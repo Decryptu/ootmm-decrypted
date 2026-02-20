@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pkgutil
+import json
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
@@ -7,211 +9,30 @@ from BaseClasses import Entrance, Region
 if TYPE_CHECKING:
     from .world import OOTxMM
 
-OOTxMMRegionList = [
-    "OOT_SACRED_REALM",
-    "OOT_DEKU_TREE",
-    "OOT_DODONGO_CAVERN",
-    "OOT_JABU_JABU",
-    "OOT_TEMPLE_FOREST",
-    "OOT_TEMPLE_FIRE",
-    "OOT_TEMPLE_WATER",
-    "OOT_TEMPLE_SPIRIT",
-    "OOT_TEMPLE_SHADOW",
-    "OOT_BOTTOM_OF_THE_WELL",
-    "OOT_ICE_CAVERN",
-    "OOT_GERUDO_TRAINING_GROUNDS",
-    "OOT_THIEVES_HIDEOUT",
-    "OOT_GANON_CASTLE",
-    "OOT_KOKIRI_FOREST",
-    "OOT_HYRULE_FIELD",
-    "OOT_MARKET",
-    "OOT_LON_LON_RANCH",
-    "OOT_HYRULE_CASTLE",
-    "OOT_GANON_CASTLE_EXTERIOR",
-    "OOT_LOST_WOODS",
-    "OOT_SACRED_MEADOW",
-    "OOT_KAKARIKO",
-    "OOT_GRAVEYARD",
-    "OOT_DEATH_MOUNTAIN_TRAIL",
-    "OOT_DEATH_MOUNTAIN_CRATER",
-    "OOT_GORON_CITY",
-    "OOT_ZORA_RIVER",
-    "OOT_ZORA_DOMAIN",
-    "OOT_ZORA_FOUNTAIN",
-    "OOT_LAKE_HYLIA",
-    "OOT_TEMPLE_OF_TIME",
-    "OOT_GERUDO_VALLEY",
-    "OOT_GERUDO_FORTRESS",
-    "OOT_HAUNTED_WASTELAND",
-    "OOT_DESERT_COLOSSUS",
-    "OOT_EGGS",
-    "OOT_GANON_CASTLE_TOWER",
-    "MM_TEMPLE_WOODFALL",
-    "MM_TEMPLE_SNOWHEAD",
-    "MM_TEMPLE_GREAT_BAY",
-    "MM_TEMPLE_STONE_TOWER",
-    "MM_CLOCK_TOWN_SOUTH",
-    "MM_CLOCK_TOWN_NORTH",
-    "MM_CLOCK_TOWN_EAST",
-    "MM_CLOCK_TOWN_WEST",
-    "MM_LAUNDRY_POOL",
-    "MM_GIANT_DREAM",
-    "MM_CLOCK_TOWER_ROOFTOP",
-    "MM_STOCK_POT_INN",
-    "MM_TERMINA_FIELD",
-    "MM_ROAD_TO_SWAMP",
-    "MM_SOUTHERN_SWAMP",
-    "MM_DEKU_PALACE",
-    "MM_WOODFALL",
-    "MM_PATH_TO_MOUNTAIN_VILLAGE",
-    "MM_MOUNTAIN_VILLAGE",
-    "MM_PATH_TO_SNOWHEAD",
-    "MM_TWIN_ISLANDS",
-    "MM_GORON_VILLAGE",
-    "MM_SNOWHEAD",
-    "MM_MILK_ROAD",
-    "MM_ROMANI_RANCH",
-    "MM_GREAT_BAY_COAST",
-    "MM_PIRATE_FORTRESS_EXTERIOR",
-    "MM_PIRATE_FORTRESS_SEWERS",
-    "MM_PIRATE_FORTRESS_INTERIOR",
-    "MM_ZORA_CAPE",
-    "MM_ZORA_HALL",
-    "MM_PINNACLE_ROCK",
-    "MM_ROAD_TO_IKANA",
-    "MM_IKANA_GRAVEYARD",
-    "MM_IKANA_CANYON",
-    "MM_IKANA_CASTLE",
-    "MM_BENEATH_THE_WELL",
-    "MM_SECRET_SHRINE",
-    "MM_STONE_TOWER",
-    "MM_MOON",
-    "MM_SPIDER_HOUSE_SWAMP",
-    "MM_SPIDER_HOUSE_OCEAN",
-    "MM_TINGLE",
-    "MM_TEMPLE_STONE_TOWER_INVERTED",
-    "MM_BUTLER_RACE",
-    "MM_GORON_RACETRACK",
-    "TEST_Overworld","OOT_GROTTOS",
-    "OOT_LINK_HOUSE",
-    "OOT_KOKIRI_MIDO",
-    "OOT_KOKIRI_SARIA",
-    "OOT_KOKIRI_SHOP",
-    "OOT_KOKIRI_KNOW_IT_ALL",
-    "OOT_KOKIRI_TWINS",
-    "OOT_CASTLE_COURTYARD",
-    "OOT_SACRED_FOREST_MEADOW",
-    "OOT_FAIRY_FOUNTAIN",
-    "OOT_KAKARIKO_VILLAGE",
-    "OOT_IMPA_HOUSE",
-    "OOT_KAKARIKO_POTION_SHOP",
-    "OOT_BAZAAR",
-    "OOT_TOMB_REDEAD",
-    "OOT_TOMB_ROYAL",
-    "OOT_TOMB_FAIRY",
-    "OOT_TOMB_DAMPE_WINDMILL",
-    "OOT_ZORA_SHOP",
-    "OOT_LABORATORY",
-    "OOT_FISHING_POND",
-    "OOT_RANCH_HOUSE_SILO",
-    "OOT_BACK_ALLEY_HOUSE2",
-    "OOT_BACK_ALLEY_HOUSE",
-    "OOT_GUARD_HOUSE",
-    "OOT_MARKET_POTION_SHOP",
-    "OOT_BOMBCHU_SHOP",
-    "OOT_MARKET_CHILD_DAY",
-    "OOT_MARKET_CHILD_NIGHT",
-    "OOT_BOMBCHU_BOWLING_ALLEY",
-    "OOT_TREASURE_SHOP",
-    "OOT_SHOOTING_GALLERY",
-    "OOT_HOUSE_OF_SKULLTULA",
-    "OOT_GREAT_FAIRY_FOUNTAIN_UPGRADES",
-    "OOT_GREAT_FAIRY_FOUNTAIN_SPELLS",
-    "OOT_LAIR_GOHMA",
-    "OOT_LAIR_KING_DODONGO",
-    "OOT_INSIDE_JABU_JABU",
-    "OOT_LAIR_BARINADE",
-    "OOT_LAIR_PHANTOM_GANON",
-    "OOT_LAIR_VOLVAGIA",
-    "OOT_LAIR_MORPHA",
-    "OOT_LAIR_BONGO_BONGO",
-    "OOT_LAIR_TWINROVA",
-    "OOT_GERUDO_TRAINING_GROUND",
-    "OOT_INSIDE_GANON_CASTLE",
-    "OOT_GANON_TOWER",
-    "MM_FAIRY_FOUNTAIN",
-    "MM_MAYOR_HOUSE",
-    "MM_MILK_BAR",
-    "MM_SHOOTING_GALLERY",
-    "MM_TREASURE_SHOP",
-    "MM_HONEY_DARLING",
-    "MM_OBSERVATORY",
-    "MM_TRADING_POST",
-    "MM_BOMB_SHOP",
-    "MM_CURIOSITY_SHOP",
-    "MM_POST_OFFICE",
-    "MM_SWORDSMAN_SCHOOL",
-    "MM_DEKU_PLAYGROUND",
-    "MM_GROTTOS",
-    "MM_ROAD_SOUTHERN_SWAMP",
-    "MM_WOODS_MYSTERY",
-    "MM_SHOOTING_GALLERY_SWAMP",
-    "MM_POTION_SHOP",
-    "MM_TOURIST_INFORMATION",
-    "MM_DEKU_KING_CHAMBER",
-    "MM_DEKU_SHRINE",
-    "MM_PATH_MOUNTAIN_VILLAGE",
-    "MM_MOUNTAIN_VILLAGE_WINTER",
-    "MM_MOUNTAIN_VILLAGE_SPRING",
-    "MM_BLACKSMITH",
-    "MM_GORON_GRAVEYARD",
-    "MM_TWIN_ISLANDS_WINTER",
-    "MM_TWIN_ISLANDS_SPRING",
-    "MM_GORON_SHRINE",
-    "MM_GORON_SHOP",
-    "MM_GORON_VILLAGE_WINTER",
-    "MM_PATH_SNOWHEAD",
-    "MM_RANCH_HOUSE_BARN",
-    "MM_CUCCO_SHACK",
-    "MM_DOG_RACETRACK",
-    "MM_EXTRA",
-    "MM_ZORA_HALL_ROOMS",
-    "MM_LABORATORY",
-    "MM_WATERFALL_RAPIDS",
-    "MM_ROAD_IKANA",
-    "MM_GORMAN_TRACK",
-    "MM_BENEATH_THE_GRAVEYARD",
-    "MM_DAMPE_HOUSE",
-    "MM_GHOST_HUT",
-    "MM_MUSIC_BOX_HOUSE",
-    "MM_STONE_TOWER_INVERTED",
-    "MM_LAIR_ODOLWA",
-    "MM_LAIR_GOHT",
-    "MM_PIRATE_FORTRESS_ENTRANCE",
-    "MM_LAIR_GYORG",
-    "MM_CASTLE_IKANA",
-    "MM_LAIR_IKANA",
-    "MM_LAIR_TWINMOLD",
-    "MM_SAKON_HIDEOUT",
-    "MM_MOON_DEKU",
-    "MM_MOON_GORON",
-    "MM_MOON_ZORA",
-    "MM_MOON_LINK",
-    "MM_LAIR_MAJORA",
-    "MM_ENDING",
-]
+OOTxMMRegionData = json.loads((pkgutil.get_data(__name__, 'raw/GreatWorldJSONdump.json')).decode('utf-8'))
+OOTxMMRegionList = OOTxMMRegionData.keys()
 
 def create_and_connect_regions(world: OOTxMM) -> None:
     create_all_regions(world)
     connect_regions(world)
     
 def create_all_regions(world: OOTxMM) -> None:
-    regions = [Region(name, world.player, world.multiworld) for name in OOTxMMRegionList]
+    regions = [Region(name, world.player, world.multiworld) for name in OOTxMMRegionData.keys()]
     world.multiworld.regions += regions
 
 def connect_regions(world: OOTxMM) -> None:
-    overworld = world.get_region("TEST_Overworld")
-    
-    for region in OOTxMMRegionList:
-        RegionObject = world.get_region(region)
-        overworld.connect(RegionObject, f"Overworld to {region}")
+    for region in OOTxMMRegionData.keys():
+        print("== Connecting region: " + region)
+        worldregion = world.get_region(region)
+        try:
+            for connectedregion in OOTxMMRegionData[region]["exits"].keys():
+                try:
+                    print("==== "+ region + " => " + connectedregion)
+                    ExitRegion = world.get_region(connectedregion)
+                    worldregion.connect(ExitRegion, f"{region} to {connectedregion}")
+                except Exception as e:
+                    print("Connection Error: " + region + " => " + connectedregion + " ~~ " + str(e))
+                    pass
+        except Exception as e:
+            print("Connection Error: " + region + " ~~ " + str(e))
+            pass
