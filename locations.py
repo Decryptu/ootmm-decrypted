@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification, Location
 
-from . import items
+from . import items, ootxmm_staticdata
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -29,12 +29,10 @@ class OOTxMMLocationData:
 LocationIDCounter = 1
 OOTxMMLocationList = []
 
-OOTxMMRegionData = json.loads((pkgutil.get_data(__name__, 'raw/GreatWorldJSONdump.json')).decode('utf-8'))
-
-for region in OOTxMMRegionData.keys():
+for region in ootxmm_staticdata.OOTxMMRegionData.keys():
     print("== Adding locations for region: " + region)
     try:
-        for regionlocation in OOTxMMRegionData[region]["locations"].keys():
+        for regionlocation in ootxmm_staticdata.OOTxMMRegionData[region]["locations"].keys():
             try:
                 print("==== + " + regionlocation)
                 OOTxMMLocationList.append(OOTxMMLocationData(LocationIDCounter, regionlocation, regionlocation, region))

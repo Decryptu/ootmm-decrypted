@@ -18,8 +18,7 @@ Once the game is generated; [Unknown how yet] the OOTMM rom is patched, and it i
   - AP-OOTMM is the '*public*' name of the project (everything but code)
   - OOTxMM is the internal code-name of the project (code only)
 
-## Development
-
+# Development
 Right now:  
 - Regions and Locations are generated and processed at runtime.  
 - Items are static.
@@ -34,13 +33,57 @@ Step 1 is just getting a viable product developed where the multiworld can gener
     - All data will be output as yaml (as that's native to OOTMM), then converted into JSON for use by AP-OOTMM 
 
 - To generate/update the json/yamls for the AP world:  
-    1) Download the source of OOTMM
-    2) Copy the `/packages/data/src` folder, and place it in the `/raw` folder of AP-OOTMM  
-        - The final filepaths should be `/raw/src/*`...etc..etc  
-    3) Running `/raw/GenerateMetadata.py` will generate the json files that are processed by the APworld
+    1) Download the source of OOTMM into `/raw/ootmm`
+    4) Running `/raw/GenerateMetadata.py` will generate the json files that are processed by the APworld
+
+### Items
+Items are "staticly" defined in `items.py` in like-item-lists.  
+AP's World API require items to have a unique associated ID. To make sure there is room to insert new items if need be. Each item will have a one digit 'game identifier' (`GID`), a one digit catagory 'catagory identifier' (`CID`), and a three digit 'item id' (`IID`).  
+  > As an example; OOT_FISH is `11069`  
+  > `1` - OOT  
+  > `1` - Item  
+  > `069` - IID for the fish  
+  > Thus the final AP ItemID would be `11069`
+
+  > Another example; MM_SOUL_NPC_DAMPE is `22520`  
+  > `2` - MM  
+  > `2` - Soul  
+  > `520` - IID for Dampe's Soul  
+  > Thus the final AP ItemID would be `22520`
+
+|Game|GID|
+|-----|-----|
+|OOT|1|
+|MM|2|
+|Shared|3|
+
+|Catagory|CID|
+|-----|-----|
+|Item|1|
+|Soul|2|
+
+### These lists are currently broken up as:
+|Catagory|Name|GIDs|CIDs|Finished ID Ranges|
+|-----|-----|-----|-----|-----|
+|Items|OOT Items              |1|1|11001 - 11999|
+|Items|MM Items               |2|1|21001 - 21999|
+|Items|Shared Items           |3|1|31001 - 31999|
+|Souls|OOT Enemy Soul List    |1|2|12001 - 12499|
+|Souls|OOT NPC Soul List      |1|2|12501 - 12999|
+|Souls|MM Enemy Soul List     |2|2|22001 - 22499|
+|Souls|MM NPC Soul List       |2|2|22501 - 22999|
+|Souls|Shared Enemy Soul List |3|2|32001 - 32499|
+|Souls|Shared NPC Soul List   |3|2|32501 - 32999|
+- Possible TODO item lists:
+  - Silver ruppee list (?)
+  - Songs (?)
+
+And are combined into a single itemlist upon generation depending on options.
+> At this moment, there are no options, so all into one big list it is! :)
+
+You'll notice that some ID Ranges are split, that's to further devide the pool without requiring a new catagory. This is useful where items are still "similar" but you don't really want them mixed together, and don't want them in seperate catagories.
 
 ## TODO
-
 |Task|Static?|Dynamic?|Done?|
 |-----|-----|-----|-----|
 |AP - World|x|x||
@@ -58,8 +101,7 @@ Step 1 is just getting a viable product developed where the multiworld can gener
   - Make a proper logo for github/discord.
 
 
-## Special Thanks
-
+# Special Thanks
 Thank you to [Fletch64](https://github.com/Fletch64) and [alphaONE2](https://github.com/alphaONE2) for their work on the first pass at an OOTMM AP world/generator.  
 
 Thank you to the [OOTMM Dev Team](https://github.com/OoTMM/OoTMM) for creating OOTMM in the first place.

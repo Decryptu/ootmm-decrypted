@@ -4,8 +4,8 @@ import os
 
 def GenerateMetaFiles():
     # Source dumps of location and macro data
-    SourceWorld = "./src/world"
-    SourceMacro = "./src/macros"
+    SourceWorld = "./ootmm/data/world"
+    SourceMacro = "./ootmm/data/macros"
 
     GreatWorldYAML = {}
     GreatMacroYAML = {}
@@ -49,4 +49,17 @@ def GenerateMetaFiles():
         with open("GreatMacroJSONdump.json", 'w') as jsonfile:
             json.dump(yamldata, jsonfile)
 
-GenerateMetaFiles()
+def GenerateMacroData():
+    print("Do stuff")
+
+def main():
+    try:
+        print("Generating metadata files from source YAML...")
+        GenerateMetaFiles()
+        print("Analyzing and testing macro data...")
+        GenerateMacroData()
+    except Exception as e:
+        print(f"Error: {e}")
+
+if __name__ == "__main__":
+    main()
