@@ -3,11 +3,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
+
 from worlds.generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
     from .world import OOTxMM
 
+from . import ootxmm_staticdata
 
 def set_all_rules(world: OOTxMM) -> None:
     #set_all_entrance_rules(world)
@@ -16,6 +18,16 @@ def set_all_rules(world: OOTxMM) -> None:
 
 
 def set_all_entrance_rules(world: OOTxMM) -> None:
+    for Region in ootxmm_staticdata.OOTxMMRegionData.keys():
+        for Entrence in ootxmm_staticdata.OOTxMMRegionData[Region]["exits"].keys():
+            EntrenceObject = world.get_entrance(Entrence)
+
+    
+    
+    
+    
+    
+    
     overworld_to_bottom_right_room = world.get_entrance("Overworld to Bottom Right Room")
     overworld_to_top_left_room = world.get_entrance("Overworld to Top Left Room")
     overworld_to_secret_room = world.get_entrance("Overworld to Secret Room")
