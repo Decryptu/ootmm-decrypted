@@ -63,9 +63,9 @@ def create_regular_locations(world: OOTxMM) -> None:
         parent.add_locations(loc, OOTxMMLocation)
 
 def create_events(world: OOTxMM) -> None:
-    final_boss_room = world.get_region("Moon Boss")
+    final_boss_room = world.get_region("Moon")
 
     final_boss_room.add_event(
-        "Final Boss Defeated", "Victory", location_type=OOTxMMLocation, item_type=items.OOTxMMItem
+        "BEAT MAJORA", "Victory", location_type=OOTxMMLocation, item_type=items.OOTxMMItem
     )
 
