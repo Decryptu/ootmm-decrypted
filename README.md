@@ -30,11 +30,14 @@ Step 1 is just getting a viable product developed where the multiworld can gener
 ### GenerateMetadata.py
 - `GenerateMetadata.py` should be the central source/process for converting OOTMM logic/data into formats used by AP-OOTMM.
     - Any data that must be compiled from OOTMM to AP-OOTMM should be processed through this script as the 'single source of conversion'  
-    - All data will be output as yaml (as that's native to OOTMM), then converted into JSON for use by AP-OOTMM 
+    - All data will be output as yaml (as that's native to OOTMM and more human-readable), then converted into JSON for use by AP-OOTMM 
+    - These files are collectively called the AP world's `metadata`
 
 - To generate/update the json/yamls for the AP world:  
     1) Download the source of OOTMM into `/raw/ootmm`
-    4) Running `/raw/GenerateMetadata.py` will generate the json files that are processed by the APworld
+    2) `cd` into the `raw` directory.
+      - Make sure you're in `raw`! The script is pretty picky about the locations of these files and their output.
+    4) Running `GenerateMetadata.py` will generate the files that are processed by the APworld
 
 ### Items
 Items are "staticly" defined in `items.py` in like-item-lists.  
