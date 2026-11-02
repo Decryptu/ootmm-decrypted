@@ -24,6 +24,8 @@ class OOTxMM(World):
     origin_region_name = "OOT SPAWN"
     
     def create_regions(self) -> None:
+        # Compiled access rules, shared by every entrance and location with the same condition.
+        self.rule_cache = {}
         regions.create_and_connect_regions(self)
         locations.create_all_locations(self)
 
