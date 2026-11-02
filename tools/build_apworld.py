@@ -34,6 +34,8 @@ WORLD_FILES = [
     "raw/GreatLogicJSONdump.json",
     "raw/LocationIDs.json",
     "raw/GreatCheckItemJSONdump.json",
+    "raw/GreatCheckInfoJSONdump.json",
+    "raw/GreatSettingsJSONdump.json",
     "raw/GreatItemJSONdump.json",
     "raw/ItemIDs.json",
 ]

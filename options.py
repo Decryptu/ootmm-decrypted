@@ -4,6 +4,548 @@ from dataclasses import dataclass
 from Options import OptionGroup, PerGameCommonOptions, Toggle, DefaultOnToggle, Choice, Range, OptionSet
 
 
+class OOTxMM_shufflePotsOot(Choice):
+    """
+    Controls whether or not the pots are shuffled (OoT).
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Pots Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shufflePotsMm(Choice):
+    """
+    Controls whether or not the pots are shuffled (MM).
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Pots Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleCratesOot(Choice):
+    """
+    Controls whether or not the crates are shuffled (OoT).
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Crates Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleCratesMm(Choice):
+    """
+    Controls whether or not the crates are shuffled (MM).
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Crates Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleBarrelsMm(Choice):
+    """
+    Controls whether or not the barrels are shuffled (MM).
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Barrels Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleHivesOot(Toggle):
+    """
+    Controls whether or not the beehives are shuffled (OoT)
+    """
+    display_name = "Hives Shuffle (OoT)"
+
+
+class OOTxMM_shuffleHivesMm(Toggle):
+    """
+    Controls whether or not the beehives are shuffled (MM)<br>One beehive in the grotto with Bio Babas will always be shuffled regardless of this setting, thus CAMC will not affect it.
+    """
+    display_name = "Hives Shuffle (MM)"
+
+
+class OOTxMM_shuffleGrassOot(Choice):
+    """
+    Controls whether or not the grass is shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Grass Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleRocksOot(Toggle):
+    """
+    Controls whether or not the rocks are shuffled (OoT)
+    """
+    display_name = "Rock Shuffle (OoT)"
+
+
+class OOTxMM_shuffleRocksMm(Choice):
+    """
+    Controls whether or not the rocks are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Rock Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleGrassMm(Choice):
+    """
+    Controls whether or not the grass is shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Grass Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleTFGrassMm(Toggle):
+    """
+    Controls whether or not the Termina Field grass is shuffled (MM). Grottos do not count towards this
+    """
+    display_name = "Termina Field Grass Shuffle (MM)"
+
+
+class OOTxMM_shuffleTreesOot(Toggle):
+    """
+    Controls whether or not the trees are shuffled (OoT)
+    """
+    display_name = "Tree Shuffle (OoT)"
+
+
+class OOTxMM_shuffleTreesMm(Choice):
+    """
+    Controls whether or not the trees are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Tree Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleBushOot(Toggle):
+    """
+    Controls whether or not the bushes are shuffled (OoT)
+    """
+    display_name = "Bush Shuffle (OoT)"
+
+
+class OOTxMM_shuffleBushMm(Choice):
+    """
+    Controls whether or not the bushes are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Bush Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleSoilOot(Toggle):
+    """
+    Controls whether or not the fairies from bean soil spots are shuffled (OoT)
+    """
+    display_name = "Soil Shuffle (OoT)"
+
+
+class OOTxMM_shuffleSoilMm(Choice):
+    """
+    Controls whether or not the items from bean soil spots are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Soil Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleFreeRupeesOot(Choice):
+    """
+    Controls whether or not the freestanding rupees are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Freestanding Rupees Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleFreeRupeesMm(Choice):
+    """
+    Controls whether or not the freestanding rupees are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Freestanding Rupees Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleFreeHeartsOot(Choice):
+    """
+    Controls whether or not the freestanding hearts are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Freestanding Hearts Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleFreeHeartsMm(Toggle):
+    """
+    Controls whether or not the freestanding hearts are shuffled (MM)
+    """
+    display_name = "Freestanding Hearts Shuffle (MM)"
+
+
+class OOTxMM_shuffleGossipFairiesOot(Choice):
+    """
+    Controls whether or not the gossip stones fairies are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Fairies Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleGossipBigFairiesOot(Choice):
+    """
+    Controls whether or not the gossip stones big fairies are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Big Fairies Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleGossipFairiesMm(Choice):
+    """
+    Controls whether or not the gossip stones fairies are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Fairies Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleGossipBigFairiesMm(Choice):
+    """
+    Controls whether or not the gossip stones big fairies are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Big Fairies Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleWonderItemsOot(Choice):
+    """
+    Controls whether or not the wonder items are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Wonder Items Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleWonderItemsMm(Toggle):
+    """
+    Controls whether or not the wonder items are shuffled (MM)
+    """
+    display_name = "Wonder Items Shuffle (MM)"
+
+
+class OOTxMM_shuffleSnowballsMm(Choice):
+    """
+    Controls whether or not the snowballs are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Snowball Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleButterfliesOot(Toggle):
+    """
+    Controls whether or not the butterflies are shuffled (OoT)
+    """
+    display_name = "Butterflies Shuffle (OoT)"
+
+
+class OOTxMM_shuffleButterfliesMm(Toggle):
+    """
+    Controls whether or not the butterflies are shuffled (MM)
+    """
+    display_name = "Butterflies Shuffle (MM)"
+
+
+class OOTxMM_shuffleBouldersOot(Choice):
+    """
+    Controls whether or not the regular boulders drop an item when broken (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Boulder Drops Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleBouldersMm(Choice):
+    """
+    Controls whether or not the regular boulders drop an item when broken (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Boulder Drops Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    ootmm_values = ['none', 'all', 'overworld', 'dungeons']
+    default = option_none
+
+
+class OOTxMM_shuffleRedBouldersOot(Toggle):
+    """
+    Controls whether or not the red boulders drop an item when broken (OoT)
+    """
+    display_name = "Red Boulder Drops Shuffle (OoT)"
+
+
+class OOTxMM_shuffleRedBouldersMm(Toggle):
+    """
+    Controls whether or not the red boulders drop an item when broken (MM)
+    """
+    display_name = "Red Boulder Drops Shuffle (MM)"
+
+
+class OOTxMM_shuffleSilverBouldersOot(Toggle):
+    """
+    Controls whether or not the silver boulders drop an item when broken (OoT)
+    """
+    display_name = "Silver Boulder Drops Shuffle (OoT)"
+
+
+class OOTxMM_shuffleIciclesOot(Toggle):
+    """
+    Controls whether or not grounded icicles drop an item when broken (OoT)
+    """
+    display_name = "Icicles Shuffle (OoT)"
+
+
+class OOTxMM_shuffleIciclesMm(Toggle):
+    """
+    Controls whether or not grounded icicles drop an item when broken (MM)
+    """
+    display_name = "Icicles Shuffle (MM)"
+
+
+class OOTxMM_shuffleRedIceOot(Toggle):
+    """
+    Controls whether or not the red ice drop an item for thawing it (OoT)
+    """
+    display_name = "Red Ice Shuffle (OoT)"
+
+
+class OOTxMM_shuffleSkulltulaFinalReward(Toggle):
+    """
+    Controls whether or not the huge rupee obtained by having all 100 gold skulltula tokens is shuffled
+    """
+    display_name = "Skulltula Final Reward Shuffle"
+
+
+class OOTxMM_shuffleMaskTrades(Toggle):
+    """
+    Controls whether or not trading the masks are checks
+    """
+    display_name = "Mask Trade Shuffle"
+
+
+class OOTxMM_divingGameRupeeShuffle(Toggle):
+    """
+    Controls whether or not the Zora's Domain Diving Game has 5 random items instead of green, blue, red, purple and 500 rupees.
+    """
+    display_name = "Diving Game Rupee Shuffle"
+
+
+class OOTxMM_fairyFountainFairyShuffleOot(Toggle):
+    """
+    Controls whether or not the fairies in fairy fountains are shuffled (OoT).<br>Includes the fairies in Ganon's Castle behind the invisible wall and in Desert Colossus from the oasis.
+    """
+    display_name = "Fairy Fountain Fairy Shuffle (OoT)"
+
+
+class OOTxMM_fairyFountainFairyShuffleMm(Toggle):
+    """
+    Controls whether or not the fairies in the Beneath the Well fairy fountain are shuffled (MM).
+    """
+    display_name = "Fairy Fountain Fairy Shuffle (MM)"
+
+
+class OOTxMM_fairySpotShuffleOot(Toggle):
+    """
+    Controls whether or not big fairies in fairy spots are shuffled (OoT). Play either Song of Storms or Sun's Song
+    """
+    display_name = "Fairy Spot Shuffle (OoT)"
+
+
+class OOTxMM_eggShuffle(Toggle):
+    """
+    Fun setting: should using the Weird/Pocket Eggs give an item? If not, they're entirely removed from the game
+    """
+    display_name = "Weird / Pocket Egg Content Shuffle"
+
+
 class OOTxMM_moonCrash(Choice):
     """
     Changes the behavior of moon crashing
@@ -248,6 +790,13 @@ class OOTxMM_climbMostSurfacesMm(Toggle):
     Modifies most surfaces to be climbable
     """
     display_name = "Climb Most Surfaces (MM)"
+
+
+class OOTxMM_restoreBrokenActors(Toggle):
+    """
+    In vanilla OoT, some actors fails to load properly in some rooms due to errors in the room files. When this is on, these actors will load.
+    """
+    display_name = "Restore Broken Actors"
 
 
 class OOTxMM_alterLostWoodsExits(Toggle):
@@ -872,6 +1421,52 @@ class OOTxMM_tricks(OptionSet):
 
 @dataclass
 class OOTxMMOptions(PerGameCommonOptions):
+    shufflePotsOot: OOTxMM_shufflePotsOot
+    shufflePotsMm: OOTxMM_shufflePotsMm
+    shuffleCratesOot: OOTxMM_shuffleCratesOot
+    shuffleCratesMm: OOTxMM_shuffleCratesMm
+    shuffleBarrelsMm: OOTxMM_shuffleBarrelsMm
+    shuffleHivesOot: OOTxMM_shuffleHivesOot
+    shuffleHivesMm: OOTxMM_shuffleHivesMm
+    shuffleGrassOot: OOTxMM_shuffleGrassOot
+    shuffleRocksOot: OOTxMM_shuffleRocksOot
+    shuffleRocksMm: OOTxMM_shuffleRocksMm
+    shuffleGrassMm: OOTxMM_shuffleGrassMm
+    shuffleTFGrassMm: OOTxMM_shuffleTFGrassMm
+    shuffleTreesOot: OOTxMM_shuffleTreesOot
+    shuffleTreesMm: OOTxMM_shuffleTreesMm
+    shuffleBushOot: OOTxMM_shuffleBushOot
+    shuffleBushMm: OOTxMM_shuffleBushMm
+    shuffleSoilOot: OOTxMM_shuffleSoilOot
+    shuffleSoilMm: OOTxMM_shuffleSoilMm
+    shuffleFreeRupeesOot: OOTxMM_shuffleFreeRupeesOot
+    shuffleFreeRupeesMm: OOTxMM_shuffleFreeRupeesMm
+    shuffleFreeHeartsOot: OOTxMM_shuffleFreeHeartsOot
+    shuffleFreeHeartsMm: OOTxMM_shuffleFreeHeartsMm
+    shuffleGossipFairiesOot: OOTxMM_shuffleGossipFairiesOot
+    shuffleGossipBigFairiesOot: OOTxMM_shuffleGossipBigFairiesOot
+    shuffleGossipFairiesMm: OOTxMM_shuffleGossipFairiesMm
+    shuffleGossipBigFairiesMm: OOTxMM_shuffleGossipBigFairiesMm
+    shuffleWonderItemsOot: OOTxMM_shuffleWonderItemsOot
+    shuffleWonderItemsMm: OOTxMM_shuffleWonderItemsMm
+    shuffleSnowballsMm: OOTxMM_shuffleSnowballsMm
+    shuffleButterfliesOot: OOTxMM_shuffleButterfliesOot
+    shuffleButterfliesMm: OOTxMM_shuffleButterfliesMm
+    shuffleBouldersOot: OOTxMM_shuffleBouldersOot
+    shuffleBouldersMm: OOTxMM_shuffleBouldersMm
+    shuffleRedBouldersOot: OOTxMM_shuffleRedBouldersOot
+    shuffleRedBouldersMm: OOTxMM_shuffleRedBouldersMm
+    shuffleSilverBouldersOot: OOTxMM_shuffleSilverBouldersOot
+    shuffleIciclesOot: OOTxMM_shuffleIciclesOot
+    shuffleIciclesMm: OOTxMM_shuffleIciclesMm
+    shuffleRedIceOot: OOTxMM_shuffleRedIceOot
+    shuffleSkulltulaFinalReward: OOTxMM_shuffleSkulltulaFinalReward
+    shuffleMaskTrades: OOTxMM_shuffleMaskTrades
+    divingGameRupeeShuffle: OOTxMM_divingGameRupeeShuffle
+    fairyFountainFairyShuffleOot: OOTxMM_fairyFountainFairyShuffleOot
+    fairyFountainFairyShuffleMm: OOTxMM_fairyFountainFairyShuffleMm
+    fairySpotShuffleOot: OOTxMM_fairySpotShuffleOot
+    eggShuffle: OOTxMM_eggShuffle
     moonCrash: OOTxMM_moonCrash
     startingAgeMm: OOTxMM_startingAgeMm
     doorOfTime: OOTxMM_doorOfTime
@@ -894,6 +1489,7 @@ class OOTxMMOptions(PerGameCommonOptions):
     hookshotAnywhereOot: OOTxMM_hookshotAnywhereOot
     climbMostSurfacesOot: OOTxMM_climbMostSurfacesOot
     climbMostSurfacesMm: OOTxMM_climbMostSurfacesMm
+    restoreBrokenActors: OOTxMM_restoreBrokenActors
     alterLostWoodsExits: OOTxMM_alterLostWoodsExits
     voidWarpMm: OOTxMM_voidWarpMm
     damageMultiplierOot: OOTxMM_damageMultiplierOot
@@ -959,14 +1555,18 @@ class OOTxMMOptions(PerGameCommonOptions):
 
 
 # The OoTMM setting keys of the options above: the patch takes their values as they are.
-OOTMM_SETTINGS = ['moonCrash', 'startingAgeMm', 'doorOfTime', 'dekuTree', 'beneathWell', 'openZdShortcut', 'openMoon', 'bossWarpPads', 'freeScarecrowOot', 'freeScarecrowMm', 'crossGameFw', 'csmc', 'csmcHearts', 'csmcMapCompass', 'csmcSkulltula', 'csmcCow', 'blastMaskCooldown', 'clockSpeed', 'fierceDeityAnywhere', 'hookshotAnywhereOot', 'climbMostSurfacesOot', 'climbMostSurfacesMm', 'alterLostWoodsExits', 'voidWarpMm', 'damageMultiplierOot', 'damageMultiplierMm', 'mmStyleAirMovementOot', 'ootHyperEnemies', 'mmHyperEnemies', 'fillWallets', 'blueFireArrows', 'iceArrowPlatformsOot', 'sunlightArrows', 'rupeeScaling', 'kegStrength3', 'menuNotebook', 'coins', 'songOfDoubleTimeOot', 'agelessSwords', 'agelessShields', 'agelessTunics', 'agelessBoots', 'agelessSticks', 'agelessBoomerang', 'agelessHammer', 'agelessGFS', 'agelessHookshot', 'agelessSlingshot', 'agelessBow', 'agelessChildTrade', 'agelessSoaring', 'mmEasierLightblock', 'shadowFastBoat', 'openMaskShop', 'lenientSpikes', 'fastBunnyHood', 'bowSlingshotBreakHives', 'critWiggleDisable', 'fastMasks', 'keepItemsReset', 'keepBottlesReset', 'mmSongOfDoubleTimeTimeSelector', 'autoInvert', 'cutsceneSkipOoT', 'cutsceneSkipMM', 'cutsceneGlitchOoT', 'cutsceneIntroGohma', 'cutsceneIntroKingDodongo', 'cutsceneIntroBarinade', 'cutsceneIntroPhantomGanon', 'cutsceneIntroVolvagia', 'cutsceneIntroMorpha', 'cutsceneIntroBongoBongo', 'cutsceneIntroTwinrova', 'cutsceneIntroGanondorf', 'cutsceneIntroOdolwa', 'cutsceneIntroGoht', 'cutsceneIntroWart', 'cutsceneIntroGyorg', 'cutsceneIntroIgos', 'cutsceneIntroGomess', 'cutsceneIntroTwinmold', 'cutsceneIntroMajora', 'tricks']
+OOTMM_SETTINGS = ['shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'moonCrash', 'startingAgeMm', 'doorOfTime', 'dekuTree', 'beneathWell', 'openZdShortcut', 'openMoon', 'bossWarpPads', 'freeScarecrowOot', 'freeScarecrowMm', 'crossGameFw', 'csmc', 'csmcHearts', 'csmcMapCompass', 'csmcSkulltula', 'csmcCow', 'blastMaskCooldown', 'clockSpeed', 'fierceDeityAnywhere', 'hookshotAnywhereOot', 'climbMostSurfacesOot', 'climbMostSurfacesMm', 'restoreBrokenActors', 'alterLostWoodsExits', 'voidWarpMm', 'damageMultiplierOot', 'damageMultiplierMm', 'mmStyleAirMovementOot', 'ootHyperEnemies', 'mmHyperEnemies', 'fillWallets', 'blueFireArrows', 'iceArrowPlatformsOot', 'sunlightArrows', 'rupeeScaling', 'kegStrength3', 'menuNotebook', 'coins', 'songOfDoubleTimeOot', 'agelessSwords', 'agelessShields', 'agelessTunics', 'agelessBoots', 'agelessSticks', 'agelessBoomerang', 'agelessHammer', 'agelessGFS', 'agelessHookshot', 'agelessSlingshot', 'agelessBow', 'agelessChildTrade', 'agelessSoaring', 'mmEasierLightblock', 'shadowFastBoat', 'openMaskShop', 'lenientSpikes', 'fastBunnyHood', 'bowSlingshotBreakHives', 'critWiggleDisable', 'fastMasks', 'keepItemsReset', 'keepBottlesReset', 'mmSongOfDoubleTimeTimeSelector', 'autoInvert', 'cutsceneSkipOoT', 'cutsceneSkipMM', 'cutsceneGlitchOoT', 'cutsceneIntroGohma', 'cutsceneIntroKingDodongo', 'cutsceneIntroBarinade', 'cutsceneIntroPhantomGanon', 'cutsceneIntroVolvagia', 'cutsceneIntroMorpha', 'cutsceneIntroBongoBongo', 'cutsceneIntroTwinrova', 'cutsceneIntroGanondorf', 'cutsceneIntroOdolwa', 'cutsceneIntroGoht', 'cutsceneIntroWart', 'cutsceneIntroGyorg', 'cutsceneIntroIgos', 'cutsceneIntroGomess', 'cutsceneIntroTwinmold', 'cutsceneIntroMajora', 'tricks']
+
+# The ones OoTMM's code reads outside conditions, which the world ports (raw/Meta_Options.py).
+PORTED_SETTINGS = ['shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'restoreBrokenActors']
 
 # By OoTMM's setting category.
 option_groups = [
+    OptionGroup("Main / Shuffle", [OOTxMM_shufflePotsOot, OOTxMM_shufflePotsMm, OOTxMM_shuffleCratesOot, OOTxMM_shuffleCratesMm, OOTxMM_shuffleBarrelsMm, OOTxMM_shuffleHivesOot, OOTxMM_shuffleHivesMm, OOTxMM_shuffleGrassOot, OOTxMM_shuffleRocksOot, OOTxMM_shuffleRocksMm, OOTxMM_shuffleGrassMm, OOTxMM_shuffleTFGrassMm, OOTxMM_shuffleTreesOot, OOTxMM_shuffleTreesMm, OOTxMM_shuffleBushOot, OOTxMM_shuffleBushMm, OOTxMM_shuffleSoilOot, OOTxMM_shuffleSoilMm, OOTxMM_shuffleFreeRupeesOot, OOTxMM_shuffleFreeRupeesMm, OOTxMM_shuffleFreeHeartsOot, OOTxMM_shuffleFreeHeartsMm, OOTxMM_shuffleGossipFairiesOot, OOTxMM_shuffleGossipBigFairiesOot, OOTxMM_shuffleGossipFairiesMm, OOTxMM_shuffleGossipBigFairiesMm, OOTxMM_shuffleWonderItemsOot, OOTxMM_shuffleWonderItemsMm, OOTxMM_shuffleSnowballsMm, OOTxMM_shuffleButterfliesOot, OOTxMM_shuffleButterfliesMm, OOTxMM_shuffleBouldersOot, OOTxMM_shuffleBouldersMm, OOTxMM_shuffleRedBouldersOot, OOTxMM_shuffleRedBouldersMm, OOTxMM_shuffleSilverBouldersOot, OOTxMM_shuffleIciclesOot, OOTxMM_shuffleIciclesMm, OOTxMM_shuffleRedIceOot, OOTxMM_shuffleSkulltulaFinalReward, OOTxMM_shuffleMaskTrades, OOTxMM_divingGameRupeeShuffle, OOTxMM_fairyFountainFairyShuffleOot, OOTxMM_fairyFountainFairyShuffleMm, OOTxMM_fairySpotShuffleOot, OOTxMM_eggShuffle]),
     OptionGroup("Main / Events", [OOTxMM_moonCrash, OOTxMM_startingAgeMm, OOTxMM_doorOfTime, OOTxMM_dekuTree, OOTxMM_beneathWell, OOTxMM_openZdShortcut, OOTxMM_openMoon, OOTxMM_bossWarpPads, OOTxMM_freeScarecrowOot, OOTxMM_freeScarecrowMm]),
     OptionGroup("Main / Cross", [OOTxMM_crossGameFw]),
     OptionGroup("Main / Camc", [OOTxMM_csmc, OOTxMM_csmcHearts, OOTxMM_csmcMapCompass, OOTxMM_csmcSkulltula, OOTxMM_csmcCow]),
-    OptionGroup("Main / Misc", [OOTxMM_blastMaskCooldown, OOTxMM_hookshotAnywhereOot, OOTxMM_climbMostSurfacesOot, OOTxMM_alterLostWoodsExits, OOTxMM_voidWarpMm]),
+    OptionGroup("Main / Misc", [OOTxMM_blastMaskCooldown, OOTxMM_hookshotAnywhereOot, OOTxMM_climbMostSurfacesOot, OOTxMM_restoreBrokenActors, OOTxMM_alterLostWoodsExits, OOTxMM_voidWarpMm]),
     OptionGroup("Main / Nologic", [OOTxMM_clockSpeed, OOTxMM_fierceDeityAnywhere, OOTxMM_climbMostSurfacesMm, OOTxMM_damageMultiplierOot, OOTxMM_damageMultiplierMm, OOTxMM_mmStyleAirMovementOot, OOTxMM_ootHyperEnemies, OOTxMM_mmHyperEnemies]),
     OptionGroup("Items / Extensions / General", [OOTxMM_fillWallets, OOTxMM_rupeeScaling]),
     OptionGroup("Items / Extensions / Oot", [OOTxMM_blueFireArrows, OOTxMM_iceArrowPlatformsOot, OOTxMM_sunlightArrows, OOTxMM_songOfDoubleTimeOot]),

@@ -1,6 +1,7 @@
 import yaml
 import xml.etree.ElementTree as ET
 import glob
+import hashlib
 import json
 import os
 import shutil
@@ -10,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories
+from Meta_Options import NotOffered, NotOfferedCategories, Ported
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -181,6 +182,81 @@ def GenerateCheckItemFile():
         file.write("\n")
 
 
+# OoTMM's lists of checks that run() in packages/logic/src/world/transform.ts removes by name.
+CheckLists = {"brokenActors": "BROKEN_ACTORS_CHECKS", "sellMasks": "SELL_MASKS_CHECKS", "mmWaterRocks": "MM_WATER_ROCKS"}
+
+def GenerateCheckInfoFile():
+    # What OoTMM's check filters read about each check (see "Options" in DEVELOPMENT.md): its type, its scene
+    # and whether that scene is a dungeon, from OoTMM's check data, and the lists it removes checks by name.
+    print("Exporting check types...")
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { CHECKS } from './ootmm/packages/data/lib/checks.ts';
+    import { isLocationInDungeon } from './ootmm/packages/logic/src/locations.ts';
+    const checks = Object.fromEntries(CHECKS.map(c => [c.location, [c.type, c.scene, isLocationInDungeon(c.scene)]]));
+    fs.writeFileSync('./_checks.json', JSON.stringify(checks), 'utf8');
+    """)
+    with open("_checks.json", 'r') as file:
+        checks = json.load(file)
+    os.remove("_checks.json")
+    with open("GreatCheckItemJSONdump.json", 'r') as file:
+        names = sorted(json.load(file))
+    missing = [name for name in names if name not in checks]
+    if missing:
+        raise ValueError(f"No check data for {len(missing)} locations: {missing[:10]}")
+    with open(os.path.join("ootmm", "packages", "logic", "src", "world", "transform.ts"), 'r', encoding='utf-8') as file:
+        transform = file.read()
+    info = {"checks": {name: checks[name] for name in names}}
+    for key, const in CheckLists.items():
+        match = re.search(rf"const {const} = \[(.*?)\];", transform, re.S)
+        if match is None:
+            raise ValueError(f"{const} not found in transform.ts")
+        info[key] = [json.loads('"' + name.replace("\\'", "'") + '"') for name in re.findall(r"'((?:[^'\\]|\\.)*)'", match.group(1))]
+        unknown = [name for name in info[key] if name not in checks]
+        if unknown:
+            raise ValueError(f"{const} names unknown checks: {unknown}")
+    with open("GreatCheckInfoJSONdump.json", 'w') as file:
+        json.dump(info, file, indent=1)
+        file.write("\n")
+
+
+def GenerateCheckSamples():
+    # OoTMM's own check set for a few settings of the ported check settings: test/test_checks.py checks that
+    # logic.removed_checks leaves the same ones. Hashed, as the lists are long.
+    print("Sampling OoTMM's check sets...")
+    with open("GreatSettingsJSONdump.json", 'r') as file:
+        types = {s["key"]: s["type"] for s in json.load(file)["settings"]}
+    samples = [{}] + [{key: (value if types[key] == "enum" else toggle) for key in Ported}
+                      for value, toggle in (("all", True), ("overworld", True), ("dungeons", False))]
+    with open("_samples.json", 'w') as file:
+        json.dump(samples, file)
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
+    const samples = JSON.parse(fs.readFileSync('_samples.json', 'utf8'));
+    const checks = [];
+    for (const settings of samples) {
+      const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...settings } } as any);
+      checks.push([...state.worlds[0].locations]);
+    }
+    fs.writeFileSync('_samples.json', JSON.stringify(checks), 'utf8');
+    """)
+    with open("_samples.json", 'r') as file:
+        checks = json.load(file)
+    os.remove("_samples.json")
+    with open("GreatCheckItemJSONdump.json", 'r') as file:
+        names = set(json.load(file))
+    with open(os.path.join("..", "test", "check_samples.json"), 'w') as file:
+        json.dump([{"settings": settings, "count": len(names & set(found)), "sha256": CheckSetHash(names & set(found))}
+                   for settings, found in zip(samples, checks)], file, indent=1)
+        file.write("\n")
+
+def CheckSetHash(names):
+    # Also in test/test_checks.py.
+    return hashlib.sha256("\n".join(sorted(names)).encode("utf-8")).hexdigest()
+
+
 def GenerateLogicFile():
     # OoTMM's own pipeline parses every condition with default settings: macros are inlined and
     # settings, tricks and the vanilla shop prices and song events are already decided. What is left is
@@ -202,10 +278,11 @@ def GenerateLogicFile():
     import { ItemGroups } from './ootmm/packages/logic/src/items/index.ts';
     import { ExprParser, exprEvent, exprAnd, exprOr, exprTrue, exprFalse } from './ootmm/packages/logic/src/expr/index.ts';
 
-    // The settings the world offers that act only through conditions, and every trick, stay symbolic so
+    // The settings the world offers that conditions read, and every trick, stay symbolic so
     // the world evaluates them per player. The parser resolves them to true or false, so its two methods
     // are wrapped to return a marker event instead, after OoTMM's own checks of the key and value.
-    const symbolic = new Set<string>(JSON.parse(fs.readFileSync('SettingsClasses.json', 'utf8')).logic);
+    const classes = JSON.parse(fs.readFileSync('SettingsClasses.json', 'utf8'));
+    const symbolic = new Set<string>([...classes.logic, ...classes.ported]);
     // The key and value are the identifiers the method reads with expect().
     const P: any = ExprParser.prototype;
     const withIdentifiers = (parse: any, symbol: (ids: string[]) => any) => function (this: any) {
@@ -455,7 +532,7 @@ def GenerateRawOptionsFile():
     };
     const tricks = Object.entries(TRICKS).map(([key, t]) => ({ key, name: t.name, glitch: !!t.glitch }));
     fs.writeFileSync('./GreatSettingsJSONdump.json',
-      JSON.stringify({ settings: SETTINGS, tricks, defaultTricks: DEFAULT_SETTINGS.tricks }, replacer, 1) + '\n', 'utf8');
+      JSON.stringify({ settings: SETTINGS, tricks, defaults: DEFAULT_SETTINGS }, replacer, 1) + '\n', 'utf8');
     """)
 
 # OoTMM code that reads settings outside conditions: the world must port what a setting does there before
@@ -466,6 +543,8 @@ PortSourcesSkipped = ["logic/src/expr/builder.ts", "logic/src/expr/parser.ts", "
 
 def ClassifySettings():
     # Each setting is offered or not by what OoTMM does with it:
+    # - ported: read by OoTMM's code outside conditions, and the world does what that code does
+    #   (Ported in Meta_Options.py). Offered, and symbolic in the logic dump.
     # - port: read by OoTMM's code outside conditions (pool, checks, world shape). Not offered until ported.
     # - logic: read only by conditions (setting(...) in data/). Offered, and symbolic in the logic dump.
     # - patch: read by neither, only by the ROM patcher. Offered and passed through.
@@ -482,11 +561,13 @@ def ClassifySettings():
     for path in sorted(glob.glob("ootmm/data/**/*.yml", recursive=True)):
         with open(path, 'r', encoding='utf-8') as file:
             conditions += file.read()
-    classes = {"logic": [], "patch": [], "port": [], "not_offered": []}
+    classes = {"logic": [], "ported": [], "patch": [], "port": [], "not_offered": []}
     for setting in settings:
         key = setting["key"]
         if key in NotOffered or setting["category"] in NotOfferedCategories:
             kind = "not_offered"
+        elif key in Ported:
+            kind = "ported"
         elif re.search(rf"\b{key}\b", code):
             kind = "port"
         elif re.search(rf"\bsetting\(\s*{key}\b", conditions):
@@ -511,7 +592,7 @@ def ConvertRawOptions():
         dump = json.load(file)
     with open("SettingsClasses.json", 'r') as file:
         classes = json.load(file)
-    offered = set(classes["logic"]) | set(classes["patch"])
+    offered = set(classes["logic"]) | set(classes["ported"]) | set(classes["patch"])
     lines = [
         "# Generated by raw/GenerateMetadata.py from OoTMM's settings. Do not edit by hand.",
         "",
@@ -562,13 +643,15 @@ def ConvertRawOptions():
     lines += ["class OOTxMM_tricks(OptionSet):", *Docstring(doc),
               '    display_name = "Tricks"',
               f"    valid_keys = {[t['key'] for t in tricks]!r}",
-              f"    default = frozenset({sorted(dump['defaultTricks'])!r})", "", ""]
+              f"    default = frozenset({sorted(dump['defaults']['tricks'])!r})", "", ""]
     fields.append(("tricks", "OOTxMM_tricks"))
     groups.setdefault("logic.tricks", []).append("OOTxMM_tricks")
     lines += ["@dataclass", "class OOTxMMOptions(PerGameCommonOptions):"]
     lines += [f"    {key}: {cls}" for key, cls in fields]
     lines += ["", "", "# The OoTMM setting keys of the options above: the patch takes their values as they are.",
               f"OOTMM_SETTINGS = {[key for key, _ in fields]!r}", "",
+              "# The ones OoTMM's code reads outside conditions, which the world ports (raw/Meta_Options.py).",
+              f"PORTED_SETTINGS = {[key for key, _ in fields if key in classes['ported']]!r}", "",
               "# By OoTMM's setting category.", "option_groups = ["]
     # Categories are keys like "cutscenes.bosses.oot": shown as "Cutscenes / Bosses / Oot".
     lines += [f"    OptionGroup({json.dumps(' / '.join(part[:1].upper() + part[1:] for part in category.split('.')))}, [{', '.join(members)}]),"
@@ -585,6 +668,8 @@ def main():
     GenerateLogicFile()
     UpdateLocationIDs()
     GenerateCheckItemFile()
+    GenerateCheckInfoFile()
+    GenerateCheckSamples()
     GenerateItemFile()
     UpdateItemIDs()
     IsolateRegionData()
