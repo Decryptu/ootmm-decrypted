@@ -70,14 +70,6 @@
     "default": 1
   },
   {
-    "key": "distinctWorlds",
-    "name": "Distinct Worlds",
-    "category": "main",
-    "type": "boolean",
-    "description": "For multiworld, with settings that involve randomness, should the worlds have distinct properties (ER, MQ, price rando...).",
-    "default": true
-  },
-  {
     "key": "goal",
     "name": "Goal",
     "category": "main",
@@ -350,11 +342,6 @@
         "value": "none",
         "name": "No Shuffle",
         "description": "Swamp and Ocean Tokens will be vanilla"
-      },
-      {
-        "value": "cross",
-        "name": "Gold Skulltulas Only",
-        "description": "Any unshuffled Token can be found on any other unshuffled Skulltula"
       },
       {
         "value": "all",
@@ -1464,6 +1451,110 @@
     "default": false
   },
   {
+    "key": "shuffleGossipFairiesOot",
+    "name": "Gossip Fairies Shuffle (OoT)",
+    "category": "main.shuffle",
+    "type": "enum",
+    "description": "Controls whether or not the gossip stones fairies are shuffled (OoT)",
+    "values": [
+      {
+        "value": "none",
+        "name": "None"
+      },
+      {
+        "value": "all",
+        "name": "All"
+      },
+      {
+        "value": "overworld",
+        "name": "Overworld"
+      },
+      {
+        "value": "dungeons",
+        "name": "Dungeons only"
+      }
+    ],
+    "default": "none"
+  },
+  {
+    "key": "shuffleGossipBigFairiesOot",
+    "name": "Gossip Big Fairies Shuffle (OoT)",
+    "category": "main.shuffle",
+    "type": "enum",
+    "description": "Controls whether or not the gossip stones big fairies are shuffled (OoT)",
+    "values": [
+      {
+        "value": "none",
+        "name": "None"
+      },
+      {
+        "value": "all",
+        "name": "All"
+      },
+      {
+        "value": "overworld",
+        "name": "Overworld"
+      },
+      {
+        "value": "dungeons",
+        "name": "Dungeons only"
+      }
+    ],
+    "default": "none"
+  },
+  {
+    "key": "shuffleGossipFairiesMm",
+    "name": "Gossip Fairies Shuffle (MM)",
+    "category": "main.shuffle",
+    "type": "enum",
+    "description": "Controls whether or not the gossip stones fairies are shuffled (MM)",
+    "values": [
+      {
+        "value": "none",
+        "name": "None"
+      },
+      {
+        "value": "all",
+        "name": "All"
+      },
+      {
+        "value": "overworld",
+        "name": "Overworld"
+      },
+      {
+        "value": "dungeons",
+        "name": "Dungeons only"
+      }
+    ],
+    "default": "none"
+  },
+  {
+    "key": "shuffleGossipBigFairiesMm",
+    "name": "Gossip Big Fairies Shuffle (MM)",
+    "category": "main.shuffle",
+    "type": "enum",
+    "description": "Controls whether or not the gossip stones big fairies are shuffled (MM)",
+    "values": [
+      {
+        "value": "none",
+        "name": "None"
+      },
+      {
+        "value": "all",
+        "name": "All"
+      },
+      {
+        "value": "overworld",
+        "name": "Overworld"
+      },
+      {
+        "value": "dungeons",
+        "name": "Dungeons only"
+      }
+    ],
+    "default": "none"
+  },
+  {
     "key": "shuffleWonderItemsOot",
     "name": "Wonder Items Shuffle (OoT)",
     "category": "main.shuffle",
@@ -1540,6 +1631,58 @@
     "default": false
   },
   {
+    "key": "shuffleBouldersOot",
+    "name": "Boulder Drops Shuffle (OoT)",
+    "category": "main.shuffle",
+    "type": "enum",
+    "values": [
+      {
+        "value": "none",
+        "name": "None"
+      },
+      {
+        "value": "all",
+        "name": "All"
+      },
+      {
+        "value": "overworld",
+        "name": "Overworld"
+      },
+      {
+        "value": "dungeons",
+        "name": "Dungeons only"
+      }
+    ],
+    "description": "Controls whether or not the regular boulders drop an item when broken (OoT)",
+    "default": "none"
+  },
+  {
+    "key": "shuffleBouldersMm",
+    "name": "Boulder Drops Shuffle (MM)",
+    "category": "main.shuffle",
+    "type": "enum",
+    "values": [
+      {
+        "value": "none",
+        "name": "None"
+      },
+      {
+        "value": "all",
+        "name": "All"
+      },
+      {
+        "value": "overworld",
+        "name": "Overworld"
+      },
+      {
+        "value": "dungeons",
+        "name": "Dungeons only"
+      }
+    ],
+    "description": "Controls whether or not the regular boulders drop an item when broken (MM)",
+    "default": "none"
+  },
+  {
     "key": "shuffleRedBouldersOot",
     "name": "Red Boulder Drops Shuffle (OoT)",
     "category": "main.shuffle",
@@ -1553,6 +1696,14 @@
     "category": "main.shuffle",
     "type": "boolean",
     "description": "Controls whether or not the red boulders drop an item when broken (MM)",
+    "default": false
+  },
+  {
+    "key": "shuffleSilverBouldersOot",
+    "name": "Silver Boulder Drops Shuffle (OoT)",
+    "category": "main.shuffle",
+    "type": "boolean",
+    "description": "Controls whether or not the silver boulders drop an item when broken (OoT)",
     "default": false
   },
   {
@@ -1920,8 +2071,8 @@
     "default": "reset"
   },
   {
-    "key": "startingAge",
-    "name": "Starting Age",
+    "key": "startingAgeOot",
+    "name": "Starting Age (OoT)",
     "category": "main.events",
     "type": "enum",
     "description": "Choose the starting age",
@@ -1945,12 +2096,29 @@
     "default": "child"
   },
   {
-    "key": "swordlessAdult",
-    "name": "Allow Adult Link to be swordless",
+    "key": "startingAgeMm",
+    "name": "Starting Age (MM)",
     "category": "main.events",
-    "type": "boolean",
-    "description": "Choose whether or not Adult Link can be swordless",
-    "default": false
+    "type": "enum",
+    "description": "Choose the starting age in Majora's Mask. If Adult Mask or Cross-Game Age is off, you will be unable to change age in MM.",
+    "values": [
+      {
+        "value": "child",
+        "name": "Child",
+        "description": "Link will start off as Child"
+      },
+      {
+        "value": "adult",
+        "name": "Adult",
+        "description": "Link will start off as Adult"
+      },
+      {
+        "value": "random",
+        "name": "Random",
+        "description": "Link will start off as either Adult or Child, with a 50/50 probability"
+      }
+    ],
+    "default": "child"
   },
   {
     "key": "timeTravelSword",
@@ -2002,7 +2170,7 @@
         "description": "Can change age by playing Song of Time using any means."
       }
     ],
-    "description": "Allows you to switch ages by playing Song of Time after you've switched ages once in Temple of Time.<br>Preserves your current position on the scene, which logic can expect you to take advantage of.",
+    "description": "Allows you to switch ages by playing Song of Time in OoT after you've switched ages once in Temple of Time.<br>Preserves your current position on the scene, which logic can expect you to take advantage of.",
     "default": "none"
   },
   {
@@ -3000,7 +3168,7 @@
   {
     "key": "fillWallets",
     "name": "Fill Wallets",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Fills the wallet upon finding a new one",
     "default": false
@@ -3008,7 +3176,7 @@
   {
     "key": "bottleContentShuffle",
     "name": "Random Bottle Contents",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Randomize what bottles from both games contain upon finding them in the world",
     "default": false
@@ -3016,7 +3184,9 @@
   {
     "key": "stoneAgonyMm",
     "name": "Stone of Agony in MM",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Stone of Agony",
     "type": "boolean",
     "description": "Enables Stone of Agony in MM",
     "default": false
@@ -3024,15 +3194,27 @@
   {
     "key": "sticksNutsUpgradesMm",
     "name": "Deku Stick & Nut Upgrades in MM",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Deku Stick & Nut Upgrades",
     "type": "boolean",
     "description": "Enables Deku Stick and Nut upgrades in MM",
     "default": false
   },
   {
+    "key": "sticksNutsUpgradesInitial",
+    "name": "Shuffle Initial Deku Stick & Nut Upgrades",
+    "category": "items.extensions.general",
+    "type": "boolean",
+    "description": "Shuffle the initial stick & nuts.",
+    "default": false
+  },
+  {
     "key": "fairyOcarinaMm",
     "name": "Fairy Ocarina in MM",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Fairy Ocarina",
     "type": "boolean",
     "description": "Functionally identical as the Ocarina of Time, but now there's 2 Ocarinas for Majora's Mask!",
     "default": false
@@ -3040,7 +3222,7 @@
   {
     "key": "blueFireArrows",
     "name": "Blue Fire Arrows",
-    "category": "items.extensions",
+    "category": "items.extensions.oot",
     "type": "boolean",
     "description": "Gives the OoT Ice Arrows the properties of Blue Fire",
     "default": false
@@ -3048,7 +3230,7 @@
   {
     "key": "iceArrowPlatformsOot",
     "name": "Ice Arrow Platforms (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.oot",
     "type": "boolean",
     "description": "Allow ice arrows in OoT to create walkable ice platforms on water",
     "default": false
@@ -3056,7 +3238,7 @@
   {
     "key": "sunlightArrows",
     "name": "Sunlight Arrows",
-    "category": "items.extensions",
+    "category": "items.extensions.oot",
     "type": "boolean",
     "description": "Gives the OoT Light Arrows the ability to activate most sun switches",
     "default": false
@@ -3064,7 +3246,9 @@
   {
     "key": "shortHookshotMm",
     "name": "Short Hookshot in MM",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Short Hookshot",
     "type": "boolean",
     "description": "Adds a short Hookshot in MM, which logic accounts for. A trick is also there for some of the harder spots",
     "default": false
@@ -3072,7 +3256,7 @@
   {
     "key": "bronzeScale",
     "name": "Bronze Scale",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Add an extra scale item, that is required to enter deep water.",
     "default": false
@@ -3080,7 +3264,7 @@
   {
     "key": "childWallets",
     "name": "Child Wallets",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Shuffles the starting wallet in each game... making it so you have to find it to hold anything!",
     "default": false
@@ -3088,7 +3272,7 @@
   {
     "key": "colossalWallets",
     "name": "Colossal Wallets",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Adds a Wallet that can hold up to 999 rupees in each game",
     "default": false
@@ -3096,7 +3280,7 @@
   {
     "key": "bottomlessWallets",
     "name": "Bottomless Wallets",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Adds a Wallet that can hold up to 9999 rupees in each game",
     "default": false
@@ -3104,7 +3288,7 @@
   {
     "key": "rupeeScaling",
     "name": "Rupee Scaling",
-    "category": "items.extensions",
+    "category": "items.extensions.general",
     "type": "boolean",
     "description": "Makes rupees worth twice as much with the Colossal Wallet, and twenty times as much with the Bottomless Wallet.",
     "default": false
@@ -3112,7 +3296,9 @@
   {
     "key": "skeletonKeyOot",
     "name": "Skeleton Key (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Skeleton Key",
     "type": "boolean",
     "description": "Adds a Skeleton Key that can open every small-key-locked door in OoT.",
     "default": false
@@ -3120,7 +3306,9 @@
   {
     "key": "skeletonKeyMm",
     "name": "Skeleton Key (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Skeleton Key",
     "type": "boolean",
     "description": "Adds a Skeleton Key that can open every small-key-locked door in MM.",
     "default": false
@@ -3128,7 +3316,7 @@
   {
     "key": "magicalRupee",
     "name": "Magical Rupee",
-    "category": "items.extensions",
+    "category": "items.extensions.oot",
     "type": "boolean",
     "description": "Adds a Magical Rupee that can trigger every silver-rupee event in OoT dungeons.",
     "default": false
@@ -3136,7 +3324,7 @@
   {
     "key": "transcendentFairy",
     "name": "Transcendent Fairy",
-    "category": "items.extensions",
+    "category": "items.extensions.mm",
     "type": "boolean",
     "description": "Adds a Transcendent Fairy that counts as every Stray Fairy in MM.",
     "default": false
@@ -3144,7 +3332,9 @@
   {
     "key": "platinumTokenOot",
     "name": "Platinum Token (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Platinum Token",
     "type": "boolean",
     "description": "Adds a Platinum Token that counts as every Gold Skulltula Token.",
     "default": false
@@ -3152,7 +3342,9 @@
   {
     "key": "platinumTokenMm",
     "name": "Platinum Token (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Platinum Token",
     "type": "boolean",
     "description": "Adds a Platinum Token that counts as every House Token.",
     "default": false
@@ -3160,7 +3352,9 @@
   {
     "key": "bombchuBehaviorOot",
     "name": "Bombchu Behavior (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Bombchu",
     "type": "enum",
     "values": [
       {
@@ -3190,7 +3384,9 @@
   {
     "key": "bombchuBehaviorMm",
     "name": "Bombchu Behavior (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Bombchu",
     "type": "enum",
     "values": [
       {
@@ -3220,7 +3416,9 @@
   {
     "key": "spellFireMm",
     "name": "Din's Fire (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Din's Fire",
     "type": "boolean",
     "description": "Adds Din's Fire in Majora's Mask.",
     "default": false
@@ -3228,7 +3426,9 @@
   {
     "key": "spellWindMm",
     "name": "Farore's Wind (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Farore's Wind",
     "type": "boolean",
     "description": "Adds Farore's Wind in Majora's Mask.",
     "default": false
@@ -3236,7 +3436,9 @@
   {
     "key": "spellLoveMm",
     "name": "Nayru's Love (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Nayru's Love",
     "type": "boolean",
     "description": "Adds Nayru's Love in Majora's Mask.",
     "default": false
@@ -3244,7 +3446,9 @@
   {
     "key": "bootsIronMm",
     "name": "Iron Boots (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Iron Boots",
     "type": "boolean",
     "description": "Adds Iron Boots in Majora's Mask.",
     "default": false
@@ -3252,7 +3456,9 @@
   {
     "key": "bootsHoverMm",
     "name": "Hover Boots (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Hover Boots",
     "type": "boolean",
     "description": "Adds Hover Boots in Majora's Mask.",
     "default": false
@@ -3260,7 +3466,9 @@
   {
     "key": "tunicGoronMm",
     "name": "Goron Tunic (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Goron Tunic",
     "type": "boolean",
     "description": "Adds the Goron Tunic in Majora's Mask.",
     "default": false
@@ -3268,7 +3476,9 @@
   {
     "key": "tunicZoraMm",
     "name": "Zora Tunic (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Zora Tunic",
     "type": "boolean",
     "description": "Adds the Zora Tunic in Majora's Mask.",
     "default": false
@@ -3276,7 +3486,9 @@
   {
     "key": "scalesMm",
     "name": "Scales (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Scales",
     "type": "boolean",
     "description": "Adds the Silver Scale and Golden Scale in Majora's Mask.",
     "default": false
@@ -3284,7 +3496,9 @@
   {
     "key": "strengthMm",
     "name": "Strength (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Strength",
     "type": "boolean",
     "description": "Adds the Goron's Bracelet, Silver Gauntlets and Golden Gauntlets in Majora's Mask.",
     "default": false
@@ -3292,7 +3506,7 @@
   {
     "key": "kegStrength3",
     "name": "Use Keg With Golden Gauntlets",
-    "category": "items.extensions",
+    "category": "items.extensions.mm",
     "type": "boolean",
     "description": "If you have the Golden Gauntlets in Majora's Mask, this allows you to purchase and use Powder Kegs, and attempt the Keg Trial.",
     "default": false
@@ -3300,7 +3514,9 @@
   {
     "key": "hammerMm",
     "name": "Megaton Hammer (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Megaton Hammer",
     "type": "boolean",
     "description": "Adds the Megaton Hammer in Majora's Mask.",
     "default": false
@@ -3308,7 +3524,9 @@
   {
     "key": "boomerangMm",
     "name": "Boomerang (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Boomerang",
     "type": "boolean",
     "description": "Adds the Boomerang in Majora's Mask.",
     "default": false
@@ -3316,7 +3534,9 @@
   {
     "key": "gfsOot",
     "name": "Great Fairy's Sword (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "oot",
+    "group": "Great Fairy's Sword",
     "type": "boolean",
     "description": "Adds the Great Fairy's Sword in Ocarina of Time.",
     "default": false
@@ -3324,7 +3544,9 @@
   {
     "key": "slingshotMm",
     "name": "Slingshot (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Slingshot",
     "type": "boolean",
     "description": "Adds the Slingshot in Majora's Mask.",
     "default": false
@@ -3332,7 +3554,9 @@
   {
     "key": "spinUpgradeOot",
     "name": "Spin Attack Upgrade (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "oot",
+    "group": "Spin Attack Upgrade",
     "type": "boolean",
     "description": "Add the Spin Attack upgrade as an item in OoT.",
     "default": false
@@ -3340,7 +3564,9 @@
   {
     "key": "extraChildSwordsOot",
     "name": "Extra Child Swords (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "oot",
+    "group": "Child Swords",
     "type": "boolean",
     "description": "Add the Razor and Gilded Swords in OoT, as upgrades to the Kokiri Sword.",
     "default": false
@@ -3348,7 +3574,9 @@
   {
     "key": "dekuShieldMm",
     "name": "Deku Shield (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "mm",
+    "group": "Deku Shield",
     "type": "boolean",
     "description": "Add the Deku Shield in Majora's Mask.",
     "default": false
@@ -3356,7 +3584,9 @@
   {
     "key": "blastMaskOot",
     "name": "Blast Mask (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.masks",
+    "game": "oot",
+    "group": "Blast Mask",
     "type": "boolean",
     "description": "Add the Blast Mask in Ocarina of Time.",
     "default": false
@@ -3364,7 +3594,9 @@
   {
     "key": "stoneMaskOot",
     "name": "Stone Mask (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.masks",
+    "game": "oot",
+    "group": "Stone Mask",
     "type": "boolean",
     "description": "Add the Stone Mask in Ocarina of Time.",
     "default": false
@@ -3372,15 +3604,57 @@
   {
     "key": "kamaroMaskOot",
     "name": "Kamaro Mask (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.masks",
+    "game": "oot",
+    "group": "Kamaro Mask",
     "type": "boolean",
     "description": "Add the Kamaro Mask in Ocarina of Time.",
     "default": false
   },
   {
+    "key": "gerudoMaskMm",
+    "name": "Gerudo Mask (MM)",
+    "category": "items.extensions.crossGame.masks",
+    "game": "mm",
+    "group": "Gerudo Mask",
+    "type": "boolean",
+    "description": "Add the Gerudo Mask in Majora's Mask which can be used as a disguise to enter Pirates Fortress.",
+    "default": false
+  },
+  {
+    "key": "skullMaskMm",
+    "name": "Skull Mask (MM)",
+    "category": "items.extensions.crossGame.masks",
+    "game": "mm",
+    "group": "Skull Mask",
+    "type": "boolean",
+    "description": "Add the Skull Mask in Majora's Mask which can be used as a disguise to enter the Deku Palace.",
+    "default": false
+  },
+  {
+    "key": "spookyMaskMm",
+    "name": "Spooky Mask (MM)",
+    "category": "items.extensions.crossGame.masks",
+    "game": "mm",
+    "group": "Spooky Mask",
+    "type": "boolean",
+    "description": "Add the Spooky Mask in Majora's Mask. The spooky mask functions like the Gibdo mask but only at night.",
+    "default": false
+  },
+  {
+    "key": "adultMaskMm",
+    "name": "Adult Mask",
+    "category": "items.extensions.mm",
+    "type": "boolean",
+    "description": "Add the Adult Mask in Majora's Mask. The Adult mask allows you to change age in Majora's Mask.",
+    "default": false
+  },
+  {
     "key": "elegyOot",
     "name": "Elegy of Emptiness (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "Elegy of Emptiness",
     "type": "boolean",
     "description": "Add the Elegy of Emptiness in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3388,7 +3662,9 @@
   {
     "key": "songSoaringOot",
     "name": "Song of Soaring (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "Song of Soaring",
     "type": "boolean",
     "description": "Add the Song of Soaring in Ocarina of Time. Usable only as child. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3396,7 +3672,9 @@
   {
     "key": "songHealingOot",
     "name": "Song of Healing (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "Song of Healing",
     "type": "boolean",
     "description": "Add the Song of Healing in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3404,7 +3682,9 @@
   {
     "key": "songAwakeningOot",
     "name": "Sonata of Awakening (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "Sonata of Awakening",
     "type": "boolean",
     "description": "Add the Sonata of Awakening in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3412,7 +3692,9 @@
   {
     "key": "songGoronOot",
     "name": "Goron Lullaby (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "Goron Lullaby",
     "type": "boolean",
     "description": "Add the Goron Lullaby in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3420,7 +3702,9 @@
   {
     "key": "songZoraOot",
     "name": "New Wave Bossa Nova (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "New Wave Bossa Nova",
     "type": "boolean",
     "description": "Add the New Wave Bossa Nova in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3428,7 +3712,9 @@
   {
     "key": "songOrderOot",
     "name": "Oath to Order (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "oot",
+    "group": "Oath to Order",
     "type": "boolean",
     "description": "Add the Oath to Order in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3436,7 +3722,9 @@
   {
     "key": "songSunMm",
     "name": "Sun's Song (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Sun's Song",
     "type": "boolean",
     "description": "Add Sun's Song in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3444,7 +3732,9 @@
   {
     "key": "songZeldaLullabyMm",
     "name": "Zelda's Lullaby (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Zelda's Lullaby",
     "type": "boolean",
     "description": "Add Zelda's Lullaby in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3452,7 +3742,9 @@
   {
     "key": "songSariasMm",
     "name": "Saria's Song (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Saria's Song",
     "type": "boolean",
     "description": "Add Saria's Song in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3460,7 +3752,9 @@
   {
     "key": "songMinuetMm",
     "name": "Minuet of Forest (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Minuet of Forest",
     "type": "boolean",
     "description": "Add the Minuet of Forest in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3468,7 +3762,9 @@
   {
     "key": "songBoleroMm",
     "name": "Bolero of Fire (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Bolero of Fire",
     "type": "boolean",
     "description": "Add the Bolero of Fire in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3476,7 +3772,9 @@
   {
     "key": "songSerenadeMm",
     "name": "Serenade of Water (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Serenade of Water",
     "type": "boolean",
     "description": "Add the Serenade of Water in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3484,7 +3782,9 @@
   {
     "key": "songRequiemMm",
     "name": "Requiem of Spirit (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Requiem of Spirit",
     "type": "boolean",
     "description": "Add the Requiem of Spirit in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3492,7 +3792,9 @@
   {
     "key": "songNocturneMm",
     "name": "Nocturne of Shadow (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Nocturne of Shadow",
     "type": "boolean",
     "description": "Add the Nocturne of Shadow in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3500,7 +3802,9 @@
   {
     "key": "songPreludeMm",
     "name": "Prelude of Light (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.songs",
+    "game": "mm",
+    "group": "Prelude of Light",
     "type": "boolean",
     "description": "Add the Prelude of Light in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song",
     "default": false
@@ -3508,15 +3812,29 @@
   {
     "key": "powderKegOot",
     "name": "Powder Keg (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.crossGame.items",
+    "game": "oot",
+    "group": "Powder Keg",
     "type": "boolean",
     "description": "Add the Powder Keg in Ocarina of Time. Once found, Medigoron in Goron City will sell Powder Kegs after you buy his item.",
     "default": false
   },
   {
+    "key": "extraBottlesOot",
+    "name": "Extra Bottles (OoT)",
+    "category": "items.extensions.crossGame.items",
+    "game": "oot",
+    "group": "Bottles",
+    "type": "boolean",
+    "description": "Allows Ocarina of Time to have up to six bottles by using the Adult and Child trade slots for the fifth and sixth bottles.",
+    "default": false
+  },
+  {
     "key": "ocarinaButtonsShuffleOot",
     "name": "Ocarina Buttons (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Ocarina Buttons",
     "type": "boolean",
     "description": "Add the Ocarina Buttons for OoT into the item pool. Ocarina notes cannot be played until the corresponding button is obtained.",
     "default": false
@@ -3524,15 +3842,39 @@
   {
     "key": "ocarinaButtonsShuffleMm",
     "name": "Ocarina Buttons (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Ocarina Buttons",
     "type": "boolean",
     "description": "Add the Ocarina Buttons for MM into the item pool. Ocarina notes cannot be played until the corresponding button is obtained.",
     "default": false
   },
   {
+    "key": "shovelOot",
+    "name": "Shovel (OoT)",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Shovel",
+    "type": "boolean",
+    "description": "Add a shovel to the item pool. The shovel is required to access grottos.",
+    "default": false
+  },
+  {
+    "key": "shovelMm",
+    "name": "Shovel (MM)",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Shovel",
+    "type": "boolean",
+    "description": "Add a shovel to the item pool. The shovel is required to access grottos.",
+    "default": false
+  },
+  {
     "key": "soulsEnemyOot",
     "name": "Enemy Souls (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Enemy Souls",
     "type": "boolean",
     "description": "Add Souls for OoT enemies into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3540,7 +3882,9 @@
   {
     "key": "soulsEnemyMm",
     "name": "Enemy Souls (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Enemy Souls",
     "type": "boolean",
     "description": "Add Souls for MM enemies into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3548,7 +3892,9 @@
   {
     "key": "soulsBossOot",
     "name": "Boss Souls (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Boss Souls",
     "type": "boolean",
     "description": "Add Souls for OoT bosses into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3556,7 +3902,9 @@
   {
     "key": "soulsBossMm",
     "name": "Boss Souls (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Boss Souls",
     "type": "boolean",
     "description": "Add Souls for MM bosses into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3564,7 +3912,9 @@
   {
     "key": "soulsNpcOot",
     "name": "NPC Souls (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "NPC Souls",
     "type": "boolean",
     "description": "Add Souls for OoT NPCs into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3572,7 +3922,9 @@
   {
     "key": "soulsNpcMm",
     "name": "NPC Souls (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "NPC Souls",
     "type": "boolean",
     "description": "Add Souls for MM NPCs into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3580,7 +3932,9 @@
   {
     "key": "soulsAnimalOot",
     "name": "Animal Souls (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Animal Souls",
     "type": "boolean",
     "description": "Add Souls for OoT animals into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3588,7 +3942,9 @@
   {
     "key": "soulsAnimalMm",
     "name": "Animal Souls (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Animal Souls",
     "type": "boolean",
     "description": "Add Souls for MM animals into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3596,7 +3952,9 @@
   {
     "key": "soulsMiscOot",
     "name": "Misc. Souls (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Misc. Souls",
     "type": "boolean",
     "description": "Add Souls for OoT Business Scrubs and Gold Skulltulas into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3604,7 +3962,9 @@
   {
     "key": "soulsMiscMm",
     "name": "Misc. Souls (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Misc. Souls",
     "type": "boolean",
     "description": "Add Souls for MM Business Scrubs and Gold Skulltulas into the item pool. They won't spawn unless their Soul is obtained.",
     "default": false
@@ -3612,7 +3972,9 @@
   {
     "key": "rustyKeysOot",
     "name": "Rusty Keys (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Rusty Keys",
     "type": "boolean",
     "description": "Add rusty keys to the item pool. Every rusty key locks a single overworld door.",
     "default": false
@@ -3620,23 +3982,59 @@
   {
     "key": "rustyKeysMm",
     "name": "Rusty Keys (MM)",
-    "category": "items.extensions",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Rusty Keys",
     "type": "boolean",
     "description": "Add rusty keys to the item pool. Every rusty key locks a single overworld door.",
     "default": false
   },
   {
-    "key": "clocks",
-    "name": "Clocks as Items",
-    "category": "items.extensions",
+    "key": "clocksMm",
+    "name": "Clocks as Items (MM)",
+    "category": "items.extensions.systems",
+    "game": "mm",
+    "group": "Clocks",
     "type": "boolean",
     "description": "Add items representing every Majora's Mask day and night into the pool. The moon will crash early unless you collect these items.",
     "default": false
   },
   {
+    "key": "clocksOot",
+    "name": "Clock as Item (OoT)",
+    "category": "items.extensions.systems",
+    "game": "oot",
+    "group": "Clocks",
+    "type": "enum",
+    "description": "Add an item representing the flow of time in Ocarina of Time into the pool. You will be locked at either noon or midnight unless you collect this item.",
+    "values": [
+      {
+        "value": "none",
+        "name": "None",
+        "description": "Disabled"
+      },
+      {
+        "value": "day",
+        "name": "Day",
+        "description": "The world will allways experience daytime until you find the clock."
+      },
+      {
+        "value": "night",
+        "name": "Night",
+        "description": "The world will allways experience nighttime until you find the clock."
+      },
+      {
+        "value": "random",
+        "name": "Random",
+        "description": "Either night or day, at random."
+      }
+    ],
+    "default": "none"
+  },
+  {
     "key": "menuNotebook",
     "name": "Bombers' Tracker",
-    "category": "items.extensions",
+    "category": "items.extensions.mm",
     "type": "boolean",
     "description": "Locks the in-game tracker behind the Bombers' Notebook",
     "default": false
@@ -3644,7 +4042,7 @@
   {
     "key": "coins",
     "name": "Coins",
-    "category": "items.extensions",
+    "category": "items.extensions.coins",
     "type": "boolean",
     "description": "Enable the leftover Coin items. These can be used for special conditions",
     "default": false
@@ -3652,7 +4050,7 @@
   {
     "key": "coinsRed",
     "name": "Red Coins",
-    "category": "items.extensions",
+    "category": "items.extensions.coins",
     "type": "number",
     "description": "How many Red Coins to add to the item pool",
     "default": 0,
@@ -3662,7 +4060,7 @@
   {
     "key": "coinsGreen",
     "name": "Green Coins",
-    "category": "items.extensions",
+    "category": "items.extensions.coins",
     "type": "number",
     "description": "How many Green Coins to add to the item pool",
     "default": 0,
@@ -3672,7 +4070,7 @@
   {
     "key": "coinsBlue",
     "name": "Blue Coins",
-    "category": "items.extensions",
+    "category": "items.extensions.coins",
     "type": "number",
     "description": "How many Blue Coins to add to the item pool",
     "default": 0,
@@ -3682,7 +4080,7 @@
   {
     "key": "coinsYellow",
     "name": "Yellow Coins",
-    "category": "items.extensions",
+    "category": "items.extensions.coins",
     "type": "number",
     "description": "How many Yellow Coins to add to the item pool",
     "default": 0,
@@ -3692,7 +4090,7 @@
   {
     "key": "trapIce",
     "name": "Ice Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Ice Traps to the item pool. They freeze you when collected.",
     "default": true
@@ -3700,7 +4098,7 @@
   {
     "key": "trapFire",
     "name": "Fire Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Fire Traps to the item pool. They burn you when collected.",
     "default": false
@@ -3708,7 +4106,7 @@
   {
     "key": "trapShock",
     "name": "Shock Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Shock Traps to the item pool. They shock you when collected.",
     "default": false
@@ -3716,7 +4114,7 @@
   {
     "key": "trapDrain",
     "name": "Drain Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Drain Traps to the item pool. They drain your life when collected.",
     "default": false
@@ -3724,7 +4122,7 @@
   {
     "key": "trapAntiMagic",
     "name": "Anti-Magic Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Anti-Magic Traps to the item pool. They drain magic from you when collected.",
     "default": false
@@ -3732,7 +4130,7 @@
   {
     "key": "trapKnockback",
     "name": "Knockback Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Knockback Traps to the item pool. They throw you in a random direction.",
     "default": false
@@ -3740,7 +4138,7 @@
   {
     "key": "trapRupoor",
     "name": "Rupoors",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "description": "Add Rupoors to the item pool. They remove 10 rupees when collected.",
     "default": false
@@ -3748,7 +4146,7 @@
   {
     "key": "cloakTraps",
     "name": "Cloak Traps",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "boolean",
     "default": true,
     "description": "Makes traps look like different items."
@@ -3756,7 +4154,7 @@
   {
     "key": "trapsQuantity",
     "name": "Traps Quantity",
-    "category": "items.extensions",
+    "category": "items.extensions.traps",
     "type": "enum",
     "values": [
       {
@@ -3814,7 +4212,7 @@
   {
     "key": "songOfDoubleTimeOot",
     "name": "Song of Double Time (OoT)",
-    "category": "items.extensions",
+    "category": "items.extensions.oot",
     "type": "boolean",
     "description": "Enables using Song of Double Time in OoT when you have the Song of Time in OoT",
     "default": false
@@ -3822,7 +4220,9 @@
   {
     "key": "sharedStoneAgony",
     "name": "Shared Stone of Agony",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Stone of Agony",
     "type": "boolean",
     "description": "Combines the Stones of Agony from OoT and MM into one item for both games",
     "default": false
@@ -3830,7 +4230,9 @@
   {
     "key": "sharedSpinUpgrade",
     "name": "Shared Spin Attack Upgrade",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Spin Attack Upgrade",
     "type": "boolean",
     "description": "Combines the Spin Attack Upgrades from OoT and MM into one item for both games",
     "default": false
@@ -3838,7 +4240,9 @@
   {
     "key": "sharedNutsSticks",
     "name": "Shared Deku Sticks & Nuts",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Deku Stick & Nut Upgrades",
     "type": "boolean",
     "description": "Combines the Deku Stick and Nut Upgrades from OoT and MM into two items each for both games",
     "default": false
@@ -3846,7 +4250,9 @@
   {
     "key": "sharedBows",
     "name": "Shared Bows",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Bows",
     "type": "boolean",
     "description": "Combines the Bows from OoT and MM into three progressive items for both games",
     "default": false
@@ -3854,7 +4260,9 @@
   {
     "key": "sharedBombBags",
     "name": "Shared Bomb Bags",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Bomb Bags",
     "type": "boolean",
     "description": "Combines the Bomb Bags from OoT and MM into three progressive items for both games",
     "default": false
@@ -3862,7 +4270,9 @@
   {
     "key": "sharedMagic",
     "name": "Shared Magic",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Magic",
     "type": "boolean",
     "description": "Combines the Magic Upgrades from OoT and MM into two progressive items for both games",
     "default": false
@@ -3870,7 +4280,9 @@
   {
     "key": "sharedMagicArrowFire",
     "name": "Shared Fire Arrows",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Fire Arrows",
     "type": "boolean",
     "description": "Combines the Fire Arrows from OoT and MM into one item for both games",
     "default": false
@@ -3878,7 +4290,9 @@
   {
     "key": "sharedMagicArrowIce",
     "name": "Shared Ice Arrows",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Ice Arrows",
     "type": "boolean",
     "description": "Combines the Ice Arrows from OoT and MM into one item for both games",
     "default": false
@@ -3886,7 +4300,9 @@
   {
     "key": "sharedMagicArrowLight",
     "name": "Shared Light Arrows",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Light Arrows",
     "type": "boolean",
     "description": "Combines the Light Arrows from OoT and MM into one item for both games",
     "default": false
@@ -3894,7 +4310,9 @@
   {
     "key": "sharedSongEpona",
     "name": "Shared Epona's Song",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Epona's Song",
     "type": "boolean",
     "description": "Combines Epona's Song from OoT and MM into one item for both games",
     "default": false
@@ -3902,7 +4320,9 @@
   {
     "key": "sharedSongStorms",
     "name": "Shared Song of Storms",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Song of Storms",
     "type": "boolean",
     "description": "Combines Song of Storms from OoT and MM into one item for both games",
     "default": false
@@ -3910,7 +4330,9 @@
   {
     "key": "sharedSongTime",
     "name": "Shared Song of Time",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Song of Time",
     "type": "boolean",
     "description": "Combines Song of Time from OoT and MM into one item for both games",
     "default": false
@@ -3918,7 +4340,9 @@
   {
     "key": "sharedSongSun",
     "name": "Shared Sun's Song",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Sun's Song",
     "type": "boolean",
     "description": "Combines Sun's Song from OoT and MM into one item for both games",
     "default": false
@@ -3926,7 +4350,9 @@
   {
     "key": "sharedHookshot",
     "name": "Shared Hookshots",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Short Hookshot",
     "type": "boolean",
     "description": "Combines the Hookshots from OoT and MM into two progressive items for both games.<br>If \"Short Hookshot in MM\" is disabled, the MM Hookshot will be given along with the first progressive item.",
     "default": false
@@ -3934,7 +4360,9 @@
   {
     "key": "sharedLens",
     "name": "Shared Lens of Truth",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Lens of Truth",
     "type": "boolean",
     "description": "Combines the Lenses of Truth from OoT and MM into one item for both games",
     "default": false
@@ -3942,7 +4370,9 @@
   {
     "key": "sharedOcarina",
     "name": "Shared Ocarinas",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Fairy Ocarina",
     "type": "boolean",
     "description": "Combines the Ocarinas from OoT and MM into two progressive items for both games.<br>If \"Fairy Ocarina in MM\" is disabled, the MM Ocarina will be given along with the second progressive item.",
     "default": false
@@ -3950,7 +4380,9 @@
   {
     "key": "sharedMaskGoron",
     "name": "Shared Goron Mask",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Goron Mask",
     "type": "boolean",
     "description": "Combines the Goron Masks from OoT and MM into one item for both games",
     "default": false
@@ -3958,7 +4390,9 @@
   {
     "key": "sharedMaskZora",
     "name": "Shared Zora Mask",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Zora Mask",
     "type": "boolean",
     "description": "Combines the Zora Masks from OoT and MM into one item for both games",
     "default": false
@@ -3966,7 +4400,9 @@
   {
     "key": "sharedMaskBunny",
     "name": "Shared Bunny Hood",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Bunny Hood",
     "type": "boolean",
     "description": "Combines the Bunny Hoods from OoT and MM into one item for both games",
     "default": false
@@ -3974,7 +4410,9 @@
   {
     "key": "sharedMaskKeaton",
     "name": "Shared Keaton Mask",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Keaton Mask",
     "type": "boolean",
     "description": "Combines the Keaton Masks from OoT and MM into one item for both games",
     "default": false
@@ -3982,7 +4420,9 @@
   {
     "key": "sharedMaskTruth",
     "name": "Shared Mask of Truth",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Mask of Truth",
     "type": "boolean",
     "description": "Combines the Masks of Truth from OoT and MM into one item for both games",
     "default": false
@@ -3990,7 +4430,9 @@
   {
     "key": "sharedMaskBlast",
     "name": "Shared Blast Mask",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.masks",
+    "game": "shared",
+    "group": "Blast Mask",
     "type": "boolean",
     "description": "Combines the Blast Masks from OoT and MM into one item for both games",
     "default": false
@@ -3998,7 +4440,9 @@
   {
     "key": "sharedMaskStone",
     "name": "Shared Stone Mask",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.masks",
+    "game": "shared",
+    "group": "Stone Mask",
     "type": "boolean",
     "description": "Combines the Stone Masks from OoT and MM into one item for both games",
     "default": false
@@ -4006,7 +4450,9 @@
   {
     "key": "sharedMaskKamaro",
     "name": "Shared Kamaro Mask",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.masks",
+    "game": "shared",
+    "group": "Kamaro Mask",
     "type": "boolean",
     "description": "Combines the Kamaro Masks from OoT and MM into one item for both games",
     "default": false
@@ -4014,7 +4460,9 @@
   {
     "key": "sharedSongElegy",
     "name": "Shared Elegy of Emptiness",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Elegy of Emptiness",
     "type": "boolean",
     "description": "Combines the Elegies of Emptiness from OoT and MM into one item for both games",
     "default": false
@@ -4022,7 +4470,9 @@
   {
     "key": "sharedSongHealing",
     "name": "Shared Song of Healing",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Song of Healing",
     "type": "boolean",
     "description": "Combines the Songs of Healing from OoT and MM into one item for both games",
     "default": false
@@ -4030,7 +4480,9 @@
   {
     "key": "sharedSongSoaring",
     "name": "Shared Song of Soaring",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Song of Soaring",
     "type": "boolean",
     "description": "Combines the Songs of Song from OoT and MM into one item for both games",
     "default": false
@@ -4038,7 +4490,9 @@
   {
     "key": "sharedSongAwakening",
     "name": "Shared Sonata of Awakening",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Sonata of Awakening",
     "type": "boolean",
     "description": "Combines the Sonata of Awakening from OoT and MM into one item for both games",
     "default": false
@@ -4046,7 +4500,9 @@
   {
     "key": "sharedSongGoron",
     "name": "Shared Goron Lullaby",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Goron Lullaby",
     "type": "boolean",
     "description": "Combines the Goron Lullaby from OoT and MM into one item for both games",
     "default": false
@@ -4054,7 +4510,9 @@
   {
     "key": "sharedSongZora",
     "name": "Shared New Wave Bossa Nova",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "New Wave Bossa Nova",
     "type": "boolean",
     "description": "Combines the New Wave Bossa Nova from OoT and MM into one item for both games",
     "default": false
@@ -4062,7 +4520,9 @@
   {
     "key": "sharedSongOrder",
     "name": "Shared Oath to Order",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Oath to Order",
     "type": "boolean",
     "description": "Combines the Oath to Order from OoT and MM into one item for both games",
     "default": false
@@ -4070,7 +4530,9 @@
   {
     "key": "sharedSongZeldaLullaby",
     "name": "Shared Zelda's Lullaby",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Zelda's Lullaby",
     "type": "boolean",
     "description": "Combines Zelda's Lullaby from OoT and MM into one item for both games",
     "default": false
@@ -4078,7 +4540,9 @@
   {
     "key": "sharedSongSarias",
     "name": "Shared Saria's Song",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Saria's Song",
     "type": "boolean",
     "description": "Combines Saria's Song from OoT and MM into one item for both games",
     "default": false
@@ -4086,7 +4550,9 @@
   {
     "key": "sharedSongMinuet",
     "name": "Shared Minuet of Forest",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Minuet of Forest",
     "type": "boolean",
     "description": "Combines the Minuet of Forest from OoT and MM into one item for both games",
     "default": false
@@ -4094,7 +4560,9 @@
   {
     "key": "sharedSongBolero",
     "name": "Shared Bolero of Fire",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Bolero of Fire",
     "type": "boolean",
     "description": "Combines the Bolero of Fire from OoT and MM into one item for both games",
     "default": false
@@ -4102,7 +4570,9 @@
   {
     "key": "sharedSongSerenade",
     "name": "Shared Serenade of Water",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Serenade of Water",
     "type": "boolean",
     "description": "Combines the Serenade of Water from OoT and MM into one item for both games",
     "default": false
@@ -4110,7 +4580,9 @@
   {
     "key": "sharedSongRequiem",
     "name": "Shared Requiem of Spirit",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Requiem of Spirit",
     "type": "boolean",
     "description": "Combines the Requiem of Spirit from OoT and MM into one item for both games",
     "default": false
@@ -4118,7 +4590,9 @@
   {
     "key": "sharedSongNocturne",
     "name": "Shared Nocturne of Shadow",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Nocturne of Shadow",
     "type": "boolean",
     "description": "Combines the Nocturne of Shadow from OoT and MM into one item for both games",
     "default": false
@@ -4126,7 +4600,9 @@
   {
     "key": "sharedSongPrelude",
     "name": "Shared Prelude of Light",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.songs",
+    "game": "shared",
+    "group": "Prelude of Light",
     "type": "boolean",
     "description": "Combines the Prelude of Light from OoT and MM into one item for both games",
     "default": false
@@ -4134,7 +4610,9 @@
   {
     "key": "sharedPowderKeg",
     "name": "Shared Powder Keg",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Powder Keg",
     "type": "boolean",
     "description": "Combines the Powder Kegs from OoT and MM into one item for both games.",
     "default": false
@@ -4142,7 +4620,9 @@
   {
     "key": "sharedWallets",
     "name": "Shared Wallets",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Wallets",
     "type": "boolean",
     "description": "Combines the Wallets from OoT and MM into multiple progressive items for both games, depending on settings",
     "default": false
@@ -4150,7 +4630,9 @@
   {
     "key": "sharedHealth",
     "name": "Shared Health",
-    "category": "items.shared",
+    "category": "items.extensions.shared",
+    "game": "shared",
+    "group": "Health",
     "type": "boolean",
     "description": "Combines the Heart Pieces, Heart Containers and Double Defenses from OoT and MM into 44 Heart Pieces, 6 Heart Containers and one Double Defense for both games",
     "default": false
@@ -4158,7 +4640,9 @@
   {
     "key": "sharedSwords",
     "name": "Shared Child Swords",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Child Swords",
     "type": "boolean",
     "description": "Combines the Kokiri, Razor and Gilded Swords from OoT and MM into three progressive items for both games",
     "default": false
@@ -4166,7 +4650,9 @@
   {
     "key": "sharedShields",
     "name": "Shared Shields",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Deku Shield",
     "type": "boolean",
     "description": "When you obtain a shield, the opposite game's equivalent is given to you as well. With this, the Hylian and Hero's Shields are considered equivalent.<br>If Shields are Progressive, all Shields are combined into three progressive items: Deku Shield -> Hylian/Hero's Shield -> Mirror Shield",
     "default": false
@@ -4174,7 +4660,9 @@
   {
     "key": "sharedSoulsEnemy",
     "name": "Shared Enemy Souls",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Enemy Souls",
     "type": "boolean",
     "description": "Combines the OoT and MM Souls for a specific enemy into one item, for all enemies present in both games",
     "default": false
@@ -4182,7 +4670,9 @@
   {
     "key": "sharedSoulsNpc",
     "name": "Shared NPC Souls",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "NPC Souls",
     "type": "boolean",
     "description": "Combines the OoT and MM Souls for a specific NPC into one item, for all NPCs present in both games",
     "default": false
@@ -4190,7 +4680,9 @@
   {
     "key": "sharedSoulsAnimal",
     "name": "Shared Animal Souls",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Animal Souls",
     "type": "boolean",
     "description": "Combines the OoT and MM Souls for a specific animal into one item, for all animals present in both games",
     "default": false
@@ -4198,7 +4690,9 @@
   {
     "key": "sharedSoulsMisc",
     "name": "Shared Misc. Souls",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Misc. Souls",
     "type": "boolean",
     "description": "Combines the OoT and MM Souls for Business Scrubs and Gold Skulltulas into two items for both games",
     "default": false
@@ -4206,15 +4700,29 @@
   {
     "key": "sharedOcarinaButtons",
     "name": "Shared Ocarina Buttons",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Ocarina Buttons",
     "type": "boolean",
     "description": "Combines the Ocarina Buttons from OoT and MM into five items for both games",
     "default": false
   },
   {
+    "key": "sharedShovel",
+    "name": "Shared Shovel",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Shovel",
+    "type": "boolean",
+    "description": "Combines the Shovels from OoT and MM into a single item for both games",
+    "default": false
+  },
+  {
     "key": "sharedSkeletonKey",
     "name": "Shared Skeleton Key",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Skeleton Key",
     "type": "boolean",
     "description": "Combines the Skeleton Key from OoT and MM into one item for both games",
     "default": false
@@ -4222,7 +4730,9 @@
   {
     "key": "sharedPlatinumToken",
     "name": "Shared Platinum Token",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Platinum Token",
     "type": "boolean",
     "description": "Combines the Platinum Token from OoT and MM into one item for both games",
     "default": false
@@ -4230,7 +4740,9 @@
   {
     "key": "sharedBombchu",
     "name": "Shared Bombchu",
-    "category": "items.shared",
+    "category": "items.extensions.systems",
+    "game": "shared",
+    "group": "Bombchu",
     "type": "boolean",
     "description": "Combines either Bombchu or the Bombchu Bags from OoT and MM into items for both games, depending on settings",
     "default": false
@@ -4238,7 +4750,9 @@
   {
     "key": "sharedSpellFire",
     "name": "Shared Din's Fire",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Din's Fire",
     "type": "boolean",
     "description": "Combines Din's Fire from OoT and MM into one item for both games",
     "default": false
@@ -4246,7 +4760,9 @@
   {
     "key": "sharedSpellWind",
     "name": "Shared Farore's Wind",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Farore's Wind",
     "type": "boolean",
     "description": "Combines Farore's Wind from OoT and MM into one item for both games",
     "default": false
@@ -4254,7 +4770,9 @@
   {
     "key": "sharedSpellLove",
     "name": "Shared Nayru's Love",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Nayru's Love",
     "type": "boolean",
     "description": "Combines Nayru's Love from OoT and MM into one item for both games",
     "default": false
@@ -4262,7 +4780,9 @@
   {
     "key": "sharedBootsIron",
     "name": "Shared Iron Boots",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Iron Boots",
     "type": "boolean",
     "description": "Combines the Iron Boots from OoT and MM into one item for both games",
     "default": false
@@ -4270,7 +4790,9 @@
   {
     "key": "sharedBootsHover",
     "name": "Shared Hover Boots",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Hover Boots",
     "type": "boolean",
     "description": "Combines the Hover Boots from OoT and MM into one item for both games",
     "default": false
@@ -4278,7 +4800,9 @@
   {
     "key": "sharedTunicGoron",
     "name": "Shared Goron Tunic",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Goron Tunic",
     "type": "boolean",
     "description": "Combines the Goron Tunics from OoT and MM into two items for both games",
     "default": false
@@ -4286,7 +4810,9 @@
   {
     "key": "sharedTunicZora",
     "name": "Shared Zora Tunic",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Zora Tunic",
     "type": "boolean",
     "description": "Combines the Zora Tunics from OoT and MM into two items for both games",
     "default": false
@@ -4294,7 +4820,9 @@
   {
     "key": "sharedScales",
     "name": "Shared Scales",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Scales",
     "type": "boolean",
     "description": "Combines the Scales from OoT and MM into multiple progressive items for both games, depending on settings",
     "default": false
@@ -4302,7 +4830,9 @@
   {
     "key": "sharedStrength",
     "name": "Shared Strength",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Strength",
     "type": "boolean",
     "description": "Combines the Strength Upgrades from OoT and MM into three progressive items for both games",
     "default": false
@@ -4310,7 +4840,9 @@
   {
     "key": "sharedHammer",
     "name": "Shared Megaton Hammer",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Megaton Hammer",
     "type": "boolean",
     "description": "Combines the Megaton Hammers from OoT and MM into one item for both games",
     "default": false
@@ -4318,7 +4850,9 @@
   {
     "key": "sharedBoomerang",
     "name": "Shared Boomerang",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Boomerang",
     "type": "boolean",
     "description": "Combines the Boomerangs from OoT and MM into one item for both games",
     "default": false
@@ -4326,7 +4860,9 @@
   {
     "key": "sharedGFS",
     "name": "Shared Great Fairy's Sword",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Great Fairy's Sword",
     "type": "boolean",
     "description": "Combines the Great Fairy's Sword from OoT and MM into one item for both games",
     "default": false
@@ -4334,15 +4870,49 @@
   {
     "key": "sharedSlingshot",
     "name": "Shared Slingshot",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Slingshot",
     "type": "boolean",
     "description": "Combines the Slingshots from OoT and MM into one item for both games",
     "default": false
   },
   {
+    "key": "sharedMaskGerudo",
+    "name": "Shared Gerudo Mask",
+    "category": "items.extensions.crossGame.masks",
+    "game": "shared",
+    "group": "Gerudo Mask",
+    "type": "boolean",
+    "description": "Combines the Gerudo Masks from OoT and MM into one item for both games",
+    "default": false
+  },
+  {
+    "key": "sharedMaskSkull",
+    "name": "Shared Skull Mask",
+    "category": "items.extensions.crossGame.masks",
+    "game": "shared",
+    "group": "Skull Mask",
+    "type": "boolean",
+    "description": "Combines the Skull Masks from OoT and MM into one item for both games",
+    "default": false
+  },
+  {
+    "key": "sharedMaskSpooky",
+    "name": "Shared Spooky Mask",
+    "category": "items.extensions.crossGame.masks",
+    "game": "shared",
+    "group": "Spooky Mask",
+    "type": "boolean",
+    "description": "Combines the Spooky Masks from OoT and MM into one item for both games",
+    "default": false
+  },
+  {
     "key": "sharedBottles",
     "name": "Shared Bottles",
-    "category": "items.shared",
+    "category": "items.extensions.crossGame.items",
+    "game": "shared",
+    "group": "Bottles",
     "type": "boolean",
     "description": "Combines the bottles from OoT and MM into six items for both games. The six bottles are: Red Potion, Gold Dust, Chateau, Milk, Ruto's Letter and an Empty Bottle. Bottle refills are also shared.",
     "default": false
@@ -4458,6 +5028,1276 @@
     "type": "boolean",
     "description": "Allows Link to use the Song of Soaring in OoT independently of his age",
     "default": false
+  },
+  {
+    "key": "mmAgeReqChildHookshot",
+    "name": "Hookshot requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Hookshot in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultHookshot",
+    "name": "Hookshot requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Hookshot in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildHookshotShort",
+    "name": "Short Hookshot requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Short Hookshot in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultHookshotShort",
+    "name": "Short Hookshot requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Short Hookshot in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildBow",
+    "name": "Bow requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Bow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultBow",
+    "name": "Bow requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Bow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildOcarinaOfTime",
+    "name": "Ocarina of Time requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Ocarina of Time in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultOcarinaOfTime",
+    "name": "Ocarina of Time requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Ocarina of Time in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildOcarinaFairy",
+    "name": "Fairy Ocarina requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Fairy Ocarina in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultOcarinaFairy",
+    "name": "Fairy Ocarina requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Fairy Ocarina in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildBomb",
+    "name": "Bombs requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Bombs in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultBomb",
+    "name": "Bombs requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Bombs in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildBombchu",
+    "name": "Bombchu requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Bombchu in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultBombchu",
+    "name": "Bombchu requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Bombchu in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildArrowFire",
+    "name": "Fire Arrow requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Fire Arrow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultArrowFire",
+    "name": "Fire Arrow requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Fire Arrow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildArrowIce",
+    "name": "Ice Arrow requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Ice Arrow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultArrowIce",
+    "name": "Ice Arrow requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Ice Arrow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildArrowLight",
+    "name": "Light Arrow requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Light Arrow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultArrowLight",
+    "name": "Light Arrow requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Light Arrow in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildHammer",
+    "name": "Megaton Hammer requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Megaton Hammer in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultHammer",
+    "name": "Megaton Hammer requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Megaton Hammer in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildSpellWind",
+    "name": "Farore's Wind requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Farore's Wind in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultSpellWind",
+    "name": "Farore's Wind requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Farore's Wind in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildSpellLove",
+    "name": "Nayru's Love requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Nayru's Love in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultSpellLove",
+    "name": "Nayru's Love requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Nayru's Love in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildSpellFire",
+    "name": "Din's Fire requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Din's Fire in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultSpellFire",
+    "name": "Din's Fire requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Din's Fire in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildBootsIron",
+    "name": "Iron Boots requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Iron Boots in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultBootsIron",
+    "name": "Iron Boots requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Iron Boots in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildBootsHover",
+    "name": "Hover Boots requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Hover Boots in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultBootsHover",
+    "name": "Hover Boots requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Hover Boots in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildTunicGoron",
+    "name": "Goron Tunic requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Goron Tunic in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultTunicGoron",
+    "name": "Goron Tunic requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Goron Tunic in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildTunicZora",
+    "name": "Zora Tunic requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Zora Tunic in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultTunicZora",
+    "name": "Zora Tunic requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Zora Tunic in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildGreatFairySword",
+    "name": "Great Fairy Sword requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Great Fairy Sword in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultGreatFairySword",
+    "name": "Great Fairy Sword requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Great Fairy Sword in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildBoomerang",
+    "name": "Boomerang requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Boomerang in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultBoomerang",
+    "name": "Boomerang requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Boomerang in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildSlingshot",
+    "name": "Slingshot requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Slingshot in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultSlingshot",
+    "name": "Slingshot requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Slingshot in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildStick",
+    "name": "Deku Stick requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Deku Stick in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultStick",
+    "name": "Deku Stick requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Deku Stick in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskDeku",
+    "name": "Deku Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Deku Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskDeku",
+    "name": "Deku Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Deku Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildDekuNuts",
+    "name": "Deku Nuts requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Deku Nuts in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultDekuNuts",
+    "name": "Deku Nuts requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Deku Nuts in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMagicBean",
+    "name": "Magic Bean requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Magic Bean in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMagicBean",
+    "name": "Magic Bean requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Magic Bean in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildPowderKeg",
+    "name": "Powder Keg requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Powder Keg in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultPowderKeg",
+    "name": "Powder Keg requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Powder Keg in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildPictographBox",
+    "name": "Pictograph Box requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Pictograph Box in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultPictographBox",
+    "name": "Pictograph Box requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Pictograph Box in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildLensOfTruth",
+    "name": "Lens of Truth requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Lens of Truth in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultLensOfTruth",
+    "name": "Lens of Truth requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Lens of Truth in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskGoron",
+    "name": "Goron Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Goron Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskGoron",
+    "name": "Goron Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Goron Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskZora",
+    "name": "Zora Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Zora Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskZora",
+    "name": "Zora Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Zora Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskFierceDeity",
+    "name": "Fierce Deity Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Fierce Deity Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskFierceDeity",
+    "name": "Fierce Deity Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Fierce Deity Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskPostman",
+    "name": "Postman Hat requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Postman Hat in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskPostman",
+    "name": "Postman Hat requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Postman Hat in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskAllNight",
+    "name": "All-Night Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip All-Night Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskAllNight",
+    "name": "All-Night Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip All-Night Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskBlast",
+    "name": "Blast Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Blast Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskBlast",
+    "name": "Blast Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Blast Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskStone",
+    "name": "Stone Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Stone Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskStone",
+    "name": "Stone Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Stone Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskGreatFairy",
+    "name": "Great Fairy Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Great Fairy Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskGreatFairy",
+    "name": "Great Fairy Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Great Fairy Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskKeaton",
+    "name": "Keaton Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Keaton Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskKeaton",
+    "name": "Keaton Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Keaton Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskBremen",
+    "name": "Bremen Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Bremen Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskBremen",
+    "name": "Bremen Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Bremen Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskBunny",
+    "name": "Bunny Hood requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Bunny Hood in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskBunny",
+    "name": "Bunny Hood requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Bunny Hood in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskDonGero",
+    "name": "Don Gero Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Don Gero Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskDonGero",
+    "name": "Don Gero Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Don Gero Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskScents",
+    "name": "Mask of Scents requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Mask of Scents in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskScents",
+    "name": "Mask of Scents requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Mask of Scents in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskRomani",
+    "name": "Romani Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Romani Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskRomani",
+    "name": "Romani Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Romani Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskTroupeLeader",
+    "name": "Troupe Leader Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Troupe Leader Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskTroupeLeader",
+    "name": "Troupe Leader Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Troupe Leader Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskKafei",
+    "name": "Kafei Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Kafei Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskKafei",
+    "name": "Kafei Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Kafei Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskCouple",
+    "name": "Couple's Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Couple's Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskCouple",
+    "name": "Couple's Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Couple's Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskTruth",
+    "name": "Mask of Truth requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Mask of Truth in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskTruth",
+    "name": "Mask of Truth requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Mask of Truth in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskKamaro",
+    "name": "Kamaro Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Kamaro Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskKamaro",
+    "name": "Kamaro Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Kamaro Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskGibdo",
+    "name": "Gibdo Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Gibdo Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskGibdo",
+    "name": "Gibdo Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Gibdo Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskGaro",
+    "name": "Garo Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Garo Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskGaro",
+    "name": "Garo Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Garo Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskCaptain",
+    "name": "Captain's Hat requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Captain's Hat in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskCaptain",
+    "name": "Captain's Hat requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Captain's Hat in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskGiant",
+    "name": "Giant's Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Giant's Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskGiant",
+    "name": "Giant's Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Giant's Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskGerudo",
+    "name": "Gerudo Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Gerudo Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskGerudo",
+    "name": "Gerudo Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Gerudo Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskSkull",
+    "name": "Skull Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Skull Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskSkull",
+    "name": "Skull Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Skull Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMaskSpooky",
+    "name": "Spooky Mask requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Spooky Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMaskSpooky",
+    "name": "Spooky Mask requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Spooky Mask in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildMoonTear",
+    "name": "Moon's Tear requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Moon's Tear in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultMoonTear",
+    "name": "Moon's Tear requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Moon's Tear in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildDeedLand",
+    "name": "Land Title Deed requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Land Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultDeedLand",
+    "name": "Land Title Deed requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Land Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildDeedSwamp",
+    "name": "Swamp Title Deed requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Swamp Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultDeedSwamp",
+    "name": "Swamp Title Deed requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Swamp Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildDeedMountain",
+    "name": "Mountain Title Deed requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Mountain Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultDeedMountain",
+    "name": "Mountain Title Deed requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Mountain Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildDeedOcean",
+    "name": "Ocean Title Deed requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Ocean Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultDeedOcean",
+    "name": "Ocean Title Deed requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Ocean Title Deed in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildLetterToMama",
+    "name": "Priority Mail to Mama requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Priority Mail to Mama in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultLetterToMama",
+    "name": "Priority Mail to Mama requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Priority Mail to Mama in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildLetterToKafei",
+    "name": "Letter to Kafei requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Letter to Kafei in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultLetterToKafei",
+    "name": "Letter to Kafei requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Letter to Kafei in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildPendantOfMemories",
+    "name": "Pendant of Memories requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Pendant of Memories in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultPendantOfMemories",
+    "name": "Pendant of Memories requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Pendant of Memories in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqChildStrength",
+    "name": "Silver/Golden Gauntlets requires Child Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Child Link to equip Silver/Golden Gauntlets in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqAdultStrength",
+    "name": "Silver/Golden Gauntlets requires Adult Link",
+    "category": "items.mmAgeRequirements",
+    "type": "boolean",
+    "description": "Requires Adult Link to equip Silver/Golden Gauntlets in MM.",
+    "default": false
+  },
+  {
+    "key": "mmAgeReqRandom",
+    "name": "Random MM Age Requirements",
+    "category": "items.mmAgeRequirements",
+    "type": "set",
+    "description": "Items whose MM age requirement is chosen randomly from the seed.",
+    "values": [
+      {
+        "value": "hookshot",
+        "name": "Hookshot"
+      },
+      {
+        "value": "hookshotShort",
+        "name": "Short Hookshot"
+      },
+      {
+        "value": "bow",
+        "name": "Bow"
+      },
+      {
+        "value": "ocarinaOfTime",
+        "name": "Ocarina of Time"
+      },
+      {
+        "value": "ocarinaFairy",
+        "name": "Fairy Ocarina"
+      },
+      {
+        "value": "bomb",
+        "name": "Bombs"
+      },
+      {
+        "value": "bombchu",
+        "name": "Bombchu"
+      },
+      {
+        "value": "arrowFire",
+        "name": "Fire Arrow"
+      },
+      {
+        "value": "arrowIce",
+        "name": "Ice Arrow"
+      },
+      {
+        "value": "arrowLight",
+        "name": "Light Arrow"
+      },
+      {
+        "value": "hammer",
+        "name": "Megaton Hammer"
+      },
+      {
+        "value": "spellWind",
+        "name": "Farore's Wind"
+      },
+      {
+        "value": "spellLove",
+        "name": "Nayru's Love"
+      },
+      {
+        "value": "spellFire",
+        "name": "Din's Fire"
+      },
+      {
+        "value": "bootsIron",
+        "name": "Iron Boots"
+      },
+      {
+        "value": "bootsHover",
+        "name": "Hover Boots"
+      },
+      {
+        "value": "tunicGoron",
+        "name": "Goron Tunic"
+      },
+      {
+        "value": "tunicZora",
+        "name": "Zora Tunic"
+      },
+      {
+        "value": "greatFairySword",
+        "name": "Great Fairy Sword"
+      },
+      {
+        "value": "boomerang",
+        "name": "Boomerang"
+      },
+      {
+        "value": "slingshot",
+        "name": "Slingshot"
+      },
+      {
+        "value": "stick",
+        "name": "Deku Stick"
+      },
+      {
+        "value": "maskDeku",
+        "name": "Deku Mask"
+      },
+      {
+        "value": "nut",
+        "name": "Deku Nuts"
+      },
+      {
+        "value": "magicBean",
+        "name": "Magic Bean"
+      },
+      {
+        "value": "powderKeg",
+        "name": "Powder Keg"
+      },
+      {
+        "value": "pictographBox",
+        "name": "Pictograph Box"
+      },
+      {
+        "value": "lensOfTruth",
+        "name": "Lens of Truth"
+      },
+      {
+        "value": "maskGoron",
+        "name": "Goron Mask"
+      },
+      {
+        "value": "maskZora",
+        "name": "Zora Mask"
+      },
+      {
+        "value": "maskFierceDeity",
+        "name": "Fierce Deity Mask"
+      },
+      {
+        "value": "maskPostman",
+        "name": "Postman Hat"
+      },
+      {
+        "value": "maskAllNight",
+        "name": "All-Night Mask"
+      },
+      {
+        "value": "maskBlast",
+        "name": "Blast Mask"
+      },
+      {
+        "value": "maskStone",
+        "name": "Stone Mask"
+      },
+      {
+        "value": "maskGreatFairy",
+        "name": "Great Fairy Mask"
+      },
+      {
+        "value": "maskKeaton",
+        "name": "Keaton Mask"
+      },
+      {
+        "value": "maskBremen",
+        "name": "Bremen Mask"
+      },
+      {
+        "value": "maskBunny",
+        "name": "Bunny Hood"
+      },
+      {
+        "value": "maskDonGero",
+        "name": "Don Gero Mask"
+      },
+      {
+        "value": "maskScents",
+        "name": "Mask of Scents"
+      },
+      {
+        "value": "maskRomani",
+        "name": "Romani Mask"
+      },
+      {
+        "value": "maskTroupeLeader",
+        "name": "Troupe Leader Mask"
+      },
+      {
+        "value": "maskKafei",
+        "name": "Kafei Mask"
+      },
+      {
+        "value": "maskCouple",
+        "name": "Couple's Mask"
+      },
+      {
+        "value": "maskTruth",
+        "name": "Mask of Truth"
+      },
+      {
+        "value": "maskKamaro",
+        "name": "Kamaro Mask"
+      },
+      {
+        "value": "maskGibdo",
+        "name": "Gibdo Mask"
+      },
+      {
+        "value": "maskGaro",
+        "name": "Garo Mask"
+      },
+      {
+        "value": "maskCaptain",
+        "name": "Captain's Hat"
+      },
+      {
+        "value": "maskGiant",
+        "name": "Giant's Mask"
+      },
+      {
+        "value": "maskGerudo",
+        "name": "Gerudo Mask"
+      },
+      {
+        "value": "maskSkull",
+        "name": "Skull Mask"
+      },
+      {
+        "value": "maskSpooky",
+        "name": "Spooky Mask"
+      },
+      {
+        "value": "moonTear",
+        "name": "Moon's Tear"
+      },
+      {
+        "value": "deedLand",
+        "name": "Land Title Deed"
+      },
+      {
+        "value": "deedSwamp",
+        "name": "Swamp Title Deed"
+      },
+      {
+        "value": "deedMountain",
+        "name": "Mountain Title Deed"
+      },
+      {
+        "value": "deedOcean",
+        "name": "Ocean Title Deed"
+      },
+      {
+        "value": "letterToMama",
+        "name": "Priority Mail to Mama"
+      },
+      {
+        "value": "letterToKafei",
+        "name": "Letter to Kafei"
+      },
+      {
+        "value": "pendantOfMemories",
+        "name": "Pendant of Memories"
+      },
+      {
+        "value": "strength",
+        "name": "Silver/Golden Gauntlets"
+      }
+    ],
+    "default": "none"
   },
   {
     "key": "erSelfLoops",
@@ -5110,6 +6950,14 @@
     "default": true
   },
   {
+    "key": "bowSlingshotBreakHives",
+    "name": "Bow/Slingshot Break Hives",
+    "category": "main.qol",
+    "type": "boolean",
+    "description": "Allows the Bow and Slingshot to break beehives in OoT, matching MM behavior",
+    "default": false
+  },
+  {
     "key": "critWiggleDisable",
     "name": "Disable Crit Wiggle",
     "category": "main.qol",
@@ -5142,6 +6990,14 @@
     "default": false
   },
   {
+    "key": "mmSongOfDoubleTimeTimeSelector",
+    "name": "Song of Double Time - Time Selector",
+    "category": "main.qol",
+    "type": "boolean",
+    "description": "Changes the Song of Double Time in MM to allow selecting time, similar to the Song of Double Time in Majoras Mask 3D.",
+    "default": false
+  },
+  {
     "key": "autoInvert",
     "name": "Auto-Invert Time (MM)",
     "category": "main.qol",
@@ -5162,5 +7018,165 @@
       }
     ],
     "default": "never"
+  },
+  {
+    "key": "cutsceneSkipOoT",
+    "name": "Skip Mundane Cutscenes (OoT)",
+    "category": "cutscenes.main",
+    "type": "boolean",
+    "description": "Skips a lot of mundane cutscenes in OoT, such as chests appearing, barred doors opening, etc.",
+    "default": false
+  },
+  {
+    "key": "cutsceneSkipMM",
+    "name": "Skip Mundane Cutscenes (MM)",
+    "category": "cutscenes.main",
+    "type": "boolean",
+    "description": "Skips a lot of mundane cutscenes in MM, such as chests appearing, barred doors opening, etc.",
+    "default": false
+  },
+  {
+    "key": "cutsceneGlitchOoT",
+    "name": "Glitch Aiding Cutscenes (OoT)",
+    "category": "cutscenes.glitches",
+    "type": "boolean",
+    "description": "Enables glitch-aiding cutscenes, such as Poe Sisters, Darunia, and some other chests/switches in dungeons.",
+    "default": false
+  },
+  {
+    "key": "cutsceneIntroGohma",
+    "name": "Skip Gohma Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Gohma.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroKingDodongo",
+    "name": "Skip King Dodongo Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for King Dodongo.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroBarinade",
+    "name": "Skip Barinade Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Barinade.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroPhantomGanon",
+    "name": "Skip Phantom Ganon Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Phantom Ganon.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroVolvagia",
+    "name": "Skip Volvagia Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Volvagia.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroMorpha",
+    "name": "Skip Morpha Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Morpha.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroBongoBongo",
+    "name": "Skip Bongo Bongo Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Bongo Bongo.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroTwinrova",
+    "name": "Skip Twinrova Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Twinrova.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroGanondorf",
+    "name": "Skip Ganondorf Intro Cutscene",
+    "category": "cutscenes.bosses.oot",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Ganondorf.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroOdolwa",
+    "name": "Skip Odolwa Intro Cutscene",
+    "category": "cutscenes.bosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Odolwa.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroGoht",
+    "name": "Skip Goht Intro Cutscene",
+    "category": "cutscenes.bosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Goht.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroWart",
+    "name": "Skip Wart Intro Cutscene",
+    "category": "cutscenes.minibosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Wart.",
+    "default": false
+  },
+  {
+    "key": "cutsceneIntroGyorg",
+    "name": "Skip Gyorg Intro Cutscene",
+    "category": "cutscenes.bosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Gyorg.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroIgos",
+    "name": "Skip Igos du Ikana Intro Cutscene",
+    "category": "cutscenes.minibosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Igos du Ikana.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroGomess",
+    "name": "Skip Gomess Intro Cutscene",
+    "category": "cutscenes.minibosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Gomess.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroTwinmold",
+    "name": "Skip Twinmold Intro Cutscene",
+    "category": "cutscenes.bosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Twinmold.",
+    "default": true
+  },
+  {
+    "key": "cutsceneIntroMajora",
+    "name": "Skip Majora Intro Cutscene",
+    "category": "cutscenes.bosses.mm",
+    "type": "boolean",
+    "description": "Skips the intro cutscene for Majora.",
+    "default": false
   }
 ]

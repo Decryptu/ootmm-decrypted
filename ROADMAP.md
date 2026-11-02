@@ -8,7 +8,7 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Planned, in order
 | Item | Notes |
 |---|---|
-| Items from OoTMM data | `items.py` is hand-written. Check it against OoTMM's item list and pool rules per option |
+| Item pool | The items come from OoTMM, but the pool is a placeholder: one of every non-junk item, then random junk. Port OoTMM's pool rules per option (`packages/logic`), and mark which items are progression once the logic exists |
 | Logic | `rules.py` still holds the Archipelago example world's rules, unused: every entrance and location is open. Translate OoTMM's world-file conditions and macros (`raw/GreatMacroJSONdump.json`) into access rules, including the per-parent entrances of multi-region checks ([DEVELOPMENT.md](DEVELOPMENT.md#metadata)) |
 | Options | Only keep options that make sense in a multiworld (`raw/Meta_ForbiddenOptions.py` lists the excluded ones), and pass them to the patch |
 | Goal | The completion condition is a placeholder `BEAT MAJORA` event on `MM Moon`; follow the `main_goal` option (Ganon, Majora, both, Triforce) |
