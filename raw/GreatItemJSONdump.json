@@ -1,0 +1,6434 @@
+[
+ {
+  "id": "MM_ARROW_FIRE",
+  "name": "Fire Arrows (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_ARROW_ICE",
+  "name": "Ice Arrows (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_ARROW_LIGHT",
+  "name": "Light Arrows (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_ARROWS_10",
+  "name": "10 Arrows (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_ARROWS_30",
+  "name": "30 Arrows (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_ARROWS_40",
+  "name": "40 Arrows (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_BIG_POE",
+  "name": "Big Poe (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BLUE_FIRE",
+  "name": "Blue Fire (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMB_BAG",
+  "name": "Bomb Bag (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMB",
+  "name": "Bomb (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_BOMBCHU_10",
+  "name": "10 Bombchu (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMBCHU_20",
+  "name": "20 Bombchu (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMBCHU_5",
+  "name": "5 Bombchu (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMBCHU_BAG",
+  "name": "Bombchu Bag (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMBCHU",
+  "name": "1 Bombchu (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMBER_NOTEBOOK",
+  "name": "Bombers' Notebook",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOMBS_10",
+  "name": "10 Bombs (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_BOMBS_20",
+  "name": "20 Bombs (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_BOMBS_30",
+  "name": "30 Bombs (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_BOMBS_5",
+  "name": "5 Bombs (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_BOOMERANG",
+  "name": "Boomerang (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOOTS_HOVER",
+  "name": "Hover Boots (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOOTS_IRON",
+  "name": "Iron Boots (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOSS_KEY_GB",
+  "name": "Boss Key (Great Bay Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOSS_KEY_SH",
+  "name": "Boss Key (Snowhead Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOSS_KEY_ST",
+  "name": "Boss Key (Stone Tower Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOSS_KEY_WF",
+  "name": "Boss Key (Woodfall Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_BIG_POE",
+  "name": "Bottled Big Poe (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_BLUE_FIRE",
+  "name": "Bottle of Blue Fire (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_CHATEAU",
+  "name": "Bottle of Chateau Romani (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_EMPTY",
+  "name": "Empty Bottle (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_FAIRY",
+  "name": "Bottled Fairy (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_MILK",
+  "name": "Bottle of Milk (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_POE",
+  "name": "Bottled Poe (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_POTION_BLUE",
+  "name": "Bottle of Blue Potion (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_POTION_GREEN",
+  "name": "Bottle of Green Potion (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_POTION_RED",
+  "name": "Bottle of Red Potion (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_RANDOM",
+  "name": "Random Bottle (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLE_RUTO_LETTER",
+  "name": "Ruto's Letter (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOTTLED_GOLD_DUST",
+  "name": "Bottle of Gold Dust (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BOW",
+  "name": "Hero's Bow (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BUGS",
+  "name": "Bugs (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BUTTON_A",
+  "name": "A Button (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BUTTON_C_DOWN",
+  "name": "C-Down Button (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BUTTON_C_LEFT",
+  "name": "C-Left Button (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BUTTON_C_RIGHT",
+  "name": "C-Right Button (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_BUTTON_C_UP",
+  "name": "C-Up Button (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CHATEAU",
+  "name": "Chateau Romani Refill (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK",
+  "name": "Progressive Clock (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK1",
+  "name": "Clock (MM, Day 1)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK2",
+  "name": "Clock (MM, Night 1)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK3",
+  "name": "Clock (MM, Day 2)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK4",
+  "name": "Clock (MM, Night 2)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK5",
+  "name": "Clock (MM, Day 3)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_CLOCK6",
+  "name": "Clock (MM, Night 3)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_COMPASS_GB",
+  "name": "Compass (Great Bay Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_COMPASS_SH",
+  "name": "Compass (Snowhead Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_COMPASS_ST",
+  "name": "Compass (Stone Tower Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_COMPASS_WF",
+  "name": "Compass (Woodfall Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_DEED_LAND",
+  "name": "Land Title Deed",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_DEED_MOUNTAIN",
+  "name": "Mountain Title Deed",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_DEED_OCEAN",
+  "name": "Ocean Title Deed",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_DEED_SWAMP",
+  "name": "Swamp Title Deed",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_DEFENSE_UPGRADE",
+  "name": "Double Defense (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_DEKU_SEEDS_30",
+  "name": "30 Deku Seeds (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_DEKU_SEEDS_5",
+  "name": "5 Deku Seeds (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_FAIRY_BIG",
+  "name": "Big Fairy (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_FAIRY",
+  "name": "Fairy (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_FISH",
+  "name": "Fish (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_GREAT_FAIRY_SWORD",
+  "name": "Great Fairy's Sword (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_GS_TOKEN_OCEAN",
+  "name": "Ocean Skulltula Token",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_GS_TOKEN_SWAMP",
+  "name": "Swamp Skulltula Token",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_HAMMER",
+  "name": "Megaton Hammer (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_HEART_CONTAINER",
+  "name": "Heart Container (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_HEART_PIECE",
+  "name": "Piece of Heart (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_HOOKSHOT",
+  "name": "Hookshot (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_KEY_RING_GB",
+  "name": "Key Ring (Great Bay)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_KEY_RING_SH",
+  "name": "Key Ring (Snowhead)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_KEY_RING_ST",
+  "name": "Key Ring (Stone Tower)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_KEY_RING_WF",
+  "name": "Key Ring (Woodfall)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_LENS",
+  "name": "Lens of Truth (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_LETTER_TO_KAFEI",
+  "name": "Letter to Kafei",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_LETTER_TO_MAMA",
+  "name": "Letter to Mama",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MAGIC_BEAN",
+  "name": "Magic Bean (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MAGIC_JAR_LARGE",
+  "name": "Large Magic Jar (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_MAGIC_JAR_SMALL",
+  "name": "Small Magic Jar (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_MAGIC_UPGRADE",
+  "name": "Magic Upgrade (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MAP_GB",
+  "name": "Map (Great Bay Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MAP_SH",
+  "name": "Map (Snowhead Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MAP_ST",
+  "name": "Map (Stone Tower Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MAP_WF",
+  "name": "Map (Woodfall Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_ADULT",
+  "name": "Adult Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_ALL_NIGHT",
+  "name": "All-Night Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_BLAST",
+  "name": "Blast Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_BREMEN",
+  "name": "Bremen Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_BUNNY",
+  "name": "Bunny Hood (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_CAPTAIN",
+  "name": "Captain's Hat",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_COUPLE",
+  "name": "Couple's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_DEKU",
+  "name": "Deku Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_DON_GERO",
+  "name": "Don Gero's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_FIERCE_DEITY",
+  "name": "Fierce Deity's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_GARO",
+  "name": "Garo's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_GERUDO",
+  "name": "Gerudo Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_GIANT",
+  "name": "Giant's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_GIBDO",
+  "name": "Gibdo Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_GORON",
+  "name": "Goron Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_GREAT_FAIRY",
+  "name": "Great Fairy's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_KAFEI",
+  "name": "Kafei's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_KAMARO",
+  "name": "Kamaro's Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_KEATON",
+  "name": "Keaton Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_POSTMAN",
+  "name": "Postman's Hat",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_ROMANI",
+  "name": "Romani's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_SCENTS",
+  "name": "Mask of Scents",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_SKULL",
+  "name": "Skull Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_SPOOKY",
+  "name": "Spooky Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_STONE",
+  "name": "Stone Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_TROUPE_LEADER",
+  "name": "Circus Leader's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_TRUTH",
+  "name": "Mask of Truth (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MASK_ZORA",
+  "name": "Zora Mask (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MILK",
+  "name": "Romani Milk",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_MOON_TEAR",
+  "name": "Moon's Tear",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_NUT_UPGRADE",
+  "name": "Deku Nut Upgrade (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_NUT",
+  "name": "Nut (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_NUTS_10",
+  "name": "10 Deku Nuts (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_NUTS_5",
+  "name": "5 Deku Nuts (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_OCARINA",
+  "name": "Ocarina (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_CLOCK_TOWN",
+  "name": "Owl Statue (Clock Town)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_GREAT_BAY",
+  "name": "Owl Statue (Great Bay)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_IKANA_CANYON",
+  "name": "Owl Statue (Ikana Canyon)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_MILK_ROAD",
+  "name": "Owl Statue (Milk Road)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_MOUNTAIN_VILLAGE",
+  "name": "Owl Statue (Mountain Village)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_SNOWHEAD",
+  "name": "Owl Statue (Snowhead)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_SOUTHERN_SWAMP",
+  "name": "Owl Statue (Southern Swamp)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_STONE_TOWER",
+  "name": "Owl Statue (Stone Tower)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_WOODFALL",
+  "name": "Owl Statue (Woodfall)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_OWL_ZORA_CAPE",
+  "name": "Owl Statue (Zora Cape)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_PENDANT_OF_MEMORIES",
+  "name": "Pendant of Memories",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_PICTOGRAPH_BOX",
+  "name": "Pictograph Box",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_PLATINUM_TOKEN",
+  "name": "Platinum Token (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_POE",
+  "name": "Poe (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_POTION_BLUE",
+  "name": "Blue Potion (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_POTION_GREEN",
+  "name": "Green Potion (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_POTION_RED",
+  "name": "Red Potion (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_POWDER_KEG",
+  "name": "Powder Keg (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RECOVERY_HEART",
+  "name": "Recovery Heart (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_REMAINS_GOHT",
+  "name": "Goht's Remains",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_REMAINS_GYORG",
+  "name": "Gyorg's Remains",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_REMAINS_ODOLWA",
+  "name": "Odolwa's Remains",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_REMAINS_TWINMOLD",
+  "name": "Twinmold's Remains",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_ROOM_KEY",
+  "name": "Room Key",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUPEE_BLUE",
+  "name": "Blue Rupee (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_RUPEE_GOLD",
+  "name": "Gold Rupee (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUPEE_GREEN",
+  "name": "Green Rupee (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_RUPEE_PURPLE",
+  "name": "Purple Rupee (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUPEE_RED",
+  "name": "Red Rupee (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_RUPEE_SILVER",
+  "name": "Silver Rupee (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_BENEATH_GRAVEYARD",
+  "name": "Rusty Key (Beneath the Graveyard)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_BLACKSMITH",
+  "name": "Rusty Key (Blacksmith)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_BOMB_SHOP",
+  "name": "Rusty Key (Bomb Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_CUCCO_SHACK",
+  "name": "Rusty Key (Cucco Shack)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_CURIOSITY_SHOP",
+  "name": "Rusty Key (Curiosity Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_DAMPE_HOUSE",
+  "name": "Rusty Key (Dampe's House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_DOG_RACETRACK",
+  "name": "Rusty Key (Doggy Racetrack)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_GRANDMA_ROOM",
+  "name": "Rusty Key (Grandma's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_HONEY_DARLING",
+  "name": "Rusty Key (Honey & Darling)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_KAFEI_HIDEOUT",
+  "name": "Rusty Key (Kafei's Hideout)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_LABORATORY",
+  "name": "Rusty Key (Oceanic Laboratory)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_LOTTERY",
+  "name": "Rusty Key (Lottery)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE_KAFEI",
+  "name": "Rusty Key (Kafei's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE_OFFICE",
+  "name": "Rusty Key (Mayor's Residence Office)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE_SALON",
+  "name": "Rusty Key (Mayor's Residence Salon)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE",
+  "name": "Rusty Key (Mayor's Residence)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_MILK_BAR",
+  "name": "Rusty Key (Milk Bar)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_MUSIC_HOUSE",
+  "name": "Rusty Key (Music House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_OBSERVATORY",
+  "name": "Rusty Key (Observatory)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_POST_OFFICE",
+  "name": "Rusty Key (Post Office)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_POTION_SHOP",
+  "name": "Rusty Key (Potion Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_RANCH_BARN",
+  "name": "Rusty Key (Romani Ranch Barn)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_RANCH_HOUSE_ROOM",
+  "name": "Rusty Key (Romani's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_RANCH_HOUSE",
+  "name": "Rusty Key (Romani Ranch House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_STOCK_POT_INN_DORMITORY",
+  "name": "Rusty Key (Stock Pot Inn Dormitory)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_STOCK_POT_INN_ROOF",
+  "name": "Rusty Key (Stock Pot Inn Roof)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_STOCK_POT_INN_STAFF_ROOM",
+  "name": "Rusty Key (Stock Pot Inn Staff Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_STOCK_POT_INN",
+  "name": "Rusty Key (Stock Pot Inn)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_SWAMP_ARCHERY",
+  "name": "Rusty Key (Swamp Archery)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_SWORDSMAN_SCHOOL",
+  "name": "Rusty Key (Swordsman School)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_TOURIST_INFORMATION",
+  "name": "Rusty Key (Tourist Information)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_TOWN_ARCHERY",
+  "name": "Rusty Key (Town Archery)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_TRADING_POST",
+  "name": "Rusty Key (Trading Post)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_TREASURE_CHEST_GAME",
+  "name": "Rusty Key (Treasure Game)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_ZORA_EVAN_ROOM",
+  "name": "Rusty Key (Evan's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_ZORA_JAPAS_ROOM",
+  "name": "Rusty Key (Japas' Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_ZORA_LULU_ROOM",
+  "name": "Rusty Key (Lulu's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_ZORA_SHOP",
+  "name": "Rusty Key (Zora Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_RUSTY_KEY_ZORA_TIJO_ROOM",
+  "name": "Rusty Key (Tijo's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SCALE",
+  "name": "Progressive Scale (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SHIELD_DEKU",
+  "name": "Deku Shield (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_SHIELD_HERO",
+  "name": "Hero's Shield",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_SHIELD_MIRROR",
+  "name": "Mirror Shield (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SHIELD",
+  "name": "Progressive Shield (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SHOVEL",
+  "name": "Shovel (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SKELETON_KEY",
+  "name": "Skeleton Key (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SLINGSHOT",
+  "name": "Fairy Slingshot (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SMALL_KEY_GB",
+  "name": "Small Key (Great Bay Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SMALL_KEY_SH",
+  "name": "Small Key (Snowhead Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SMALL_KEY_ST",
+  "name": "Small Key (Stone Tower Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SMALL_KEY_WF",
+  "name": "Small Key (Woodfall Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_AWAKENING",
+  "name": "Sonata of Awakening (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_EMPTINESS",
+  "name": "Elegy of Emptiness (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_EPONA",
+  "name": "Epona's Song (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_GORON_HALF",
+  "name": "Progressive Goron Lullaby (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_GORON",
+  "name": "Goron Lullaby (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_HEALING",
+  "name": "Song of Healing (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_AWAKENING",
+  "name": "Note from Sonata of Awakening (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_EMPTINESS",
+  "name": "Note from Elegy of Emptiness (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_EPONA",
+  "name": "Note from Epona's Song (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_GORON",
+  "name": "Note from Goron Lullaby (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_HEALING",
+  "name": "Note from Song of Healing (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_ORDER",
+  "name": "Note from Oath to Order (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_SARIA",
+  "name": "Note from Saria's Song (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_SOARING",
+  "name": "Note from Song of Soaring (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_STORMS",
+  "name": "Note from Song of Storms (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_SUN",
+  "name": "Note from Sun's Song (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TIME",
+  "name": "Note from Song of Time (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TP_FIRE",
+  "name": "Note from Bolero of Fire (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TP_FOREST",
+  "name": "Note from Minuet of Forest (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TP_LIGHT",
+  "name": "Note from Prelude of Light (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TP_SHADOW",
+  "name": "Note from Nocturne of Shadow (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TP_SPIRIT",
+  "name": "Note from Requiem of Spirit (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_TP_WATER",
+  "name": "Note from Serenade of Water (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_ZELDA",
+  "name": "Note from Zelda's Lullaby (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_NOTE_ZORA",
+  "name": "Note from New Wave Bossa Nova (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_ORDER",
+  "name": "Oath to Order (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_SARIA",
+  "name": "Saria's Song (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_SOARING",
+  "name": "Song of Soaring (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_STORMS",
+  "name": "Song of Storms (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_SUN",
+  "name": "Sun's Song (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TIME",
+  "name": "Song of Time (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TP_FIRE",
+  "name": "Bolero of Fire (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TP_FOREST",
+  "name": "Minuet of Forest (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TP_LIGHT",
+  "name": "Prelude of Light (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TP_SHADOW",
+  "name": "Nocturne of Shadow (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TP_SPIRIT",
+  "name": "Requiem of Spirit (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_TP_WATER",
+  "name": "Serenade of Water (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_ZELDA",
+  "name": "Zelda's Lullaby (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SONG_ZORA",
+  "name": "New Wave Bossa Nova (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ANIMAL_BUTTERFLY",
+  "name": "Soul of Butterflies (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ANIMAL_COW",
+  "name": "Soul of Cows (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ANIMAL_CUCCO",
+  "name": "Soul of Cuccos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ANIMAL_DOG",
+  "name": "Soul of Dogs (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_BOSS_GOHT",
+  "name": "Soul of Goht",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_BOSS_GYORG",
+  "name": "Soul of Gyorg",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_BOSS_IGOS",
+  "name": "Soul of Igos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_BOSS_ODOLWA",
+  "name": "Soul of Odolwa",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_BOSS_TWINMOLD",
+  "name": "Soul of Twinmold",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_ARMOS",
+  "name": "Soul of Armos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_BAD_BAT",
+  "name": "Soul of Bad Bats",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_BEAMOS",
+  "name": "Soul of Beamos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_BIO_BABA",
+  "name": "Soul of Bio Babas",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_BOE",
+  "name": "Soul of Boes",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_BUBBLE",
+  "name": "Soul of Bubbles (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_CAPTAIN_KEETA",
+  "name": "Soul of Captain Keeta",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_CHUCHU",
+  "name": "Soul of Chuchus",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_DEEP_PYTHON",
+  "name": "Soul of Deep Pythons",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_DEKU_BABA",
+  "name": "Soul of Deku Babas (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_DEKU_SCRUB",
+  "name": "Soul of Deku Scrubs (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_DEXIHAND",
+  "name": "Soul of Dexihands",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_DODONGO",
+  "name": "Soul of Dodongos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_DRAGONFLY",
+  "name": "Soul of Dragonflies",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_EENO",
+  "name": "Soul of Eenoes",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_EYEGORE",
+  "name": "Soul of Eyegores",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_FLOORMASTER",
+  "name": "Soul of Floormasters (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_FLYING_POT",
+  "name": "Soul of Flying Pots (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_FREEZARD",
+  "name": "Soul of Freezards (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_GARO",
+  "name": "Soul of Garo",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_GEKKO",
+  "name": "Soul of Gekkos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_GOMESS",
+  "name": "Soul of Gomess",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_GUAY",
+  "name": "Soul of Guays (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_HIPLOOP",
+  "name": "Soul of Hiploops",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_IRON_KNUCKLE",
+  "name": "Soul of Iron Knuckles (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_KEESE",
+  "name": "Soul of Keese (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_LEEVER",
+  "name": "Soul of Leevers (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_LIKE_LIKE",
+  "name": "Soul of Like Likes (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_LIZALFOS_DINOLFOS",
+  "name": "Soul of Lizalfos/Dinolfos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_NEJIRON",
+  "name": "Soul of Nejirons",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_OCTOROK",
+  "name": "Soul of Octoroks (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_PEAHAT",
+  "name": "Soul of Peahats (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_POE",
+  "name": "Soul of Poes (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_REAL_BOMBCHU",
+  "name": "Soul of Real Bombchu",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_REDEAD_GIBDO",
+  "name": "Soul of ReDeads/Gibdos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_SHELL_BLADE",
+  "name": "Soul of Shell Blades (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_SKULLFISH",
+  "name": "Soul of Skullfish (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_SKULLTULA",
+  "name": "Soul of Skulltulas (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_SKULLWALLTULA",
+  "name": "Soul of Skullwalltulas (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_SNAPPER",
+  "name": "Soul of Snappers",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_STALCHILD",
+  "name": "Soul of Stalchildren (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_TAKKURI",
+  "name": "Soul of Takkuri",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_TEKTITE",
+  "name": "Soul of Tektites (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_THIEVES",
+  "name": "Soul of the Fighting Pirates",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_WALLMASTER",
+  "name": "Soul of Wallmasters (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_WART",
+  "name": "Soul of Warts",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_WIZZROBE",
+  "name": "Soul of Wizzrobes",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_ENEMY_WOLFOS",
+  "name": "Soul of Wolfos (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_MISC_BUSINESS_SCRUB",
+  "name": "Soul of Business Scrubs (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_MISC_GS",
+  "name": "Soul of Gold Skulltulas (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_ANJU",
+  "name": "Soul of Anju (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_AROMA",
+  "name": "Soul of Madame Aroma (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_ASTRONOMER",
+  "name": "Soul of Astronomer (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BANKER",
+  "name": "Soul of the Banker (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BAZAAR_SHOPKEEPER",
+  "name": "Soul of Swamp Archery Owner (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BEAN_SALESMAN",
+  "name": "Soul of the Bean Salesman (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BIGGORON",
+  "name": "Soul of Biggoron (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BLACKSMITHS",
+  "name": "Soul of Blacksmiths",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BOMBCHU_BOWLING_LADY",
+  "name": "Soul of Chest Game Lady (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BOMBCHU_SHOPKEEPER",
+  "name": "Soul of the Bomb Shop Owner (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BOMBERS",
+  "name": "Soul of Bombers (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_BUTLER_DEKU",
+  "name": "Soul of the Deku Butler",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_CARPENTERS",
+  "name": "Soul of Carpenters (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_CARPET_MAN",
+  "name": "Soul of Swordsman (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_CHEST_GAME_OWNER",
+  "name": "Soul of the Fisherman (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_CITIZEN",
+  "name": "Soul of Citizens (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_COMPOSER_BROS",
+  "name": "Soul of Composer Bros. (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_DAMPE",
+  "name": "Soul of Dampe (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_DEKU_KING",
+  "name": "Soul of the Deku King",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_DEKU_PRINCESS",
+  "name": "Soul of the Deku Princess",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_DOG_LADY",
+  "name": "Soul of Dog Lady (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_FISHING_POND_OWNER",
+  "name": "Soul of Trading Post Owner (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GORMAN",
+  "name": "Soul of Gorman & Bros. (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GORON_CHILD",
+  "name": "Soul of the Goron Baby (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GORON_ELDER",
+  "name": "Soul of the Goron Elder",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GORON_SHOPKEEPER",
+  "name": "Soul of the Goron Shopkeeper (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GORON",
+  "name": "Soul of Gorons (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GROG",
+  "name": "Soul of Grog (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_GURU_GURU",
+  "name": "Soul of Guru-Guru (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_HONEY_DARLING",
+  "name": "Soul of Honey & Darling (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_KAFEI",
+  "name": "Soul of Kafei",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_KEATON",
+  "name": "Soul of Keaton",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_KOUME_KOTAKE",
+  "name": "Soul of Koume and Kotake",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_MALON",
+  "name": "Soul of Romani/Cremia (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_MAYOR_DOTOUR",
+  "name": "Soul of Mayor Dotour",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_MEDIGORON",
+  "name": "Soul of Keg Trial Goron (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_MOON_CHILDREN",
+  "name": "Soul of Moon Children",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_OLD_HAG",
+  "name": "Soul of Anju's Grandmother (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_PLAYGROUND_SCRUBS",
+  "name": "Soul of Playground Scrubs",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_POE_COLLECTOR",
+  "name": "Soul of Ghost Hut Owner (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_ROOFTOP_MAN",
+  "name": "Soul of Part-Timer (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_RUTO",
+  "name": "Soul of Lulu (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_SCIENTIST",
+  "name": "Soul of the Scientist (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_SHOOTING_GALLERY_OWNER",
+  "name": "Soul of Town Archery Owner (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_TALON",
+  "name": "Soul of Mr. Barten (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_THIEVES",
+  "name": "Soul of the Patrolling Pirates and their Chief",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_TINGLE",
+  "name": "Soul of Tingle",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_TOILET_HAND",
+  "name": "Soul of Toilet Hand",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_TOTO",
+  "name": "Soul of Toto (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_TOURIST_CENTER",
+  "name": "Soul of Tourist Center Owner",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_ZORA_MUSICIANS",
+  "name": "Soul of the Zora Musicians",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_ZORA_SHOPKEEPER",
+  "name": "Soul of the Zora Shopkeeper (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SOUL_NPC_ZORA",
+  "name": "Soul of Zoras (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SPELL_FIRE",
+  "name": "Din's Fire (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SPELL_LOVE",
+  "name": "Nayru's Love (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SPELL_WIND",
+  "name": "Farore's Wind (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SPIN_UPGRADE",
+  "name": "Spin Attack Upgrade (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STICK_UPGRADE",
+  "name": "Deku Stick Upgrade (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STICK",
+  "name": "Deku Stick (MM)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "MM_STONE_OF_AGONY",
+  "name": "Stone of Agony (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STRAY_FAIRY_GB",
+  "name": "Stray Fairy (Great Bay Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STRAY_FAIRY_SH",
+  "name": "Stray Fairy (Snowhead Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STRAY_FAIRY_ST",
+  "name": "Stray Fairy (Stone Tower Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STRAY_FAIRY_TOWN",
+  "name": "Stray Fairy (Clock Town)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STRAY_FAIRY_WF",
+  "name": "Stray Fairy (Woodfall Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_STRENGTH",
+  "name": "Progressive Strength (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_SWORD",
+  "name": "Progressive Sword (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_TRANSCENDENT_FAIRY",
+  "name": "Transcendent Fairy",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_TUNIC_GORON",
+  "name": "Goron Tunic (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_TUNIC_ZORA",
+  "name": "Zora Tunic (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WALLET",
+  "name": "Progressive Wallet (MM)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WORLD_MAP_CLOCK_TOWN",
+  "name": "World Map of Clock Town",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WORLD_MAP_GREAT_BAY",
+  "name": "World Map of Great Bay",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WORLD_MAP_ROMANI_RANCH",
+  "name": "World Map of Ranch",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WORLD_MAP_SNOWHEAD",
+  "name": "World Map of Snowhead",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WORLD_MAP_STONE_TOWER",
+  "name": "World Map of Stone Tower",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "MM_WORLD_MAP_WOODFALL",
+  "name": "World Map of Woodfall",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ARROW_FIRE",
+  "name": "Fire Arrows (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ARROW_ICE",
+  "name": "Ice Arrows (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ARROW_LIGHT",
+  "name": "Light Arrows (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ARROWS_10",
+  "name": "10 Arrows (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_ARROWS_30",
+  "name": "30 Arrows (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_ARROWS_5",
+  "name": "5 Arrows (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_BIG_POE",
+  "name": "Big Poe (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BLUE_FIRE",
+  "name": "Blue Fire (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOMB_BAG",
+  "name": "Bomb Bag (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOMB",
+  "name": "Bomb (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_BOMBCHU_10",
+  "name": "10 Bombchu (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOMBCHU_20",
+  "name": "20 Bombchu (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOMBCHU_5",
+  "name": "5 Bombchu (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOMBCHU_BAG",
+  "name": "Bombchu Bag (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOMBS_10",
+  "name": "10 Bombs (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_BOMBS_20",
+  "name": "20 Bombs (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_BOMBS_30",
+  "name": "30 Bombs (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_BOMBS_5",
+  "name": "5 Bombs (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_BOOMERANG",
+  "name": "Boomerang (OOT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOOTS_HOVER",
+  "name": "Hover Boots (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOOTS_IRON",
+  "name": "Iron Boots (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOSS_KEY_FIRE",
+  "name": "Boss Key (Fire Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOSS_KEY_FOREST",
+  "name": "Boss Key (Forest Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOSS_KEY_GANON",
+  "name": "Boss Key (Ganon's Castle)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOSS_KEY_SHADOW",
+  "name": "Boss Key (Shadow Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOSS_KEY_SPIRIT",
+  "name": "Boss Key (Spirit Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOSS_KEY_WATER",
+  "name": "Boss Key (Water Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_BIG_POE",
+  "name": "Bottled Big Poe (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_BLUE_FIRE",
+  "name": "Bottle of Blue Fire (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_CHATEAU",
+  "name": "Bottle of Chateau Romani (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_EMPTY",
+  "name": "Empty Bottle (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_FAIRY",
+  "name": "Bottled Fairy (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_MILK",
+  "name": "Bottle of Milk (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_POE",
+  "name": "Bottled Poe (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_POTION_BLUE",
+  "name": "Bottle of Blue Potion (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_POTION_GREEN",
+  "name": "Bottle of Green Potion (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_POTION_RED",
+  "name": "Bottle of Red Potion (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_RANDOM",
+  "name": "Random Bottle (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLE_RUTO_LETTER",
+  "name": "Ruto's Letter (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOTTLED_GOLD_DUST",
+  "name": "Bottle of Gold Dust (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BOW",
+  "name": "Fairy Bow (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BROKEN_GORON_SWORD",
+  "name": "Broken Goron's Sword",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BUGS",
+  "name": "Bugs (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BUTTON_A",
+  "name": "A Button (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BUTTON_C_DOWN",
+  "name": "C-Down Button (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BUTTON_C_LEFT",
+  "name": "C-Left Button (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BUTTON_C_RIGHT",
+  "name": "C-Right Button (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_BUTTON_C_UP",
+  "name": "C-Up Button (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_CHATEAU",
+  "name": "Chateau Romani Refill (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_CHICKEN",
+  "name": "Chicken",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_CLAIM_CHECK",
+  "name": "Claim Check",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_CLOCK",
+  "name": "Clock (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COIN_BLUE",
+  "name": "Coin (Blue)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COIN_GREEN",
+  "name": "Coin (Green)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COIN_RED",
+  "name": "Coin (Red)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COIN_YELLOW",
+  "name": "Coin (Yellow)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COJIRO",
+  "name": "Cojiro",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_BOTW",
+  "name": "Compass (Bottom of the Well)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_DC",
+  "name": "Compass (Dodongo's Cavern)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_DT",
+  "name": "Compass (Deku Tree)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_FIRE",
+  "name": "Compass (Fire Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_FOREST",
+  "name": "Compass (Forest Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_IC",
+  "name": "Compass (Ice Cavern)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_JJ",
+  "name": "Compass (Jabu-Jabu's Belly)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_SHADOW",
+  "name": "Compass (Shadow Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_SPIRIT",
+  "name": "Compass (Spirit Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_COMPASS_WATER",
+  "name": "Compass (Water Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_DEFENSE_UPGRADE",
+  "name": "Double Defense (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_DEKU_SEEDS_30",
+  "name": "30 Deku Seeds (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_DEKU_SEEDS_5",
+  "name": "5 Deku Seeds (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_EYE_DROPS",
+  "name": "Eye Drops",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_EYEBALL_FROG",
+  "name": "Eyeball Frog",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FAIRY_BIG",
+  "name": "Big Fairy (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FAIRY",
+  "name": "Fairy (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISH",
+  "name": "Fish (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_10LBS",
+  "name": "Adult Fish (10 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_11LBS",
+  "name": "Adult Fish (11 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_12LBS",
+  "name": "Adult Fish (12 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_13LBS",
+  "name": "Adult Fish (13 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_14LBS",
+  "name": "Adult Fish (14 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_15LBS",
+  "name": "Adult Fish (15 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_16LBS",
+  "name": "Adult Fish (16 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_17LBS",
+  "name": "Adult Fish (17 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_18LBS",
+  "name": "Adult Fish (18 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_19LBS",
+  "name": "Adult Fish (19 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_20LBS",
+  "name": "Adult Fish (20 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_21LBS",
+  "name": "Adult Fish (21 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_22LBS",
+  "name": "Adult Fish (22 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_23LBS",
+  "name": "Adult Fish (23 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_24LBS",
+  "name": "Adult Fish (24 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_25LBS",
+  "name": "Adult Fish (25 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_4LBS",
+  "name": "Adult Fish (4 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_5LBS",
+  "name": "Adult Fish (5 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_6LBS",
+  "name": "Adult Fish (6 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_7LBS",
+  "name": "Adult Fish (7 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_8LBS",
+  "name": "Adult Fish (8 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH_9LBS",
+  "name": "Adult Fish (9 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_FISH",
+  "name": "Adult Fish (Placeholder)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_29LBS",
+  "name": "Adult Loach (29 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_30LBS",
+  "name": "Adult Loach (30 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_31LBS",
+  "name": "Adult Loach (31 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_32LBS",
+  "name": "Adult Loach (32 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_33LBS",
+  "name": "Adult Loach (33 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_34LBS",
+  "name": "Adult Loach (34 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_35LBS",
+  "name": "Adult Loach (35 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH_36LBS",
+  "name": "Adult Loach (36 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_ADULT_LOACH",
+  "name": "Adult Loach (Placeholder)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_10LBS",
+  "name": "Child Fish (10 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_11LBS",
+  "name": "Child Fish (11 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_12LBS",
+  "name": "Child Fish (12 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_13LBS",
+  "name": "Child Fish (13 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_14LBS",
+  "name": "Child Fish (14 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_2LBS",
+  "name": "Child Fish (2 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_3LBS",
+  "name": "Child Fish (3 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_4LBS",
+  "name": "Child Fish (4 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_5LBS",
+  "name": "Child Fish (5 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_6LBS",
+  "name": "Child Fish (6 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_7LBS",
+  "name": "Child Fish (7 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_8LBS",
+  "name": "Child Fish (8 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH_9LBS",
+  "name": "Child Fish (9 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_FISH",
+  "name": "Child Fish (Placeholder)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH_14LBS",
+  "name": "Child Loach (14 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH_15LBS",
+  "name": "Child Loach (15 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH_16LBS",
+  "name": "Child Loach (16 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH_17LBS",
+  "name": "Child Loach (17 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH_18LBS",
+  "name": "Child Loach (18 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH_19LBS",
+  "name": "Child Loach (19 pounds)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_FISHING_POND_CHILD_LOACH",
+  "name": "Child Loach (Placeholder)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_GERUDO_CARD",
+  "name": "Gerudo's Membership Card",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_GREAT_FAIRY_SWORD",
+  "name": "Great Fairy's Sword (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_GS_TOKEN",
+  "name": "Gold Skulltula Token",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_HAMMER",
+  "name": "Megaton Hammer (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_HEART_CONTAINER",
+  "name": "Heart Container (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_HEART_PIECE",
+  "name": "Piece of Heart (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_HOOKSHOT",
+  "name": "Progressive Hookshot (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_BOTW",
+  "name": "Key Ring (Well)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_FIRE",
+  "name": "Key Ring (Fire)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_FOREST",
+  "name": "Key Ring (Forest)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_GANON",
+  "name": "Key Ring (Ganon)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_GF",
+  "name": "Key Ring (Hideout)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_GTG",
+  "name": "Key Ring (GTG)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_SHADOW",
+  "name": "Key Ring (Shadow)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_SPIRIT",
+  "name": "Key Ring (Spirit)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_TCG",
+  "name": "Key Ring (Chest Game)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_KEY_RING_WATER",
+  "name": "Key Ring (Water)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_LENS",
+  "name": "Lens of Truth (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAGIC_BEAN",
+  "name": "Magic Beans (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAGIC_JAR_LARGE",
+  "name": "Large Magic Jar (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_MAGIC_JAR_SMALL",
+  "name": "Small Magic Jar (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_MAGIC_UPGRADE",
+  "name": "Magic Upgrade (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_BOTW",
+  "name": "Map (Bottom of the Well)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_DC",
+  "name": "Map (Dodongo's Cavern)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_DT",
+  "name": "Map (Deku Tree)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_FIRE",
+  "name": "Map (Fire Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_FOREST",
+  "name": "Map (Forest Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_IC",
+  "name": "Map (Ice Cavern)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_JJ",
+  "name": "Map (Jabu-Jabu's Belly)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_SHADOW",
+  "name": "Map (Shadow Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_SPIRIT",
+  "name": "Map (Spirit Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MAP_WATER",
+  "name": "Map (Water Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_BLAST",
+  "name": "Blast Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_BUNNY",
+  "name": "Bunny Hood (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_GERUDO",
+  "name": "Gerudo Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_GORON",
+  "name": "Goron Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_KAMARO",
+  "name": "Kamaro's Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_KEATON",
+  "name": "Keaton Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_SKULL",
+  "name": "Skull Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_SPOOKY",
+  "name": "Spooky Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_STONE",
+  "name": "Stone Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_TRUTH",
+  "name": "Mask of Truth (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MASK_ZORA",
+  "name": "Zora Mask (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MEDALLION_FIRE",
+  "name": "Fire Medallion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MEDALLION_FOREST",
+  "name": "Forest Medallion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MEDALLION_LIGHT",
+  "name": "Light Medallion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MEDALLION_SHADOW",
+  "name": "Shadow Medallion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MEDALLION_SPIRIT",
+  "name": "Spirit Medallion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MEDALLION_WATER",
+  "name": "Water Medallion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_MILK",
+  "name": "Lon Lon Milk (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_NUT_UPGRADE",
+  "name": "Deku Nut Upgrade (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_NUTS_10",
+  "name": "10 Deku Nuts (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_NUTS_5_ALT",
+  "name": "5 Deku Nuts (OoT) (OOT_NUTS_5_ALT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_NUTS_5",
+  "name": "5 Deku Nuts (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_OCARINA",
+  "name": "Progressive Ocarina (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ODD_MUSHROOM",
+  "name": "Odd Mushroom",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ODD_POTION",
+  "name": "Odd Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_PLATINUM_TOKEN",
+  "name": "Platinum Token (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POACHER_SAW",
+  "name": "Poacher's Saw",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POCKET_CUCCO",
+  "name": "Pocket Cucco",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POCKET_EGG",
+  "name": "Pocket Egg",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POE",
+  "name": "Poe (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POTION_BLUE",
+  "name": "Blue Potion (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POTION_GREEN",
+  "name": "Green Potion (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POTION_RED",
+  "name": "Red Potion (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_BOTW",
+  "name": "Silver Rupee Pouch (Bottom of the Well)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_DC",
+  "name": "Silver Rupee Pouch (Dodongo's Cavern)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GANON_FIRE",
+  "name": "Silver Rupee Pouch (Ganon's Castle - Fire Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GANON_FOREST",
+  "name": "Silver Rupee Pouch (Ganon's Castle - Forest Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GANON_LIGHT",
+  "name": "Silver Rupee Pouch (Ganon's Castle - Light Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GANON_SHADOW",
+  "name": "Silver Rupee Pouch (Ganon's Castle - Shadow Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GANON_SPIRIT",
+  "name": "Silver Rupee Pouch (Ganon's Castle - Spirit Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GANON_WATER",
+  "name": "Silver Rupee Pouch (Ganon's Castle - Water Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GTG_LAVA",
+  "name": "Silver Rupee Pouch (Gerudo Training Ground - Lava)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GTG_SLOPES",
+  "name": "Silver Rupee Pouch (Gerudo Training Ground - Slopes)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_GTG_WATER",
+  "name": "Silver Rupee Pouch (Gerudo Training Ground - Water)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_IC_BLOCK",
+  "name": "Silver Rupee Pouch (Ice Cavern - Block)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_IC_SCYTHE",
+  "name": "Silver Rupee Pouch (Ice Cavern - Scythe)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SHADOW_BLADES",
+  "name": "Silver Rupee Pouch (Shadow Temple - Invisible Blades)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SHADOW_PIT",
+  "name": "Silver Rupee Pouch (Shadow Temple - Large Pits)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SHADOW_SCYTHE",
+  "name": "Silver Rupee Pouch (Shadow Temple - Scythe)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SHADOW_SPIKES",
+  "name": "Silver Rupee Pouch (Shadow Temple - Spikes)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SPIRIT_ADULT",
+  "name": "Silver Rupee Pouch (Spirit Temple - Adult)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SPIRIT_BOULDERS",
+  "name": "Silver Rupee Pouch (Spirit Temple - Boulders)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SPIRIT_CHILD",
+  "name": "Silver Rupee Pouch (Spirit Temple - Child)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SPIRIT_LOBBY",
+  "name": "Silver Rupee Pouch (Spirit Temple - Lobby)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POUCH_SILVER_SPIRIT_SUN",
+  "name": "Silver Rupee Pouch (Spirit Temple - Sun Block)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_POWDER_KEG",
+  "name": "Powder Keg (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_PRESCRIPTION",
+  "name": "Prescription",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RECOVERY_HEART",
+  "name": "Recovery Heart (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_RUPEE_BLUE",
+  "name": "Blue Rupee (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_RUPEE_GREEN",
+  "name": "Green Rupee (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_HUGE",
+  "name": "Gold Rupee (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_MAGICAL",
+  "name": "Magical Silver Rupee",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_PURPLE",
+  "name": "Purple Rupee (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_RAINBOW",
+  "name": "Rainbow Rupee (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_RED",
+  "name": "Red Rupee (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_BOTW",
+  "name": "Silver Rupee (Bottom of the Well)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_DC",
+  "name": "Silver Rupee (Dodongo's Cavern)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GANON_FIRE",
+  "name": "Silver Rupee (Ganon's Castle - Fire Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GANON_FOREST",
+  "name": "Silver Rupee (Ganon's Castle - Forest Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GANON_LIGHT",
+  "name": "Silver Rupee (Ganon's Castle - Light Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GANON_SHADOW",
+  "name": "Silver Rupee (Ganon's Castle - Shadow Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GANON_SPIRIT",
+  "name": "Silver Rupee (Ganon's Castle - Spirit Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GANON_WATER",
+  "name": "Silver Rupee (Ganon's Castle - Water Trial)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GTG_LAVA",
+  "name": "Silver Rupee (Gerudo Training Ground - Lava)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GTG_SLOPES",
+  "name": "Silver Rupee (Gerudo Training Ground - Slopes)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_GTG_WATER",
+  "name": "Silver Rupee (Gerudo Training Ground - Water)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_IC_BLOCK",
+  "name": "Silver Rupee (Ice Cavern - Block)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_IC_SCYTHE",
+  "name": "Silver Rupee (Ice Cavern - Scythe)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SHADOW_BLADES",
+  "name": "Silver Rupee (Shadow Temple - Invisible Blades)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SHADOW_PIT",
+  "name": "Silver Rupee (Shadow Temple - Large Pits)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SHADOW_SCYTHE",
+  "name": "Silver Rupee (Shadow Temple - Scythe)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SHADOW_SPIKES",
+  "name": "Silver Rupee (Shadow Temple - Spikes)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SPIRIT_ADULT",
+  "name": "Silver Rupee (Spirit Temple - Adult)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SPIRIT_BOULDERS",
+  "name": "Silver Rupee (Spirit Temple - Boulders)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SPIRIT_CHILD",
+  "name": "Silver Rupee (Spirit Temple - Child)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SPIRIT_LOBBY",
+  "name": "Silver Rupee (Spirit Temple - Lobby)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUPEE_SILVER_SPIRIT_SUN",
+  "name": "Silver Rupee (Spirit Temple - Sun Block)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_ADULT_BAZAAR",
+  "name": "Rusty Key (Adult Bazaar)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_ADULT_POTION_SHOP_BACK",
+  "name": "Rusty Key (Adult Potion Shop Back)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_ADULT_POTION_SHOP",
+  "name": "Rusty Key (Adult Potion Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_ADULT_SHOOTING_GALLERY",
+  "name": "Rusty Key (Adult Shooting Gallery)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_BACK_ALLEY_HOUSE",
+  "name": "Rusty Key (Back Alley House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_BOMBCHU_BOWLING",
+  "name": "Rusty Key (Bombchu Bowling)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_BOMBCHU_SHOP",
+  "name": "Rusty Key (Bombchu Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_CARPENTER_HOUSE",
+  "name": "Rusty Key (Carpenter House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_CHILD_BAZAAR",
+  "name": "Rusty Key (Child Bazaar)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_CHILD_POTION_SHOP",
+  "name": "Rusty Key (Child Potion Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_CHILD_SHOOTING_GALLERY",
+  "name": "Rusty Key (Child Shooting Gallery)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_DOG_LADY_HOUSE",
+  "name": "Rusty Key (Dog Lady House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_FISHING_POND",
+  "name": "Rusty Key (Fishing Pond)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_GRANNY_POTION_SHOP",
+  "name": "Rusty Key (Granny Potion Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_GRAVEYARD",
+  "name": "Rusty Key (Kakariko Graveyard Hut)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_GUARD_HOUSE",
+  "name": "Rusty Key (Guard House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_HYRULE_CASTLE",
+  "name": "Rusty Key (Hyrule Castle)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_IMPA_HOUSE",
+  "name": "Rusty Key (Impa's House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_LABORATORY",
+  "name": "Rusty Key (Laboratory)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_MASK_SHOP",
+  "name": "Rusty Key (Mask Shop)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_RANCH_HOUSE_ROOM",
+  "name": "Rusty Key (Malon's Room)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_RANCH_HOUSE",
+  "name": "Rusty Key (Ranch House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_RANCH_STABLE",
+  "name": "Rusty Key (Ranch Stable)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_SILO",
+  "name": "Rusty Key (Silo)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_SKULLTULA_HOUSE",
+  "name": "Rusty Key (Skulltula House)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_TREASURE_CHEST_GAME",
+  "name": "Rusty Key (Treasure Chest Game)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_RUSTY_KEY_WINDMILL",
+  "name": "Rusty Key (Windmill)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SCALE",
+  "name": "Progressive Scale (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SHIELD_DEKU",
+  "name": "Deku Shield (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_SHIELD_HYLIAN",
+  "name": "Hylian Shield",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_SHIELD_MIRROR",
+  "name": "Mirror Shield (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SHIELD",
+  "name": "Progressive Shield (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SHOVEL",
+  "name": "Shovel (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SKELETON_KEY",
+  "name": "Skeleton Key (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SLINGSHOT",
+  "name": "Fairy Slingshot (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_BOTW",
+  "name": "Small Key (Bottom of the Well)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_FIRE",
+  "name": "Small Key (Fire Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_FOREST",
+  "name": "Small Key (Forest Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_GANON",
+  "name": "Small Key (Ganon's Castle)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_GF",
+  "name": "Small Key (Gerudo's Fortress)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_GTG",
+  "name": "Small Key (Gerudo's Training Ground)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_SHADOW",
+  "name": "Small Key (Shadow Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_SPIRIT",
+  "name": "Small Key (Spirit Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_TCG",
+  "name": "Small Key (Chest Game)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SMALL_KEY_WATER",
+  "name": "Small Key (Water Temple)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_AWAKENING",
+  "name": "Sonata of Awakening (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_EMPTINESS",
+  "name": "Elegy of Emptiness (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_EPONA",
+  "name": "Epona's Song (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_GORON_HALF",
+  "name": "Progressive Goron Lullaby (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_GORON",
+  "name": "Goron Lullaby (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_HEALING",
+  "name": "Song of Healing (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_AWAKENING",
+  "name": "Note from Sonata of Awakening (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_EMPTINESS",
+  "name": "Note from Elegy of Emptiness (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_EPONA",
+  "name": "Note from Epona's Song (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_GORON",
+  "name": "Note from Goron Lullaby (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_HEALING",
+  "name": "Note from Song of Healing (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_ORDER",
+  "name": "Note from Oath to Order (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_SARIA",
+  "name": "Note from Saria's Song (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_SOARING",
+  "name": "Note from Song of Soaring (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_STORMS",
+  "name": "Note from Song of Storms (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_SUN",
+  "name": "Note from Sun's Song (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TIME",
+  "name": "Note from Song of Time (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TP_FIRE",
+  "name": "Note from Bolero of Fire (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TP_FOREST",
+  "name": "Note from Minuet of Forest (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TP_LIGHT",
+  "name": "Note from Prelude of Light (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TP_SHADOW",
+  "name": "Note from Nocturne of Shadow (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TP_SPIRIT",
+  "name": "Note from Requiem of Spirit (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_TP_WATER",
+  "name": "Note from Serenade of Water (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_ZELDA",
+  "name": "Note from Zelda's Lullaby (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_NOTE_ZORA",
+  "name": "Note from New Wave Bossa Nova (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_ORDER",
+  "name": "Oath to Order (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_SARIA",
+  "name": "Saria's Song (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_SOARING",
+  "name": "Song of Soaring (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_STORMS",
+  "name": "Song of Storms (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_SUN",
+  "name": "Sun's Song (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TIME",
+  "name": "Song of Time (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TP_FIRE",
+  "name": "Bolero of Fire (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TP_FOREST",
+  "name": "Minuet of Forest (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TP_LIGHT",
+  "name": "Prelude of Light (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TP_SHADOW",
+  "name": "Nocturne of Shadow (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TP_SPIRIT",
+  "name": "Requiem of Spirit (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_TP_WATER",
+  "name": "Serenade of Water (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_ZELDA",
+  "name": "Zelda's Lullaby (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SONG_ZORA",
+  "name": "New Wave Bossa Nova (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ANIMAL_BUTTERFLY",
+  "name": "Soul of Butterflies (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ANIMAL_COW",
+  "name": "Soul of Cows (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ANIMAL_CUCCO",
+  "name": "Soul of Cuccos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ANIMAL_DOG",
+  "name": "Soul of Dogs (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_BARINADE",
+  "name": "Soul of Barinade",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_BONGO_BONGO",
+  "name": "Soul of Bongo Bongo",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_KING_DODONGO",
+  "name": "Soul of King Dodongo",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_MORPHA",
+  "name": "Soul of Morpha",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_PHANTOM_GANON",
+  "name": "Soul of Phantom Ganon",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_QUEEN_GOHMA",
+  "name": "Soul of Queen Gohma",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_TWINROVA",
+  "name": "Soul of Twinrova",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_BOSS_VOLVAGIA",
+  "name": "Soul of Volvagia",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_ANUBIS",
+  "name": "Soul of Anubis",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_ARMOS",
+  "name": "Soul of Armos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_BABY_DODONGO",
+  "name": "Soul of Baby Dodongos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_BEAMOS",
+  "name": "Soul of Beamos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_BIRI_BARI",
+  "name": "Soul of Biris/Baris",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_BUBBLE",
+  "name": "Soul of Bubbles (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_DARK_LINK",
+  "name": "Soul of Dark Link",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_DEAD_HAND",
+  "name": "Soul of Dead Hands",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_DEKU_BABA",
+  "name": "Soul of Deku Babas (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_DEKU_SCRUB",
+  "name": "Soul of Deku Scrubs (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_DODONGO",
+  "name": "Soul of Dodongos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_FLARE_DANCER",
+  "name": "Soul of Flare Dancers",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_FLOORMASTER",
+  "name": "Soul of Floormasters (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_FLYING_POT",
+  "name": "Soul of Flying Pots (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_FREEZARD",
+  "name": "Soul of Freezards (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_GOHMA_LARVA",
+  "name": "Soul of Gohma Larvae",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_GUAY",
+  "name": "Soul of Guays (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_IRON_KNUCKLE",
+  "name": "Soul of Iron Knuckles (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_KEESE",
+  "name": "Soul of Keese (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_LEEVER",
+  "name": "Soul of Leevers (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_LIKE_LIKE",
+  "name": "Soul of Like Likes (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_LIZALFOS_DINOLFOS",
+  "name": "Soul of Lizalfos/Dinolfos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_MOBLIN",
+  "name": "Soul of Moblins",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_OCTOROK",
+  "name": "Soul of Octoroks (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_PARASITE",
+  "name": "Soul of Jabu-Jabu's Parasites",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_PEAHAT",
+  "name": "Soul of Peahats (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_POE",
+  "name": "Soul of Poes (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_REDEAD_GIBDO",
+  "name": "Soul of ReDeads/Gibdos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_SHABOM",
+  "name": "Soul of Shaboms",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_SHELL_BLADE",
+  "name": "Soul of Shell Blades (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_SKULL_KID",
+  "name": "Soul of Skull Kids (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_SKULLTULA",
+  "name": "Soul of Skulltulas (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_SKULLWALLTULA",
+  "name": "Soul of Skullwalltulas (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_SPIKE",
+  "name": "Soul of Spikes",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_STALCHILD",
+  "name": "Soul of Stalchildren (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_STALFOS",
+  "name": "Soul of Stalfos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_STINGER",
+  "name": "Soul of Stingers",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_TAILPASARN",
+  "name": "Soul of Tailpasarans",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_TEKTITE",
+  "name": "Soul of Tektites (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_THIEVES",
+  "name": "Soul of the Fighting Gerudos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_TORCH_SLUG",
+  "name": "Soul of Torch Slugs",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_WALLMASTER",
+  "name": "Soul of Wallmasters (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_ENEMY_WOLFOS",
+  "name": "Soul of Wolfos (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_MISC_BUSINESS_SCRUB",
+  "name": "Soul of Business Scrubs (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_MISC_GS",
+  "name": "Soul of Gold Skulltulas (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_ANJU",
+  "name": "Soul of Cucco Lady (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_ASTRONOMER",
+  "name": "Soul of the Astronomer (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BANKER",
+  "name": "Soul of the Beggar (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BAZAAR_SHOPKEEPER",
+  "name": "Soul of Bazaar Shopkeeper (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BEAN_SALESMAN",
+  "name": "Soul of the Bean Salesman (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BIGGORON",
+  "name": "Soul of Biggoron (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BOMBCHU_BOWLING_LADY",
+  "name": "Soul of Bombchu Bowling Lady (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BOMBCHU_SHOPKEEPER",
+  "name": "Soul of Bombchu Shopkeeper (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_BOMBERS",
+  "name": "Soul of Graveyard Kid (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_CARPENTERS",
+  "name": "Soul of Carpenters (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_CARPET_MAN",
+  "name": "Soul of the Carpet Man (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_CHEST_GAME_OWNER",
+  "name": "Soul of Chest Game Owner (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_CITIZEN",
+  "name": "Soul of the Citizens (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_COMPOSER_BROS",
+  "name": "Soul of Composer Bros. (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_DAMPE",
+  "name": "Soul of Dampe (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_DARUNIA",
+  "name": "Soul of Darunia",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_DOG_LADY",
+  "name": "Soul of the Dog Lady (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_FISHING_POND_OWNER",
+  "name": "Soul of Fishing Pond Owner (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_GORMAN",
+  "name": "Soul of Ingo (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_GORON_CHILD",
+  "name": "Soul of Goron Child (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_GORON_SHOPKEEPER",
+  "name": "Soul of Goron Shopkeeper (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_GORON",
+  "name": "Soul of Goron (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_GROG",
+  "name": "Soul of the Punk Kid (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_GURU_GURU",
+  "name": "Soul of Guru-Guru (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_HONEY_DARLING",
+  "name": "Soul of Honey & Darling (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_HYLIAN_GUARD",
+  "name": "Soul of Hylian Guard",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_KING_ZORA",
+  "name": "Soul of King Zora",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_KOKIRI_SHOPKEEPER",
+  "name": "Soul of Kokiri Shopkeeper",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_KOKIRI",
+  "name": "Soul of Kokiri",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_MALON",
+  "name": "Soul of Malon (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_MEDIGORON",
+  "name": "Soul of Medigoron (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_MIDO",
+  "name": "Soul of Mido",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_OLD_HAG",
+  "name": "Soul of the Old Hag (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_POE_COLLECTOR",
+  "name": "Soul of Poe Collector (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_POTION_SHOPKEEPER",
+  "name": "Soul of Potion Shopkeeper",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_ROOFTOP_MAN",
+  "name": "Soul of the Rooftop Man (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_RUTO",
+  "name": "Soul of Ruto (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_SARIA",
+  "name": "Soul of Saria",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_SCIENTIST",
+  "name": "Soul of the Scientist (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_SHEIK",
+  "name": "Soul of Sheik",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_SHOOTING_GALLERY_OWNER",
+  "name": "Soul of Shooting Gallery Owner (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_TALON",
+  "name": "Soul of Talon (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_THIEVES",
+  "name": "Soul of the Patrolling Gerudos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_ZELDA",
+  "name": "Soul of Zelda",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_ZORA_SHOPKEEPER",
+  "name": "Soul of Zora Shopkeeper (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SOUL_NPC_ZORA",
+  "name": "Soul of Zora (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SPELL_FIRE",
+  "name": "Din's Fire (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SPELL_LOVE",
+  "name": "Nayru's Love (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SPELL_WIND",
+  "name": "Farore's Wind (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SPIN_UPGRADE",
+  "name": "Spin Attack Upgrade (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_STICK_UPGRADE",
+  "name": "Deku Stick Upgrade (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_STICK",
+  "name": "Deku Stick (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_STICKS_10",
+  "name": "10 Deku Sticks (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_STICKS_5",
+  "name": "5 Deku Sticks (OoT)",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "OOT_STONE_EMERALD",
+  "name": "Kokiri's Emerald",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_STONE_OF_AGONY",
+  "name": "Stone of Agony (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_STONE_RUBY",
+  "name": "Goron's Ruby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_STONE_SAPPHIRE",
+  "name": "Zora's Sapphire",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_STRENGTH",
+  "name": "Progressive Strength (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SWORD_BIGGORON",
+  "name": "Biggoron's Sword",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SWORD_GORON",
+  "name": "Progressive Goron Sword",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SWORD_KNIFE",
+  "name": "Giant's Knife",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SWORD_KOKIRI",
+  "name": "Kokiri Sword (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SWORD_MASTER",
+  "name": "Master Sword",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_SWORD",
+  "name": "Progressive Sword (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_TRAP_ANTI_MAGIC",
+  "name": "Anti-Magic Trap",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TRAP_DRAIN",
+  "name": "Drain Trap",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TRAP_FIRE",
+  "name": "Fire Trap",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TRAP_ICE",
+  "name": "Ice Trap",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TRAP_KNOCKBACK",
+  "name": "Knockback Trap",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TRAP_RUPOOR",
+  "name": "Rupoor",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TRAP_SHOCK",
+  "name": "Shock Trap",
+  "trap": true,
+  "junk": true
+ },
+ {
+  "id": "OOT_TUNIC_GORON",
+  "name": "Goron Tunic (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_TUNIC_ZORA",
+  "name": "Zora Tunic (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_WALLET",
+  "name": "Progressive Wallet (OoT)",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_WEIRD_EGG",
+  "name": "Weird Egg",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "OOT_ZELDA_LETTER",
+  "name": "Zelda's Letter",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_ARROW_FIRE",
+  "name": "Fire Arrows",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_ARROW_ICE",
+  "name": "Ice Arrows",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_ARROW_LIGHT",
+  "name": "Light Arrows",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_ARROWS_10",
+  "name": "10 Arrows",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_ARROWS_30",
+  "name": "30 Arrows",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_ARROWS_40",
+  "name": "40 Arrows",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_ARROWS_5",
+  "name": "5 Arrows",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_BIG_POE",
+  "name": "Big Poe",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BLUE_FIRE",
+  "name": "Blue Fire",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMB_BAG",
+  "name": "Bomb Bag",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMB",
+  "name": "1 Bomb",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_BOMBCHU_10",
+  "name": "10 Bombchu",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMBCHU_20",
+  "name": "20 Bombchu",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMBCHU_5",
+  "name": "5 Bombchu",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMBCHU_BAG",
+  "name": "Bombchu Bag",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMBCHU",
+  "name": "Bombchu",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOMBS_10",
+  "name": "10 Bombs",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_BOMBS_20",
+  "name": "20 Bombs",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_BOMBS_30",
+  "name": "30 Bombs",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_BOMBS_5",
+  "name": "5 Bombs",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_BOOMERANG",
+  "name": "Boomerang",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOOTS_HOVER",
+  "name": "Hover Boots",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOOTS_IRON",
+  "name": "Iron Boots",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_BIG_POE",
+  "name": "Bottled Big Poe",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_BLUE_FIRE",
+  "name": "Bottle of Blue Fire",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_CHATEAU",
+  "name": "Bottle of Chateau Romani",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_EMPTY",
+  "name": "Empty Bottle",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_FAIRY",
+  "name": "Bottled Fairy",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_MILK",
+  "name": "Bottle of Milk",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_POE",
+  "name": "Bottled Poe",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_POTION_BLUE",
+  "name": "Bottle of Blue Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_POTION_GREEN",
+  "name": "Bottle of Green Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_POTION_RED",
+  "name": "Bottle of Red Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_RANDOM",
+  "name": "Random Bottle",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLE_RUTO_LETTER",
+  "name": "Ruto's Letter",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOTTLED_GOLD_DUST",
+  "name": "Bottle of Gold Dust",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BOW",
+  "name": "Bow",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BUGS",
+  "name": "Bugs",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BUTTON_A",
+  "name": "A Button",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BUTTON_C_DOWN",
+  "name": "C-Down Button",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BUTTON_C_LEFT",
+  "name": "C-Left Button",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BUTTON_C_RIGHT",
+  "name": "C-Right Button",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_BUTTON_C_UP",
+  "name": "C-Up Button",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_CHATEAU",
+  "name": "Chateau Romani Refill",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_DEFENSE_UPGRADE",
+  "name": "Double Defense",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_DEKU_SEEDS_30",
+  "name": "30 Deku Seeds",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_DEKU_SEEDS_5",
+  "name": "5 Deku Seeds",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_FAIRY_BIG",
+  "name": "Big Fairy",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_FAIRY",
+  "name": "Fairy",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_FISH",
+  "name": "Fish",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_GREAT_FAIRY_SWORD",
+  "name": "Great Fairy's Sword",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_HAMMER",
+  "name": "Megaton Hammer",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_HEART_CONTAINER",
+  "name": "Heart Container",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_HEART_PIECE",
+  "name": "Piece of Heart",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_HOOKSHOT",
+  "name": "Progressive Hookshot",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_LENS",
+  "name": "Lens of Truth",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MAGIC_JAR_LARGE",
+  "name": "Large Magic Jar",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_MAGIC_JAR_SMALL",
+  "name": "Small Magic Jar",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_MAGIC_UPGRADE",
+  "name": "Magic Upgrade",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_BLAST",
+  "name": "Blast Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_BUNNY",
+  "name": "Bunny Hood",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_GERUDO",
+  "name": "Gerudo Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_GORON",
+  "name": "Goron Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_KAMARO",
+  "name": "Kamaro's Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_KEATON",
+  "name": "Keaton Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_SKULL",
+  "name": "Skull Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_SPOOKY",
+  "name": "Spooky Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_STONE",
+  "name": "Stone Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_TRUTH",
+  "name": "Mask of Truth",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MASK_ZORA",
+  "name": "Zora Mask",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_MILK",
+  "name": "Milk",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_NUT_UPGRADE",
+  "name": "Deku Nut Upgrade",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_NUT",
+  "name": "Deku Nut",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_NUTS_10",
+  "name": "10 Deku Nuts",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_NUTS_5",
+  "name": "5 Deku Nuts",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_OCARINA",
+  "name": "Progressive Ocarina",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_PLATINUM_TOKEN",
+  "name": "Platinum Token",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_POE",
+  "name": "Poe",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_POTION_BLUE",
+  "name": "Blue Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_POTION_GREEN",
+  "name": "Green Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_POTION_RED",
+  "name": "Red Potion",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_POWDER_KEG",
+  "name": "Powder Keg",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_RECOVERY_HEART",
+  "name": "Recovery Heart",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_RUPEE_BLUE",
+  "name": "Blue Rupee",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_RUPEE_GOLD",
+  "name": "Gold Rupee",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_RUPEE_GREEN",
+  "name": "Green Rupee",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_RUPEE_PURPLE",
+  "name": "Purple Rupee",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_RUPEE_RAINBOW",
+  "name": "Rainbow Rupee",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_RUPEE_RED",
+  "name": "Red Rupee",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_RUPEE_SILVER",
+  "name": "Silver Rupee",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SCALE",
+  "name": "Progressive Scale",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SHIELD_DEKU",
+  "name": "Deku Shield",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_SHIELD_HYLIAN",
+  "name": "Hylian/Hero Shield",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_SHIELD_MIRROR",
+  "name": "Mirror Shield",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SHIELD",
+  "name": "Progressive Shield",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SHOVEL",
+  "name": "Shovel",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SKELETON_KEY",
+  "name": "Skeleton Key",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SLINGSHOT",
+  "name": "Fairy Slingshot",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_AWAKENING",
+  "name": "Sonata of Awakening",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_EMPTINESS",
+  "name": "Elegy of Emptiness",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_EPONA",
+  "name": "Epona's Song",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_GORON_HALF",
+  "name": "Progressive Goron Lullaby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_GORON",
+  "name": "Goron Lullaby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_HEALING",
+  "name": "Song of Healing",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_AWAKENING",
+  "name": "Note from Sonata of Awakening",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_EMPTINESS",
+  "name": "Note from Elegy of Emptiness",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_EPONA",
+  "name": "Note from Epona's Song",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_GORON",
+  "name": "Note from Goron Lullaby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_HEALING",
+  "name": "Note from Song of Healing",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_ORDER",
+  "name": "Note from Oath to Order",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_SARIA",
+  "name": "Note from Saria's Song",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_SOARING",
+  "name": "Note from Song of Soaring",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_STORMS",
+  "name": "Note from Song of Storms",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_SUN",
+  "name": "Note from Sun's Song",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TIME",
+  "name": "Note from Song of Time",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TP_FIRE",
+  "name": "Note from Bolero of Fire",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TP_FOREST",
+  "name": "Note from Minuet of Forest",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TP_LIGHT",
+  "name": "Note from Prelude of Light",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TP_SHADOW",
+  "name": "Note from Nocturne of Shadow",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TP_SPIRIT",
+  "name": "Note from Requiem of Spirit",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_TP_WATER",
+  "name": "Note from Serenade of Water",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_ZELDA",
+  "name": "Note from Zelda's Lullaby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_NOTE_ZORA",
+  "name": "Note from New Wave Bossa Nova",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_ORDER",
+  "name": "Oath to Order",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_SARIA",
+  "name": "Saria's Song",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_SOARING",
+  "name": "Song of Soaring",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_STORMS",
+  "name": "Song of Storms",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_SUN",
+  "name": "Sun's Song",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TIME",
+  "name": "Song of Time",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TP_FIRE",
+  "name": "Bolero of Fire",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TP_FOREST",
+  "name": "Minuet of Forest",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TP_LIGHT",
+  "name": "Prelude of Light",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TP_SHADOW",
+  "name": "Nocturne of Shadow",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TP_SPIRIT",
+  "name": "Requiem of Spirit",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_TP_WATER",
+  "name": "Serenade of Water",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_ZELDA",
+  "name": "Zelda's Lullaby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SONG_ZORA",
+  "name": "New Wave Bossa Nova",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ANIMAL_BUTTERFLY",
+  "name": "Soul of Butterflies",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ANIMAL_COW",
+  "name": "Soul of Cows",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ANIMAL_CUCCO",
+  "name": "Soul of Cuccos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ANIMAL_DOG",
+  "name": "Soul of Dogs",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_ARMOS",
+  "name": "Soul of Armos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_BEAMOS",
+  "name": "Soul of Beamos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_BUBBLE",
+  "name": "Soul of Bubbles",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_DEKU_BABA",
+  "name": "Soul of Deku Babas",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_DEKU_SCRUB",
+  "name": "Soul of Deku Scrubs",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_DODONGO",
+  "name": "Soul of Dodongos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_FLOORMASTER",
+  "name": "Soul of Floormasters",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_FLYING_POT",
+  "name": "Soul of Flying Pots",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_FREEZARD",
+  "name": "Soul of Freezards",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_GUAY",
+  "name": "Soul of Guays",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_IRON_KNUCKLE",
+  "name": "Soul of Iron Knuckles",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_KEESE",
+  "name": "Soul of Keese",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_LEEVER",
+  "name": "Soul of Leevers",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_LIKE_LIKE",
+  "name": "Soul of Like Likes",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_LIZALFOS_DINOLFOS",
+  "name": "Soul of Lizalfos/Dinolfos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_OCTOROK",
+  "name": "Soul of Octoroks",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_PEAHAT",
+  "name": "Soul of Peahats",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_POE",
+  "name": "Soul of Poes",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_REDEAD_GIBDO",
+  "name": "Soul of ReDeads/Gibdos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_SHELL_BLADE",
+  "name": "Soul of Shell Blades",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_SKULLTULA",
+  "name": "Soul of Skulltulas",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_SKULLWALLTULA",
+  "name": "Soul of Skullwalltulas",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_STALCHILD",
+  "name": "Soul of Stalchildren",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_TEKTITE",
+  "name": "Soul of Tektites",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_THIEVES",
+  "name": "Soul of Fighting Thieves",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_WALLMASTER",
+  "name": "Soul of Wallmasters",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_ENEMY_WOLFOS",
+  "name": "Soul of Wolfos",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_MISC_BUSINESS_SCRUB",
+  "name": "Soul of Business Scrubs",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_MISC_GS",
+  "name": "Soul of Gold Skulltulas",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_ANJU",
+  "name": "Soul of Cucco Lady/Anju",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_ASTRONOMER",
+  "name": "Soul of the Astronomer",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BANKER",
+  "name": "Soul of the Beggar/Banker",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BAZAAR_SHOPKEEPER",
+  "name": "Soul of the Bazaar/Swamp Archery Owner",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BEAN_SALESMAN",
+  "name": "Soul of the Bean Salesman",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BIGGORON",
+  "name": "Soul of Biggoron",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BOMBCHU_BOWLING_LADY",
+  "name": "Soul of Bombchu Bowling/Chest Game Lady",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BOMBCHU_SHOPKEEPER",
+  "name": "Soul of the Bombchu/Bomb Shop Owner",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_BOMBERS",
+  "name": "Soul of the Graveyard Kid/Bombers",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_CARPENTERS",
+  "name": "Soul of Carpenters",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_CARPET_MAN",
+  "name": "Soul of the Carpet Man/Swordsman",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_CHEST_GAME_OWNER",
+  "name": "Soul of the Chest Game Owner/Fisherman",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_CITIZEN",
+  "name": "Soul of Citizens",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_COMPOSER_BROS",
+  "name": "Soul of Composer Bros.",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_DAMPE",
+  "name": "Soul of Dampe",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_DOG_LADY",
+  "name": "Soul of the Dog Lady",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_FISHING_POND_OWNER",
+  "name": "Soul of Fishing Pond/Trading Post Owner",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_GORMAN",
+  "name": "Soul of Ingo/Gorman & Bros.",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_GORON_CHILD",
+  "name": "Soul of the Goron Child/Baby",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_GORON_SHOPKEEPER",
+  "name": "Soul of the Goron Shopkeeper",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_GORON",
+  "name": "Soul of Gorons",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_GROG",
+  "name": "Soul of the Punk Kid/Grog",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_GURU_GURU",
+  "name": "Soul of Guru-Guru",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_HONEY_DARLING",
+  "name": "Soul of Honey & Darling",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_MALON",
+  "name": "Soul of Malon/Romani/Cremia",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_MEDIGORON",
+  "name": "Soul of Medigoron/Keg Trial Goron",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_OLD_HAG",
+  "name": "Soul of the Old Hag/Anju's Grandmother",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_POE_COLLECTOR",
+  "name": "Soul of Poe Collector/Ghost Hut Owner",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_ROOFTOP_MAN",
+  "name": "Soul of Rooftop Man/Part-Timer",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_RUTO",
+  "name": "Soul of Ruto/Lulu",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_SCIENTIST",
+  "name": "Soul of the Scientist",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_SHOOTING_GALLERY_OWNER",
+  "name": "Soul of the Shooting Gallery/Town Archery Owner",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_TALON",
+  "name": "Soul of Talon/Mr. Barten",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_THIEVES",
+  "name": "Soul of the Patrolling Thieves and their Chief",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_ZORA_SHOPKEEPER",
+  "name": "Soul of the Zora Shopkeeper",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SOUL_NPC_ZORA",
+  "name": "Soul of Zoras",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SPELL_FIRE",
+  "name": "Din's Fire",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SPELL_LOVE",
+  "name": "Nayru's Love",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SPELL_WIND",
+  "name": "Farore's Wind",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SPIN_UPGRADE",
+  "name": "Spin Attack Upgrade",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_STICK_UPGRADE",
+  "name": "Deku Stick Upgrade",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_STICK",
+  "name": "Deku Stick",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_STICKS_10",
+  "name": "10 Deku Sticks",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_STICKS_5",
+  "name": "5 Deku Sticks",
+  "trap": false,
+  "junk": true
+ },
+ {
+  "id": "SHARED_STONE_OF_AGONY",
+  "name": "Stone of Agony",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_STRENGTH",
+  "name": "Progressive Strength",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_SWORD",
+  "name": "Progressive Sword",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_TRIFORCE_COURAGE",
+  "name": "Triforce of Courage",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_TRIFORCE_POWER",
+  "name": "Triforce of Power",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_TRIFORCE_WISDOM",
+  "name": "Triforce of Wisdom",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_TRIFORCE",
+  "name": "Triforce Piece",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_TUNIC_GORON",
+  "name": "Goron Tunic",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_TUNIC_ZORA",
+  "name": "Zora Tunic",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "SHARED_WALLET",
+  "name": "Progressive Wallet",
+  "trap": false,
+  "junk": false
+ },
+ {
+  "id": "NOTHING",
+  "name": "Nothing",
+  "trap": false,
+  "junk": true
+ }
+]
