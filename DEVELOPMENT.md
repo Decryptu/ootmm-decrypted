@@ -19,7 +19,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 | `web_world.py`, `docs/` | Archipelago website pages: game page (`en_OOTxMM.md`) and setup guide (`setup_en.md`) |
 | `raw/` | `GenerateMetadata.py` and its outputs. Only `GreatWorldJSONdump.json` and `GreatMacroJSONdump.json` ship in the apworld; the YAML and `Isolated*` files are intermediates kept for reading and diffing |
 | `assets/` | Logo |
-| `tools/` | Our scripts: pack the world, test it, import upstream |
+| `tools/` | Our scripts: pack the world, prune other games from the test checkout, test it, import upstream |
 | `roms/` | The developer's own ROMs (`oot.z64`, `mm.z64`), ignored by git |
 
 ## Metadata
@@ -73,7 +73,7 @@ OoTMM also lists a second OoT CRC (`d423e8b0`, SHA-256 `d38fd6ff…`). Keep ROMs
 
 ## Build and test
 - `python tools/build_apworld.py dist/ootxmm.apworld` packs the world. A new file the world needs must be added to `WORLD_FILES` there (or live under a listed folder such as `test/`).
-- `pwsh tools/apworld-test.ps1` runs Archipelago's generic world tests (`test/general`, `test/benchmark`) and the world's own `test/` inside an Archipelago 0.6.8 source checkout. The first run clones Archipelago and builds a Python 3.12 virtualenv under `%LOCALAPPDATA%\ootmm-decrypted\archipelago`; extra arguments go to pytest.
+- `pwsh tools/apworld-test.ps1` runs Archipelago's generic world tests (`test/general`, `test/benchmark`) and the world's own `test/` inside an Archipelago 0.6.8 source checkout. `tools/prune_worlds.py` first removes every other game from that checkout (keeping `generic` and `apquest`, which the tests need), so another game's random failure can't fail our checks. To restore them: `git -C <checkout> checkout HEAD -- worlds`. The first run clones Archipelago and builds a Python 3.12 virtualenv under `%LOCALAPPDATA%\ootmm-decrypted\archipelago`; extra arguments go to pytest.
 - `.github/workflows/apworld.yml` (World) runs the same on pushes to `dev` and on pull requests, and uploads the packed `ootxmm.apworld`. `gh workflow run apworld.yml --ref <branch>` runs it on any branch.
 
 ## Branches
