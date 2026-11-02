@@ -10,7 +10,7 @@ It continues Quasky's [AP-OOTMM](https://github.com/Quasky/AP-OOTMM), with its f
 
 ## Status
 
-Not playable yet. The world loads OoTMM's regions and locations, the item list is static, and logic and the ROM patch are not done. [ROADMAP.md](ROADMAP.md) lists what is left.
+Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions and locations are in, but the item list is static, there is no logic (everything is open), and there is no ROM patch or client. [ROADMAP.md](ROADMAP.md) lists what is left.
 
 ## What you need
 

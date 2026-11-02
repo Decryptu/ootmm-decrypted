@@ -12,7 +12,7 @@
 /dist/
 *.apworld
 
-raw/ootmm/*
+raw/ootmm/
 raw/tmpbuild
 
 # Byte-compiled / optimized / DLL files
