@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import pkgutil
-import json
 from typing import TYPE_CHECKING
 
-from BaseClasses import Entrance, Region
+from BaseClasses import Region
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -16,24 +14,13 @@ OOTxMMRegionList = ootxmm_staticdata.OOTxMMRegionData.keys()
 def create_and_connect_regions(world: OOTxMM) -> None:
     create_all_regions(world)
     connect_regions(world)
-    
+
 def create_all_regions(world: OOTxMM) -> None:
     regions = [Region(name, world.player, world.multiworld) for name in ootxmm_staticdata.OOTxMMRegionData.keys()]
     world.multiworld.regions += regions
 
 def connect_regions(world: OOTxMM) -> None:
-    for region in ootxmm_staticdata.OOTxMMRegionData.keys():
-        print("== Connecting region: " + region)
+    for region, regiondata in ootxmm_staticdata.OOTxMMRegionData.items():
         worldregion = world.get_region(region)
-        try:
-            for connectedregion in ootxmm_staticdata.OOTxMMRegionData[region]["exits"].keys():
-                try:
-                    print("==== "+ region + " => " + connectedregion)
-                    ExitRegion = world.get_region(connectedregion)
-                    worldregion.connect(ExitRegion, f"{region} to {connectedregion}")
-                except Exception as e:
-                    print("Connection Error: " + region + " => " + connectedregion + " ~~ " + str(e))
-                    pass
-        except Exception as e:
-            print("Connection Error: " + region + " ~~ " + str(e))
-            pass
+        for connectedregion in regiondata.get("exits") or {}:
+            worldregion.connect(world.get_region(connectedregion), f"{region} to {connectedregion}")
