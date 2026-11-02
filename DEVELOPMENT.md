@@ -24,7 +24,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 
 ## Metadata
 `raw/GenerateMetadata.py` is the single place OoTMM data is converted. To regenerate:
-1. Put an OoTMM checkout in `raw/ootmm` (ignored by git). Note its commit in the commit message.
+1. Put an OoTMM checkout of the release we track ([ROADMAP.md](ROADMAP.md#decisions)) in `raw/ootmm` (ignored by git): `git clone --depth 1 --branch v33.0 https://github.com/OoTMM/OoTMM.git raw/ootmm`. Name the release in the commit message.
 2. From `raw/` (the script uses relative paths), run `python GenerateMetadata.py`. It needs PyYAML, and Node with `npx tsx` for the settings step, which reads `ootmm/packages/core/src/settings/data.ts`.
 3. It merges `data/world` and `data/macros` into the `Great*` dumps, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`.
 
