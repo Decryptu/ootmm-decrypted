@@ -22,4 +22,5 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Decisions
 - Keep the game name `OOTxMM` and upstream's file layout, so Quasky's work can still be merged if AP-OOTMM resumes ([Syncing upstream](DEVELOPMENT.md#syncing-upstream)).
 - Logic comes from OoTMM's data through `raw/GenerateMetadata.py`, not hand-written rules, so it follows OoTMM updates.
+- Use OoTMM as released, not a fork: it is the data source for metadata (a checkout in `raw/ootmm`, ignored) and the ROM builder. Track one release at a time, currently v33.0; the committed metadata predates it (generated in July 2026), so regenerate it from v33.0 with the first metadata change. Fork OoTMM only if the patch or client needs a change OoTMM won't take upstream.
 - Target Archipelago 0.6.8 (`archipelago.json`, CI and `tools/apworld-test.ps1` pin the same commit).
