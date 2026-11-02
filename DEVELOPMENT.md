@@ -12,13 +12,14 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 |---|---|
 | `world.py` | The `World` class: game name, origin region (`OOT SPAWN`), the generation steps |
 | `items.py` | Items built at import from `raw/GreatItemJSONdump.json` and `raw/ItemIDs.json` (below) |
-| `logic.py` | The world graph per age with OoTMM's conditions, built at import from `raw/GreatLogicJSONdump.json` ([Logic](#logic)) |
+| `logic.py` | The world graph per age with OoTMM's conditions, built per player's settings from `raw/GreatLogicJSONdump.json` ([Logic](#logic)) |
 | `regions.py`, `locations.py` | Create the regions, checks and events `logic.py` keeps |
 | `rules.py` | Turns conditions into access rules; the completion condition |
-| `options.py` | Options, generated from OoTMM's settings by `raw/GenerateMetadata.py`. Don't edit it by hand |
+| `options.py` | Options, generated from OoTMM's settings by `raw/GenerateMetadata.py` ([Options](#options)). Don't edit it by hand |
 | `ootxmm_staticdata.py` | Loads the metadata JSON the world reads at runtime |
 | `web_world.py`, `docs/` | Archipelago website pages: game page (`en_OOTxMM.md`) and setup guide (`setup_en.md`) |
-| `raw/` | `GenerateMetadata.py` and its outputs. Only the `GreatWorld`, `GreatLogic`, `GreatCheckItem` and `GreatItem` JSON dumps, `LocationIDs.json` and `ItemIDs.json` ship in the apworld; the YAML and `Isolated*` files are intermediates kept for reading and diffing |
+| `raw/` | `GenerateMetadata.py` and its outputs. Only the `GreatWorld`, `GreatLogic`, `GreatCheckItem` and `GreatItem` JSON dumps, `LocationIDs.json` and `ItemIDs.json` ship in the apworld; the YAML, `Isolated*`, `GreatSettingsJSONdump.json` and `SettingsClasses.json` files are intermediates kept for reading and diffing |
+| `test/` | The world's own tests, run with Archipelago's ([Build and test](#build-and-test)) |
 | `assets/` | Logo |
 | `tools/` | Our scripts: pack the world, prune other games from the test checkout, test it, import upstream |
 | `roms/` | The developer's own ROMs (`oot.z64`, `mm.z64`), ignored by git |
@@ -27,26 +28,38 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 `raw/GenerateMetadata.py` is the single place OoTMM data is converted. To regenerate:
 1. Put an OoTMM checkout of the release we track ([ROADMAP.md](ROADMAP.md#decisions)) in `raw/ootmm` (ignored by git): `git clone --depth 1 --branch v33.0 https://github.com/OoTMM/OoTMM.git raw/ootmm`. Name the release in the commit message.
 2. From `raw/` (the script uses relative paths), run `python GenerateMetadata.py`. It needs PyYAML, and Node with pnpm and `npx tsx`: the logic, item and settings steps import OoTMM's TypeScript directly. The logic step installs OoTMM's dependencies and builds its data package in the checkout itself.
-3. It merges `data/world` and `data/macros` into the `Great*` dumps, exports the logic, updates the location ID registry (below), exports each check's vanilla item, exports the items and updates their registry, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`. Any error stops it.
+3. It merges `data/world` and `data/macros` into the `Great*` dumps, exports the settings and sorts them ([Options](#options)), exports the logic, updates the location ID registry (below), exports each check's vanilla item, exports the items and updates their registry, splits out the `Isolated*` files, converts the offered settings into `GeneratedOptions.py` and copies that over `../options.py`. Any error stops it.
 
 What the world data looks like, and why:
 - **Default variant only.** `WorldSources` lists the files OoTMM's `packages/data/build/world.ts` loads for default settings: no `dungeons_mq` (Master Quest) and no `mm/jp` (the `jpLayouts` Deku Palace). Those files reuse the vanilla region names, so they can't share one dump.
 - **Game prefix.** OoT and MM reuse names (shops, `GLOBAL`, `VOID`), so every region and location is named `OOT <name>` or `MM <name>`, like OoTMM's internal IDs. An exit that already starts with a prefix points into the other game. The spawn is `OOT SPAWN`.
 - **Reachable regions only.** Regions no exit chain reaches from `OOT SPAWN` are dropped and printed: stubs for the other Deku Palace layout, entrance-randomizer-only sources, and data OoTMM never connects (in v33.0, `Pirate Fortress Telescope` has `exit:` instead of `exits:`).
 - **Macros** stay split as `common`, `OOT` and `MM`, since the same macro name differs per game. They are kept for reading: the world uses the logic dump, where OoTMM has already inlined them.
-- **Options.** Archipelago reserves `random` on every Choice and rolls it itself, so OoTMM's own `random` value is skipped, and a `random` default becomes `default = "random"`.
 
 ## Logic
-OoTMM's own code turns its conditions into rules, so nothing is parsed or rewritten by hand. The generator runs OoTMM's pipeline with default settings up to the entrance pass (which links the games: the Mask Shop door leads to Clock Town) and writes every exit, check and event condition into `raw/GreatLogicJSONdump.json` as a node table. Macros, settings, tricks, the vanilla shop prices and the song events are already decided there. The world transform pass is skipped, because it drops the checks default settings leave out and this world keeps them.
+OoTMM's own code turns its conditions into rules, so nothing is parsed or rewritten by hand. The generator runs OoTMM's pipeline with default settings up to the entrance pass (which links the games: the Mask Shop door leads to Clock Town) and writes every exit, check and event condition into `raw/GreatLogicJSONdump.json` as a node table. Macros, the vanilla shop prices and the song events are already decided there, and so are the settings the world doesn't offer. The world transform pass is skipped, because it drops the checks default settings leave out and this world keeps them.
 
-`logic.py` builds the graph from it at import:
+The offered settings conditions read (the `logic` class in [Options](#options)) and every trick stay symbolic: OoTMM's parser decides `setting(...)` and `trick(...)` on the spot, so the export wraps its `parseExprSetting` and `parseExprTrick` to return marker events instead, and parses `!` and `cond(...)` itself, since OoTMM only allows them on settings it has decided. The dump has `setting`, `trick` and `not` nodes for them, which `logic.py` decides from the player's settings.
+
+`logic.py` builds the graph from it for each player's settings (`logic.build`, shared by players whose logic settings and tricks match):
 - **Ages.** OoTMM explores every area as child and as adult, so each region has a `(Child)` and an `(Adult)` copy, and conditions are specialized to the copy's age. Both ages start at `OOT SPAWN`, the origin, as in OoTMM's pathfinder; the adult spawn needs the `OOT_TIME_TRAVEL` event. Age change at will (`ageChange`) is off by default and not modeled.
 - **Events** become event items placed on locations named after them (`MM_MAJORA`). The completion condition is `MM_MAJORA`.
 - **Impossible conditions are false**, as they are for OoTMM: an item the pool never holds (MM Ruto's Letter) or an event no area triggers (the pre-completed dungeon events). The pool is the vanilla items of the checks that exist, and which checks exist depends on the pool, so `logic.py` starts from every item and drops those whose check is unreachable until it settles.
-- **Left out:** region copies no exit reaches with every pool item, and checks and events false at every copy. In v33.0 that is 34 checks (MM underwater rocks without MM iron boots, child silver boulders, the guarded Hyrule Castle tree), all unreachable in OoTMM too with default settings.
+- **Left out:** region copies no exit reaches with every pool item, and checks and events false at every copy. In v33.0 with default settings that is 34 checks (MM underwater rocks without MM iron boots, child silver boulders, the guarded Hyrule Castle tree), all unreachable in OoTMM too with default settings.
 - **Several parents.** OoTMM lists some checks and events under several regions, meaning reachable from any of them, and every age copy is a parent. Archipelago gives a location one region, so `locations.py` gives a check with more than one parent its own `<check> (check)` region (`<event> (event)` for events), with an entrance from every parent that carries that parent's condition.
 - **Approximations.** OoTMM tracks the time of day per area (OoT day and night, MM's three-day clock) and some per-area flags; Archipelago's state can't, so time and flag conditions count as met. `renewable(x)` and `license(x)` count as having `x`.
-- **Progression** items are the ones some condition asks for (`LOGIC_ITEMS`).
+- **Progression** items are the ones some condition of the player's graph asks for (`Logic.items`). An item link group's world has no graph of its own: its progression items are its members'.
+
+## Options
+OoTMM has over 500 settings, and most change more than conditions: the pool, which checks exist, the shape of the world. The world offers only the ones it handles, and `ClassifySettings` in `raw/GenerateMetadata.py` decides which by scanning OoTMM's source, so a new OoTMM release is classified again without a hand-kept list. Its result is `raw/SettingsClasses.json`:
+- **port**: OoTMM's code reads it outside conditions (`packages/logic/src`, `packages/data/build`, `packages/core/src`, except the files that only define, parse or roll settings). Not offered until the world ports what it does there ([ROADMAP.md](ROADMAP.md)).
+- **logic**: only conditions read it (`setting(...)` in `data/`). Offered, and symbolic in the logic dump ([Logic](#logic)).
+- **patch**: neither reads it, so only the ROM patcher does. Offered and passed through.
+- **not_offered**: listed in `raw/Meta_Options.py`: meaningless in a multiworld (players, hints, spoiler), read through computed keys the scan can't see (`items.mmAgeRequirements`), or a `custom` value that needs `specialConds`, which is not ported (`lacs`, `rainbowBridge`, `majoraChild`).
+
+The tricks are one option set, `tricks`, defaulting to OoTMM's default tricks. Options are named by their OoTMM key (`doorOfTime: open` in a player YAML), grouped by OoTMM's categories. Archipelago lowercases Choice names and reserves `random` (it rolls it itself, so OoTMM's own `random` value is skipped and a `random` default becomes `default = "random"`); each Choice keeps OoTMM's values in `ootmm_values`. `ootmm_settings` in `world.py` turns a player's options back into OoTMM settings, which `logic.build` reads and `fill_slot_data` hands on as `settings`, for the patch.
+
+To check a change, `test/test_options.py` generates with non-default settings and all tricks.
 
 ## Items
 `raw/GenerateMetadata.py` exports OoTMM's item list (`packages/logic/src/items/defs.ts`) with each item's display name (`packages/generator/lib/combo/names.ts`) and whether it is in the `TRAPS` or `JUNK` group (`groups.ts`) into `raw/GreatItemJSONdump.json`. `items.py` makes traps `trap`, items the logic asks for `progression`, junk `filler` (including `Nothing`, OoTMM's empty check) and everything else `useful`.

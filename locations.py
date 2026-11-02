@@ -20,11 +20,11 @@ LOCATION_NAME_TO_ID = {
 }
 
 def create_all_locations(world: OOTxMM) -> None:
-    for name, parents in logic.CHECKS.items():
+    for name, parents in world.logic.checks.items():
         location = OOTxMMLocation(world.player, name, LOCATION_NAME_TO_ID[name])
         place(world, location, parents, "check")
     # OoTMM's events become event items on locations of the same name.
-    for event, parents in logic.EVENTS.items():
+    for event, parents in world.logic.events.items():
         location = OOTxMMLocation(world.player, event, None)
         location.place_locked_item(items.OOTxMMItem(event, items.ItemClassification.progression, None, world.player))
         place(world, location, parents, "event")
