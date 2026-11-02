@@ -15,7 +15,7 @@ def create_and_connect_regions(world: OOTxMM) -> None:
 
 def create_all_regions(world: OOTxMM) -> None:
     regions = [Region(logic.ORIGIN, world.player, world.multiworld)]
-    regions += [Region(logic.region_name(area, age), world.player, world.multiworld) for area, age in logic.REGIONS]
+    regions += [Region(logic.region_name(area, age), world.player, world.multiworld) for area, age in world.logic.regions]
     world.multiworld.regions += regions
 
 def connect_regions(world: OOTxMM) -> None:
@@ -23,7 +23,7 @@ def connect_regions(world: OOTxMM) -> None:
     origin = world.get_region(logic.ORIGIN)
     for age in logic.AGES:
         origin.connect(world.get_region(logic.region_name(logic.ORIGIN, age)))
-    for (area, age), exits in logic.EXITS.items():
+    for (area, age), exits in world.logic.exits.items():
         region = world.get_region(logic.region_name(area, age))
         for target, cond in exits:
             target_name = logic.region_name(target, age)
