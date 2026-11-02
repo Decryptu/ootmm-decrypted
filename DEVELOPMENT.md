@@ -17,7 +17,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 | `options.py` | Options, generated from OoTMM's settings by `raw/GenerateMetadata.py`. Don't edit it by hand |
 | `ootxmm_staticdata.py` | Loads the metadata JSON the world reads at runtime |
 | `web_world.py`, `docs/` | Archipelago website pages: game page (`en_OOTxMM.md`) and setup guide (`setup_en.md`) |
-| `raw/` | `GenerateMetadata.py` and its outputs. Only `GreatWorldJSONdump.json` and `GreatMacroJSONdump.json` ship in the apworld; the YAML and `Isolated*` files are intermediates kept for reading and diffing |
+| `raw/` | `GenerateMetadata.py` and its outputs. Only `GreatWorldJSONdump.json`, `GreatMacroJSONdump.json` and `LocationIDs.json` ship in the apworld; the YAML and `Isolated*` files are intermediates kept for reading and diffing |
 | `assets/` | Logo |
 | `tools/` | Our scripts: pack the world, prune other games from the test checkout, test it, import upstream |
 | `roms/` | The developer's own ROMs (`oot.z64`, `mm.z64`), ignored by git |
@@ -26,7 +26,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 `raw/GenerateMetadata.py` is the single place OoTMM data is converted. To regenerate:
 1. Put an OoTMM checkout of the release we track ([ROADMAP.md](ROADMAP.md#decisions)) in `raw/ootmm` (ignored by git): `git clone --depth 1 --branch v33.0 https://github.com/OoTMM/OoTMM.git raw/ootmm`. Name the release in the commit message.
 2. From `raw/` (the script uses relative paths), run `python GenerateMetadata.py`. It needs PyYAML, and Node with `npx tsx` for the settings step, which reads `ootmm/packages/core/src/settings/data.ts`.
-3. It merges `data/world` and `data/macros` into the `Great*` dumps, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`. Any error stops it.
+3. It merges `data/world` and `data/macros` into the `Great*` dumps, updates the location ID registry (below), splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`. Any error stops it.
 
 What the world data looks like, and why:
 - **Default variant only.** `WorldSources` lists the files OoTMM's `packages/data/build/world.ts` loads for default settings: no `dungeons_mq` (Master Quest) and no `mm/jp` (the `jpLayouts` Deku Palace). Those files reuse the vanilla region names, so they can't share one dump.
@@ -60,6 +60,9 @@ Items are static lists in `items.py`. Each ID is a one-digit game (`GID`), a one
 | Shared enemy souls / NPC souls | 32001-32499 / 32501-32999 |
 
 Split ranges keep similar items apart without a new category. Item and location IDs are part of the multiworld protocol: once a release is out, never renumber them.
+
+## Locations
+Location IDs live in `raw/LocationIDs.json`, a registry `raw/GenerateMetadata.py` only adds to. IDs are keyed by name: a check keeps its ID across OoTMM releases (one OoTMM renames counts as new); a new check gets the next free ID in its game's range (OoT `100001-199999`, MM `200001-299999`) and is printed; a check OoTMM removes keeps its entry, so its ID is never reused. Don't edit or reorder the file by hand. `locations.py` fails at import if a location has no ID, which means the generator was not rerun.
 
 ## ROMs
 OoTMM accepts only Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U, checked by CRC32 in `packages/generator/lib/combo/config.ts` of OoTMM:

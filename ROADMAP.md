@@ -8,7 +8,6 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Planned, in order
 | Item | Notes |
 |---|---|
-| Location IDs | IDs are a counter over the JSON's iteration order, so they shift whenever OoTMM data changes. Give each location a stable ID derived from its OoTMM check, like the item scheme |
 | Items from OoTMM data | `items.py` is hand-written. Check it against OoTMM's item list and pool rules per option |
 | Logic | `rules.py` still holds the Archipelago example world's rules, unused: every entrance and location is open. Translate OoTMM's world-file conditions and macros (`raw/GreatMacroJSONdump.json`) into access rules, including the per-parent entrances of multi-region checks ([DEVELOPMENT.md](DEVELOPMENT.md#metadata)) |
 | Options | Only keep options that make sense in a multiworld (`raw/Meta_ForbiddenOptions.py` lists the excluded ones), and pass them to the patch |
