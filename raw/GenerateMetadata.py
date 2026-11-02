@@ -24,6 +24,12 @@ MacroSources = {
     "MM": "macros_mm.yml",
 }
 
+# Location IDs are part of the multiworld protocol, so they live in a registry that only grows:
+# a location keeps its ID across OoTMM releases, a new one gets the next free ID in its game's range,
+# and a location OoTMM drops keeps its entry so its ID is never reused.
+LocationIDFile = "LocationIDs.json"
+LocationIDBase = {"OOT": 100000, "MM": 200000}
+
 def LoadYAML(Path):
     with open(Path, 'r', encoding='utf-8') as file:
         return yaml.safe_load(file) or {}
@@ -89,6 +95,29 @@ def GenerateMetaFiles():
         yamldata = yaml.safe_load(file)
         with open("GreatMacroJSONdump.json", 'w') as jsonfile:
             json.dump(yamldata, jsonfile)
+
+
+def UpdateLocationIDs():
+    print("Updating the location ID registry...")
+    with open("GreatWorldJSONdump.json", 'r') as file:
+        world = json.load(file)
+    LocationIDs = {}
+    if os.path.exists(LocationIDFile):
+        with open(LocationIDFile, 'r') as file:
+            LocationIDs = json.load(file)
+    names = sorted({name for regiondata in world.values() for name in (regiondata.get("locations") or {})})
+    for name in names:
+        if name in LocationIDs:
+            continue
+        game = name.split(" ", 1)[0]
+        base = LocationIDBase[game]
+        LocationIDs[name] = max([i for i in LocationIDs.values() if base < i < base + 100000], default=base) + 1
+        print(f"  new location {LocationIDs[name]}: {name}")
+    if len(set(LocationIDs.values())) != len(LocationIDs):
+        raise ValueError(f"{LocationIDFile} has duplicate IDs")
+    with open(LocationIDFile, 'w') as file:
+        json.dump(dict(sorted(LocationIDs.items(), key=lambda entry: entry[1])), file, indent=1)
+        file.write("\n")
 
 
 def IsolateRegionData():
@@ -317,6 +346,7 @@ def ConvertRawOptions():
 
 def main():
     GenerateMetaFiles()
+    UpdateLocationIDs()
     IsolateRegionData()
     GenerateRawOptionsFile()
     ConvertRawOptions()
