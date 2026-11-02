@@ -17,7 +17,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 | `options.py` | Options, generated from OoTMM's settings by `raw/GenerateMetadata.py`. Don't edit it by hand |
 | `ootxmm_staticdata.py` | Loads the metadata JSON the world reads at runtime |
 | `web_world.py`, `docs/` | Archipelago website pages: game page (`en_OOTxMM.md`) and setup guide (`setup_en.md`) |
-| `raw/` | `GenerateMetadata.py` and its outputs. Only the `GreatWorld`, `GreatMacro` and `GreatItem` JSON dumps, `LocationIDs.json` and `ItemIDs.json` ship in the apworld; the YAML and `Isolated*` files are intermediates kept for reading and diffing |
+| `raw/` | `GenerateMetadata.py` and its outputs. Only the `GreatWorld`, `GreatMacro`, `GreatCheckItem` and `GreatItem` JSON dumps, `LocationIDs.json` and `ItemIDs.json` ship in the apworld; the YAML and `Isolated*` files are intermediates kept for reading and diffing |
 | `assets/` | Logo |
 | `tools/` | Our scripts: pack the world, prune other games from the test checkout, test it, import upstream |
 | `roms/` | The developer's own ROMs (`oot.z64`, `mm.z64`), ignored by git |
@@ -26,7 +26,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 `raw/GenerateMetadata.py` is the single place OoTMM data is converted. To regenerate:
 1. Put an OoTMM checkout of the release we track ([ROADMAP.md](ROADMAP.md#decisions)) in `raw/ootmm` (ignored by git): `git clone --depth 1 --branch v33.0 https://github.com/OoTMM/OoTMM.git raw/ootmm`. Name the release in the commit message.
 2. From `raw/` (the script uses relative paths), run `python GenerateMetadata.py`. It needs PyYAML, and Node with `npx tsx` for the item and settings steps, which import OoTMM's TypeScript directly.
-3. It merges `data/world` and `data/macros` into the `Great*` dumps, updates the location ID registry (below), exports the items and updates their registry, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`. Any error stops it.
+3. It merges `data/world` and `data/macros` into the `Great*` dumps, updates the location ID registry (below), exports each check's vanilla item, exports the items and updates their registry, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`. Any error stops it.
 
 What the world data looks like, and why:
 - **Default variant only.** `WorldSources` lists the files OoTMM's `packages/data/build/world.ts` loads for default settings: no `dungeons_mq` (Master Quest) and no `mm/jp` (the `jpLayouts` Deku Palace). Those files reuse the vanilla region names, so they can't share one dump.
@@ -37,9 +37,10 @@ What the world data looks like, and why:
 - **Options.** Archipelago reserves `random` on every Choice and rolls it itself, so OoTMM's own `random` value is skipped, and a `random` default becomes `default = "random"`.
 
 ## Items
-`raw/GenerateMetadata.py` exports OoTMM's item list (`packages/logic/src/items/defs.ts`) with each item's display name (`packages/generator/lib/combo/names.ts`) and whether it is in the `TRAPS` or `JUNK` group (`groups.ts`) into `raw/GreatItemJSONdump.json`. `items.py` makes traps `trap`, junk `filler` and everything else `progression`. `NOTHING` is not an item.
+`raw/GenerateMetadata.py` exports OoTMM's item list (`packages/logic/src/items/defs.ts`) with each item's display name (`packages/generator/lib/combo/names.ts`) and whether it is in the `TRAPS` or `JUNK` group (`groups.ts`) into `raw/GreatItemJSONdump.json`. `items.py` makes traps `trap`, junk `filler` (including `Nothing`, OoTMM's empty check) and everything else `progression`.
 
 - **Names.** Archipelago needs unique item names, and OoTMM reuses some (`Blue Fire` is an OoT, an MM and a shared item). A reused name gets ` (OoT)` or ` (MM)` on the game's own items, so the shared item keeps the plain name; one still reused gets its OoTMM ID added (`5 Deku Nuts (OoT) (OOT_NUTS_5_ALT)`). The generator fails if any name is still reused.
+- **Pool.** OoTMM's base pool: the vanilla item of every check, plus the items whose vanilla source is not a check (`EXTRA_ITEMS` in `items.py`, from OoTMM's `world/transform.ts`), which replace random filler so the pool matches the location count. The generator exports each check's vanilla item from OoTMM's `data/checks` XML into `raw/GreatCheckItemJSONdump.json`, swapping the placeholders OoTMM swaps itself (`OOT_RANDOM` and the like become green rupees, `CheckItemAliases`), and fails if a location has none. Option-dependent pool changes are not ported yet ([ROADMAP.md](ROADMAP.md)).
 - **IDs** live in `raw/ItemIDs.json`, a registry keyed by OoTMM's item ID that follows the same rules as the location registry below: OoT `1001-1999`, MM `2001-2999`, shared `3001-3999`. Item and location IDs are part of the multiworld protocol: once a release is out, never renumber them. `items.py` fails at import if an item has no ID.
 
 ## Locations
