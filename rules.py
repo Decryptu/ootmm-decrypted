@@ -1,78 +1,57 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 
 from BaseClasses import CollectionState
 
-from worlds.generic.Rules import add_rule, set_rule
+from .items import ITEM_BY_SYMBOLIC_ID
+from .logic import Condition
 
 if TYPE_CHECKING:
     from .world import OOTxMM
 
-from . import ootxmm_staticdata
+Rule = Callable[[CollectionState], bool]
+
+def compile_rule(world: OOTxMM, cond: Condition, cache: dict) -> Rule | None:
+    """Turn a condition from logic.py into an access rule. None means always met."""
+    if cond is True:
+        return None
+    if cond in cache:
+        return cache[cond]
+    player = world.player
+    rule: Rule
+    if cond is False:
+        rule = lambda state: False
+    elif cond[0] == "item":
+        name, count = ITEM_BY_SYMBOLIC_ID[cond[1]].display_name, cond[2]
+        rule = lambda state: state.has(name, player, count)
+    elif cond[0] == "event":
+        event = cond[1]
+        rule = lambda state: state.has(event, player)
+    elif cond[0] == "unique":
+        names, count = [ITEM_BY_SYMBOLIC_ID[i].display_name for i in cond[1]], cond[2]
+        rule = lambda state: state.has_from_list_unique(names, player, count)
+    else:
+        children = tuple(compile_rule(world, c, cache) for c in cond[1])
+        if cond[0] == "and":
+            def rule(state: CollectionState) -> bool:
+                for child in children:
+                    if not child(state):
+                        return False
+                return True
+        else:
+            def rule(state: CollectionState) -> bool:
+                for child in children:
+                    if child(state):
+                        return True
+                return False
+    cache[cond] = rule
+    return rule
 
 def set_all_rules(world: OOTxMM) -> None:
-    #set_all_entrance_rules(world)
-    #set_all_location_rules(world)
+    # Entrance and location rules are set where regions.py and locations.py create them.
     set_completion_condition(world)
 
-
-def set_all_entrance_rules(world: OOTxMM) -> None:
-    for Region in ootxmm_staticdata.OOTxMMRegionData.keys():
-        for Entrence in ootxmm_staticdata.OOTxMMRegionData[Region]["exits"].keys():
-            EntrenceObject = world.get_entrance(Entrence)
-
-    
-    
-    
-    
-    
-    
-    overworld_to_bottom_right_room = world.get_entrance("Overworld to Bottom Right Room")
-    overworld_to_top_left_room = world.get_entrance("Overworld to Top Left Room")
-    overworld_to_secret_room = world.get_entrance("Overworld to Secret Room")
-    right_room_to_final_boss_room = world.get_entrance("Right Room to Final Boss Room")
-
-    def can_destroy_bush(state: CollectionState) -> bool:
-        return state.has("Sword", world.player)
-    
-    set_rule(overworld_to_secret_room, can_destroy_bush)
-
-    set_rule(overworld_to_bottom_right_room, can_destroy_bush)
-
-    set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
-
-    set_rule(right_room_to_final_boss_room, lambda state: state.has("Top Left Room Button Pressed", world.player))
-
-
-def set_all_location_rules(world: OOTxMM) -> None:
-    
-    right_room_enemy = world.get_location("Right Room Enemy Drop")
-
-    if world.options.hard_mode:
-        set_rule(
-            right_room_enemy,
-            lambda state: (
-                state.has("Sword", world.player) and state.has_any(("Shield", "Health Upgrade"), world.player)
-            ),
-        )
-    else:
-        set_rule(right_room_enemy, lambda state: state.has("Sword", world.player))
-
-    # Another way to chain multiple conditions is via the add_rule function.
-    # This makes the access rules a bit slower though, so it should only be used if your structure justifies it.
-    # In our case, it's pretty useful because hard mode and easy mode have different requirements.
-    final_boss = world.get_location("Final Boss Defeated")
-
-    # For the "known" requirements, it's still better to chain them using a normal "and" condition.
-    add_rule(final_boss, lambda state: state.has_all(("Sword", "Shield"), world.player))
-
-    if world.options.hard_mode:
-        # You can check for multiple copies of an item by using the optional count parameter of state.has().
-        add_rule(final_boss, lambda state: state.has("Health Upgrade", world.player, 2))
-
-
 def set_completion_condition(world: OOTxMM) -> None:
-    # In our case, we went for the Victory event design pattern (see create_events() in locations.py).
-    # So lets undo what we just did, and instead set the completion condition to:
-    world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
+    # MM_MAJORA is OoTMM's event for beating Majora.
+    world.multiworld.completion_condition[world.player] = lambda state: state.has("MM_MAJORA", world.player)

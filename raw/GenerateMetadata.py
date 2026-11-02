@@ -179,6 +179,100 @@ def GenerateCheckItemFile():
         file.write("\n")
 
 
+def GenerateLogicFile():
+    # OoTMM's own pipeline parses every condition with default settings: macros are inlined and
+    # settings, tricks and the vanilla shop prices and song events are already decided. What is left is
+    # written as a node table that logic.py reads. OoTMM tracks time of day per area, which
+    # Archipelago's state can't, so time and flag conditions are written as met.
+    print("Exporting the world logic...")
+    # The world builder imports OoTMM's packages, which need their dependencies and the built data package.
+    Shell = sys.platform == "win32"
+    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--ignore-scripts"], cwd="ootmm", check=True, shell=Shell)
+    subprocess.run(["pnpm", "run", "build"], cwd=os.path.join("ootmm", "packages", "data"), check=True, shell=Shell)
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
+    import { logicPassPrice } from './ootmm/packages/logic/src/price.ts';
+    import { logicPassSongEvents } from './ootmm/packages/logic/src/misc/index.ts';
+    import { logicPassEntrances } from './ootmm/packages/logic/src/solver/entrances.ts';
+    import { logicPassWorld } from './ootmm/packages/logic/src/world/builder.ts';
+    import { ItemGroups } from './ootmm/packages/logic/src/items/index.ts';
+
+    // OoTMM's pipeline up to the entrance pass, which links the games (Clock Tower and Mask Shop). The
+    // world transform pass in between drops the checks default settings leave out, but this world keeps
+    // every check, so the entrance pass runs on the world as built.
+    let state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: DEFAULT_SETTINGS } as any);
+    state = { ...state, ...logicPassWorld(state) };
+    for (const pass of [logicPassPrice, logicPassSongEvents, logicPassEntrances] as any[]) {
+      state = { ...state, ...pass(state) };
+    }
+    const world = state.worlds[0];
+
+    const nodes: any[] = [true, false];
+    const nodeIds = new Map<string, number>([['true', 0], ['false', 1]]);
+    const add = (node: any) => {
+      const key = JSON.stringify(node);
+      if (!nodeIds.has(key)) { nodeIds.set(key, nodes.length); nodes.push(node); }
+      return nodeIds.get(key)!;
+    };
+    const memo = new Map<number, number>();
+    const convert = (e: any): number => {
+      if (memo.has(e.id)) return memo.get(e.id)!;
+      let id: number;
+      switch (e.type) {
+      case 'true': case 'time-oot': case 'time-mm': case 'flag-on': case 'flag-off': id = 0; break;
+      case 'false': id = 1; break;
+      case 'price': id = world.prices[e.slot] <= e.max ? 0 : 1; break;
+      case 'song-event-oot': id = world.songEventsOot[e.songId] === e.cmp ? 0 : 1; break;
+      case 'song-event-mm': id = world.songEventsMm[e.songId] === e.cmp ? 0 : 1; break;
+      case 'age': id = add(['age', e.age === 0 ? 'child' : 'adult']); break;
+      case 'item': id = add(['item', e.item.id, e.count]); break;
+      case 'renewable': case 'license': id = add(['item', e.item.id, 1]); break;
+      case 'event': id = add(['event', e.event]); break;
+      case 'masks': id = add(['count_unique', [...ItemGroups.MASKS_REGULAR_VANILLA_MM].map(x => x.id), e.count]); break;
+      case 'and': case 'or': {
+        const isAnd = e.type === 'and';
+        const absorb = isAnd ? 1 : 0, neutral = isAnd ? 0 : 1;
+        const children = [...new Set<number>(e.exprs.map(convert))].filter(x => x !== neutral);
+        if (children.includes(absorb)) id = absorb;
+        else if (children.length === 0) id = neutral;
+        else if (children.length === 1) id = children[0];
+        else id = add([e.type, children]);
+        break;
+      }
+      default: throw new Error(`Unknown expression type ${e.type}`);
+      }
+      memo.set(e.id, id);
+      return id;
+    };
+    const mapExprs = (m: any) => Object.fromEntries(Object.entries(m).map(([k, e]) => [k, convert(e)]));
+    const areas: any = {};
+    for (const [name, area] of Object.entries(world.areas) as any[]) {
+      areas[name] = {
+        game: area.game,
+        age_change: area.ageChange,
+        exits: mapExprs(area.exits),
+        events: mapExprs(area.events),
+        locations: mapExprs(area.locations),
+      };
+    }
+    fs.writeFileSync('GreatLogicJSONdump.json', JSON.stringify({ nodes, areas }) + '\\n');
+    """)
+    # Exits come from the logic (the entrance pass changes some), but regions and checks come from the
+    # world dump, so the logic must have every one of them.
+    with open("GreatWorldJSONdump.json", 'r') as file:
+        world = json.load(file)
+    with open("GreatLogicJSONdump.json", 'r') as file:
+        areas = json.load(file)["areas"]
+    for region, regiondata in world.items():
+        if region not in areas:
+            raise ValueError(f"No logic for region {region}")
+        missing = set(regiondata.get("locations") or {}) - areas[region]["locations"].keys()
+        if missing:
+            raise ValueError(f"{region}: no logic for locations {sorted(missing)}")
+
+
 def GenerateItemFile():
     print("Generating item file from OoTMM item data...")
     # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts).
@@ -471,6 +565,7 @@ def ConvertRawOptions():
 
 def main():
     GenerateMetaFiles()
+    GenerateLogicFile()
     UpdateLocationIDs()
     GenerateCheckItemFile()
     GenerateItemFile()

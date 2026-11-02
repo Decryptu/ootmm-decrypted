@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 
-from . import ootxmm_staticdata
+from . import logic, ootxmm_staticdata
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -19,13 +19,15 @@ class OOTxMMItemData:
         self.type = type
 
 def classify(item: dict) -> ItemClassification:
-    # OoTMM's TRAPS and JUNK groups (logic/src/items/groups.ts). Everything else counts as progression
-    # until the logic tells which items it needs.
+    # Items some condition asks for are progression. Of the rest, OoTMM's TRAPS and JUNK groups
+    # (logic/src/items/groups.ts) are traps and filler, and everything else is useful.
     if item["trap"]:
         return ItemClassification.trap
+    if item["id"] in logic.LOGIC_ITEMS:
+        return ItemClassification.progression
     if item["junk"]:
         return ItemClassification.filler
-    return ItemClassification.progression
+    return ItemClassification.useful
 
 # Built from OoTMM's item list by raw/GenerateMetadata.py.
 OOTxMMItemList: list[OOTxMMItemData] = [
@@ -33,14 +35,6 @@ OOTxMMItemList: list[OOTxMMItemData] = [
     for item in ootxmm_staticdata.OOTxMMItemData
 ]
 ITEM_BY_SYMBOLIC_ID = {item.symbolic_id: item for item in OOTxMMItemList}
-
-# Items OoTMM adds to the pool on top of the checks' vanilla items (EXTRA_ITEMS_OOT and EXTRA_ITEMS_MM in
-# packages/logic/src/world/transform.ts): their vanilla sources are not checks.
-EXTRA_ITEMS = [
-    "OOT_MASK_SKULL", "OOT_MASK_SPOOKY", "OOT_MASK_GERUDO", "OOT_MASK_KEATON",
-    "OOT_MASK_TRUTH", "OOT_MASK_BUNNY", "OOT_MASK_GORON", "OOT_MASK_ZORA",
-    "MM_MASK_DEKU", "MM_SWORD",
-]
 
 ITEM_NAME_TO_ID = {item.display_name: item.id for item in OOTxMMItemList}
 ITEM_NAME_TO_CLASS = {item.display_name: item.type for item in OOTxMMItemList}
@@ -59,6 +53,6 @@ def create_all_items(world: OOTxMM) -> None:
     unfilled = world.multiworld.get_unfilled_locations(world.player)
     pool = [ITEM_BY_SYMBOLIC_ID[ootxmm_staticdata.OOTxMMCheckItems[location.name]] for location in unfilled]
     filler = [i for i, item in enumerate(pool) if item.type == ItemClassification.filler]
-    for i, extra in zip(world.random.sample(filler, len(EXTRA_ITEMS)), EXTRA_ITEMS):
+    for i, extra in zip(world.random.sample(filler, len(logic.EXTRA_ITEMS)), logic.EXTRA_ITEMS):
         pool[i] = ITEM_BY_SYMBOLIC_ID[extra]
     world.multiworld.itempool += [create_item_with_correct_classification(world, item.display_name) for item in pool]
