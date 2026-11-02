@@ -8,19 +8,16 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Planned, in order
 | Item | Notes |
 |---|---|
-| World loads in Archipelago | It fails at import: `options.py` has Choice options with a `random` value (first: `OOTxMM_mainprices_priceOotShops`), which Archipelago forbids. Fix it in `raw/GenerateMetadata.py`'s option conversion (map OoTMM's `random` to Archipelago's own random handling), then regenerate. The World workflow is red until then |
-| Clean up generation output | `regions.py` and `locations.py` print every region and location on import and swallow errors with bare `except`. Remove the prints; let a bad name fail |
-| Location IDs | IDs are a counter over the JSON's iteration order, so they shift whenever OoTMM data changes. Give each location a stable ID derived from its OoTMM check, like the item scheme |
-| Items from OoTMM data | `items.py` is hand-written. Check it against OoTMM's item list and pool rules per option |
-| Logic | `rules.py` still holds the Archipelago example world's rules, unused. Translate OoTMM's world-file conditions and macros (`raw/GreatMacroJSONdump.json`) into access rules |
-| Options | Only keep options that make sense in a multiworld (`raw/Meta_ForbiddenOptions.py` lists the excluded ones), and pass them to the patch |
-| Goal | The completion condition is a placeholder `BEAT MAJORA` event on `Moon`; follow the `main_goal` option (Ganon, Majora, both, Triforce) |
+| More options | The world offers the settings that only change conditions or the ROM ([DEVELOPMENT.md](DEVELOPMENT.md#options)). The rest (the `port` class in `raw/SettingsClasses.json`) change which checks exist, the pool or the world's shape: port each with what `run()` in OoTMM's `packages/logic/src/world/transform.ts` does for it (check filters, souls, keys, shared items, `itemPool`), then add it to `Ported` ([DEVELOPMENT.md](DEVELOPMENT.md#options)). The check filters are ported; the pool is still OoTMM's base pool, so pool changes (souls, keys, shared items, `itemPool`, `pondFishShuffle`) come next |
+| Goal | The completion condition is OoTMM's `MM_MAJORA` event; follow OoTMM's `goal` setting (Ganon, Majora, both, Triforce), which is not offered yet |
 | ROM patch | Produce a per-player patch file that OoTMM's generator turns into the combo ROM, with this seed's item placements |
 | Client | Item send/receive with the running game (emulator connector, likely BizHawk like the other N64 worlds) |
+| Time of day | Time and flag conditions count as met ([DEVELOPMENT.md](DEVELOPMENT.md#logic)), so a seed can expect something at a time the route can't reach (mostly MM's clock). Model OoTMM's per-area time ranges in the state, or at least make the conditions that only one time slice meets false |
 | Game and setup pages | `docs/en_OOTxMM.md` and `docs/setup_en.md` are stubs |
 
 ## Decisions
 - Keep the game name `OOTxMM` and upstream's file layout, so Quasky's work can still be merged if AP-OOTMM resumes ([Syncing upstream](DEVELOPMENT.md#syncing-upstream)).
 - Logic comes from OoTMM's data through `raw/GenerateMetadata.py`, not hand-written rules, so it follows OoTMM updates.
-- Use OoTMM as released, not a fork: it is the data source for metadata (a checkout in `raw/ootmm`, ignored) and the ROM builder. Track one release at a time, currently v33.0; the committed metadata predates it (generated in July 2026), so regenerate it from v33.0 with the first metadata change. Fork OoTMM only if the patch or client needs a change OoTMM won't take upstream.
+- Use OoTMM as released, not a fork: it is the data source for metadata (a checkout in `raw/ootmm`, ignored) and the ROM builder. Track one release at a time, currently v33.0. Fork OoTMM only if the patch or client needs a change OoTMM won't take upstream.
+- Generate OoTMM's default world variant only: vanilla dungeons (no Master Quest) and the US Deku Palace. MQ and `jpLayouts` are not offered until the world can pick world files per option.
 - Target Archipelago 0.6.8 (`archipelago.json`, CI and `tools/apworld-test.ps1` pin the same commit).

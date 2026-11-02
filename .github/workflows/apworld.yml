@@ -40,6 +40,7 @@ jobs:
       - name: Pack the world
         run: |
           python world/tools/build_apworld.py --dir archipelago/worlds/ootxmm
+          python world/tools/prune_worlds.py archipelago
           python world/tools/build_apworld.py ootxmm.apworld
       - name: Test
         working-directory: archipelago
