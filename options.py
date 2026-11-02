@@ -113,13 +113,11 @@ class OOTxMM_mainshuffle_housesSkulltulaTokens(Choice):
     """
     Controls how Swamp and Ocean Skulltulas will be shuffled
     - **none**: Swamp and Ocean Tokens will be vanilla
-    - **cross**: Any unshuffled Token can be found on any other unshuffled Skulltula
     - **all**: Swamp and Ocean Tokens can be found anywhere
     """
     display_name = "House Skulltula Tokens Shuffle"
     option_none = 0
-    option_cross = 1
-    option_all = 2
+    option_all = 1
     default = option_none
 
 class OOTxMM_mainshuffle_tingleShuffle(Choice):
@@ -719,6 +717,66 @@ class OOTxMM_mainshuffle_shuffleFreeHeartsMm(Toggle):
     display_name = "Freestanding Hearts Shuffle (MM)"
     default = False
 
+class OOTxMM_mainshuffle_shuffleGossipFairiesOot(Choice):
+    """
+    Controls whether or not the gossip stones fairies are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Fairies Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    default = option_none
+
+class OOTxMM_mainshuffle_shuffleGossipBigFairiesOot(Choice):
+    """
+    Controls whether or not the gossip stones big fairies are shuffled (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Big Fairies Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    default = option_none
+
+class OOTxMM_mainshuffle_shuffleGossipFairiesMm(Choice):
+    """
+    Controls whether or not the gossip stones fairies are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Fairies Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    default = option_none
+
+class OOTxMM_mainshuffle_shuffleGossipBigFairiesMm(Choice):
+    """
+    Controls whether or not the gossip stones big fairies are shuffled (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Gossip Big Fairies Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    default = option_none
+
 class OOTxMM_mainshuffle_shuffleWonderItemsOot(Choice):
     """
     Controls whether or not the wonder items are shuffled (OoT)
@@ -770,6 +828,36 @@ class OOTxMM_mainshuffle_shuffleButterfliesMm(Toggle):
     display_name = "Butterflies Shuffle (MM)"
     default = False
 
+class OOTxMM_mainshuffle_shuffleBouldersOot(Choice):
+    """
+    Controls whether or not the regular boulders drop an item when broken (OoT)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Boulder Drops Shuffle (OoT)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    default = option_none
+
+class OOTxMM_mainshuffle_shuffleBouldersMm(Choice):
+    """
+    Controls whether or not the regular boulders drop an item when broken (MM)
+    - **none**
+    - **all**
+    - **overworld**
+    - **dungeons**
+    """
+    display_name = "Boulder Drops Shuffle (MM)"
+    option_none = 0
+    option_all = 1
+    option_overworld = 2
+    option_dungeons = 3
+    default = option_none
+
 class OOTxMM_mainshuffle_shuffleRedBouldersOot(Toggle):
     """
     Controls whether or not the red boulders drop an item when broken (OoT)
@@ -782,6 +870,13 @@ class OOTxMM_mainshuffle_shuffleRedBouldersMm(Toggle):
     Controls whether or not the red boulders drop an item when broken (MM)
     """
     display_name = "Red Boulder Drops Shuffle (MM)"
+    default = False
+
+class OOTxMM_mainshuffle_shuffleSilverBouldersOot(Toggle):
+    """
+    Controls whether or not the silver boulders drop an item when broken (OoT)
+    """
+    display_name = "Silver Boulder Drops Shuffle (OoT)"
     default = False
 
 class OOTxMM_mainshuffle_shuffleFrogsRupeesOot(Toggle):
@@ -1016,23 +1111,27 @@ class OOTxMM_mainevents_moonCrash(Choice):
     option_cycle = 1
     default = option_reset
 
-class OOTxMM_mainevents_startingAge(Choice):
+class OOTxMM_mainevents_startingAgeOot(Choice):
     """
     Choose the starting age
     - **child**: Link will start off as Child
     - **adult**: Link will start off as Adult
     """
-    display_name = "Starting Age"
+    display_name = "Starting Age (OoT)"
     option_child = 0
     option_adult = 1
     default = option_child
 
-class OOTxMM_mainevents_swordlessAdult(Toggle):
+class OOTxMM_mainevents_startingAgeMm(Choice):
     """
-    Choose whether or not Adult Link can be swordless
+    Choose the starting age in Majora's Mask. If Adult Mask or Cross-Game Age is off, you will be unable to change age in MM.
+    - **child**: Link will start off as Child
+    - **adult**: Link will start off as Adult
     """
-    display_name = "Allow Adult Link to be swordless"
-    default = False
+    display_name = "Starting Age (MM)"
+    option_child = 0
+    option_adult = 1
+    default = option_child
 
 class OOTxMM_mainevents_timeTravelSword(Toggle):
     """
@@ -1054,7 +1153,7 @@ class OOTxMM_mainevents_doorOfTime(Choice):
 
 class OOTxMM_mainevents_ageChange(Choice):
     """
-    Allows you to switch ages by playing Song of Time after you've switched ages once in Temple of Time.<br>Preserves your current position on the scene, which logic can expect you to take advantage of.
+    Allows you to switch ages by playing Song of Time in OoT after you've switched ages once in Temple of Time.<br>Preserves your current position on the scene, which logic can expect you to take advantage of.
     - **none**: Cannot change age by playing Song of Time.
     - **oot**: Can change age by playing Song of Time with the Ocarina of Time specifically.
     - **always**: Can change age by playing Song of Time using any means.
@@ -1665,147 +1764,154 @@ class OOTxMM_itemsprogressive_progressiveClocks(Choice):
     option_descending = 2
     default = option_ascending
 
-class OOTxMM_itemsextensions_fillWallets(Toggle):
+class OOTxMM_itemsextensionsgeneral_fillWallets(Toggle):
     """
     Fills the wallet upon finding a new one
     """
     display_name = "Fill Wallets"
     default = False
 
-class OOTxMM_itemsextensions_bottleContentShuffle(Toggle):
+class OOTxMM_itemsextensionsgeneral_bottleContentShuffle(Toggle):
     """
     Randomize what bottles from both games contain upon finding them in the world
     """
     display_name = "Random Bottle Contents"
     default = False
 
-class OOTxMM_itemsextensions_stoneAgonyMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_stoneAgonyMm(Toggle):
     """
     Enables Stone of Agony in MM
     """
     display_name = "Stone of Agony in MM"
     default = False
 
-class OOTxMM_itemsextensions_sticksNutsUpgradesMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sticksNutsUpgradesMm(Toggle):
     """
     Enables Deku Stick and Nut upgrades in MM
     """
     display_name = "Deku Stick & Nut Upgrades in MM"
     default = False
 
-class OOTxMM_itemsextensions_fairyOcarinaMm(Toggle):
+class OOTxMM_itemsextensionsgeneral_sticksNutsUpgradesInitial(Toggle):
+    """
+    Shuffle the initial stick & nuts.
+    """
+    display_name = "Shuffle Initial Deku Stick & Nut Upgrades"
+    default = False
+
+class OOTxMM_itemsextensionscrossGameitems_fairyOcarinaMm(Toggle):
     """
     Functionally identical as the Ocarina of Time, but now there's 2 Ocarinas for Majora's Mask!
     """
     display_name = "Fairy Ocarina in MM"
     default = False
 
-class OOTxMM_itemsextensions_blueFireArrows(Toggle):
+class OOTxMM_itemsextensionsoot_blueFireArrows(Toggle):
     """
     Gives the OoT Ice Arrows the properties of Blue Fire
     """
     display_name = "Blue Fire Arrows"
     default = False
 
-class OOTxMM_itemsextensions_iceArrowPlatformsOot(Toggle):
+class OOTxMM_itemsextensionsoot_iceArrowPlatformsOot(Toggle):
     """
     Allow ice arrows in OoT to create walkable ice platforms on water
     """
     display_name = "Ice Arrow Platforms (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_sunlightArrows(Toggle):
+class OOTxMM_itemsextensionsoot_sunlightArrows(Toggle):
     """
     Gives the OoT Light Arrows the ability to activate most sun switches
     """
     display_name = "Sunlight Arrows"
     default = False
 
-class OOTxMM_itemsextensions_shortHookshotMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_shortHookshotMm(Toggle):
     """
     Adds a short Hookshot in MM, which logic accounts for. A trick is also there for some of the harder spots
     """
     display_name = "Short Hookshot in MM"
     default = False
 
-class OOTxMM_itemsextensions_bronzeScale(Toggle):
+class OOTxMM_itemsextensionsgeneral_bronzeScale(Toggle):
     """
     Add an extra scale item, that is required to enter deep water.
     """
     display_name = "Bronze Scale"
     default = False
 
-class OOTxMM_itemsextensions_childWallets(Toggle):
+class OOTxMM_itemsextensionsgeneral_childWallets(Toggle):
     """
     Shuffles the starting wallet in each game... making it so you have to find it to hold anything!
     """
     display_name = "Child Wallets"
     default = False
 
-class OOTxMM_itemsextensions_colossalWallets(Toggle):
+class OOTxMM_itemsextensionsgeneral_colossalWallets(Toggle):
     """
     Adds a Wallet that can hold up to 999 rupees in each game
     """
     display_name = "Colossal Wallets"
     default = False
 
-class OOTxMM_itemsextensions_bottomlessWallets(Toggle):
+class OOTxMM_itemsextensionsgeneral_bottomlessWallets(Toggle):
     """
     Adds a Wallet that can hold up to 9999 rupees in each game
     """
     display_name = "Bottomless Wallets"
     default = False
 
-class OOTxMM_itemsextensions_rupeeScaling(Toggle):
+class OOTxMM_itemsextensionsgeneral_rupeeScaling(Toggle):
     """
     Makes rupees worth twice as much with the Colossal Wallet, and twenty times as much with the Bottomless Wallet.
     """
     display_name = "Rupee Scaling"
     default = False
 
-class OOTxMM_itemsextensions_skeletonKeyOot(Toggle):
+class OOTxMM_itemsextensionssystems_skeletonKeyOot(Toggle):
     """
     Adds a Skeleton Key that can open every small-key-locked door in OoT.
     """
     display_name = "Skeleton Key (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_skeletonKeyMm(Toggle):
+class OOTxMM_itemsextensionssystems_skeletonKeyMm(Toggle):
     """
     Adds a Skeleton Key that can open every small-key-locked door in MM.
     """
     display_name = "Skeleton Key (MM)"
     default = False
 
-class OOTxMM_itemsextensions_magicalRupee(Toggle):
+class OOTxMM_itemsextensionsoot_magicalRupee(Toggle):
     """
     Adds a Magical Rupee that can trigger every silver-rupee event in OoT dungeons.
     """
     display_name = "Magical Rupee"
     default = False
 
-class OOTxMM_itemsextensions_transcendentFairy(Toggle):
+class OOTxMM_itemsextensionsmm_transcendentFairy(Toggle):
     """
     Adds a Transcendent Fairy that counts as every Stray Fairy in MM.
     """
     display_name = "Transcendent Fairy"
     default = False
 
-class OOTxMM_itemsextensions_platinumTokenOot(Toggle):
+class OOTxMM_itemsextensionssystems_platinumTokenOot(Toggle):
     """
     Adds a Platinum Token that counts as every Gold Skulltula Token.
     """
     display_name = "Platinum Token (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_platinumTokenMm(Toggle):
+class OOTxMM_itemsextensionssystems_platinumTokenMm(Toggle):
     """
     Adds a Platinum Token that counts as every House Token.
     """
     display_name = "Platinum Token (MM)"
     default = False
 
-class OOTxMM_itemsextensions_bombchuBehaviorOot(Choice):
+class OOTxMM_itemsextensionssystems_bombchuBehaviorOot(Choice):
     """
     Controls the behavior of bombchu.
     - **free**: Bombchu can be used as soon as a pack is obtained. No bombchu drops. Max ammo is 50.
@@ -1820,7 +1926,7 @@ class OOTxMM_itemsextensions_bombchuBehaviorOot(Choice):
     option_bagSeparate = 3
     default = option_free
 
-class OOTxMM_itemsextensions_bombchuBehaviorMm(Choice):
+class OOTxMM_itemsextensionssystems_bombchuBehaviorMm(Choice):
     """
     Controls the behavior of bombchu.
     - **free**: Bombchu can be used as soon as a pack is obtained. No bombchu drops. Max ammo is 50.
@@ -1835,385 +1941,447 @@ class OOTxMM_itemsextensions_bombchuBehaviorMm(Choice):
     option_bagSeparate = 3
     default = option_bombBag
 
-class OOTxMM_itemsextensions_spellFireMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_spellFireMm(Toggle):
     """
     Adds Din's Fire in Majora's Mask.
     """
     display_name = "Din's Fire (MM)"
     default = False
 
-class OOTxMM_itemsextensions_spellWindMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_spellWindMm(Toggle):
     """
     Adds Farore's Wind in Majora's Mask.
     """
     display_name = "Farore's Wind (MM)"
     default = False
 
-class OOTxMM_itemsextensions_spellLoveMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_spellLoveMm(Toggle):
     """
     Adds Nayru's Love in Majora's Mask.
     """
     display_name = "Nayru's Love (MM)"
     default = False
 
-class OOTxMM_itemsextensions_bootsIronMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_bootsIronMm(Toggle):
     """
     Adds Iron Boots in Majora's Mask.
     """
     display_name = "Iron Boots (MM)"
     default = False
 
-class OOTxMM_itemsextensions_bootsHoverMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_bootsHoverMm(Toggle):
     """
     Adds Hover Boots in Majora's Mask.
     """
     display_name = "Hover Boots (MM)"
     default = False
 
-class OOTxMM_itemsextensions_tunicGoronMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_tunicGoronMm(Toggle):
     """
     Adds the Goron Tunic in Majora's Mask.
     """
     display_name = "Goron Tunic (MM)"
     default = False
 
-class OOTxMM_itemsextensions_tunicZoraMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_tunicZoraMm(Toggle):
     """
     Adds the Zora Tunic in Majora's Mask.
     """
     display_name = "Zora Tunic (MM)"
     default = False
 
-class OOTxMM_itemsextensions_scalesMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_scalesMm(Toggle):
     """
     Adds the Silver Scale and Golden Scale in Majora's Mask.
     """
     display_name = "Scales (MM)"
     default = False
 
-class OOTxMM_itemsextensions_strengthMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_strengthMm(Toggle):
     """
     Adds the Goron's Bracelet, Silver Gauntlets and Golden Gauntlets in Majora's Mask.
     """
     display_name = "Strength (MM)"
     default = False
 
-class OOTxMM_itemsextensions_kegStrength3(Toggle):
+class OOTxMM_itemsextensionsmm_kegStrength3(Toggle):
     """
     If you have the Golden Gauntlets in Majora's Mask, this allows you to purchase and use Powder Kegs, and attempt the Keg Trial.
     """
     display_name = "Use Keg With Golden Gauntlets"
     default = False
 
-class OOTxMM_itemsextensions_hammerMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_hammerMm(Toggle):
     """
     Adds the Megaton Hammer in Majora's Mask.
     """
     display_name = "Megaton Hammer (MM)"
     default = False
 
-class OOTxMM_itemsextensions_boomerangMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_boomerangMm(Toggle):
     """
     Adds the Boomerang in Majora's Mask.
     """
     display_name = "Boomerang (MM)"
     default = False
 
-class OOTxMM_itemsextensions_gfsOot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_gfsOot(Toggle):
     """
     Adds the Great Fairy's Sword in Ocarina of Time.
     """
     display_name = "Great Fairy's Sword (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_slingshotMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_slingshotMm(Toggle):
     """
     Adds the Slingshot in Majora's Mask.
     """
     display_name = "Slingshot (MM)"
     default = False
 
-class OOTxMM_itemsextensions_spinUpgradeOot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_spinUpgradeOot(Toggle):
     """
     Add the Spin Attack upgrade as an item in OoT.
     """
     display_name = "Spin Attack Upgrade (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_extraChildSwordsOot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_extraChildSwordsOot(Toggle):
     """
     Add the Razor and Gilded Swords in OoT, as upgrades to the Kokiri Sword.
     """
     display_name = "Extra Child Swords (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_dekuShieldMm(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_dekuShieldMm(Toggle):
     """
     Add the Deku Shield in Majora's Mask.
     """
     display_name = "Deku Shield (MM)"
     default = False
 
-class OOTxMM_itemsextensions_blastMaskOot(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_blastMaskOot(Toggle):
     """
     Add the Blast Mask in Ocarina of Time.
     """
     display_name = "Blast Mask (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_stoneMaskOot(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_stoneMaskOot(Toggle):
     """
     Add the Stone Mask in Ocarina of Time.
     """
     display_name = "Stone Mask (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_kamaroMaskOot(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_kamaroMaskOot(Toggle):
     """
     Add the Kamaro Mask in Ocarina of Time.
     """
     display_name = "Kamaro Mask (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_elegyOot(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_gerudoMaskMm(Toggle):
+    """
+    Add the Gerudo Mask in Majora's Mask which can be used as a disguise to enter Pirates Fortress.
+    """
+    display_name = "Gerudo Mask (MM)"
+    default = False
+
+class OOTxMM_itemsextensionscrossGamemasks_skullMaskMm(Toggle):
+    """
+    Add the Skull Mask in Majora's Mask which can be used as a disguise to enter the Deku Palace.
+    """
+    display_name = "Skull Mask (MM)"
+    default = False
+
+class OOTxMM_itemsextensionscrossGamemasks_spookyMaskMm(Toggle):
+    """
+    Add the Spooky Mask in Majora's Mask. The spooky mask functions like the Gibdo mask but only at night.
+    """
+    display_name = "Spooky Mask (MM)"
+    default = False
+
+class OOTxMM_itemsextensionsmm_adultMaskMm(Toggle):
+    """
+    Add the Adult Mask in Majora's Mask. The Adult mask allows you to change age in Majora's Mask.
+    """
+    display_name = "Adult Mask"
+    default = False
+
+class OOTxMM_itemsextensionscrossGamesongs_elegyOot(Toggle):
     """
     Add the Elegy of Emptiness in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Elegy of Emptiness (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songSoaringOot(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songSoaringOot(Toggle):
     """
     Add the Song of Soaring in Ocarina of Time. Usable only as child. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Song of Soaring (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songHealingOot(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songHealingOot(Toggle):
     """
     Add the Song of Healing in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Song of Healing (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songAwakeningOot(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songAwakeningOot(Toggle):
     """
     Add the Sonata of Awakening in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Sonata of Awakening (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songGoronOot(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songGoronOot(Toggle):
     """
     Add the Goron Lullaby in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Goron Lullaby (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songZoraOot(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songZoraOot(Toggle):
     """
     Add the New Wave Bossa Nova in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "New Wave Bossa Nova (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songOrderOot(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songOrderOot(Toggle):
     """
     Add the Oath to Order in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Oath to Order (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_songSunMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songSunMm(Toggle):
     """
     Add Sun's Song in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Sun's Song (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songZeldaLullabyMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songZeldaLullabyMm(Toggle):
     """
     Add Zelda's Lullaby in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Zelda's Lullaby (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songSariasMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songSariasMm(Toggle):
     """
     Add Saria's Song in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Saria's Song (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songMinuetMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songMinuetMm(Toggle):
     """
     Add the Minuet of Forest in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Minuet of Forest (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songBoleroMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songBoleroMm(Toggle):
     """
     Add the Bolero of Fire in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Bolero of Fire (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songSerenadeMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songSerenadeMm(Toggle):
     """
     Add the Serenade of Water in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Serenade of Water (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songRequiemMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songRequiemMm(Toggle):
     """
     Add the Requiem of Spirit in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Requiem of Spirit (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songNocturneMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songNocturneMm(Toggle):
     """
     Add the Nocturne of Shadow in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Nocturne of Shadow (MM)"
     default = False
 
-class OOTxMM_itemsextensions_songPreludeMm(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_songPreludeMm(Toggle):
     """
     Add the Prelude of Light in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
     """
     display_name = "Prelude of Light (MM)"
     default = False
 
-class OOTxMM_itemsextensions_powderKegOot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_powderKegOot(Toggle):
     """
     Add the Powder Keg in Ocarina of Time. Once found, Medigoron in Goron City will sell Powder Kegs after you buy his item.
     """
     display_name = "Powder Keg (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_ocarinaButtonsShuffleOot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_extraBottlesOot(Toggle):
+    """
+    Allows Ocarina of Time to have up to six bottles by using the Adult and Child trade slots for the fifth and sixth bottles.
+    """
+    display_name = "Extra Bottles (OoT)"
+    default = False
+
+class OOTxMM_itemsextensionssystems_ocarinaButtonsShuffleOot(Toggle):
     """
     Add the Ocarina Buttons for OoT into the item pool. Ocarina notes cannot be played until the corresponding button is obtained.
     """
     display_name = "Ocarina Buttons (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_ocarinaButtonsShuffleMm(Toggle):
+class OOTxMM_itemsextensionssystems_ocarinaButtonsShuffleMm(Toggle):
     """
     Add the Ocarina Buttons for MM into the item pool. Ocarina notes cannot be played until the corresponding button is obtained.
     """
     display_name = "Ocarina Buttons (MM)"
     default = False
 
-class OOTxMM_itemsextensions_soulsEnemyOot(Toggle):
+class OOTxMM_itemsextensionssystems_shovelOot(Toggle):
+    """
+    Add a shovel to the item pool. The shovel is required to access grottos.
+    """
+    display_name = "Shovel (OoT)"
+    default = False
+
+class OOTxMM_itemsextensionssystems_shovelMm(Toggle):
+    """
+    Add a shovel to the item pool. The shovel is required to access grottos.
+    """
+    display_name = "Shovel (MM)"
+    default = False
+
+class OOTxMM_itemsextensionssystems_soulsEnemyOot(Toggle):
     """
     Add Souls for OoT enemies into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Enemy Souls (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_soulsEnemyMm(Toggle):
+class OOTxMM_itemsextensionssystems_soulsEnemyMm(Toggle):
     """
     Add Souls for MM enemies into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Enemy Souls (MM)"
     default = False
 
-class OOTxMM_itemsextensions_soulsBossOot(Toggle):
+class OOTxMM_itemsextensionssystems_soulsBossOot(Toggle):
     """
     Add Souls for OoT bosses into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Boss Souls (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_soulsBossMm(Toggle):
+class OOTxMM_itemsextensionssystems_soulsBossMm(Toggle):
     """
     Add Souls for MM bosses into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Boss Souls (MM)"
     default = False
 
-class OOTxMM_itemsextensions_soulsNpcOot(Toggle):
+class OOTxMM_itemsextensionssystems_soulsNpcOot(Toggle):
     """
     Add Souls for OoT NPCs into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "NPC Souls (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_soulsNpcMm(Toggle):
+class OOTxMM_itemsextensionssystems_soulsNpcMm(Toggle):
     """
     Add Souls for MM NPCs into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "NPC Souls (MM)"
     default = False
 
-class OOTxMM_itemsextensions_soulsAnimalOot(Toggle):
+class OOTxMM_itemsextensionssystems_soulsAnimalOot(Toggle):
     """
     Add Souls for OoT animals into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Animal Souls (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_soulsAnimalMm(Toggle):
+class OOTxMM_itemsextensionssystems_soulsAnimalMm(Toggle):
     """
     Add Souls for MM animals into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Animal Souls (MM)"
     default = False
 
-class OOTxMM_itemsextensions_soulsMiscOot(Toggle):
+class OOTxMM_itemsextensionssystems_soulsMiscOot(Toggle):
     """
     Add Souls for OoT Business Scrubs and Gold Skulltulas into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Misc. Souls (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_soulsMiscMm(Toggle):
+class OOTxMM_itemsextensionssystems_soulsMiscMm(Toggle):
     """
     Add Souls for MM Business Scrubs and Gold Skulltulas into the item pool. They won't spawn unless their Soul is obtained.
     """
     display_name = "Misc. Souls (MM)"
     default = False
 
-class OOTxMM_itemsextensions_rustyKeysOot(Toggle):
+class OOTxMM_itemsextensionssystems_rustyKeysOot(Toggle):
     """
     Add rusty keys to the item pool. Every rusty key locks a single overworld door.
     """
     display_name = "Rusty Keys (OoT)"
     default = False
 
-class OOTxMM_itemsextensions_rustyKeysMm(Toggle):
+class OOTxMM_itemsextensionssystems_rustyKeysMm(Toggle):
     """
     Add rusty keys to the item pool. Every rusty key locks a single overworld door.
     """
     display_name = "Rusty Keys (MM)"
     default = False
 
-class OOTxMM_itemsextensions_clocks(Toggle):
+class OOTxMM_itemsextensionssystems_clocksMm(Toggle):
     """
     Add items representing every Majora's Mask day and night into the pool. The moon will crash early unless you collect these items.
     """
-    display_name = "Clocks as Items"
+    display_name = "Clocks as Items (MM)"
     default = False
 
-class OOTxMM_itemsextensions_menuNotebook(Toggle):
+class OOTxMM_itemsextensionssystems_clocksOot(Choice):
+    """
+    Add an item representing the flow of time in Ocarina of Time into the pool. You will be locked at either noon or midnight unless you collect this item.
+    - **none**: Disabled
+    - **day**: The world will allways experience daytime until you find the clock.
+    - **night**: The world will allways experience nighttime until you find the clock.
+    """
+    display_name = "Clock as Item (OoT)"
+    option_none = 0
+    option_day = 1
+    option_night = 2
+    default = option_none
+
+class OOTxMM_itemsextensionsmm_menuNotebook(Toggle):
     """
     Locks the in-game tracker behind the Bombers' Notebook
     """
     display_name = "Bombers' Tracker"
     default = False
 
-class OOTxMM_itemsextensions_coins(Toggle):
+class OOTxMM_itemsextensionscoins_coins(Toggle):
     """
     Enable the leftover Coin items. These can be used for special conditions
     """
     display_name = "Coins"
     default = False
 
-class OOTxMM_itemsextensions_coinsRed(Range):
+class OOTxMM_itemsextensionscoins_coinsRed(Range):
     """
     How many Red Coins to add to the item pool
     """
@@ -2222,7 +2390,7 @@ class OOTxMM_itemsextensions_coinsRed(Range):
     range_end = 999
     default = 0
 
-class OOTxMM_itemsextensions_coinsGreen(Range):
+class OOTxMM_itemsextensionscoins_coinsGreen(Range):
     """
     How many Green Coins to add to the item pool
     """
@@ -2231,7 +2399,7 @@ class OOTxMM_itemsextensions_coinsGreen(Range):
     range_end = 999
     default = 0
 
-class OOTxMM_itemsextensions_coinsBlue(Range):
+class OOTxMM_itemsextensionscoins_coinsBlue(Range):
     """
     How many Blue Coins to add to the item pool
     """
@@ -2240,7 +2408,7 @@ class OOTxMM_itemsextensions_coinsBlue(Range):
     range_end = 999
     default = 0
 
-class OOTxMM_itemsextensions_coinsYellow(Range):
+class OOTxMM_itemsextensionscoins_coinsYellow(Range):
     """
     How many Yellow Coins to add to the item pool
     """
@@ -2249,63 +2417,63 @@ class OOTxMM_itemsextensions_coinsYellow(Range):
     range_end = 999
     default = 0
 
-class OOTxMM_itemsextensions_trapIce(Toggle):
+class OOTxMM_itemsextensionstraps_trapIce(Toggle):
     """
     Add Ice Traps to the item pool. They freeze you when collected.
     """
     display_name = "Ice Traps"
     default = True
 
-class OOTxMM_itemsextensions_trapFire(Toggle):
+class OOTxMM_itemsextensionstraps_trapFire(Toggle):
     """
     Add Fire Traps to the item pool. They burn you when collected.
     """
     display_name = "Fire Traps"
     default = False
 
-class OOTxMM_itemsextensions_trapShock(Toggle):
+class OOTxMM_itemsextensionstraps_trapShock(Toggle):
     """
     Add Shock Traps to the item pool. They shock you when collected.
     """
     display_name = "Shock Traps"
     default = False
 
-class OOTxMM_itemsextensions_trapDrain(Toggle):
+class OOTxMM_itemsextensionstraps_trapDrain(Toggle):
     """
     Add Drain Traps to the item pool. They drain your life when collected.
     """
     display_name = "Drain Traps"
     default = False
 
-class OOTxMM_itemsextensions_trapAntiMagic(Toggle):
+class OOTxMM_itemsextensionstraps_trapAntiMagic(Toggle):
     """
     Add Anti-Magic Traps to the item pool. They drain magic from you when collected.
     """
     display_name = "Anti-Magic Traps"
     default = False
 
-class OOTxMM_itemsextensions_trapKnockback(Toggle):
+class OOTxMM_itemsextensionstraps_trapKnockback(Toggle):
     """
     Add Knockback Traps to the item pool. They throw you in a random direction.
     """
     display_name = "Knockback Traps"
     default = False
 
-class OOTxMM_itemsextensions_trapRupoor(Toggle):
+class OOTxMM_itemsextensionstraps_trapRupoor(Toggle):
     """
     Add Rupoors to the item pool. They remove 10 rupees when collected.
     """
     display_name = "Rupoors"
     default = False
 
-class OOTxMM_itemsextensions_cloakTraps(Toggle):
+class OOTxMM_itemsextensionstraps_cloakTraps(Toggle):
     """
     Makes traps look like different items.
     """
     display_name = "Cloak Traps"
     default = True
 
-class OOTxMM_itemsextensions_trapsQuantity(Choice):
+class OOTxMM_itemsextensionstraps_trapsQuantity(Choice):
     """
     Controls the number of traps relative to the number of junk items in the pool.
     - **small**: 5 traps per 100 junk items
@@ -2335,469 +2503,497 @@ class OOTxMM_main_trapsLink(Toggle):
     display_name = "Linked Multiworld Traps"
     default = False
 
-class OOTxMM_itemsextensions_songOfDoubleTimeOot(Toggle):
+class OOTxMM_itemsextensionsoot_songOfDoubleTimeOot(Toggle):
     """
     Enables using Song of Double Time in OoT when you have the Song of Time in OoT
     """
     display_name = "Song of Double Time (OoT)"
     default = False
 
-class OOTxMM_itemsshared_sharedStoneAgony(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedStoneAgony(Toggle):
     """
     Combines the Stones of Agony from OoT and MM into one item for both games
     """
     display_name = "Shared Stone of Agony"
     default = False
 
-class OOTxMM_itemsshared_sharedSpinUpgrade(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedSpinUpgrade(Toggle):
     """
     Combines the Spin Attack Upgrades from OoT and MM into one item for both games
     """
     display_name = "Shared Spin Attack Upgrade"
     default = False
 
-class OOTxMM_itemsshared_sharedNutsSticks(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedNutsSticks(Toggle):
     """
     Combines the Deku Stick and Nut Upgrades from OoT and MM into two items each for both games
     """
     display_name = "Shared Deku Sticks & Nuts"
     default = False
 
-class OOTxMM_itemsshared_sharedBows(Toggle):
+class OOTxMM_itemsextensionsshared_sharedBows(Toggle):
     """
     Combines the Bows from OoT and MM into three progressive items for both games
     """
     display_name = "Shared Bows"
     default = False
 
-class OOTxMM_itemsshared_sharedBombBags(Toggle):
+class OOTxMM_itemsextensionsshared_sharedBombBags(Toggle):
     """
     Combines the Bomb Bags from OoT and MM into three progressive items for both games
     """
     display_name = "Shared Bomb Bags"
     default = False
 
-class OOTxMM_itemsshared_sharedMagic(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMagic(Toggle):
     """
     Combines the Magic Upgrades from OoT and MM into two progressive items for both games
     """
     display_name = "Shared Magic"
     default = False
 
-class OOTxMM_itemsshared_sharedMagicArrowFire(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMagicArrowFire(Toggle):
     """
     Combines the Fire Arrows from OoT and MM into one item for both games
     """
     display_name = "Shared Fire Arrows"
     default = False
 
-class OOTxMM_itemsshared_sharedMagicArrowIce(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMagicArrowIce(Toggle):
     """
     Combines the Ice Arrows from OoT and MM into one item for both games
     """
     display_name = "Shared Ice Arrows"
     default = False
 
-class OOTxMM_itemsshared_sharedMagicArrowLight(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMagicArrowLight(Toggle):
     """
     Combines the Light Arrows from OoT and MM into one item for both games
     """
     display_name = "Shared Light Arrows"
     default = False
 
-class OOTxMM_itemsshared_sharedSongEpona(Toggle):
+class OOTxMM_itemsextensionsshared_sharedSongEpona(Toggle):
     """
     Combines Epona's Song from OoT and MM into one item for both games
     """
     display_name = "Shared Epona's Song"
     default = False
 
-class OOTxMM_itemsshared_sharedSongStorms(Toggle):
+class OOTxMM_itemsextensionsshared_sharedSongStorms(Toggle):
     """
     Combines Song of Storms from OoT and MM into one item for both games
     """
     display_name = "Shared Song of Storms"
     default = False
 
-class OOTxMM_itemsshared_sharedSongTime(Toggle):
+class OOTxMM_itemsextensionsshared_sharedSongTime(Toggle):
     """
     Combines Song of Time from OoT and MM into one item for both games
     """
     display_name = "Shared Song of Time"
     default = False
 
-class OOTxMM_itemsshared_sharedSongSun(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongSun(Toggle):
     """
     Combines Sun's Song from OoT and MM into one item for both games
     """
     display_name = "Shared Sun's Song"
     default = False
 
-class OOTxMM_itemsshared_sharedHookshot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedHookshot(Toggle):
     """
     Combines the Hookshots from OoT and MM into two progressive items for both games.<br>If "Short Hookshot in MM" is disabled, the MM Hookshot will be given along with the first progressive item.
     """
     display_name = "Shared Hookshots"
     default = False
 
-class OOTxMM_itemsshared_sharedLens(Toggle):
+class OOTxMM_itemsextensionsshared_sharedLens(Toggle):
     """
     Combines the Lenses of Truth from OoT and MM into one item for both games
     """
     display_name = "Shared Lens of Truth"
     default = False
 
-class OOTxMM_itemsshared_sharedOcarina(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedOcarina(Toggle):
     """
     Combines the Ocarinas from OoT and MM into two progressive items for both games.<br>If "Fairy Ocarina in MM" is disabled, the MM Ocarina will be given along with the second progressive item.
     """
     display_name = "Shared Ocarinas"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskGoron(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMaskGoron(Toggle):
     """
     Combines the Goron Masks from OoT and MM into one item for both games
     """
     display_name = "Shared Goron Mask"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskZora(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMaskZora(Toggle):
     """
     Combines the Zora Masks from OoT and MM into one item for both games
     """
     display_name = "Shared Zora Mask"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskBunny(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMaskBunny(Toggle):
     """
     Combines the Bunny Hoods from OoT and MM into one item for both games
     """
     display_name = "Shared Bunny Hood"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskKeaton(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMaskKeaton(Toggle):
     """
     Combines the Keaton Masks from OoT and MM into one item for both games
     """
     display_name = "Shared Keaton Mask"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskTruth(Toggle):
+class OOTxMM_itemsextensionsshared_sharedMaskTruth(Toggle):
     """
     Combines the Masks of Truth from OoT and MM into one item for both games
     """
     display_name = "Shared Mask of Truth"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskBlast(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_sharedMaskBlast(Toggle):
     """
     Combines the Blast Masks from OoT and MM into one item for both games
     """
     display_name = "Shared Blast Mask"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskStone(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_sharedMaskStone(Toggle):
     """
     Combines the Stone Masks from OoT and MM into one item for both games
     """
     display_name = "Shared Stone Mask"
     default = False
 
-class OOTxMM_itemsshared_sharedMaskKamaro(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_sharedMaskKamaro(Toggle):
     """
     Combines the Kamaro Masks from OoT and MM into one item for both games
     """
     display_name = "Shared Kamaro Mask"
     default = False
 
-class OOTxMM_itemsshared_sharedSongElegy(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongElegy(Toggle):
     """
     Combines the Elegies of Emptiness from OoT and MM into one item for both games
     """
     display_name = "Shared Elegy of Emptiness"
     default = False
 
-class OOTxMM_itemsshared_sharedSongHealing(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongHealing(Toggle):
     """
     Combines the Songs of Healing from OoT and MM into one item for both games
     """
     display_name = "Shared Song of Healing"
     default = False
 
-class OOTxMM_itemsshared_sharedSongSoaring(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongSoaring(Toggle):
     """
     Combines the Songs of Song from OoT and MM into one item for both games
     """
     display_name = "Shared Song of Soaring"
     default = False
 
-class OOTxMM_itemsshared_sharedSongAwakening(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongAwakening(Toggle):
     """
     Combines the Sonata of Awakening from OoT and MM into one item for both games
     """
     display_name = "Shared Sonata of Awakening"
     default = False
 
-class OOTxMM_itemsshared_sharedSongGoron(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongGoron(Toggle):
     """
     Combines the Goron Lullaby from OoT and MM into one item for both games
     """
     display_name = "Shared Goron Lullaby"
     default = False
 
-class OOTxMM_itemsshared_sharedSongZora(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongZora(Toggle):
     """
     Combines the New Wave Bossa Nova from OoT and MM into one item for both games
     """
     display_name = "Shared New Wave Bossa Nova"
     default = False
 
-class OOTxMM_itemsshared_sharedSongOrder(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongOrder(Toggle):
     """
     Combines the Oath to Order from OoT and MM into one item for both games
     """
     display_name = "Shared Oath to Order"
     default = False
 
-class OOTxMM_itemsshared_sharedSongZeldaLullaby(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongZeldaLullaby(Toggle):
     """
     Combines Zelda's Lullaby from OoT and MM into one item for both games
     """
     display_name = "Shared Zelda's Lullaby"
     default = False
 
-class OOTxMM_itemsshared_sharedSongSarias(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongSarias(Toggle):
     """
     Combines Saria's Song from OoT and MM into one item for both games
     """
     display_name = "Shared Saria's Song"
     default = False
 
-class OOTxMM_itemsshared_sharedSongMinuet(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongMinuet(Toggle):
     """
     Combines the Minuet of Forest from OoT and MM into one item for both games
     """
     display_name = "Shared Minuet of Forest"
     default = False
 
-class OOTxMM_itemsshared_sharedSongBolero(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongBolero(Toggle):
     """
     Combines the Bolero of Fire from OoT and MM into one item for both games
     """
     display_name = "Shared Bolero of Fire"
     default = False
 
-class OOTxMM_itemsshared_sharedSongSerenade(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongSerenade(Toggle):
     """
     Combines the Serenade of Water from OoT and MM into one item for both games
     """
     display_name = "Shared Serenade of Water"
     default = False
 
-class OOTxMM_itemsshared_sharedSongRequiem(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongRequiem(Toggle):
     """
     Combines the Requiem of Spirit from OoT and MM into one item for both games
     """
     display_name = "Shared Requiem of Spirit"
     default = False
 
-class OOTxMM_itemsshared_sharedSongNocturne(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongNocturne(Toggle):
     """
     Combines the Nocturne of Shadow from OoT and MM into one item for both games
     """
     display_name = "Shared Nocturne of Shadow"
     default = False
 
-class OOTxMM_itemsshared_sharedSongPrelude(Toggle):
+class OOTxMM_itemsextensionscrossGamesongs_sharedSongPrelude(Toggle):
     """
     Combines the Prelude of Light from OoT and MM into one item for both games
     """
     display_name = "Shared Prelude of Light"
     default = False
 
-class OOTxMM_itemsshared_sharedPowderKeg(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedPowderKeg(Toggle):
     """
     Combines the Powder Kegs from OoT and MM into one item for both games.
     """
     display_name = "Shared Powder Keg"
     default = False
 
-class OOTxMM_itemsshared_sharedWallets(Toggle):
+class OOTxMM_itemsextensionsshared_sharedWallets(Toggle):
     """
     Combines the Wallets from OoT and MM into multiple progressive items for both games, depending on settings
     """
     display_name = "Shared Wallets"
     default = False
 
-class OOTxMM_itemsshared_sharedHealth(Toggle):
+class OOTxMM_itemsextensionsshared_sharedHealth(Toggle):
     """
     Combines the Heart Pieces, Heart Containers and Double Defenses from OoT and MM into 44 Heart Pieces, 6 Heart Containers and one Double Defense for both games
     """
     display_name = "Shared Health"
     default = False
 
-class OOTxMM_itemsshared_sharedSwords(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedSwords(Toggle):
     """
     Combines the Kokiri, Razor and Gilded Swords from OoT and MM into three progressive items for both games
     """
     display_name = "Shared Child Swords"
     default = False
 
-class OOTxMM_itemsshared_sharedShields(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedShields(Toggle):
     """
     When you obtain a shield, the opposite game's equivalent is given to you as well. With this, the Hylian and Hero's Shields are considered equivalent.<br>If Shields are Progressive, all Shields are combined into three progressive items: Deku Shield -> Hylian/Hero's Shield -> Mirror Shield
     """
     display_name = "Shared Shields"
     default = False
 
-class OOTxMM_itemsshared_sharedSoulsEnemy(Toggle):
+class OOTxMM_itemsextensionssystems_sharedSoulsEnemy(Toggle):
     """
     Combines the OoT and MM Souls for a specific enemy into one item, for all enemies present in both games
     """
     display_name = "Shared Enemy Souls"
     default = False
 
-class OOTxMM_itemsshared_sharedSoulsNpc(Toggle):
+class OOTxMM_itemsextensionssystems_sharedSoulsNpc(Toggle):
     """
     Combines the OoT and MM Souls for a specific NPC into one item, for all NPCs present in both games
     """
     display_name = "Shared NPC Souls"
     default = False
 
-class OOTxMM_itemsshared_sharedSoulsAnimal(Toggle):
+class OOTxMM_itemsextensionssystems_sharedSoulsAnimal(Toggle):
     """
     Combines the OoT and MM Souls for a specific animal into one item, for all animals present in both games
     """
     display_name = "Shared Animal Souls"
     default = False
 
-class OOTxMM_itemsshared_sharedSoulsMisc(Toggle):
+class OOTxMM_itemsextensionssystems_sharedSoulsMisc(Toggle):
     """
     Combines the OoT and MM Souls for Business Scrubs and Gold Skulltulas into two items for both games
     """
     display_name = "Shared Misc. Souls"
     default = False
 
-class OOTxMM_itemsshared_sharedOcarinaButtons(Toggle):
+class OOTxMM_itemsextensionssystems_sharedOcarinaButtons(Toggle):
     """
     Combines the Ocarina Buttons from OoT and MM into five items for both games
     """
     display_name = "Shared Ocarina Buttons"
     default = False
 
-class OOTxMM_itemsshared_sharedSkeletonKey(Toggle):
+class OOTxMM_itemsextensionssystems_sharedShovel(Toggle):
+    """
+    Combines the Shovels from OoT and MM into a single item for both games
+    """
+    display_name = "Shared Shovel"
+    default = False
+
+class OOTxMM_itemsextensionssystems_sharedSkeletonKey(Toggle):
     """
     Combines the Skeleton Key from OoT and MM into one item for both games
     """
     display_name = "Shared Skeleton Key"
     default = False
 
-class OOTxMM_itemsshared_sharedPlatinumToken(Toggle):
+class OOTxMM_itemsextensionssystems_sharedPlatinumToken(Toggle):
     """
     Combines the Platinum Token from OoT and MM into one item for both games
     """
     display_name = "Shared Platinum Token"
     default = False
 
-class OOTxMM_itemsshared_sharedBombchu(Toggle):
+class OOTxMM_itemsextensionssystems_sharedBombchu(Toggle):
     """
     Combines either Bombchu or the Bombchu Bags from OoT and MM into items for both games, depending on settings
     """
     display_name = "Shared Bombchu"
     default = False
 
-class OOTxMM_itemsshared_sharedSpellFire(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedSpellFire(Toggle):
     """
     Combines Din's Fire from OoT and MM into one item for both games
     """
     display_name = "Shared Din's Fire"
     default = False
 
-class OOTxMM_itemsshared_sharedSpellWind(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedSpellWind(Toggle):
     """
     Combines Farore's Wind from OoT and MM into one item for both games
     """
     display_name = "Shared Farore's Wind"
     default = False
 
-class OOTxMM_itemsshared_sharedSpellLove(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedSpellLove(Toggle):
     """
     Combines Nayru's Love from OoT and MM into one item for both games
     """
     display_name = "Shared Nayru's Love"
     default = False
 
-class OOTxMM_itemsshared_sharedBootsIron(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedBootsIron(Toggle):
     """
     Combines the Iron Boots from OoT and MM into one item for both games
     """
     display_name = "Shared Iron Boots"
     default = False
 
-class OOTxMM_itemsshared_sharedBootsHover(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedBootsHover(Toggle):
     """
     Combines the Hover Boots from OoT and MM into one item for both games
     """
     display_name = "Shared Hover Boots"
     default = False
 
-class OOTxMM_itemsshared_sharedTunicGoron(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedTunicGoron(Toggle):
     """
     Combines the Goron Tunics from OoT and MM into two items for both games
     """
     display_name = "Shared Goron Tunic"
     default = False
 
-class OOTxMM_itemsshared_sharedTunicZora(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedTunicZora(Toggle):
     """
     Combines the Zora Tunics from OoT and MM into two items for both games
     """
     display_name = "Shared Zora Tunic"
     default = False
 
-class OOTxMM_itemsshared_sharedScales(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedScales(Toggle):
     """
     Combines the Scales from OoT and MM into multiple progressive items for both games, depending on settings
     """
     display_name = "Shared Scales"
     default = False
 
-class OOTxMM_itemsshared_sharedStrength(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedStrength(Toggle):
     """
     Combines the Strength Upgrades from OoT and MM into three progressive items for both games
     """
     display_name = "Shared Strength"
     default = False
 
-class OOTxMM_itemsshared_sharedHammer(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedHammer(Toggle):
     """
     Combines the Megaton Hammers from OoT and MM into one item for both games
     """
     display_name = "Shared Megaton Hammer"
     default = False
 
-class OOTxMM_itemsshared_sharedBoomerang(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedBoomerang(Toggle):
     """
     Combines the Boomerangs from OoT and MM into one item for both games
     """
     display_name = "Shared Boomerang"
     default = False
 
-class OOTxMM_itemsshared_sharedGFS(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedGFS(Toggle):
     """
     Combines the Great Fairy's Sword from OoT and MM into one item for both games
     """
     display_name = "Shared Great Fairy's Sword"
     default = False
 
-class OOTxMM_itemsshared_sharedSlingshot(Toggle):
+class OOTxMM_itemsextensionscrossGameitems_sharedSlingshot(Toggle):
     """
     Combines the Slingshots from OoT and MM into one item for both games
     """
     display_name = "Shared Slingshot"
     default = False
 
-class OOTxMM_itemsshared_sharedBottles(Toggle):
+class OOTxMM_itemsextensionscrossGamemasks_sharedMaskGerudo(Toggle):
+    """
+    Combines the Gerudo Masks from OoT and MM into one item for both games
+    """
+    display_name = "Shared Gerudo Mask"
+    default = False
+
+class OOTxMM_itemsextensionscrossGamemasks_sharedMaskSkull(Toggle):
+    """
+    Combines the Skull Masks from OoT and MM into one item for both games
+    """
+    display_name = "Shared Skull Mask"
+    default = False
+
+class OOTxMM_itemsextensionscrossGamemasks_sharedMaskSpooky(Toggle):
+    """
+    Combines the Spooky Masks from OoT and MM into one item for both games
+    """
+    display_name = "Shared Spooky Mask"
+    default = False
+
+class OOTxMM_itemsextensionscrossGameitems_sharedBottles(Toggle):
     """
     Combines the bottles from OoT and MM into six items for both games. The six bottles are: Red Potion, Gold Dust, Chateau, Milk, Ruto's Letter and an Empty Bottle. Bottle refills are also shared.
     """
@@ -2901,6 +3097,961 @@ class OOTxMM_itemsageless_agelessSoaring(Toggle):
     """
     display_name = "Ageless Song of Soaring"
     default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHookshot(Toggle):
+    """
+    Requires Child Link to equip Hookshot in MM.
+    """
+    display_name = "Hookshot requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHookshot(Toggle):
+    """
+    Requires Adult Link to equip Hookshot in MM.
+    """
+    display_name = "Hookshot requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHookshotShort(Toggle):
+    """
+    Requires Child Link to equip Short Hookshot in MM.
+    """
+    display_name = "Short Hookshot requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHookshotShort(Toggle):
+    """
+    Requires Adult Link to equip Short Hookshot in MM.
+    """
+    display_name = "Short Hookshot requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBow(Toggle):
+    """
+    Requires Child Link to equip Bow in MM.
+    """
+    display_name = "Bow requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBow(Toggle):
+    """
+    Requires Adult Link to equip Bow in MM.
+    """
+    display_name = "Bow requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildOcarinaOfTime(Toggle):
+    """
+    Requires Child Link to equip Ocarina of Time in MM.
+    """
+    display_name = "Ocarina of Time requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultOcarinaOfTime(Toggle):
+    """
+    Requires Adult Link to equip Ocarina of Time in MM.
+    """
+    display_name = "Ocarina of Time requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildOcarinaFairy(Toggle):
+    """
+    Requires Child Link to equip Fairy Ocarina in MM.
+    """
+    display_name = "Fairy Ocarina requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultOcarinaFairy(Toggle):
+    """
+    Requires Adult Link to equip Fairy Ocarina in MM.
+    """
+    display_name = "Fairy Ocarina requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBomb(Toggle):
+    """
+    Requires Child Link to equip Bombs in MM.
+    """
+    display_name = "Bombs requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBomb(Toggle):
+    """
+    Requires Adult Link to equip Bombs in MM.
+    """
+    display_name = "Bombs requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBombchu(Toggle):
+    """
+    Requires Child Link to equip Bombchu in MM.
+    """
+    display_name = "Bombchu requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBombchu(Toggle):
+    """
+    Requires Adult Link to equip Bombchu in MM.
+    """
+    display_name = "Bombchu requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowFire(Toggle):
+    """
+    Requires Child Link to equip Fire Arrow in MM.
+    """
+    display_name = "Fire Arrow requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowFire(Toggle):
+    """
+    Requires Adult Link to equip Fire Arrow in MM.
+    """
+    display_name = "Fire Arrow requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowIce(Toggle):
+    """
+    Requires Child Link to equip Ice Arrow in MM.
+    """
+    display_name = "Ice Arrow requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowIce(Toggle):
+    """
+    Requires Adult Link to equip Ice Arrow in MM.
+    """
+    display_name = "Ice Arrow requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowLight(Toggle):
+    """
+    Requires Child Link to equip Light Arrow in MM.
+    """
+    display_name = "Light Arrow requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowLight(Toggle):
+    """
+    Requires Adult Link to equip Light Arrow in MM.
+    """
+    display_name = "Light Arrow requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHammer(Toggle):
+    """
+    Requires Child Link to equip Megaton Hammer in MM.
+    """
+    display_name = "Megaton Hammer requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHammer(Toggle):
+    """
+    Requires Adult Link to equip Megaton Hammer in MM.
+    """
+    display_name = "Megaton Hammer requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellWind(Toggle):
+    """
+    Requires Child Link to equip Farore's Wind in MM.
+    """
+    display_name = "Farore's Wind requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellWind(Toggle):
+    """
+    Requires Adult Link to equip Farore's Wind in MM.
+    """
+    display_name = "Farore's Wind requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellLove(Toggle):
+    """
+    Requires Child Link to equip Nayru's Love in MM.
+    """
+    display_name = "Nayru's Love requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellLove(Toggle):
+    """
+    Requires Adult Link to equip Nayru's Love in MM.
+    """
+    display_name = "Nayru's Love requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellFire(Toggle):
+    """
+    Requires Child Link to equip Din's Fire in MM.
+    """
+    display_name = "Din's Fire requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellFire(Toggle):
+    """
+    Requires Adult Link to equip Din's Fire in MM.
+    """
+    display_name = "Din's Fire requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBootsIron(Toggle):
+    """
+    Requires Child Link to equip Iron Boots in MM.
+    """
+    display_name = "Iron Boots requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBootsIron(Toggle):
+    """
+    Requires Adult Link to equip Iron Boots in MM.
+    """
+    display_name = "Iron Boots requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBootsHover(Toggle):
+    """
+    Requires Child Link to equip Hover Boots in MM.
+    """
+    display_name = "Hover Boots requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBootsHover(Toggle):
+    """
+    Requires Adult Link to equip Hover Boots in MM.
+    """
+    display_name = "Hover Boots requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildTunicGoron(Toggle):
+    """
+    Requires Child Link to equip Goron Tunic in MM.
+    """
+    display_name = "Goron Tunic requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultTunicGoron(Toggle):
+    """
+    Requires Adult Link to equip Goron Tunic in MM.
+    """
+    display_name = "Goron Tunic requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildTunicZora(Toggle):
+    """
+    Requires Child Link to equip Zora Tunic in MM.
+    """
+    display_name = "Zora Tunic requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultTunicZora(Toggle):
+    """
+    Requires Adult Link to equip Zora Tunic in MM.
+    """
+    display_name = "Zora Tunic requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildGreatFairySword(Toggle):
+    """
+    Requires Child Link to equip Great Fairy Sword in MM.
+    """
+    display_name = "Great Fairy Sword requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultGreatFairySword(Toggle):
+    """
+    Requires Adult Link to equip Great Fairy Sword in MM.
+    """
+    display_name = "Great Fairy Sword requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBoomerang(Toggle):
+    """
+    Requires Child Link to equip Boomerang in MM.
+    """
+    display_name = "Boomerang requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBoomerang(Toggle):
+    """
+    Requires Adult Link to equip Boomerang in MM.
+    """
+    display_name = "Boomerang requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSlingshot(Toggle):
+    """
+    Requires Child Link to equip Slingshot in MM.
+    """
+    display_name = "Slingshot requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSlingshot(Toggle):
+    """
+    Requires Adult Link to equip Slingshot in MM.
+    """
+    display_name = "Slingshot requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildStick(Toggle):
+    """
+    Requires Child Link to equip Deku Stick in MM.
+    """
+    display_name = "Deku Stick requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultStick(Toggle):
+    """
+    Requires Adult Link to equip Deku Stick in MM.
+    """
+    display_name = "Deku Stick requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskDeku(Toggle):
+    """
+    Requires Child Link to equip Deku Mask in MM.
+    """
+    display_name = "Deku Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskDeku(Toggle):
+    """
+    Requires Adult Link to equip Deku Mask in MM.
+    """
+    display_name = "Deku Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDekuNuts(Toggle):
+    """
+    Requires Child Link to equip Deku Nuts in MM.
+    """
+    display_name = "Deku Nuts requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDekuNuts(Toggle):
+    """
+    Requires Adult Link to equip Deku Nuts in MM.
+    """
+    display_name = "Deku Nuts requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMagicBean(Toggle):
+    """
+    Requires Child Link to equip Magic Bean in MM.
+    """
+    display_name = "Magic Bean requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMagicBean(Toggle):
+    """
+    Requires Adult Link to equip Magic Bean in MM.
+    """
+    display_name = "Magic Bean requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPowderKeg(Toggle):
+    """
+    Requires Child Link to equip Powder Keg in MM.
+    """
+    display_name = "Powder Keg requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPowderKeg(Toggle):
+    """
+    Requires Adult Link to equip Powder Keg in MM.
+    """
+    display_name = "Powder Keg requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPictographBox(Toggle):
+    """
+    Requires Child Link to equip Pictograph Box in MM.
+    """
+    display_name = "Pictograph Box requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPictographBox(Toggle):
+    """
+    Requires Adult Link to equip Pictograph Box in MM.
+    """
+    display_name = "Pictograph Box requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLensOfTruth(Toggle):
+    """
+    Requires Child Link to equip Lens of Truth in MM.
+    """
+    display_name = "Lens of Truth requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLensOfTruth(Toggle):
+    """
+    Requires Adult Link to equip Lens of Truth in MM.
+    """
+    display_name = "Lens of Truth requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGoron(Toggle):
+    """
+    Requires Child Link to equip Goron Mask in MM.
+    """
+    display_name = "Goron Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGoron(Toggle):
+    """
+    Requires Adult Link to equip Goron Mask in MM.
+    """
+    display_name = "Goron Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskZora(Toggle):
+    """
+    Requires Child Link to equip Zora Mask in MM.
+    """
+    display_name = "Zora Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskZora(Toggle):
+    """
+    Requires Adult Link to equip Zora Mask in MM.
+    """
+    display_name = "Zora Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskFierceDeity(Toggle):
+    """
+    Requires Child Link to equip Fierce Deity Mask in MM.
+    """
+    display_name = "Fierce Deity Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskFierceDeity(Toggle):
+    """
+    Requires Adult Link to equip Fierce Deity Mask in MM.
+    """
+    display_name = "Fierce Deity Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskPostman(Toggle):
+    """
+    Requires Child Link to equip Postman Hat in MM.
+    """
+    display_name = "Postman Hat requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskPostman(Toggle):
+    """
+    Requires Adult Link to equip Postman Hat in MM.
+    """
+    display_name = "Postman Hat requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskAllNight(Toggle):
+    """
+    Requires Child Link to equip All-Night Mask in MM.
+    """
+    display_name = "All-Night Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskAllNight(Toggle):
+    """
+    Requires Adult Link to equip All-Night Mask in MM.
+    """
+    display_name = "All-Night Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBlast(Toggle):
+    """
+    Requires Child Link to equip Blast Mask in MM.
+    """
+    display_name = "Blast Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBlast(Toggle):
+    """
+    Requires Adult Link to equip Blast Mask in MM.
+    """
+    display_name = "Blast Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskStone(Toggle):
+    """
+    Requires Child Link to equip Stone Mask in MM.
+    """
+    display_name = "Stone Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskStone(Toggle):
+    """
+    Requires Adult Link to equip Stone Mask in MM.
+    """
+    display_name = "Stone Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGreatFairy(Toggle):
+    """
+    Requires Child Link to equip Great Fairy Mask in MM.
+    """
+    display_name = "Great Fairy Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGreatFairy(Toggle):
+    """
+    Requires Adult Link to equip Great Fairy Mask in MM.
+    """
+    display_name = "Great Fairy Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKeaton(Toggle):
+    """
+    Requires Child Link to equip Keaton Mask in MM.
+    """
+    display_name = "Keaton Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKeaton(Toggle):
+    """
+    Requires Adult Link to equip Keaton Mask in MM.
+    """
+    display_name = "Keaton Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBremen(Toggle):
+    """
+    Requires Child Link to equip Bremen Mask in MM.
+    """
+    display_name = "Bremen Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBremen(Toggle):
+    """
+    Requires Adult Link to equip Bremen Mask in MM.
+    """
+    display_name = "Bremen Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBunny(Toggle):
+    """
+    Requires Child Link to equip Bunny Hood in MM.
+    """
+    display_name = "Bunny Hood requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBunny(Toggle):
+    """
+    Requires Adult Link to equip Bunny Hood in MM.
+    """
+    display_name = "Bunny Hood requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskDonGero(Toggle):
+    """
+    Requires Child Link to equip Don Gero Mask in MM.
+    """
+    display_name = "Don Gero Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskDonGero(Toggle):
+    """
+    Requires Adult Link to equip Don Gero Mask in MM.
+    """
+    display_name = "Don Gero Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskScents(Toggle):
+    """
+    Requires Child Link to equip Mask of Scents in MM.
+    """
+    display_name = "Mask of Scents requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskScents(Toggle):
+    """
+    Requires Adult Link to equip Mask of Scents in MM.
+    """
+    display_name = "Mask of Scents requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskRomani(Toggle):
+    """
+    Requires Child Link to equip Romani Mask in MM.
+    """
+    display_name = "Romani Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskRomani(Toggle):
+    """
+    Requires Adult Link to equip Romani Mask in MM.
+    """
+    display_name = "Romani Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskTroupeLeader(Toggle):
+    """
+    Requires Child Link to equip Troupe Leader Mask in MM.
+    """
+    display_name = "Troupe Leader Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskTroupeLeader(Toggle):
+    """
+    Requires Adult Link to equip Troupe Leader Mask in MM.
+    """
+    display_name = "Troupe Leader Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKafei(Toggle):
+    """
+    Requires Child Link to equip Kafei Mask in MM.
+    """
+    display_name = "Kafei Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKafei(Toggle):
+    """
+    Requires Adult Link to equip Kafei Mask in MM.
+    """
+    display_name = "Kafei Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskCouple(Toggle):
+    """
+    Requires Child Link to equip Couple's Mask in MM.
+    """
+    display_name = "Couple's Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskCouple(Toggle):
+    """
+    Requires Adult Link to equip Couple's Mask in MM.
+    """
+    display_name = "Couple's Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskTruth(Toggle):
+    """
+    Requires Child Link to equip Mask of Truth in MM.
+    """
+    display_name = "Mask of Truth requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskTruth(Toggle):
+    """
+    Requires Adult Link to equip Mask of Truth in MM.
+    """
+    display_name = "Mask of Truth requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKamaro(Toggle):
+    """
+    Requires Child Link to equip Kamaro Mask in MM.
+    """
+    display_name = "Kamaro Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKamaro(Toggle):
+    """
+    Requires Adult Link to equip Kamaro Mask in MM.
+    """
+    display_name = "Kamaro Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGibdo(Toggle):
+    """
+    Requires Child Link to equip Gibdo Mask in MM.
+    """
+    display_name = "Gibdo Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGibdo(Toggle):
+    """
+    Requires Adult Link to equip Gibdo Mask in MM.
+    """
+    display_name = "Gibdo Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGaro(Toggle):
+    """
+    Requires Child Link to equip Garo Mask in MM.
+    """
+    display_name = "Garo Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGaro(Toggle):
+    """
+    Requires Adult Link to equip Garo Mask in MM.
+    """
+    display_name = "Garo Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskCaptain(Toggle):
+    """
+    Requires Child Link to equip Captain's Hat in MM.
+    """
+    display_name = "Captain's Hat requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskCaptain(Toggle):
+    """
+    Requires Adult Link to equip Captain's Hat in MM.
+    """
+    display_name = "Captain's Hat requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGiant(Toggle):
+    """
+    Requires Child Link to equip Giant's Mask in MM.
+    """
+    display_name = "Giant's Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGiant(Toggle):
+    """
+    Requires Adult Link to equip Giant's Mask in MM.
+    """
+    display_name = "Giant's Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGerudo(Toggle):
+    """
+    Requires Child Link to equip Gerudo Mask in MM.
+    """
+    display_name = "Gerudo Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGerudo(Toggle):
+    """
+    Requires Adult Link to equip Gerudo Mask in MM.
+    """
+    display_name = "Gerudo Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskSkull(Toggle):
+    """
+    Requires Child Link to equip Skull Mask in MM.
+    """
+    display_name = "Skull Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskSkull(Toggle):
+    """
+    Requires Adult Link to equip Skull Mask in MM.
+    """
+    display_name = "Skull Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskSpooky(Toggle):
+    """
+    Requires Child Link to equip Spooky Mask in MM.
+    """
+    display_name = "Spooky Mask requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskSpooky(Toggle):
+    """
+    Requires Adult Link to equip Spooky Mask in MM.
+    """
+    display_name = "Spooky Mask requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMoonTear(Toggle):
+    """
+    Requires Child Link to equip Moon's Tear in MM.
+    """
+    display_name = "Moon's Tear requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMoonTear(Toggle):
+    """
+    Requires Adult Link to equip Moon's Tear in MM.
+    """
+    display_name = "Moon's Tear requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedLand(Toggle):
+    """
+    Requires Child Link to equip Land Title Deed in MM.
+    """
+    display_name = "Land Title Deed requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedLand(Toggle):
+    """
+    Requires Adult Link to equip Land Title Deed in MM.
+    """
+    display_name = "Land Title Deed requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedSwamp(Toggle):
+    """
+    Requires Child Link to equip Swamp Title Deed in MM.
+    """
+    display_name = "Swamp Title Deed requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedSwamp(Toggle):
+    """
+    Requires Adult Link to equip Swamp Title Deed in MM.
+    """
+    display_name = "Swamp Title Deed requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedMountain(Toggle):
+    """
+    Requires Child Link to equip Mountain Title Deed in MM.
+    """
+    display_name = "Mountain Title Deed requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedMountain(Toggle):
+    """
+    Requires Adult Link to equip Mountain Title Deed in MM.
+    """
+    display_name = "Mountain Title Deed requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedOcean(Toggle):
+    """
+    Requires Child Link to equip Ocean Title Deed in MM.
+    """
+    display_name = "Ocean Title Deed requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedOcean(Toggle):
+    """
+    Requires Adult Link to equip Ocean Title Deed in MM.
+    """
+    display_name = "Ocean Title Deed requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLetterToMama(Toggle):
+    """
+    Requires Child Link to equip Priority Mail to Mama in MM.
+    """
+    display_name = "Priority Mail to Mama requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLetterToMama(Toggle):
+    """
+    Requires Adult Link to equip Priority Mail to Mama in MM.
+    """
+    display_name = "Priority Mail to Mama requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLetterToKafei(Toggle):
+    """
+    Requires Child Link to equip Letter to Kafei in MM.
+    """
+    display_name = "Letter to Kafei requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLetterToKafei(Toggle):
+    """
+    Requires Adult Link to equip Letter to Kafei in MM.
+    """
+    display_name = "Letter to Kafei requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPendantOfMemories(Toggle):
+    """
+    Requires Child Link to equip Pendant of Memories in MM.
+    """
+    display_name = "Pendant of Memories requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPendantOfMemories(Toggle):
+    """
+    Requires Adult Link to equip Pendant of Memories in MM.
+    """
+    display_name = "Pendant of Memories requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqChildStrength(Toggle):
+    """
+    Requires Child Link to equip Silver/Golden Gauntlets in MM.
+    """
+    display_name = "Silver/Golden Gauntlets requires Child Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultStrength(Toggle):
+    """
+    Requires Adult Link to equip Silver/Golden Gauntlets in MM.
+    """
+    display_name = "Silver/Golden Gauntlets requires Adult Link"
+    default = False
+
+class OOTxMM_itemsmmAgeRequirements_mmAgeReqRandom(OptionSet):
+    """
+    Items whose MM age requirement is chosen randomly from the seed.
+    ['hookshot', 'hookshotShort', 'bow', 'ocarinaOfTime', 'ocarinaFairy', 'bomb', 'bombchu', 'arrowFire', 'arrowIce', 'arrowLight', 'hammer', 'spellWind', 'spellLove', 'spellFire', 'bootsIron', 'bootsHover', 'tunicGoron', 'tunicZora', 'greatFairySword', 'boomerang', 'slingshot', 'stick', 'maskDeku', 'nut', 'magicBean', 'powderKeg', 'pictographBox', 'lensOfTruth', 'maskGoron', 'maskZora', 'maskFierceDeity', 'maskPostman', 'maskAllNight', 'maskBlast', 'maskStone', 'maskGreatFairy', 'maskKeaton', 'maskBremen', 'maskBunny', 'maskDonGero', 'maskScents', 'maskRomani', 'maskTroupeLeader', 'maskKafei', 'maskCouple', 'maskTruth', 'maskKamaro', 'maskGibdo', 'maskGaro', 'maskCaptain', 'maskGiant', 'maskGerudo', 'maskSkull', 'maskSpooky', 'moonTear', 'deedLand', 'deedSwamp', 'deedMountain', 'deedOcean', 'letterToMama', 'letterToKafei', 'pendantOfMemories', 'strength']
+    """
+    display_name = "Random MM Age Requirements"
+    valid_keys = {
+        'hookshot',
+        'hookshotShort',
+        'bow',
+        'ocarinaOfTime',
+        'ocarinaFairy',
+        'bomb',
+        'bombchu',
+        'arrowFire',
+        'arrowIce',
+        'arrowLight',
+        'hammer',
+        'spellWind',
+        'spellLove',
+        'spellFire',
+        'bootsIron',
+        'bootsHover',
+        'tunicGoron',
+        'tunicZora',
+        'greatFairySword',
+        'boomerang',
+        'slingshot',
+        'stick',
+        'maskDeku',
+        'nut',
+        'magicBean',
+        'powderKeg',
+        'pictographBox',
+        'lensOfTruth',
+        'maskGoron',
+        'maskZora',
+        'maskFierceDeity',
+        'maskPostman',
+        'maskAllNight',
+        'maskBlast',
+        'maskStone',
+        'maskGreatFairy',
+        'maskKeaton',
+        'maskBremen',
+        'maskBunny',
+        'maskDonGero',
+        'maskScents',
+        'maskRomani',
+        'maskTroupeLeader',
+        'maskKafei',
+        'maskCouple',
+        'maskTruth',
+        'maskKamaro',
+        'maskGibdo',
+        'maskGaro',
+        'maskCaptain',
+        'maskGiant',
+        'maskGerudo',
+        'maskSkull',
+        'maskSpooky',
+        'moonTear',
+        'deedLand',
+        'deedSwamp',
+        'deedMountain',
+        'deedOcean',
+        'letterToMama',
+        'letterToKafei',
+        'pendantOfMemories',
+        'strength',
+    }
+    default = valid_keys.copy()
 
 class OOTxMM_entrances_erSelfLoops(Toggle):
     """
@@ -3353,6 +4504,13 @@ class OOTxMM_mainqol_fastBunnyHood(Toggle):
     display_name = "Fast Bunny Hood"
     default = True
 
+class OOTxMM_mainqol_bowSlingshotBreakHives(Toggle):
+    """
+    Allows the Bow and Slingshot to break beehives in OoT, matching MM behavior
+    """
+    display_name = "Bow/Slingshot Break Hives"
+    default = False
+
 class OOTxMM_mainqol_critWiggleDisable(Toggle):
     """
     Disables the camera zoom-in and weird movements when low on health
@@ -3381,6 +4539,13 @@ class OOTxMM_mainqol_keepBottlesReset(Toggle):
     display_name = "Keep Bottles on Cycle Reset"
     default = False
 
+class OOTxMM_mainqol_mmSongOfDoubleTimeTimeSelector(Toggle):
+    """
+    Changes the Song of Double Time in MM to allow selecting time, similar to the Song of Double Time in Majoras Mask 3D.
+    """
+    display_name = "Song of Double Time - Time Selector"
+    default = False
+
 class OOTxMM_mainqol_autoInvert(Choice):
     """
     Auto-inverts time at the start of a cycle
@@ -3393,6 +4558,146 @@ class OOTxMM_mainqol_autoInvert(Choice):
     option_firstCycle = 1
     option_always = 2
     default = option_never
+
+class OOTxMM_cutscenesmain_cutsceneSkipOoT(Toggle):
+    """
+    Skips a lot of mundane cutscenes in OoT, such as chests appearing, barred doors opening, etc.
+    """
+    display_name = "Skip Mundane Cutscenes (OoT)"
+    default = False
+
+class OOTxMM_cutscenesmain_cutsceneSkipMM(Toggle):
+    """
+    Skips a lot of mundane cutscenes in MM, such as chests appearing, barred doors opening, etc.
+    """
+    display_name = "Skip Mundane Cutscenes (MM)"
+    default = False
+
+class OOTxMM_cutscenesglitches_cutsceneGlitchOoT(Toggle):
+    """
+    Enables glitch-aiding cutscenes, such as Poe Sisters, Darunia, and some other chests/switches in dungeons.
+    """
+    display_name = "Glitch Aiding Cutscenes (OoT)"
+    default = False
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroGohma(Toggle):
+    """
+    Skips the intro cutscene for Gohma.
+    """
+    display_name = "Skip Gohma Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroKingDodongo(Toggle):
+    """
+    Skips the intro cutscene for King Dodongo.
+    """
+    display_name = "Skip King Dodongo Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroBarinade(Toggle):
+    """
+    Skips the intro cutscene for Barinade.
+    """
+    display_name = "Skip Barinade Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroPhantomGanon(Toggle):
+    """
+    Skips the intro cutscene for Phantom Ganon.
+    """
+    display_name = "Skip Phantom Ganon Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroVolvagia(Toggle):
+    """
+    Skips the intro cutscene for Volvagia.
+    """
+    display_name = "Skip Volvagia Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroMorpha(Toggle):
+    """
+    Skips the intro cutscene for Morpha.
+    """
+    display_name = "Skip Morpha Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroBongoBongo(Toggle):
+    """
+    Skips the intro cutscene for Bongo Bongo.
+    """
+    display_name = "Skip Bongo Bongo Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroTwinrova(Toggle):
+    """
+    Skips the intro cutscene for Twinrova.
+    """
+    display_name = "Skip Twinrova Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesoot_cutsceneIntroGanondorf(Toggle):
+    """
+    Skips the intro cutscene for Ganondorf.
+    """
+    display_name = "Skip Ganondorf Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesmm_cutsceneIntroOdolwa(Toggle):
+    """
+    Skips the intro cutscene for Odolwa.
+    """
+    display_name = "Skip Odolwa Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesmm_cutsceneIntroGoht(Toggle):
+    """
+    Skips the intro cutscene for Goht.
+    """
+    display_name = "Skip Goht Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesminibossesmm_cutsceneIntroWart(Toggle):
+    """
+    Skips the intro cutscene for Wart.
+    """
+    display_name = "Skip Wart Intro Cutscene"
+    default = False
+
+class OOTxMM_cutscenesbossesmm_cutsceneIntroGyorg(Toggle):
+    """
+    Skips the intro cutscene for Gyorg.
+    """
+    display_name = "Skip Gyorg Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesminibossesmm_cutsceneIntroIgos(Toggle):
+    """
+    Skips the intro cutscene for Igos du Ikana.
+    """
+    display_name = "Skip Igos du Ikana Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesminibossesmm_cutsceneIntroGomess(Toggle):
+    """
+    Skips the intro cutscene for Gomess.
+    """
+    display_name = "Skip Gomess Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesmm_cutsceneIntroTwinmold(Toggle):
+    """
+    Skips the intro cutscene for Twinmold.
+    """
+    display_name = "Skip Twinmold Intro Cutscene"
+    default = True
+
+class OOTxMM_cutscenesbossesmm_cutsceneIntroMajora(Toggle):
+    """
+    Skips the intro cutscene for Majora.
+    """
+    display_name = "Skip Majora Intro Cutscene"
+    default = False
 
 
 @dataclass
@@ -3452,13 +4757,20 @@ class OOTxMMOptions(PerGameCommonOptions):
     OOTxMM_mainshuffle_shuffleFreeRupeesMm: OOTxMM_mainshuffle_shuffleFreeRupeesMm
     OOTxMM_mainshuffle_shuffleFreeHeartsOot: OOTxMM_mainshuffle_shuffleFreeHeartsOot
     OOTxMM_mainshuffle_shuffleFreeHeartsMm: OOTxMM_mainshuffle_shuffleFreeHeartsMm
+    OOTxMM_mainshuffle_shuffleGossipFairiesOot: OOTxMM_mainshuffle_shuffleGossipFairiesOot
+    OOTxMM_mainshuffle_shuffleGossipBigFairiesOot: OOTxMM_mainshuffle_shuffleGossipBigFairiesOot
+    OOTxMM_mainshuffle_shuffleGossipFairiesMm: OOTxMM_mainshuffle_shuffleGossipFairiesMm
+    OOTxMM_mainshuffle_shuffleGossipBigFairiesMm: OOTxMM_mainshuffle_shuffleGossipBigFairiesMm
     OOTxMM_mainshuffle_shuffleWonderItemsOot: OOTxMM_mainshuffle_shuffleWonderItemsOot
     OOTxMM_mainshuffle_shuffleWonderItemsMm: OOTxMM_mainshuffle_shuffleWonderItemsMm
     OOTxMM_mainshuffle_shuffleSnowballsMm: OOTxMM_mainshuffle_shuffleSnowballsMm
     OOTxMM_mainshuffle_shuffleButterfliesOot: OOTxMM_mainshuffle_shuffleButterfliesOot
     OOTxMM_mainshuffle_shuffleButterfliesMm: OOTxMM_mainshuffle_shuffleButterfliesMm
+    OOTxMM_mainshuffle_shuffleBouldersOot: OOTxMM_mainshuffle_shuffleBouldersOot
+    OOTxMM_mainshuffle_shuffleBouldersMm: OOTxMM_mainshuffle_shuffleBouldersMm
     OOTxMM_mainshuffle_shuffleRedBouldersOot: OOTxMM_mainshuffle_shuffleRedBouldersOot
     OOTxMM_mainshuffle_shuffleRedBouldersMm: OOTxMM_mainshuffle_shuffleRedBouldersMm
+    OOTxMM_mainshuffle_shuffleSilverBouldersOot: OOTxMM_mainshuffle_shuffleSilverBouldersOot
     OOTxMM_mainshuffle_shuffleFrogsRupeesOot: OOTxMM_mainshuffle_shuffleFrogsRupeesOot
     OOTxMM_mainshuffle_shuffleLotteryMm: OOTxMM_mainshuffle_shuffleLotteryMm
     OOTxMM_mainshuffle_shuffleIciclesOot: OOTxMM_mainshuffle_shuffleIciclesOot
@@ -3486,8 +4798,8 @@ class OOTxMMOptions(PerGameCommonOptions):
     OOTxMM_mainevents_songEventsShuffleMm: OOTxMM_mainevents_songEventsShuffleMm
     OOTxMM_mainevents_ganonTrials: OOTxMM_mainevents_ganonTrials
     OOTxMM_mainevents_moonCrash: OOTxMM_mainevents_moonCrash
-    OOTxMM_mainevents_startingAge: OOTxMM_mainevents_startingAge
-    OOTxMM_mainevents_swordlessAdult: OOTxMM_mainevents_swordlessAdult
+    OOTxMM_mainevents_startingAgeOot: OOTxMM_mainevents_startingAgeOot
+    OOTxMM_mainevents_startingAgeMm: OOTxMM_mainevents_startingAgeMm
     OOTxMM_mainevents_timeTravelSword: OOTxMM_mainevents_timeTravelSword
     OOTxMM_mainevents_doorOfTime: OOTxMM_mainevents_doorOfTime
     OOTxMM_mainevents_ageChange: OOTxMM_mainevents_ageChange
@@ -3547,163 +4859,176 @@ class OOTxMMOptions(PerGameCommonOptions):
     OOTxMM_itemsprogressive_progressiveGoronLullabyMm: OOTxMM_itemsprogressive_progressiveGoronLullabyMm
     OOTxMM_itemsprogressive_progressiveGoronLullabyOot: OOTxMM_itemsprogressive_progressiveGoronLullabyOot
     OOTxMM_itemsprogressive_progressiveClocks: OOTxMM_itemsprogressive_progressiveClocks
-    OOTxMM_itemsextensions_fillWallets: OOTxMM_itemsextensions_fillWallets
-    OOTxMM_itemsextensions_bottleContentShuffle: OOTxMM_itemsextensions_bottleContentShuffle
-    OOTxMM_itemsextensions_stoneAgonyMm: OOTxMM_itemsextensions_stoneAgonyMm
-    OOTxMM_itemsextensions_sticksNutsUpgradesMm: OOTxMM_itemsextensions_sticksNutsUpgradesMm
-    OOTxMM_itemsextensions_fairyOcarinaMm: OOTxMM_itemsextensions_fairyOcarinaMm
-    OOTxMM_itemsextensions_blueFireArrows: OOTxMM_itemsextensions_blueFireArrows
-    OOTxMM_itemsextensions_iceArrowPlatformsOot: OOTxMM_itemsextensions_iceArrowPlatformsOot
-    OOTxMM_itemsextensions_sunlightArrows: OOTxMM_itemsextensions_sunlightArrows
-    OOTxMM_itemsextensions_shortHookshotMm: OOTxMM_itemsextensions_shortHookshotMm
-    OOTxMM_itemsextensions_bronzeScale: OOTxMM_itemsextensions_bronzeScale
-    OOTxMM_itemsextensions_childWallets: OOTxMM_itemsextensions_childWallets
-    OOTxMM_itemsextensions_colossalWallets: OOTxMM_itemsextensions_colossalWallets
-    OOTxMM_itemsextensions_bottomlessWallets: OOTxMM_itemsextensions_bottomlessWallets
-    OOTxMM_itemsextensions_rupeeScaling: OOTxMM_itemsextensions_rupeeScaling
-    OOTxMM_itemsextensions_skeletonKeyOot: OOTxMM_itemsextensions_skeletonKeyOot
-    OOTxMM_itemsextensions_skeletonKeyMm: OOTxMM_itemsextensions_skeletonKeyMm
-    OOTxMM_itemsextensions_magicalRupee: OOTxMM_itemsextensions_magicalRupee
-    OOTxMM_itemsextensions_transcendentFairy: OOTxMM_itemsextensions_transcendentFairy
-    OOTxMM_itemsextensions_platinumTokenOot: OOTxMM_itemsextensions_platinumTokenOot
-    OOTxMM_itemsextensions_platinumTokenMm: OOTxMM_itemsextensions_platinumTokenMm
-    OOTxMM_itemsextensions_bombchuBehaviorOot: OOTxMM_itemsextensions_bombchuBehaviorOot
-    OOTxMM_itemsextensions_bombchuBehaviorMm: OOTxMM_itemsextensions_bombchuBehaviorMm
-    OOTxMM_itemsextensions_spellFireMm: OOTxMM_itemsextensions_spellFireMm
-    OOTxMM_itemsextensions_spellWindMm: OOTxMM_itemsextensions_spellWindMm
-    OOTxMM_itemsextensions_spellLoveMm: OOTxMM_itemsextensions_spellLoveMm
-    OOTxMM_itemsextensions_bootsIronMm: OOTxMM_itemsextensions_bootsIronMm
-    OOTxMM_itemsextensions_bootsHoverMm: OOTxMM_itemsextensions_bootsHoverMm
-    OOTxMM_itemsextensions_tunicGoronMm: OOTxMM_itemsextensions_tunicGoronMm
-    OOTxMM_itemsextensions_tunicZoraMm: OOTxMM_itemsextensions_tunicZoraMm
-    OOTxMM_itemsextensions_scalesMm: OOTxMM_itemsextensions_scalesMm
-    OOTxMM_itemsextensions_strengthMm: OOTxMM_itemsextensions_strengthMm
-    OOTxMM_itemsextensions_kegStrength3: OOTxMM_itemsextensions_kegStrength3
-    OOTxMM_itemsextensions_hammerMm: OOTxMM_itemsextensions_hammerMm
-    OOTxMM_itemsextensions_boomerangMm: OOTxMM_itemsextensions_boomerangMm
-    OOTxMM_itemsextensions_gfsOot: OOTxMM_itemsextensions_gfsOot
-    OOTxMM_itemsextensions_slingshotMm: OOTxMM_itemsextensions_slingshotMm
-    OOTxMM_itemsextensions_spinUpgradeOot: OOTxMM_itemsextensions_spinUpgradeOot
-    OOTxMM_itemsextensions_extraChildSwordsOot: OOTxMM_itemsextensions_extraChildSwordsOot
-    OOTxMM_itemsextensions_dekuShieldMm: OOTxMM_itemsextensions_dekuShieldMm
-    OOTxMM_itemsextensions_blastMaskOot: OOTxMM_itemsextensions_blastMaskOot
-    OOTxMM_itemsextensions_stoneMaskOot: OOTxMM_itemsextensions_stoneMaskOot
-    OOTxMM_itemsextensions_kamaroMaskOot: OOTxMM_itemsextensions_kamaroMaskOot
-    OOTxMM_itemsextensions_elegyOot: OOTxMM_itemsextensions_elegyOot
-    OOTxMM_itemsextensions_songSoaringOot: OOTxMM_itemsextensions_songSoaringOot
-    OOTxMM_itemsextensions_songHealingOot: OOTxMM_itemsextensions_songHealingOot
-    OOTxMM_itemsextensions_songAwakeningOot: OOTxMM_itemsextensions_songAwakeningOot
-    OOTxMM_itemsextensions_songGoronOot: OOTxMM_itemsextensions_songGoronOot
-    OOTxMM_itemsextensions_songZoraOot: OOTxMM_itemsextensions_songZoraOot
-    OOTxMM_itemsextensions_songOrderOot: OOTxMM_itemsextensions_songOrderOot
-    OOTxMM_itemsextensions_songSunMm: OOTxMM_itemsextensions_songSunMm
-    OOTxMM_itemsextensions_songZeldaLullabyMm: OOTxMM_itemsextensions_songZeldaLullabyMm
-    OOTxMM_itemsextensions_songSariasMm: OOTxMM_itemsextensions_songSariasMm
-    OOTxMM_itemsextensions_songMinuetMm: OOTxMM_itemsextensions_songMinuetMm
-    OOTxMM_itemsextensions_songBoleroMm: OOTxMM_itemsextensions_songBoleroMm
-    OOTxMM_itemsextensions_songSerenadeMm: OOTxMM_itemsextensions_songSerenadeMm
-    OOTxMM_itemsextensions_songRequiemMm: OOTxMM_itemsextensions_songRequiemMm
-    OOTxMM_itemsextensions_songNocturneMm: OOTxMM_itemsextensions_songNocturneMm
-    OOTxMM_itemsextensions_songPreludeMm: OOTxMM_itemsextensions_songPreludeMm
-    OOTxMM_itemsextensions_powderKegOot: OOTxMM_itemsextensions_powderKegOot
-    OOTxMM_itemsextensions_ocarinaButtonsShuffleOot: OOTxMM_itemsextensions_ocarinaButtonsShuffleOot
-    OOTxMM_itemsextensions_ocarinaButtonsShuffleMm: OOTxMM_itemsextensions_ocarinaButtonsShuffleMm
-    OOTxMM_itemsextensions_soulsEnemyOot: OOTxMM_itemsextensions_soulsEnemyOot
-    OOTxMM_itemsextensions_soulsEnemyMm: OOTxMM_itemsextensions_soulsEnemyMm
-    OOTxMM_itemsextensions_soulsBossOot: OOTxMM_itemsextensions_soulsBossOot
-    OOTxMM_itemsextensions_soulsBossMm: OOTxMM_itemsextensions_soulsBossMm
-    OOTxMM_itemsextensions_soulsNpcOot: OOTxMM_itemsextensions_soulsNpcOot
-    OOTxMM_itemsextensions_soulsNpcMm: OOTxMM_itemsextensions_soulsNpcMm
-    OOTxMM_itemsextensions_soulsAnimalOot: OOTxMM_itemsextensions_soulsAnimalOot
-    OOTxMM_itemsextensions_soulsAnimalMm: OOTxMM_itemsextensions_soulsAnimalMm
-    OOTxMM_itemsextensions_soulsMiscOot: OOTxMM_itemsextensions_soulsMiscOot
-    OOTxMM_itemsextensions_soulsMiscMm: OOTxMM_itemsextensions_soulsMiscMm
-    OOTxMM_itemsextensions_rustyKeysOot: OOTxMM_itemsextensions_rustyKeysOot
-    OOTxMM_itemsextensions_rustyKeysMm: OOTxMM_itemsextensions_rustyKeysMm
-    OOTxMM_itemsextensions_clocks: OOTxMM_itemsextensions_clocks
-    OOTxMM_itemsextensions_menuNotebook: OOTxMM_itemsextensions_menuNotebook
-    OOTxMM_itemsextensions_coins: OOTxMM_itemsextensions_coins
-    OOTxMM_itemsextensions_coinsRed: OOTxMM_itemsextensions_coinsRed
-    OOTxMM_itemsextensions_coinsGreen: OOTxMM_itemsextensions_coinsGreen
-    OOTxMM_itemsextensions_coinsBlue: OOTxMM_itemsextensions_coinsBlue
-    OOTxMM_itemsextensions_coinsYellow: OOTxMM_itemsextensions_coinsYellow
-    OOTxMM_itemsextensions_trapIce: OOTxMM_itemsextensions_trapIce
-    OOTxMM_itemsextensions_trapFire: OOTxMM_itemsextensions_trapFire
-    OOTxMM_itemsextensions_trapShock: OOTxMM_itemsextensions_trapShock
-    OOTxMM_itemsextensions_trapDrain: OOTxMM_itemsextensions_trapDrain
-    OOTxMM_itemsextensions_trapAntiMagic: OOTxMM_itemsextensions_trapAntiMagic
-    OOTxMM_itemsextensions_trapKnockback: OOTxMM_itemsextensions_trapKnockback
-    OOTxMM_itemsextensions_trapRupoor: OOTxMM_itemsextensions_trapRupoor
-    OOTxMM_itemsextensions_cloakTraps: OOTxMM_itemsextensions_cloakTraps
-    OOTxMM_itemsextensions_trapsQuantity: OOTxMM_itemsextensions_trapsQuantity
+    OOTxMM_itemsextensionsgeneral_fillWallets: OOTxMM_itemsextensionsgeneral_fillWallets
+    OOTxMM_itemsextensionsgeneral_bottleContentShuffle: OOTxMM_itemsextensionsgeneral_bottleContentShuffle
+    OOTxMM_itemsextensionscrossGameitems_stoneAgonyMm: OOTxMM_itemsextensionscrossGameitems_stoneAgonyMm
+    OOTxMM_itemsextensionscrossGameitems_sticksNutsUpgradesMm: OOTxMM_itemsextensionscrossGameitems_sticksNutsUpgradesMm
+    OOTxMM_itemsextensionsgeneral_sticksNutsUpgradesInitial: OOTxMM_itemsextensionsgeneral_sticksNutsUpgradesInitial
+    OOTxMM_itemsextensionscrossGameitems_fairyOcarinaMm: OOTxMM_itemsextensionscrossGameitems_fairyOcarinaMm
+    OOTxMM_itemsextensionsoot_blueFireArrows: OOTxMM_itemsextensionsoot_blueFireArrows
+    OOTxMM_itemsextensionsoot_iceArrowPlatformsOot: OOTxMM_itemsextensionsoot_iceArrowPlatformsOot
+    OOTxMM_itemsextensionsoot_sunlightArrows: OOTxMM_itemsextensionsoot_sunlightArrows
+    OOTxMM_itemsextensionscrossGameitems_shortHookshotMm: OOTxMM_itemsextensionscrossGameitems_shortHookshotMm
+    OOTxMM_itemsextensionsgeneral_bronzeScale: OOTxMM_itemsextensionsgeneral_bronzeScale
+    OOTxMM_itemsextensionsgeneral_childWallets: OOTxMM_itemsextensionsgeneral_childWallets
+    OOTxMM_itemsextensionsgeneral_colossalWallets: OOTxMM_itemsextensionsgeneral_colossalWallets
+    OOTxMM_itemsextensionsgeneral_bottomlessWallets: OOTxMM_itemsextensionsgeneral_bottomlessWallets
+    OOTxMM_itemsextensionsgeneral_rupeeScaling: OOTxMM_itemsextensionsgeneral_rupeeScaling
+    OOTxMM_itemsextensionssystems_skeletonKeyOot: OOTxMM_itemsextensionssystems_skeletonKeyOot
+    OOTxMM_itemsextensionssystems_skeletonKeyMm: OOTxMM_itemsextensionssystems_skeletonKeyMm
+    OOTxMM_itemsextensionsoot_magicalRupee: OOTxMM_itemsextensionsoot_magicalRupee
+    OOTxMM_itemsextensionsmm_transcendentFairy: OOTxMM_itemsextensionsmm_transcendentFairy
+    OOTxMM_itemsextensionssystems_platinumTokenOot: OOTxMM_itemsextensionssystems_platinumTokenOot
+    OOTxMM_itemsextensionssystems_platinumTokenMm: OOTxMM_itemsextensionssystems_platinumTokenMm
+    OOTxMM_itemsextensionssystems_bombchuBehaviorOot: OOTxMM_itemsextensionssystems_bombchuBehaviorOot
+    OOTxMM_itemsextensionssystems_bombchuBehaviorMm: OOTxMM_itemsextensionssystems_bombchuBehaviorMm
+    OOTxMM_itemsextensionscrossGameitems_spellFireMm: OOTxMM_itemsextensionscrossGameitems_spellFireMm
+    OOTxMM_itemsextensionscrossGameitems_spellWindMm: OOTxMM_itemsextensionscrossGameitems_spellWindMm
+    OOTxMM_itemsextensionscrossGameitems_spellLoveMm: OOTxMM_itemsextensionscrossGameitems_spellLoveMm
+    OOTxMM_itemsextensionscrossGameitems_bootsIronMm: OOTxMM_itemsextensionscrossGameitems_bootsIronMm
+    OOTxMM_itemsextensionscrossGameitems_bootsHoverMm: OOTxMM_itemsextensionscrossGameitems_bootsHoverMm
+    OOTxMM_itemsextensionscrossGameitems_tunicGoronMm: OOTxMM_itemsextensionscrossGameitems_tunicGoronMm
+    OOTxMM_itemsextensionscrossGameitems_tunicZoraMm: OOTxMM_itemsextensionscrossGameitems_tunicZoraMm
+    OOTxMM_itemsextensionscrossGameitems_scalesMm: OOTxMM_itemsextensionscrossGameitems_scalesMm
+    OOTxMM_itemsextensionscrossGameitems_strengthMm: OOTxMM_itemsextensionscrossGameitems_strengthMm
+    OOTxMM_itemsextensionsmm_kegStrength3: OOTxMM_itemsextensionsmm_kegStrength3
+    OOTxMM_itemsextensionscrossGameitems_hammerMm: OOTxMM_itemsextensionscrossGameitems_hammerMm
+    OOTxMM_itemsextensionscrossGameitems_boomerangMm: OOTxMM_itemsextensionscrossGameitems_boomerangMm
+    OOTxMM_itemsextensionscrossGameitems_gfsOot: OOTxMM_itemsextensionscrossGameitems_gfsOot
+    OOTxMM_itemsextensionscrossGameitems_slingshotMm: OOTxMM_itemsextensionscrossGameitems_slingshotMm
+    OOTxMM_itemsextensionscrossGameitems_spinUpgradeOot: OOTxMM_itemsextensionscrossGameitems_spinUpgradeOot
+    OOTxMM_itemsextensionscrossGameitems_extraChildSwordsOot: OOTxMM_itemsextensionscrossGameitems_extraChildSwordsOot
+    OOTxMM_itemsextensionscrossGameitems_dekuShieldMm: OOTxMM_itemsextensionscrossGameitems_dekuShieldMm
+    OOTxMM_itemsextensionscrossGamemasks_blastMaskOot: OOTxMM_itemsextensionscrossGamemasks_blastMaskOot
+    OOTxMM_itemsextensionscrossGamemasks_stoneMaskOot: OOTxMM_itemsextensionscrossGamemasks_stoneMaskOot
+    OOTxMM_itemsextensionscrossGamemasks_kamaroMaskOot: OOTxMM_itemsextensionscrossGamemasks_kamaroMaskOot
+    OOTxMM_itemsextensionscrossGamemasks_gerudoMaskMm: OOTxMM_itemsextensionscrossGamemasks_gerudoMaskMm
+    OOTxMM_itemsextensionscrossGamemasks_skullMaskMm: OOTxMM_itemsextensionscrossGamemasks_skullMaskMm
+    OOTxMM_itemsextensionscrossGamemasks_spookyMaskMm: OOTxMM_itemsextensionscrossGamemasks_spookyMaskMm
+    OOTxMM_itemsextensionsmm_adultMaskMm: OOTxMM_itemsextensionsmm_adultMaskMm
+    OOTxMM_itemsextensionscrossGamesongs_elegyOot: OOTxMM_itemsextensionscrossGamesongs_elegyOot
+    OOTxMM_itemsextensionscrossGamesongs_songSoaringOot: OOTxMM_itemsextensionscrossGamesongs_songSoaringOot
+    OOTxMM_itemsextensionscrossGamesongs_songHealingOot: OOTxMM_itemsextensionscrossGamesongs_songHealingOot
+    OOTxMM_itemsextensionscrossGamesongs_songAwakeningOot: OOTxMM_itemsextensionscrossGamesongs_songAwakeningOot
+    OOTxMM_itemsextensionscrossGamesongs_songGoronOot: OOTxMM_itemsextensionscrossGamesongs_songGoronOot
+    OOTxMM_itemsextensionscrossGamesongs_songZoraOot: OOTxMM_itemsextensionscrossGamesongs_songZoraOot
+    OOTxMM_itemsextensionscrossGamesongs_songOrderOot: OOTxMM_itemsextensionscrossGamesongs_songOrderOot
+    OOTxMM_itemsextensionscrossGamesongs_songSunMm: OOTxMM_itemsextensionscrossGamesongs_songSunMm
+    OOTxMM_itemsextensionscrossGamesongs_songZeldaLullabyMm: OOTxMM_itemsextensionscrossGamesongs_songZeldaLullabyMm
+    OOTxMM_itemsextensionscrossGamesongs_songSariasMm: OOTxMM_itemsextensionscrossGamesongs_songSariasMm
+    OOTxMM_itemsextensionscrossGamesongs_songMinuetMm: OOTxMM_itemsextensionscrossGamesongs_songMinuetMm
+    OOTxMM_itemsextensionscrossGamesongs_songBoleroMm: OOTxMM_itemsextensionscrossGamesongs_songBoleroMm
+    OOTxMM_itemsextensionscrossGamesongs_songSerenadeMm: OOTxMM_itemsextensionscrossGamesongs_songSerenadeMm
+    OOTxMM_itemsextensionscrossGamesongs_songRequiemMm: OOTxMM_itemsextensionscrossGamesongs_songRequiemMm
+    OOTxMM_itemsextensionscrossGamesongs_songNocturneMm: OOTxMM_itemsextensionscrossGamesongs_songNocturneMm
+    OOTxMM_itemsextensionscrossGamesongs_songPreludeMm: OOTxMM_itemsextensionscrossGamesongs_songPreludeMm
+    OOTxMM_itemsextensionscrossGameitems_powderKegOot: OOTxMM_itemsextensionscrossGameitems_powderKegOot
+    OOTxMM_itemsextensionscrossGameitems_extraBottlesOot: OOTxMM_itemsextensionscrossGameitems_extraBottlesOot
+    OOTxMM_itemsextensionssystems_ocarinaButtonsShuffleOot: OOTxMM_itemsextensionssystems_ocarinaButtonsShuffleOot
+    OOTxMM_itemsextensionssystems_ocarinaButtonsShuffleMm: OOTxMM_itemsextensionssystems_ocarinaButtonsShuffleMm
+    OOTxMM_itemsextensionssystems_shovelOot: OOTxMM_itemsextensionssystems_shovelOot
+    OOTxMM_itemsextensionssystems_shovelMm: OOTxMM_itemsextensionssystems_shovelMm
+    OOTxMM_itemsextensionssystems_soulsEnemyOot: OOTxMM_itemsextensionssystems_soulsEnemyOot
+    OOTxMM_itemsextensionssystems_soulsEnemyMm: OOTxMM_itemsextensionssystems_soulsEnemyMm
+    OOTxMM_itemsextensionssystems_soulsBossOot: OOTxMM_itemsextensionssystems_soulsBossOot
+    OOTxMM_itemsextensionssystems_soulsBossMm: OOTxMM_itemsextensionssystems_soulsBossMm
+    OOTxMM_itemsextensionssystems_soulsNpcOot: OOTxMM_itemsextensionssystems_soulsNpcOot
+    OOTxMM_itemsextensionssystems_soulsNpcMm: OOTxMM_itemsextensionssystems_soulsNpcMm
+    OOTxMM_itemsextensionssystems_soulsAnimalOot: OOTxMM_itemsextensionssystems_soulsAnimalOot
+    OOTxMM_itemsextensionssystems_soulsAnimalMm: OOTxMM_itemsextensionssystems_soulsAnimalMm
+    OOTxMM_itemsextensionssystems_soulsMiscOot: OOTxMM_itemsextensionssystems_soulsMiscOot
+    OOTxMM_itemsextensionssystems_soulsMiscMm: OOTxMM_itemsextensionssystems_soulsMiscMm
+    OOTxMM_itemsextensionssystems_rustyKeysOot: OOTxMM_itemsextensionssystems_rustyKeysOot
+    OOTxMM_itemsextensionssystems_rustyKeysMm: OOTxMM_itemsextensionssystems_rustyKeysMm
+    OOTxMM_itemsextensionssystems_clocksMm: OOTxMM_itemsextensionssystems_clocksMm
+    OOTxMM_itemsextensionssystems_clocksOot: OOTxMM_itemsextensionssystems_clocksOot
+    OOTxMM_itemsextensionsmm_menuNotebook: OOTxMM_itemsextensionsmm_menuNotebook
+    OOTxMM_itemsextensionscoins_coins: OOTxMM_itemsextensionscoins_coins
+    OOTxMM_itemsextensionscoins_coinsRed: OOTxMM_itemsextensionscoins_coinsRed
+    OOTxMM_itemsextensionscoins_coinsGreen: OOTxMM_itemsextensionscoins_coinsGreen
+    OOTxMM_itemsextensionscoins_coinsBlue: OOTxMM_itemsextensionscoins_coinsBlue
+    OOTxMM_itemsextensionscoins_coinsYellow: OOTxMM_itemsextensionscoins_coinsYellow
+    OOTxMM_itemsextensionstraps_trapIce: OOTxMM_itemsextensionstraps_trapIce
+    OOTxMM_itemsextensionstraps_trapFire: OOTxMM_itemsextensionstraps_trapFire
+    OOTxMM_itemsextensionstraps_trapShock: OOTxMM_itemsextensionstraps_trapShock
+    OOTxMM_itemsextensionstraps_trapDrain: OOTxMM_itemsextensionstraps_trapDrain
+    OOTxMM_itemsextensionstraps_trapAntiMagic: OOTxMM_itemsextensionstraps_trapAntiMagic
+    OOTxMM_itemsextensionstraps_trapKnockback: OOTxMM_itemsextensionstraps_trapKnockback
+    OOTxMM_itemsextensionstraps_trapRupoor: OOTxMM_itemsextensionstraps_trapRupoor
+    OOTxMM_itemsextensionstraps_cloakTraps: OOTxMM_itemsextensionstraps_cloakTraps
+    OOTxMM_itemsextensionstraps_trapsQuantity: OOTxMM_itemsextensionstraps_trapsQuantity
     OOTxMM_main_trapsLink: OOTxMM_main_trapsLink
-    OOTxMM_itemsextensions_songOfDoubleTimeOot: OOTxMM_itemsextensions_songOfDoubleTimeOot
-    OOTxMM_itemsshared_sharedStoneAgony: OOTxMM_itemsshared_sharedStoneAgony
-    OOTxMM_itemsshared_sharedSpinUpgrade: OOTxMM_itemsshared_sharedSpinUpgrade
-    OOTxMM_itemsshared_sharedNutsSticks: OOTxMM_itemsshared_sharedNutsSticks
-    OOTxMM_itemsshared_sharedBows: OOTxMM_itemsshared_sharedBows
-    OOTxMM_itemsshared_sharedBombBags: OOTxMM_itemsshared_sharedBombBags
-    OOTxMM_itemsshared_sharedMagic: OOTxMM_itemsshared_sharedMagic
-    OOTxMM_itemsshared_sharedMagicArrowFire: OOTxMM_itemsshared_sharedMagicArrowFire
-    OOTxMM_itemsshared_sharedMagicArrowIce: OOTxMM_itemsshared_sharedMagicArrowIce
-    OOTxMM_itemsshared_sharedMagicArrowLight: OOTxMM_itemsshared_sharedMagicArrowLight
-    OOTxMM_itemsshared_sharedSongEpona: OOTxMM_itemsshared_sharedSongEpona
-    OOTxMM_itemsshared_sharedSongStorms: OOTxMM_itemsshared_sharedSongStorms
-    OOTxMM_itemsshared_sharedSongTime: OOTxMM_itemsshared_sharedSongTime
-    OOTxMM_itemsshared_sharedSongSun: OOTxMM_itemsshared_sharedSongSun
-    OOTxMM_itemsshared_sharedHookshot: OOTxMM_itemsshared_sharedHookshot
-    OOTxMM_itemsshared_sharedLens: OOTxMM_itemsshared_sharedLens
-    OOTxMM_itemsshared_sharedOcarina: OOTxMM_itemsshared_sharedOcarina
-    OOTxMM_itemsshared_sharedMaskGoron: OOTxMM_itemsshared_sharedMaskGoron
-    OOTxMM_itemsshared_sharedMaskZora: OOTxMM_itemsshared_sharedMaskZora
-    OOTxMM_itemsshared_sharedMaskBunny: OOTxMM_itemsshared_sharedMaskBunny
-    OOTxMM_itemsshared_sharedMaskKeaton: OOTxMM_itemsshared_sharedMaskKeaton
-    OOTxMM_itemsshared_sharedMaskTruth: OOTxMM_itemsshared_sharedMaskTruth
-    OOTxMM_itemsshared_sharedMaskBlast: OOTxMM_itemsshared_sharedMaskBlast
-    OOTxMM_itemsshared_sharedMaskStone: OOTxMM_itemsshared_sharedMaskStone
-    OOTxMM_itemsshared_sharedMaskKamaro: OOTxMM_itemsshared_sharedMaskKamaro
-    OOTxMM_itemsshared_sharedSongElegy: OOTxMM_itemsshared_sharedSongElegy
-    OOTxMM_itemsshared_sharedSongHealing: OOTxMM_itemsshared_sharedSongHealing
-    OOTxMM_itemsshared_sharedSongSoaring: OOTxMM_itemsshared_sharedSongSoaring
-    OOTxMM_itemsshared_sharedSongAwakening: OOTxMM_itemsshared_sharedSongAwakening
-    OOTxMM_itemsshared_sharedSongGoron: OOTxMM_itemsshared_sharedSongGoron
-    OOTxMM_itemsshared_sharedSongZora: OOTxMM_itemsshared_sharedSongZora
-    OOTxMM_itemsshared_sharedSongOrder: OOTxMM_itemsshared_sharedSongOrder
-    OOTxMM_itemsshared_sharedSongZeldaLullaby: OOTxMM_itemsshared_sharedSongZeldaLullaby
-    OOTxMM_itemsshared_sharedSongSarias: OOTxMM_itemsshared_sharedSongSarias
-    OOTxMM_itemsshared_sharedSongMinuet: OOTxMM_itemsshared_sharedSongMinuet
-    OOTxMM_itemsshared_sharedSongBolero: OOTxMM_itemsshared_sharedSongBolero
-    OOTxMM_itemsshared_sharedSongSerenade: OOTxMM_itemsshared_sharedSongSerenade
-    OOTxMM_itemsshared_sharedSongRequiem: OOTxMM_itemsshared_sharedSongRequiem
-    OOTxMM_itemsshared_sharedSongNocturne: OOTxMM_itemsshared_sharedSongNocturne
-    OOTxMM_itemsshared_sharedSongPrelude: OOTxMM_itemsshared_sharedSongPrelude
-    OOTxMM_itemsshared_sharedPowderKeg: OOTxMM_itemsshared_sharedPowderKeg
-    OOTxMM_itemsshared_sharedWallets: OOTxMM_itemsshared_sharedWallets
-    OOTxMM_itemsshared_sharedHealth: OOTxMM_itemsshared_sharedHealth
-    OOTxMM_itemsshared_sharedSwords: OOTxMM_itemsshared_sharedSwords
-    OOTxMM_itemsshared_sharedShields: OOTxMM_itemsshared_sharedShields
-    OOTxMM_itemsshared_sharedSoulsEnemy: OOTxMM_itemsshared_sharedSoulsEnemy
-    OOTxMM_itemsshared_sharedSoulsNpc: OOTxMM_itemsshared_sharedSoulsNpc
-    OOTxMM_itemsshared_sharedSoulsAnimal: OOTxMM_itemsshared_sharedSoulsAnimal
-    OOTxMM_itemsshared_sharedSoulsMisc: OOTxMM_itemsshared_sharedSoulsMisc
-    OOTxMM_itemsshared_sharedOcarinaButtons: OOTxMM_itemsshared_sharedOcarinaButtons
-    OOTxMM_itemsshared_sharedSkeletonKey: OOTxMM_itemsshared_sharedSkeletonKey
-    OOTxMM_itemsshared_sharedPlatinumToken: OOTxMM_itemsshared_sharedPlatinumToken
-    OOTxMM_itemsshared_sharedBombchu: OOTxMM_itemsshared_sharedBombchu
-    OOTxMM_itemsshared_sharedSpellFire: OOTxMM_itemsshared_sharedSpellFire
-    OOTxMM_itemsshared_sharedSpellWind: OOTxMM_itemsshared_sharedSpellWind
-    OOTxMM_itemsshared_sharedSpellLove: OOTxMM_itemsshared_sharedSpellLove
-    OOTxMM_itemsshared_sharedBootsIron: OOTxMM_itemsshared_sharedBootsIron
-    OOTxMM_itemsshared_sharedBootsHover: OOTxMM_itemsshared_sharedBootsHover
-    OOTxMM_itemsshared_sharedTunicGoron: OOTxMM_itemsshared_sharedTunicGoron
-    OOTxMM_itemsshared_sharedTunicZora: OOTxMM_itemsshared_sharedTunicZora
-    OOTxMM_itemsshared_sharedScales: OOTxMM_itemsshared_sharedScales
-    OOTxMM_itemsshared_sharedStrength: OOTxMM_itemsshared_sharedStrength
-    OOTxMM_itemsshared_sharedHammer: OOTxMM_itemsshared_sharedHammer
-    OOTxMM_itemsshared_sharedBoomerang: OOTxMM_itemsshared_sharedBoomerang
-    OOTxMM_itemsshared_sharedGFS: OOTxMM_itemsshared_sharedGFS
-    OOTxMM_itemsshared_sharedSlingshot: OOTxMM_itemsshared_sharedSlingshot
-    OOTxMM_itemsshared_sharedBottles: OOTxMM_itemsshared_sharedBottles
+    OOTxMM_itemsextensionsoot_songOfDoubleTimeOot: OOTxMM_itemsextensionsoot_songOfDoubleTimeOot
+    OOTxMM_itemsextensionscrossGameitems_sharedStoneAgony: OOTxMM_itemsextensionscrossGameitems_sharedStoneAgony
+    OOTxMM_itemsextensionscrossGameitems_sharedSpinUpgrade: OOTxMM_itemsextensionscrossGameitems_sharedSpinUpgrade
+    OOTxMM_itemsextensionscrossGameitems_sharedNutsSticks: OOTxMM_itemsextensionscrossGameitems_sharedNutsSticks
+    OOTxMM_itemsextensionsshared_sharedBows: OOTxMM_itemsextensionsshared_sharedBows
+    OOTxMM_itemsextensionsshared_sharedBombBags: OOTxMM_itemsextensionsshared_sharedBombBags
+    OOTxMM_itemsextensionsshared_sharedMagic: OOTxMM_itemsextensionsshared_sharedMagic
+    OOTxMM_itemsextensionsshared_sharedMagicArrowFire: OOTxMM_itemsextensionsshared_sharedMagicArrowFire
+    OOTxMM_itemsextensionsshared_sharedMagicArrowIce: OOTxMM_itemsextensionsshared_sharedMagicArrowIce
+    OOTxMM_itemsextensionsshared_sharedMagicArrowLight: OOTxMM_itemsextensionsshared_sharedMagicArrowLight
+    OOTxMM_itemsextensionsshared_sharedSongEpona: OOTxMM_itemsextensionsshared_sharedSongEpona
+    OOTxMM_itemsextensionsshared_sharedSongStorms: OOTxMM_itemsextensionsshared_sharedSongStorms
+    OOTxMM_itemsextensionsshared_sharedSongTime: OOTxMM_itemsextensionsshared_sharedSongTime
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongSun: OOTxMM_itemsextensionscrossGamesongs_sharedSongSun
+    OOTxMM_itemsextensionscrossGameitems_sharedHookshot: OOTxMM_itemsextensionscrossGameitems_sharedHookshot
+    OOTxMM_itemsextensionsshared_sharedLens: OOTxMM_itemsextensionsshared_sharedLens
+    OOTxMM_itemsextensionscrossGameitems_sharedOcarina: OOTxMM_itemsextensionscrossGameitems_sharedOcarina
+    OOTxMM_itemsextensionsshared_sharedMaskGoron: OOTxMM_itemsextensionsshared_sharedMaskGoron
+    OOTxMM_itemsextensionsshared_sharedMaskZora: OOTxMM_itemsextensionsshared_sharedMaskZora
+    OOTxMM_itemsextensionsshared_sharedMaskBunny: OOTxMM_itemsextensionsshared_sharedMaskBunny
+    OOTxMM_itemsextensionsshared_sharedMaskKeaton: OOTxMM_itemsextensionsshared_sharedMaskKeaton
+    OOTxMM_itemsextensionsshared_sharedMaskTruth: OOTxMM_itemsextensionsshared_sharedMaskTruth
+    OOTxMM_itemsextensionscrossGamemasks_sharedMaskBlast: OOTxMM_itemsextensionscrossGamemasks_sharedMaskBlast
+    OOTxMM_itemsextensionscrossGamemasks_sharedMaskStone: OOTxMM_itemsextensionscrossGamemasks_sharedMaskStone
+    OOTxMM_itemsextensionscrossGamemasks_sharedMaskKamaro: OOTxMM_itemsextensionscrossGamemasks_sharedMaskKamaro
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongElegy: OOTxMM_itemsextensionscrossGamesongs_sharedSongElegy
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongHealing: OOTxMM_itemsextensionscrossGamesongs_sharedSongHealing
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongSoaring: OOTxMM_itemsextensionscrossGamesongs_sharedSongSoaring
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongAwakening: OOTxMM_itemsextensionscrossGamesongs_sharedSongAwakening
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongGoron: OOTxMM_itemsextensionscrossGamesongs_sharedSongGoron
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongZora: OOTxMM_itemsextensionscrossGamesongs_sharedSongZora
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongOrder: OOTxMM_itemsextensionscrossGamesongs_sharedSongOrder
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongZeldaLullaby: OOTxMM_itemsextensionscrossGamesongs_sharedSongZeldaLullaby
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongSarias: OOTxMM_itemsextensionscrossGamesongs_sharedSongSarias
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongMinuet: OOTxMM_itemsextensionscrossGamesongs_sharedSongMinuet
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongBolero: OOTxMM_itemsextensionscrossGamesongs_sharedSongBolero
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongSerenade: OOTxMM_itemsextensionscrossGamesongs_sharedSongSerenade
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongRequiem: OOTxMM_itemsextensionscrossGamesongs_sharedSongRequiem
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongNocturne: OOTxMM_itemsextensionscrossGamesongs_sharedSongNocturne
+    OOTxMM_itemsextensionscrossGamesongs_sharedSongPrelude: OOTxMM_itemsextensionscrossGamesongs_sharedSongPrelude
+    OOTxMM_itemsextensionscrossGameitems_sharedPowderKeg: OOTxMM_itemsextensionscrossGameitems_sharedPowderKeg
+    OOTxMM_itemsextensionsshared_sharedWallets: OOTxMM_itemsextensionsshared_sharedWallets
+    OOTxMM_itemsextensionsshared_sharedHealth: OOTxMM_itemsextensionsshared_sharedHealth
+    OOTxMM_itemsextensionscrossGameitems_sharedSwords: OOTxMM_itemsextensionscrossGameitems_sharedSwords
+    OOTxMM_itemsextensionscrossGameitems_sharedShields: OOTxMM_itemsextensionscrossGameitems_sharedShields
+    OOTxMM_itemsextensionssystems_sharedSoulsEnemy: OOTxMM_itemsextensionssystems_sharedSoulsEnemy
+    OOTxMM_itemsextensionssystems_sharedSoulsNpc: OOTxMM_itemsextensionssystems_sharedSoulsNpc
+    OOTxMM_itemsextensionssystems_sharedSoulsAnimal: OOTxMM_itemsextensionssystems_sharedSoulsAnimal
+    OOTxMM_itemsextensionssystems_sharedSoulsMisc: OOTxMM_itemsextensionssystems_sharedSoulsMisc
+    OOTxMM_itemsextensionssystems_sharedOcarinaButtons: OOTxMM_itemsextensionssystems_sharedOcarinaButtons
+    OOTxMM_itemsextensionssystems_sharedShovel: OOTxMM_itemsextensionssystems_sharedShovel
+    OOTxMM_itemsextensionssystems_sharedSkeletonKey: OOTxMM_itemsextensionssystems_sharedSkeletonKey
+    OOTxMM_itemsextensionssystems_sharedPlatinumToken: OOTxMM_itemsextensionssystems_sharedPlatinumToken
+    OOTxMM_itemsextensionssystems_sharedBombchu: OOTxMM_itemsextensionssystems_sharedBombchu
+    OOTxMM_itemsextensionscrossGameitems_sharedSpellFire: OOTxMM_itemsextensionscrossGameitems_sharedSpellFire
+    OOTxMM_itemsextensionscrossGameitems_sharedSpellWind: OOTxMM_itemsextensionscrossGameitems_sharedSpellWind
+    OOTxMM_itemsextensionscrossGameitems_sharedSpellLove: OOTxMM_itemsextensionscrossGameitems_sharedSpellLove
+    OOTxMM_itemsextensionscrossGameitems_sharedBootsIron: OOTxMM_itemsextensionscrossGameitems_sharedBootsIron
+    OOTxMM_itemsextensionscrossGameitems_sharedBootsHover: OOTxMM_itemsextensionscrossGameitems_sharedBootsHover
+    OOTxMM_itemsextensionscrossGameitems_sharedTunicGoron: OOTxMM_itemsextensionscrossGameitems_sharedTunicGoron
+    OOTxMM_itemsextensionscrossGameitems_sharedTunicZora: OOTxMM_itemsextensionscrossGameitems_sharedTunicZora
+    OOTxMM_itemsextensionscrossGameitems_sharedScales: OOTxMM_itemsextensionscrossGameitems_sharedScales
+    OOTxMM_itemsextensionscrossGameitems_sharedStrength: OOTxMM_itemsextensionscrossGameitems_sharedStrength
+    OOTxMM_itemsextensionscrossGameitems_sharedHammer: OOTxMM_itemsextensionscrossGameitems_sharedHammer
+    OOTxMM_itemsextensionscrossGameitems_sharedBoomerang: OOTxMM_itemsextensionscrossGameitems_sharedBoomerang
+    OOTxMM_itemsextensionscrossGameitems_sharedGFS: OOTxMM_itemsextensionscrossGameitems_sharedGFS
+    OOTxMM_itemsextensionscrossGameitems_sharedSlingshot: OOTxMM_itemsextensionscrossGameitems_sharedSlingshot
+    OOTxMM_itemsextensionscrossGamemasks_sharedMaskGerudo: OOTxMM_itemsextensionscrossGamemasks_sharedMaskGerudo
+    OOTxMM_itemsextensionscrossGamemasks_sharedMaskSkull: OOTxMM_itemsextensionscrossGamemasks_sharedMaskSkull
+    OOTxMM_itemsextensionscrossGamemasks_sharedMaskSpooky: OOTxMM_itemsextensionscrossGamemasks_sharedMaskSpooky
+    OOTxMM_itemsextensionscrossGameitems_sharedBottles: OOTxMM_itemsextensionscrossGameitems_sharedBottles
     OOTxMM_itemsageless_agelessSwords: OOTxMM_itemsageless_agelessSwords
     OOTxMM_itemsageless_agelessShields: OOTxMM_itemsageless_agelessShields
     OOTxMM_itemsageless_agelessTunics: OOTxMM_itemsageless_agelessTunics
@@ -3718,6 +5043,133 @@ class OOTxMMOptions(PerGameCommonOptions):
     OOTxMM_itemsageless_agelessChildTrade: OOTxMM_itemsageless_agelessChildTrade
     OOTxMM_itemsageless_agelessStrength: OOTxMM_itemsageless_agelessStrength
     OOTxMM_itemsageless_agelessSoaring: OOTxMM_itemsageless_agelessSoaring
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHookshot: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHookshot
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHookshot: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHookshot
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHookshotShort: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHookshotShort
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHookshotShort: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHookshotShort
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBow: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBow
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBow: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBow
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildOcarinaOfTime: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildOcarinaOfTime
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultOcarinaOfTime: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultOcarinaOfTime
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildOcarinaFairy: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildOcarinaFairy
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultOcarinaFairy: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultOcarinaFairy
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBomb: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBomb
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBomb: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBomb
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBombchu: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBombchu
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBombchu: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBombchu
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowFire: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowFire
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowFire: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowFire
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowIce: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowIce
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowIce: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowIce
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowLight: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildArrowLight
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowLight: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultArrowLight
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHammer: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildHammer
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHammer: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultHammer
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellWind: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellWind
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellWind: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellWind
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellLove: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellLove
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellLove: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellLove
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellFire: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSpellFire
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellFire: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSpellFire
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBootsIron: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBootsIron
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBootsIron: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBootsIron
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBootsHover: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBootsHover
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBootsHover: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBootsHover
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildTunicGoron: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildTunicGoron
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultTunicGoron: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultTunicGoron
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildTunicZora: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildTunicZora
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultTunicZora: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultTunicZora
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildGreatFairySword: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildGreatFairySword
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultGreatFairySword: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultGreatFairySword
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBoomerang: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildBoomerang
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBoomerang: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultBoomerang
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSlingshot: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildSlingshot
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSlingshot: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultSlingshot
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildStick: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildStick
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultStick: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultStick
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskDeku: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskDeku
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskDeku: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskDeku
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDekuNuts: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDekuNuts
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDekuNuts: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDekuNuts
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMagicBean: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMagicBean
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMagicBean: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMagicBean
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPowderKeg: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPowderKeg
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPowderKeg: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPowderKeg
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPictographBox: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPictographBox
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPictographBox: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPictographBox
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLensOfTruth: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLensOfTruth
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLensOfTruth: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLensOfTruth
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGoron: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGoron
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGoron: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGoron
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskZora: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskZora
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskZora: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskZora
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskFierceDeity: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskFierceDeity
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskFierceDeity: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskFierceDeity
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskPostman: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskPostman
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskPostman: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskPostman
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskAllNight: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskAllNight
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskAllNight: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskAllNight
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBlast: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBlast
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBlast: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBlast
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskStone: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskStone
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskStone: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskStone
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGreatFairy: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGreatFairy
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGreatFairy: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGreatFairy
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKeaton: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKeaton
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKeaton: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKeaton
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBremen: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBremen
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBremen: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBremen
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBunny: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskBunny
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBunny: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskBunny
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskDonGero: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskDonGero
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskDonGero: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskDonGero
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskScents: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskScents
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskScents: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskScents
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskRomani: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskRomani
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskRomani: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskRomani
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskTroupeLeader: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskTroupeLeader
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskTroupeLeader: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskTroupeLeader
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKafei: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKafei
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKafei: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKafei
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskCouple: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskCouple
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskCouple: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskCouple
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskTruth: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskTruth
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskTruth: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskTruth
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKamaro: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskKamaro
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKamaro: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskKamaro
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGibdo: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGibdo
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGibdo: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGibdo
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGaro: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGaro
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGaro: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGaro
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskCaptain: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskCaptain
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskCaptain: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskCaptain
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGiant: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGiant
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGiant: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGiant
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGerudo: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskGerudo
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGerudo: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskGerudo
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskSkull: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskSkull
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskSkull: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskSkull
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskSpooky: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMaskSpooky
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskSpooky: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMaskSpooky
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMoonTear: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildMoonTear
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMoonTear: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultMoonTear
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedLand: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedLand
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedLand: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedLand
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedSwamp: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedSwamp
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedSwamp: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedSwamp
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedMountain: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedMountain
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedMountain: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedMountain
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedOcean: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildDeedOcean
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedOcean: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultDeedOcean
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLetterToMama: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLetterToMama
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLetterToMama: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLetterToMama
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLetterToKafei: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildLetterToKafei
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLetterToKafei: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultLetterToKafei
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPendantOfMemories: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildPendantOfMemories
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPendantOfMemories: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultPendantOfMemories
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqChildStrength: OOTxMM_itemsmmAgeRequirements_mmAgeReqChildStrength
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultStrength: OOTxMM_itemsmmAgeRequirements_mmAgeReqAdultStrength
+    OOTxMM_itemsmmAgeRequirements_mmAgeReqRandom: OOTxMM_itemsmmAgeRequirements_mmAgeReqRandom
     OOTxMM_entrances_erSelfLoops: OOTxMM_entrances_erSelfLoops
     OOTxMM_entrances_erNoPolarity: OOTxMM_entrances_erNoPolarity
     OOTxMM_entrances_erDecoupled: OOTxMM_entrances_erDecoupled
@@ -3769,11 +5221,33 @@ class OOTxMMOptions(PerGameCommonOptions):
     OOTxMM_mainqol_openMaskShop: OOTxMM_mainqol_openMaskShop
     OOTxMM_mainqol_lenientSpikes: OOTxMM_mainqol_lenientSpikes
     OOTxMM_mainqol_fastBunnyHood: OOTxMM_mainqol_fastBunnyHood
+    OOTxMM_mainqol_bowSlingshotBreakHives: OOTxMM_mainqol_bowSlingshotBreakHives
     OOTxMM_mainqol_critWiggleDisable: OOTxMM_mainqol_critWiggleDisable
     OOTxMM_mainqol_fastMasks: OOTxMM_mainqol_fastMasks
     OOTxMM_mainqol_keepItemsReset: OOTxMM_mainqol_keepItemsReset
     OOTxMM_mainqol_keepBottlesReset: OOTxMM_mainqol_keepBottlesReset
+    OOTxMM_mainqol_mmSongOfDoubleTimeTimeSelector: OOTxMM_mainqol_mmSongOfDoubleTimeTimeSelector
     OOTxMM_mainqol_autoInvert: OOTxMM_mainqol_autoInvert
+    OOTxMM_cutscenesmain_cutsceneSkipOoT: OOTxMM_cutscenesmain_cutsceneSkipOoT
+    OOTxMM_cutscenesmain_cutsceneSkipMM: OOTxMM_cutscenesmain_cutsceneSkipMM
+    OOTxMM_cutscenesglitches_cutsceneGlitchOoT: OOTxMM_cutscenesglitches_cutsceneGlitchOoT
+    OOTxMM_cutscenesbossesoot_cutsceneIntroGohma: OOTxMM_cutscenesbossesoot_cutsceneIntroGohma
+    OOTxMM_cutscenesbossesoot_cutsceneIntroKingDodongo: OOTxMM_cutscenesbossesoot_cutsceneIntroKingDodongo
+    OOTxMM_cutscenesbossesoot_cutsceneIntroBarinade: OOTxMM_cutscenesbossesoot_cutsceneIntroBarinade
+    OOTxMM_cutscenesbossesoot_cutsceneIntroPhantomGanon: OOTxMM_cutscenesbossesoot_cutsceneIntroPhantomGanon
+    OOTxMM_cutscenesbossesoot_cutsceneIntroVolvagia: OOTxMM_cutscenesbossesoot_cutsceneIntroVolvagia
+    OOTxMM_cutscenesbossesoot_cutsceneIntroMorpha: OOTxMM_cutscenesbossesoot_cutsceneIntroMorpha
+    OOTxMM_cutscenesbossesoot_cutsceneIntroBongoBongo: OOTxMM_cutscenesbossesoot_cutsceneIntroBongoBongo
+    OOTxMM_cutscenesbossesoot_cutsceneIntroTwinrova: OOTxMM_cutscenesbossesoot_cutsceneIntroTwinrova
+    OOTxMM_cutscenesbossesoot_cutsceneIntroGanondorf: OOTxMM_cutscenesbossesoot_cutsceneIntroGanondorf
+    OOTxMM_cutscenesbossesmm_cutsceneIntroOdolwa: OOTxMM_cutscenesbossesmm_cutsceneIntroOdolwa
+    OOTxMM_cutscenesbossesmm_cutsceneIntroGoht: OOTxMM_cutscenesbossesmm_cutsceneIntroGoht
+    OOTxMM_cutscenesminibossesmm_cutsceneIntroWart: OOTxMM_cutscenesminibossesmm_cutsceneIntroWart
+    OOTxMM_cutscenesbossesmm_cutsceneIntroGyorg: OOTxMM_cutscenesbossesmm_cutsceneIntroGyorg
+    OOTxMM_cutscenesminibossesmm_cutsceneIntroIgos: OOTxMM_cutscenesminibossesmm_cutsceneIntroIgos
+    OOTxMM_cutscenesminibossesmm_cutsceneIntroGomess: OOTxMM_cutscenesminibossesmm_cutsceneIntroGomess
+    OOTxMM_cutscenesbossesmm_cutsceneIntroTwinmold: OOTxMM_cutscenesbossesmm_cutsceneIntroTwinmold
+    OOTxMM_cutscenesbossesmm_cutsceneIntroMajora: OOTxMM_cutscenesbossesmm_cutsceneIntroMajora
 
 option_groups = []
 
