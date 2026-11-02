@@ -30,9 +30,10 @@ for region, regiondata in ootxmm_staticdata.OOTxMMRegionData.items():
     for regionlocation in regiondata.get("locations") or {}:
         LocationParents.setdefault(regionlocation, []).append(region)
 
+# IDs come from the registry raw/GenerateMetadata.py keeps, so they stay the same across OoTMM releases.
 OOTxMMLocationList = [
-    OOTxMMLocationData(LocationID, name, name, parents)
-    for LocationID, (name, parents) in enumerate(LocationParents.items(), start=1)
+    OOTxMMLocationData(ootxmm_staticdata.OOTxMMLocationIDs[name], name, name, parents)
+    for name, parents in LocationParents.items()
 ]
 
 LOCATION_NAME_TO_ID = {item.display_name: item.id for item in OOTxMMLocationList}
