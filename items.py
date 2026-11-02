@@ -19,12 +19,10 @@ class OOTxMMItemData:
         self.type = type
 
 def classify(item: dict) -> ItemClassification:
-    # Items some condition asks for are progression. Of the rest, OoTMM's TRAPS and JUNK groups
-    # (logic/src/items/groups.ts) are traps and filler, and everything else is useful.
+    # OoTMM's TRAPS and JUNK groups (logic/src/items/groups.ts) are traps and filler, and everything else
+    # is useful. Items some condition of the player's logic asks for are progression instead (classification).
     if item["trap"]:
         return ItemClassification.trap
-    if item["id"] in logic.LOGIC_ITEMS:
-        return ItemClassification.progression
     if item["junk"]:
         return ItemClassification.filler
     return ItemClassification.useful
@@ -37,14 +35,29 @@ OOTxMMItemList: list[OOTxMMItemData] = [
 ITEM_BY_SYMBOLIC_ID = {item.symbolic_id: item for item in OOTxMMItemList}
 
 ITEM_NAME_TO_ID = {item.display_name: item.id for item in OOTxMMItemList}
-ITEM_NAME_TO_CLASS = {item.display_name: item.type for item in OOTxMMItemList}
-FILLER_ITEM_NAMES = sorted(item.display_name for item in OOTxMMItemList if item.type == ItemClassification.filler)
+ITEM_BY_NAME = {item.display_name: item for item in OOTxMMItemList}
+
+def progression_items(world: OOTxMM) -> set[str]:
+    if hasattr(world, "logic"):
+        return world.logic.items
+    # An item link group's world, for which generate_early doesn't run: its items are its members'.
+    members = world.multiworld.groups[world.player]["players"]
+    return set().union(*(world.multiworld.worlds[player].logic.items for player in members))
+
+def classification(world: OOTxMM, item: OOTxMMItemData) -> ItemClassification:
+    if item.type != ItemClassification.trap and item.symbolic_id in progression_items(world):
+        return ItemClassification.progression
+    return item.type
 
 def get_random_filler_item(world: OOTxMM) -> str:
-    return world.random.choice(FILLER_ITEM_NAMES)
+    if not hasattr(world, "filler_item_names"):
+        world.filler_item_names = sorted(
+            item.display_name for item in OOTxMMItemList if classification(world, item) == ItemClassification.filler)
+    return world.random.choice(world.filler_item_names)
 
 def create_item_with_correct_classification(world: OOTxMM, item_name: str) -> OOTxMMItem:
-    return OOTxMMItem(item_name, ITEM_NAME_TO_CLASS[item_name], ITEM_NAME_TO_ID[item_name], world.player)
+    item = ITEM_BY_NAME[item_name]
+    return OOTxMMItem(item_name, classification(world, item), item.id, world.player)
 
 def create_all_items(world: OOTxMM) -> None:
     # OoTMM's base pool (makePools in packages/logic/src/world/transform.ts): the vanilla item of every
@@ -52,7 +65,7 @@ def create_all_items(world: OOTxMM) -> None:
     # replace random filler.
     unfilled = world.multiworld.get_unfilled_locations(world.player)
     pool = [ITEM_BY_SYMBOLIC_ID[ootxmm_staticdata.OOTxMMCheckItems[location.name]] for location in unfilled]
-    filler = [i for i, item in enumerate(pool) if item.type == ItemClassification.filler]
+    filler = [i for i, item in enumerate(pool) if classification(world, item) == ItemClassification.filler]
     for i, extra in zip(world.random.sample(filler, len(logic.EXTRA_ITEMS)), logic.EXTRA_ITEMS):
         pool[i] = ITEM_BY_SYMBOLIC_ID[extra]
     world.multiworld.itempool += [create_item_with_correct_classification(world, item.display_name) for item in pool]

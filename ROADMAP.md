@@ -8,8 +8,8 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Planned, in order
 | Item | Notes |
 |---|---|
-| Options | The logic is exported for default settings only: export it per option value, or evaluate settings at generation. Only keep options that make sense in a multiworld (`raw/Meta_ForbiddenOptions.py` lists the excluded ones), and pass them to the patch. Options also decide which checks exist and what the pool holds: the world creates every check (pots, grass and the like, which OoTMM leaves out by default) and uses OoTMM's base pool only. Port `run()` in OoTMM's `packages/logic/src/world/transform.ts` (check filters, souls, keys, shared items, `itemPool` scarce/plentiful) alongside each option |
-| Goal | The completion condition is OoTMM's `MM_MAJORA` event; follow the `main_goal` option (Ganon, Majora, both, Triforce) |
+| More options | The world offers the settings that only change conditions or the ROM ([DEVELOPMENT.md](DEVELOPMENT.md#options)). The rest (the `port` class in `raw/SettingsClasses.json`) change which checks exist, the pool or the world's shape: port each with what `run()` in OoTMM's `packages/logic/src/world/transform.ts` does for it (check filters, souls, keys, shared items, `itemPool`), then let the generator offer it. The world creates every check (pots, grass and the like, which OoTMM leaves out by default) and uses OoTMM's base pool only |
+| Goal | The completion condition is OoTMM's `MM_MAJORA` event; follow OoTMM's `goal` setting (Ganon, Majora, both, Triforce), which is not offered yet |
 | ROM patch | Produce a per-player patch file that OoTMM's generator turns into the combo ROM, with this seed's item placements |
 | Client | Item send/receive with the running game (emulator connector, likely BizHawk like the other N64 worlds) |
 | Time of day | Time and flag conditions count as met ([DEVELOPMENT.md](DEVELOPMENT.md#logic)), so a seed can expect something at a time the route can't reach (mostly MM's clock). Model OoTMM's per-area time ranges in the state, or at least make the conditions that only one time slice meets false |

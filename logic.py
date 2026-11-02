@@ -1,13 +1,13 @@
-"""The world graph with OoTMM's conditions, built once at import from raw/GreatLogicJSONdump.json.
+"""The world graph with OoTMM's conditions, built per player's settings from raw/GreatLogicJSONdump.json.
 
 OoTMM explores every area once per age, so each region exists as a child and an adult copy, and each
-condition is specialized to the copy's age. A condition on an item the pool never holds, or on an event
-nothing can trigger, is false, as it is for OoTMM. Copies no exit can reach with every pool item, and
-exits, checks and events whose condition is then false, are left out.
+condition is specialized to the copy's age and the player's settings and tricks. A condition on an item the
+pool never holds, or on an event nothing can trigger, is false, as it is for OoTMM. Copies no exit can reach
+with every pool item, and exits, checks and events whose condition is then false, are left out.
 """
 from __future__ import annotations
 
-from typing import Union
+from typing import Any, Union
 
 from . import ootxmm_staticdata
 
@@ -26,12 +26,17 @@ EXTRA_ITEMS = [
 # ("unique", item IDs, count), ("and", conditions) or ("or", conditions).
 Condition = Union[bool, tuple]
 
+# Settings are OoTMM's: {setting key: value, "tricks": [trick keys]}.
+Settings = dict[str, Any]
+
 _nodes = ootxmm_staticdata.OOTxMMLogic["nodes"]
 _areas = ootxmm_staticdata.OOTxMMLogic["areas"]
 
 class _Specializer:
-    """Conditions specialized to an age, with the items and events that can't happen folded to false."""
-    def __init__(self, items: set[str], events: set[str] | None):
+    """Conditions specialized to an age and the settings, with the items and events that can't happen folded to false."""
+    def __init__(self, settings: Settings, items: set[str], events: set[str] | None):
+        self.settings = settings
+        self.tricks = set(settings["tricks"])
         self.items = items
         self.events = events  # None: every event is still possible
         self.memo: dict[tuple[int, str], Condition] = {}
@@ -47,6 +52,15 @@ class _Specializer:
             return node
         if node[0] == "age":
             return node[1] == age
+        if node[0] == "setting":
+            # setting(key) for a toggle, setting(key, value) for the others.
+            value = self.settings[node[1]]
+            return bool(value) if node[2] is None else value == node[2]
+        if node[0] == "trick":
+            return node[1] in self.tricks
+        if node[0] == "not":
+            # Only settings and tricks are negated, so the child is already true or false.
+            return not self(node[1], age)
         if node[0] == "item":
             return node[1] in self.items and ("item", node[1], node[2])
         if node[0] == "event":
@@ -100,36 +114,6 @@ def _explore(specialize: _Specializer):
                     changed = True
     return regions, events
 
-def _build():
-    # Start from every check's item and drop those whose check turns out unreachable, until it settles.
-    items = set(ootxmm_staticdata.OOTxMMCheckItems.values()) | set(EXTRA_ITEMS)
-    while True:
-        regions, events = _explore(_Specializer(items, None))
-        specialize = _Specializer(items, events)
-        exits = {
-            (area, age): [
-                (target, cond) for target, node in _areas[area]["exits"].items()
-                if (target, age) in regions and (cond := specialize(node, age)) is not False
-            ]
-            for area, age in sorted(regions)
-        }
-        # Checks and events can be reached from several regions: name -> [(area, age, condition)].
-        checks: dict[str, list[tuple[str, str, Condition]]] = {}
-        event_parents: dict[str, list[tuple[str, str, Condition]]] = {}
-        for area, age in sorted(regions):
-            for kind, targets in (("locations", checks), ("events", event_parents)):
-                for name, node in _areas[area][kind].items():
-                    if (cond := specialize(node, age)) is not False:
-                        targets.setdefault(name, []).append((area, age, cond))
-        # The pool is the vanilla items of the checks that exist, so it depends on which can be reached.
-        pool = {ootxmm_staticdata.OOTxMMCheckItems[name] for name in checks} | set(EXTRA_ITEMS)
-        if pool == items:
-            return exits, checks, event_parents
-        items = pool
-
-EXITS, CHECKS, EVENTS = _build()
-REGIONS = list(EXITS)
-
 def _items(cond: Condition, found: set[str]) -> None:
     if not isinstance(cond, tuple):
         return
@@ -141,15 +125,58 @@ def _items(cond: Condition, found: set[str]) -> None:
         for child in cond[1]:
             _items(child, found)
 
-def _logic_items() -> set[str]:
-    found: set[str] = set()
-    for targets in EXITS.values():
-        for _, cond in targets:
-            _items(cond, found)
-    for parents in (*CHECKS.values(), *EVENTS.values()):
-        for _, _, cond in parents:
-            _items(cond, found)
-    return found
+class Logic:
+    """The graph for one set of settings.
 
-# The OoTMM item IDs some condition asks for: these are the progression items.
-LOGIC_ITEMS = _logic_items()
+    exits: (area, age) -> [(target area, condition)], for every region copy that exists.
+    checks, events: name -> [(area, age, condition)]: the parents a check or event can be reached from.
+    items: the OoTMM item IDs some condition asks for, which are the progression items.
+    """
+    def __init__(self, settings: Settings):
+        # Start from every check's item and drop those whose check turns out unreachable, until it settles.
+        items = set(ootxmm_staticdata.OOTxMMCheckItems.values()) | set(EXTRA_ITEMS)
+        while True:
+            regions, events = _explore(_Specializer(settings, items, None))
+            specialize = _Specializer(settings, items, events)
+            exits = {
+                (area, age): [
+                    (target, cond) for target, node in _areas[area]["exits"].items()
+                    if (target, age) in regions and (cond := specialize(node, age)) is not False
+                ]
+                for area, age in sorted(regions)
+            }
+            checks: dict[str, list[tuple[str, str, Condition]]] = {}
+            event_parents: dict[str, list[tuple[str, str, Condition]]] = {}
+            for area, age in sorted(regions):
+                for kind, targets in (("locations", checks), ("events", event_parents)):
+                    for name, node in _areas[area][kind].items():
+                        if (cond := specialize(node, age)) is not False:
+                            targets.setdefault(name, []).append((area, age, cond))
+            # The pool is the vanilla items of the checks that exist, so it depends on which can be reached.
+            pool = {ootxmm_staticdata.OOTxMMCheckItems[name] for name in checks} | set(EXTRA_ITEMS)
+            if pool == items:
+                break
+            items = pool
+        self.exits = exits
+        self.regions = list(exits)
+        self.checks = checks
+        self.events = event_parents
+        self.items: set[str] = set()
+        for targets in exits.values():
+            for _, cond in targets:
+                _items(cond, self.items)
+        for parents in (*checks.values(), *event_parents.values()):
+            for _, _, cond in parents:
+                _items(cond, self.items)
+
+# The settings conditions read, and so the ones that change the graph.
+LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"})
+
+_cache: dict[tuple, Logic] = {}
+
+def build(settings: Settings) -> Logic:
+    """The graph for these settings. Players with the same logic settings and tricks share one."""
+    key = (tuple(settings[k] for k in LOGIC_SETTINGS), tuple(sorted(settings["tricks"])))
+    if key not in _cache:
+        _cache[key] = Logic(settings)
+    return _cache[key]
