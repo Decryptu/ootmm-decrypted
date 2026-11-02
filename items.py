@@ -27,11 +27,19 @@ def classify(item: dict) -> ItemClassification:
         return ItemClassification.filler
     return ItemClassification.progression
 
-# Built from OoTMM's item list by raw/GenerateMetadata.py. NOTHING is OoTMM's empty check, not an item.
+# Built from OoTMM's item list by raw/GenerateMetadata.py.
 OOTxMMItemList: list[OOTxMMItemData] = [
     OOTxMMItemData(ootxmm_staticdata.OOTxMMItemIDs[item["id"]], item["id"], item["name"], classify(item))
     for item in ootxmm_staticdata.OOTxMMItemData
-    if item["id"] != "NOTHING"
+]
+ITEM_BY_SYMBOLIC_ID = {item.symbolic_id: item for item in OOTxMMItemList}
+
+# Items OoTMM adds to the pool on top of the checks' vanilla items (EXTRA_ITEMS_OOT and EXTRA_ITEMS_MM in
+# packages/logic/src/world/transform.ts): their vanilla sources are not checks.
+EXTRA_ITEMS = [
+    "OOT_MASK_SKULL", "OOT_MASK_SPOOKY", "OOT_MASK_GERUDO", "OOT_MASK_KEATON",
+    "OOT_MASK_TRUTH", "OOT_MASK_BUNNY", "OOT_MASK_GORON", "OOT_MASK_ZORA",
+    "MM_MASK_DEKU", "MM_SWORD",
 ]
 
 ITEM_NAME_TO_ID = {item.display_name: item.id for item in OOTxMMItemList}
@@ -45,12 +53,12 @@ def create_item_with_correct_classification(world: OOTxMM, item_name: str) -> OO
     return OOTxMMItem(item_name, ITEM_NAME_TO_CLASS[item_name], ITEM_NAME_TO_ID[item_name], world.player)
 
 def create_all_items(world: OOTxMM) -> None:
-    # Placeholder pool until OoTMM's pool rules are ported: one of every non-junk item, then filler.
-    itempool: list[Item] = [
-        create_item_with_correct_classification(world, item.display_name)
-        for item in OOTxMMItemList
-        if item.type == ItemClassification.progression
-    ]
-    number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
-    itempool += [world.create_filler() for _ in range(number_of_unfilled_locations - len(itempool))]
-    world.multiworld.itempool += itempool
+    # OoTMM's base pool (makePools in packages/logic/src/world/transform.ts): the vanilla item of every
+    # check, plus the extra items. The pool must match the number of locations, so the extra items
+    # replace random filler.
+    unfilled = world.multiworld.get_unfilled_locations(world.player)
+    pool = [ITEM_BY_SYMBOLIC_ID[ootxmm_staticdata.OOTxMMCheckItems[location.name]] for location in unfilled]
+    filler = [i for i, item in enumerate(pool) if item.type == ItemClassification.filler]
+    for i, extra in zip(world.random.sample(filler, len(EXTRA_ITEMS)), EXTRA_ITEMS):
+        pool[i] = ITEM_BY_SYMBOLIC_ID[extra]
+    world.multiworld.itempool += [create_item_with_correct_classification(world, item.display_name) for item in pool]

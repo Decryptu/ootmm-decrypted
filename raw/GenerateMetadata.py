@@ -1,4 +1,5 @@
 import yaml
+import xml.etree.ElementTree as ET
 import glob
 import json
 import os
@@ -24,6 +25,10 @@ MacroSources = {
     "MM": "macros_mm.yml",
 }
 
+# Check files that hold each check's vanilla item, matching WorldSources (no dungeons_mq).
+CheckSources = ["oot/overworld/**/*.xml", "oot/boss/**/*.xml", "oot/dungeons/*.xml", "oot/special.xml",
+                "mm/overworld/**/*.xml", "mm/boss/**/*.xml", "mm/dungeons/*.xml", "mm/special.xml"]
+
 # Location IDs are part of the multiworld protocol, so they live in a registry that only grows:
 # a location keeps its ID across OoTMM releases, a new one gets the next free ID in its game's range,
 # and a location OoTMM drops keeps its entry so its ID is never reused.
@@ -32,9 +37,17 @@ LocationIDBase = {"OOT": 100000, "MM": 200000}
 
 # Item IDs work the same way, keyed by OoTMM's item ID (OOT_SWORD): OoT 1001-1999, MM 2001-2999, shared 3001-3999.
 ItemIDFile = "ItemIDs.json"
+# NOTHING, which has no game prefix, goes in the shared range.
 ItemIDBase = {"OOT": 1000, "MM": 2000, "SHARED": 3000}
-# Not an item: OoTMM's placeholder for an empty check.
-ItemSkip = {"NOTHING"}
+
+# Vanilla items the check files name that OoTMM swaps for a real item when it reads them
+# (itemByID in packages/logic/src/items/index.ts).
+CheckItemAliases = {
+    "OOT_FLEXIBLE": "OOT_RUPEE_GREEN", "OOT_RANDOM": "OOT_RUPEE_GREEN",
+    "MM_???": "MM_RUPEE_GREEN", "MM_FLEXIBLE": "MM_RUPEE_GREEN", "MM_RANDOM": "MM_RUPEE_GREEN",
+    "MM_ARROWS_20": "MM_ARROWS_30",
+    "OOT_ICE_TRAP": "OOT_RUPEE_BLUE",
+}
 
 def LoadYAML(Path):
     with open(Path, 'r', encoding='utf-8') as file:
@@ -137,6 +150,35 @@ def UpdateLocationIDs():
         file.write("\n")
 
 
+def GenerateCheckItemFile():
+    # Every check's vanilla item, as OoTMM's packages/data/build/checks.ts reads it: any element with a
+    # location and an item. Names get the game prefix unless they already have one (gameId in data/lib/game.ts).
+    print("Exporting the vanilla item of every check...")
+    def GameID(game, name, sep):
+        return name if name.startswith(("OOT" + sep, "MM" + sep, "SHARED" + sep)) else game.upper() + sep + name
+    CheckItems = {}
+    for pattern in CheckSources:
+        for path in sorted(glob.glob(os.path.join("ootmm", "data", "checks", pattern), recursive=True)):
+            root = ET.parse(path).getroot()
+            game = root.get("game")
+            for element in root.iter():
+                if element.get("location") is None or element.get("item") is None:
+                    continue
+                item = element.get("item")
+                if item != "NOTHING":
+                    item = GameID(game, item, "_")
+                CheckItems[GameID(game, element.get("location"), " ")] = CheckItemAliases.get(item, item)
+    with open("GreatWorldJSONdump.json", 'r') as file:
+        world = json.load(file)
+    names = {name for regiondata in world.values() for name in (regiondata.get("locations") or {})}
+    missing = sorted(names - CheckItems.keys())
+    if missing:
+        raise ValueError(f"No vanilla item for {len(missing)} locations: {missing[:10]}")
+    with open("GreatCheckItemJSONdump.json", 'w') as file:
+        json.dump({name: CheckItems[name] for name in sorted(names)}, file, indent=1)
+        file.write("\n")
+
+
 def GenerateItemFile():
     print("Generating item file from OoTMM item data...")
     # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts).
@@ -197,9 +239,9 @@ def UpdateItemIDs():
             ItemIDs = json.load(file)
     for item in sorted(items, key=lambda item: item["id"]):
         name = item["id"]
-        if name in ItemSkip or name in ItemIDs:
+        if name in ItemIDs:
             continue
-        base = ItemIDBase[name.split("_", 1)[0]]
+        base = ItemIDBase.get(name.split("_", 1)[0], ItemIDBase["SHARED"])
         ItemIDs[name] = max([i for i in ItemIDs.values() if base < i < base + 1000], default=base) + 1
         print(f"  new item {ItemIDs[name]}: {name}")
     if len(set(ItemIDs.values())) != len(ItemIDs):
@@ -430,6 +472,7 @@ def ConvertRawOptions():
 def main():
     GenerateMetaFiles()
     UpdateLocationIDs()
+    GenerateCheckItemFile()
     GenerateItemFile()
     UpdateItemIDs()
     IsolateRegionData()
