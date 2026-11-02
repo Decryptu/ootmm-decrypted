@@ -1,9 +1,10 @@
 from collections.abc import Mapping
 from typing import Any
 
+from Options import Choice, OptionSet, Toggle
 from worlds.AutoWorld import World
 
-from . import web_world, options, items, locations, regions, rules
+from . import web_world, options, items, locations, logic, regions, rules
 
 class OOTxMM(World):
     """
@@ -22,7 +23,11 @@ class OOTxMM(World):
     item_name_to_id = items.ITEM_NAME_TO_ID
     
     origin_region_name = "OOT SPAWN"
-    
+
+    def generate_early(self) -> None:
+        self.ootmm_settings = ootmm_settings(self.options)
+        self.logic = logic.build(self.ootmm_settings)
+
     def create_regions(self) -> None:
         # Compiled access rules, shared by every entrance and location with the same condition.
         self.rule_cache = {}
@@ -41,11 +46,21 @@ class OOTxMM(World):
     def get_filler_item_name(self) -> str:
         return items.get_random_filler_item(self)
 
-    # There may be data that the game client will need to modify the behavior of the game.
-    # This is what slot_data exists for. Upon every client connection, the slot's slot_data is sent to the client.
-    # slot_data is just a dictionary using basic types, that will be converted to json when sent to the client.
-    #def fill_slot_data(self) -> Mapping[str, Any]:
-    #    # If you need access to the player's chosen options on the client side, there is a helper for that.
-    #    return self.options.as_dict(
-    #        "hard_mode", "secret_testing_data"
-    #    )
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        # The player's OoTMM settings, for the patch.
+        return {"settings": self.ootmm_settings}
+
+def ootmm_settings(opts: options.OOTxMMOptions) -> logic.Settings:
+    """The OoTMM settings the options set, keyed and valued as OoTMM's settings."""
+    settings: logic.Settings = {}
+    for key in options.OOTMM_SETTINGS:
+        option = getattr(opts, key)
+        if isinstance(option, Choice):
+            settings[key] = option.ootmm_values[option.value]
+        elif isinstance(option, Toggle):
+            settings[key] = bool(option.value)
+        elif isinstance(option, OptionSet):
+            settings[key] = sorted(option.value)
+        else:
+            settings[key] = int(option.value)
+    return settings

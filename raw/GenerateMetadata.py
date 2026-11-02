@@ -8,7 +8,9 @@ import shutil
 import subprocess
 import sys
 
-from Meta_ForbiddenOptions import ForbiddenOptionNames
+import re
+
+from Meta_Options import NotOffered, NotOfferedCategories
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -198,6 +200,58 @@ def GenerateLogicFile():
     import { logicPassEntrances } from './ootmm/packages/logic/src/solver/entrances.ts';
     import { logicPassWorld } from './ootmm/packages/logic/src/world/builder.ts';
     import { ItemGroups } from './ootmm/packages/logic/src/items/index.ts';
+    import { ExprParser, exprEvent, exprAnd, exprOr, exprTrue, exprFalse } from './ootmm/packages/logic/src/expr/index.ts';
+
+    // The settings the world offers that act only through conditions, and every trick, stay symbolic so
+    // the world evaluates them per player. The parser resolves them to true or false, so its two methods
+    // are wrapped to return a marker event instead, after OoTMM's own checks of the key and value.
+    const symbolic = new Set<string>(JSON.parse(fs.readFileSync('SettingsClasses.json', 'utf8')).logic);
+    // The key and value are the identifiers the method reads with expect().
+    const P: any = ExprParser.prototype;
+    const withIdentifiers = (parse: any, symbol: (ids: string[]) => any) => function (this: any) {
+      const ids: string[] = [];
+      this.expect = (t: string) => { const v = P.expect.call(this, t); if (t === 'identifier') ids.push(v); return v; };
+      try {
+        const expr = parse.call(this);
+        return expr === undefined ? expr : (symbol(ids) ?? expr);
+      } finally {
+        delete this.expect;
+      }
+    };
+    P.parseExprSetting = withIdentifiers(P.parseExprSetting, ([key, value]) =>
+      symbolic.has(key) ? exprEvent(`@setting ${key} ${value ?? ''}`) : undefined);
+    P.parseExprTrick = withIdentifiers(P.parseExprTrick, ([key]) => exprEvent(`@trick ${key}`));
+    // OoTMM only allows "!" and cond() on settings it has already decided. With symbolic settings they
+    // apply to markers, so both are parsed here as OoTMM parses them, negating markers (De Morgan on and/or).
+    const negate = (e: any): any => {
+      if (e === exprTrue()) return exprFalse();
+      if (e === exprFalse()) return exprTrue();
+      if (e.type === 'event' && e.event.startsWith('@')) return exprEvent(e.event.startsWith('@!') ? '@' + e.event.slice(2) : '@!' + e.event.slice(1));
+      if (e.type === 'and') return exprOr(e.exprs.map(negate));
+      if (e.type === 'or') return exprAnd(e.exprs.map(negate));
+      throw new Error('Expression is not allowed at runtime');
+    };
+    P.parseExprNot = function (this: any) {
+      if (this.accept('!')) {
+        const expr = this.parseExprSingle();
+        if (expr === undefined) throw this.error('Expected expression');
+        return negate(expr);
+      }
+    };
+    P.parseExprCond = function (this: any) {
+      if (this.peek('identifier') !== 'cond') return undefined;
+      this.accept('identifier');
+      this.expect('(');
+      const parts = [];
+      for (const sep of [',', ',', ')']) {
+        const expr = this.parseExpr();
+        if (expr === undefined) throw this.error('Expected expression');
+        this.expect(sep);
+        parts.push(expr);
+      }
+      const [cond, then, otherwise] = parts;
+      return exprOr([exprAnd([cond, then]), exprAnd([negate(cond), otherwise])]);
+    };
 
     // OoTMM's pipeline up to the entrance pass, which links the games (Clock Tower and Mask Shop). The
     // world transform pass in between drops the checks default settings leave out, but this world keeps
@@ -229,7 +283,14 @@ def GenerateLogicFile():
       case 'age': id = add(['age', e.age === 0 ? 'child' : 'adult']); break;
       case 'item': id = add(['item', e.item.id, e.count]); break;
       case 'renewable': case 'license': id = add(['item', e.item.id, 1]); break;
-      case 'event': id = add(['event', e.event]); break;
+      case 'event': {
+        // Markers: "@setting key value" or "@trick key", "@!" when negated.
+        const [marker, key, value] = e.event.replace('@!', '@').split(' ');
+        const symbol = marker === '@setting' ? ['setting', key, value || null] : marker === '@trick' ? ['trick', key] : null;
+        if (!symbol) id = add(['event', e.event]);
+        else id = e.event.startsWith('@!') ? add(['not', add(symbol)]) : add(symbol);
+        break;
+      }
       case 'masks': id = add(['count_unique', [...ItemGroups.MASKS_REGULAR_VANILLA_MM].map(x => x.id), e.count]); break;
       case 'and': case 'or': {
         const isAnd = e.type === 'and';
@@ -382,196 +443,151 @@ def IsolateRegionData():
         
 
 def GenerateRawOptionsFile():
-    print("Generating raw options file from source TypeScript...")
-    # Here we invoke node.js to convert the options/setting typescript data into JSON
-    
-    TypeScriptConverter = r"""
+    print("Exporting OoTMM's settings and tricks...")
+    RunTypeScript(r"""
     import fs from 'node:fs';
-    import { SETTINGS } from './ootmm/packages/core/src/settings/data.ts';
+    import { SETTINGS, TRICKS, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
 
-    function replacer(key, value) {
-      if ((key === 'min' || key === 'max') && typeof value === 'function') {
-        return value({ mode: 'single' });
-      }  
-        
-      if (typeof value === 'function') {
-        return undefined; // Returns functions as undefined
-        // return value.toString(); // Returns functions as strings
-      }
-      return value;
-    }
+    // min and max can be functions of the other settings; take their single-player value.
+    const replacer = (key: string, value: any) => {
+      if ((key === 'min' || key === 'max') && typeof value === 'function') return value({ mode: 'single' });
+      return typeof value === 'function' ? undefined : value;
+    };
+    const tricks = Object.entries(TRICKS).map(([key, t]) => ({ key, name: t.name, glitch: !!t.glitch }));
+    fs.writeFileSync('./GreatSettingsJSONdump.json',
+      JSON.stringify({ settings: SETTINGS, tricks, defaultTricks: DEFAULT_SETTINGS.tricks }, replacer, 1) + '\n', 'utf8');
+    """)
 
-    fs.writeFileSync(
-      './GreatSettingsJSONdump.json',
-      JSON.stringify(SETTINGS, replacer, 2),
-      'utf8'
-    );
-    """
-    RunTypeScript(TypeScriptConverter)
-    
-def ConvertRawOptions():
-    print("Converting raw options JSON to AP/python format...")
-    
-    # Load in the raw options JSON
-    RawOptionsData = json.load(open("GreatSettingsJSONdump.json", 'r'))
-    
-    # Now, we will convert the raw options data into a python file that can be used by the AP code.
-    OptionsFile = []
-    ListOfOptions = []
-    
-    # Write the basic header code directly to the file
-    OptionsFile.append("# This file is auto-generated from GenerateMetadata.py. Do not edit directly.")
-    OptionsFile.append("")
-    OptionsFile.append("from dataclasses import dataclass")
-    OptionsFile.append("from Options import OptionGroup, PerGameCommonOptions, Toggle, Choice, Range, OptionSet")
-    OptionsFile.append("")
-    OptionsFile.append("# Toggle, DefaultOnToggle, Choice, Range, NamedRange")
-    OptionsFile.append("# FreeText, TextChoice")
-    OptionsFile.append("")
-    OptionsFile.append("")
+# OoTMM code that reads settings outside conditions: the world must port what a setting does there before
+# offering it. expr/builder.ts and expr/parser.ts only evaluate conditions, settings/ defines the settings
+# and random-settings.ts only rolls them.
+PortSources = ["ootmm/packages/logic/src/**/*.ts", "ootmm/packages/data/build/**/*.ts", "ootmm/packages/core/src/**/*.ts"]
+PortSourcesSkipped = ["logic/src/expr/builder.ts", "logic/src/expr/parser.ts", "core/src/settings/", "core/src/random-settings.ts"]
 
-    # Now, we will iterate through the raw options data and convert it into the AP/python format.
-    for Option in RawOptionsData:
-        # Skip any options that are in the forbidden list
-        if Option["key"] in ForbiddenOptionNames:
-            continue
-        
-        # Inilialize the option name and type variables
-        OptionName = ""
-        OptionType = ""
-        
-        # Choice / enum
-        DescriptionList = []
-        ChoiceList = []
-        
-        # Range / number
-        RangeList = {}
-        
-        # Toggle / boolean
-        ToggleList = []
-        
-        # OptionSet / set
-        ValidKeysList = []
-        ValidKeyStrings = []
-        
-        
-        # Set the class name based on the category and name of the option. Careful to replace any periods to ensure the class loads properly
-        OptionName = "OOTxMM_" + Option["category"].replace(".", "") + "_" + Option["key"]
-        
-        # Add the OptionName to the list of options for later use
-        ListOfOptions.append(OptionName)
-        
-        # Depending on the type of option, convert this to the appropriate AP/python format.
-        if Option["type"] == "enum":
-            try:
-                OptionType = "Choice"
-                for Choice in Option["values"]:
-                    # Archipelago reserves "random" on every Choice and rolls it itself.
-                    if Choice["value"] == "random":
-                        continue
-                    if Choice.get("description"):
-                        DescriptionList.append("    - **" + Choice["value"] + "**: " + Choice["description"])
-                    else:
-                        DescriptionList.append("    - **" + Choice["value"] + "**")
-                    ChoiceList.append(Choice["value"])
-            except Exception as e:
-                OptionsFile.append("ERRTYPE: " + str(e))
-        elif Option["type"] == "number":
-            try:
-                OptionType = "Range"
-                if Option.get("min"):
-                    RangeList["min"] = Option["min"]
-                else: 
-                    RangeList["min"] = 0
-                if Option.get("max"):
-                    RangeList["max"] = Option["max"]
-                else: 
-                    RangeList["max"] = 999
-                if Option.get("default"):
-                    RangeList["default"] = Option["default"]
-                else:
-                    RangeList["default"] = 0
-            except Exception as e:
-                OptionsFile.append("ERRTYPE: " + str(e))
-        elif Option["type"] == "boolean":  
-            try:
-                OptionType = "Toggle"
-                ToggleList.append(str(Option["default"]))
-            except Exception as e:
-                OptionsFile.append("ERRTYPE: " + str(e))
-        elif Option["type"] == "set":  
-            try:
-                OptionType = "OptionSet"
-                ValidKeysList = Option["values"]
-                for validkey in ValidKeysList:
-                    ValidKeyStrings.append(validkey["value"])
-                DescriptionList.append("    " + str(ValidKeyStrings))
-            except Exception as e:
-                OptionsFile.append("ERRTYPE: " + str(e))
+def ClassifySettings():
+    # Each setting is offered or not by what OoTMM does with it:
+    # - port: read by OoTMM's code outside conditions (pool, checks, world shape). Not offered until ported.
+    # - logic: read only by conditions (setting(...) in data/). Offered, and symbolic in the logic dump.
+    # - patch: read by neither, only by the ROM patcher. Offered and passed through.
+    print("Classifying OoTMM's settings...")
+    with open("GreatSettingsJSONdump.json", 'r') as file:
+        settings = json.load(file)["settings"]
+    code = ""
+    for pattern in PortSources:
+        for path in sorted(glob.glob(pattern, recursive=True)):
+            if not any(skip in path.replace("\\", "/") for skip in PortSourcesSkipped):
+                with open(path, 'r', encoding='utf-8') as file:
+                    code += file.read()
+    conditions = ""
+    for path in sorted(glob.glob("ootmm/data/**/*.yml", recursive=True)):
+        with open(path, 'r', encoding='utf-8') as file:
+            conditions += file.read()
+    classes = {"logic": [], "patch": [], "port": [], "not_offered": []}
+    for setting in settings:
+        key = setting["key"]
+        if key in NotOffered or setting["category"] in NotOfferedCategories:
+            kind = "not_offered"
+        elif re.search(rf"\b{key}\b", code):
+            kind = "port"
+        elif re.search(rf"\bsetting\(\s*{key}\b", conditions):
+            kind = "logic"
         else:
-            OptionType = "ERRUNKNOWN"
-    
-        try:
-            OptionsFile.append("class " + OptionName + "(" + OptionType + "):")
-            OptionsFile.append("    \"\"\"")
-            OptionsFile.append("    " + Option["description"])
-            if len(DescriptionList) > 0:
-                for Description in DescriptionList:
-                    OptionsFile.append(Description)
-            OptionsFile.append("    \"\"\"")
-            OptionsFile.append("    display_name = \"" + Option["name"] + "\"")
-            if len(ChoiceList) > 0:
-                for Choice in ChoiceList:
-                    OptionsFile.append("    option_"+Choice+" = "+str(ChoiceList.index(Choice)))
-                if Option["default"] == "random":
-                    OptionsFile.append("    default = \"random\"")
-                else:
-                    OptionsFile.append("    default = option_" + Option["default"])
-            if len(RangeList) > 0:
-                OptionsFile.append("    range_start = " + str(RangeList["min"]))
-                OptionsFile.append("    range_end = " + str(RangeList["max"]))
-                OptionsFile.append("    default = " + str(RangeList["default"]))
-            if len(ToggleList) > 0:
-                for Toggle in ToggleList:
-                    OptionsFile.append("    default = " + Toggle)
-            if len(ValidKeysList) > 0:
-                OptionsFile.append("    valid_keys = {")
-                for ValidKey in ValidKeysList:
-                    OptionsFile.append("        \'" + ValidKey["value"] + "\',")
-                OptionsFile.append("    }")
-                OptionsFile.append("    default = valid_keys.copy()")
-            OptionsFile.append("")
-            
-        except Exception as e:
-            OptionsFile.append("ERRWRITE: " + str(e))
-            
-    # Write the basic footer code directly to the file  
-    OptionsFile.append("")
-    OptionsFile.append("@dataclass")
-    OptionsFile.append("class OOTxMMOptions(PerGameCommonOptions):")
-    for Option in ListOfOptions:
-        OptionsFile.append("    " + Option + ": " + Option)
-    OptionsFile.append("")
-    OptionsFile.append("option_groups = []")
-    OptionsFile.append("")
-    OptionsFile.append("option_presets = {}")
-    OptionsFile.append("")
-    
-    # Finally, write the options file to disk
-    with open("GeneratedOptions.py", 'w') as outfile:
-        for line in OptionsFile:
-            outfile.write(line + "\n")
+            kind = "patch"
+        classes[kind].append(key)
+    print("  " + ", ".join(f"{kind}: {len(keys)}" for kind, keys in classes.items()))
+    with open("SettingsClasses.json", 'w') as file:
+        json.dump(classes, file, indent=1)
+        file.write("\n")
+
+def Docstring(lines):
+    text = "\n".join(lines).replace("\\", "\\\\").replace('"""', '\\"\\"\\"')
+    return ['    """', *("    " + line if line else "" for line in text.split("\n")), '    """']
+
+def ConvertRawOptions():
+    # Offered settings become options named by their OoTMM key, so the world can hand them to the patch
+    # as they are (OOTMM_SETTINGS). The tricks are one option set.
+    print("Converting the offered settings to options...")
+    with open("GreatSettingsJSONdump.json", 'r') as file:
+        dump = json.load(file)
+    with open("SettingsClasses.json", 'r') as file:
+        classes = json.load(file)
+    offered = set(classes["logic"]) | set(classes["patch"])
+    lines = [
+        "# Generated by raw/GenerateMetadata.py from OoTMM's settings. Do not edit by hand.",
+        "",
+        "from dataclasses import dataclass",
+        "from Options import OptionGroup, PerGameCommonOptions, Toggle, DefaultOnToggle, Choice, Range, OptionSet",
+        "",
+        "",
+    ]
+    fields = []
+    groups: dict[str, list[str]] = {}
+    for setting in dump["settings"]:
+        key = setting["key"]
+        if key not in offered:
+            continue
+        cls = f"OOTxMM_{key}"
+        doc = [setting.get("description") or setting["name"]]
+        body = [f"    display_name = {json.dumps(setting['name'])}"]
+        if setting["type"] == "enum":
+            # Archipelago reserves "random" on every Choice and rolls it itself.
+            values = [v for v in setting["values"] if v["value"] != "random"]
+            doc += [f"- **{v['value']}**: {v['description']}" if v.get("description") else f"- **{v['value']}**" for v in values]
+            body += [f"    option_{v['value']} = {i}" for i, v in enumerate(values)]
+            # Archipelago lowercases option names; OoTMM's values keep their case.
+            body.append(f"    ootmm_values = {[v['value'] for v in values]!r}")
+            body.append('    default = "random"' if setting["default"] == "random" else f"    default = option_{setting['default']}")
+            base = "Choice"
+        elif setting["type"] == "number":
+            body += [f"    range_start = {setting.get('min', 0)}", f"    range_end = {setting.get('max', 999)}", f"    default = {setting['default']}"]
+            base = "Range"
+        elif setting["type"] == "boolean":
+            base = "DefaultOnToggle" if setting["default"] else "Toggle"
+        elif setting["type"] == "set":
+            values = [v["value"] for v in setting["values"]]
+            doc.append("Values: " + ", ".join(values))
+            default = setting["default"]
+            if isinstance(default, dict):
+                # A set default is {type: all, none or specific, values}.
+                default = values if default.get("type") == "all" else default.get("values", [])
+            body += [f"    valid_keys = {values!r}", f"    default = frozenset({sorted(default)!r})"]
+            base = "OptionSet"
+        else:
+            raise ValueError(f"Setting {key}: unknown type {setting['type']}")
+        lines += [f"class {cls}({base}):", *Docstring(doc), *body, "", ""]
+        fields.append((key, cls))
+        groups.setdefault(setting["category"], []).append(cls)
+    tricks = dump["tricks"]
+    doc = ["Tricks the logic may expect."] + [f"- **{t['key']}**: {t['name']}{' (glitch)' if t['glitch'] else ''}" for t in tricks]
+    lines += ["class OOTxMM_tricks(OptionSet):", *Docstring(doc),
+              '    display_name = "Tricks"',
+              f"    valid_keys = {[t['key'] for t in tricks]!r}",
+              f"    default = frozenset({sorted(dump['defaultTricks'])!r})", "", ""]
+    fields.append(("tricks", "OOTxMM_tricks"))
+    groups.setdefault("logic.tricks", []).append("OOTxMM_tricks")
+    lines += ["@dataclass", "class OOTxMMOptions(PerGameCommonOptions):"]
+    lines += [f"    {key}: {cls}" for key, cls in fields]
+    lines += ["", "", "# The OoTMM setting keys of the options above: the patch takes their values as they are.",
+              f"OOTMM_SETTINGS = {[key for key, _ in fields]!r}", "",
+              "# By OoTMM's setting category.", "option_groups = ["]
+    # Categories are keys like "cutscenes.bosses.oot": shown as "Cutscenes / Bosses / Oot".
+    lines += [f"    OptionGroup({json.dumps(' / '.join(part[:1].upper() + part[1:] for part in category.split('.')))}, [{', '.join(members)}]),"
+              for category, members in groups.items()]
+    lines += ["]", "", "option_presets = {}", ""]
+    with open("GeneratedOptions.py", 'w', encoding='utf-8') as outfile:
+        outfile.write("\n".join(lines))
 
 
 def main():
     GenerateMetaFiles()
+    GenerateRawOptionsFile()
+    ClassifySettings()
     GenerateLogicFile()
     UpdateLocationIDs()
     GenerateCheckItemFile()
     GenerateItemFile()
     UpdateItemIDs()
     IsolateRegionData()
-    GenerateRawOptionsFile()
     ConvertRawOptions()
     shutil.copyfile("GeneratedOptions.py", "../options.py")
 
