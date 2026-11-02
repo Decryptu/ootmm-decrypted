@@ -10,7 +10,7 @@ It continues Quasky's [AP-OOTMM](https://github.com/Quasky/AP-OOTMM), with its f
 
 ## Status
 
-Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions, locations and items are in, but the item pool is a placeholder, there is no logic (everything is open), and there is no ROM patch or client. [ROADMAP.md](ROADMAP.md) lists what is left.
+Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions, locations and items are in, the pool is OoTMM's base pool with every check shuffled, there is no logic (everything is open), and there is no ROM patch or client. [ROADMAP.md](ROADMAP.md) lists what is left.
 
 ## What you need
 

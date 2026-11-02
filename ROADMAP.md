@@ -8,9 +8,8 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Planned, in order
 | Item | Notes |
 |---|---|
-| Item pool | The items come from OoTMM, but the pool is a placeholder: one of every non-junk item, then random junk. Port OoTMM's pool rules per option (`packages/logic`), and mark which items are progression once the logic exists |
-| Logic | `rules.py` still holds the Archipelago example world's rules, unused: every entrance and location is open. Translate OoTMM's world-file conditions and macros (`raw/GreatMacroJSONdump.json`) into access rules, including the per-parent entrances of multi-region checks ([DEVELOPMENT.md](DEVELOPMENT.md#metadata)) |
-| Options | Only keep options that make sense in a multiworld (`raw/Meta_ForbiddenOptions.py` lists the excluded ones), and pass them to the patch |
+| Logic | `rules.py` still holds the Archipelago example world's rules, unused: every entrance and location is open. Translate OoTMM's world-file conditions and macros (`raw/GreatMacroJSONdump.json`) into access rules, including the per-parent entrances of multi-region checks ([DEVELOPMENT.md](DEVELOPMENT.md#metadata)). Then mark as progression only the items the logic uses: today every non-junk item is |
+| Options | Only keep options that make sense in a multiworld (`raw/Meta_ForbiddenOptions.py` lists the excluded ones), and pass them to the patch. Options also decide which checks exist and what the pool holds: the world creates every check (pots, grass and the like, which OoTMM leaves out by default) and uses OoTMM's base pool only. Port `run()` in OoTMM's `packages/logic/src/world/transform.ts` (check filters, souls, keys, shared items, `itemPool` scarce/plentiful) alongside each option |
 | Goal | The completion condition is a placeholder `BEAT MAJORA` event on `MM Moon`; follow the `main_goal` option (Ganon, Majora, both, Triforce) |
 | ROM patch | Produce a per-player patch file that OoTMM's generator turns into the combo ROM, with this seed's item placements |
 | Client | Item send/receive with the running game (emulator connector, likely BizHawk like the other N64 worlds) |

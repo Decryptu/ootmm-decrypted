@@ -32,6 +32,7 @@ WORLD_FILES = [
     "raw/GreatWorldJSONdump.json",
     "raw/GreatMacroJSONdump.json",
     "raw/LocationIDs.json",
+    "raw/GreatCheckItemJSONdump.json",
     "raw/GreatItemJSONdump.json",
     "raw/ItemIDs.json",
 ]
