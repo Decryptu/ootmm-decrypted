@@ -1,0 +1,52 @@
+name: World
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Archipelago 0.6.8, as in tools/apworld-test.ps1.
+  AP_REF: 54803be064fc7e80c4628777ed0b46a9390f255f
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: world
+      - uses: actions/checkout@v4
+        with:
+          repository: ArchipelagoMW/Archipelago
+          ref: ${{ env.AP_REF }}
+          path: archipelago
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: archipelago/ci-requirements.txt
+      - name: Install Archipelago
+        working-directory: archipelago
+        run: |
+          python -m pip install -r ci-requirements.txt
+          python ModuleUpdate.py --yes --force --append WebHostLib/requirements.txt
+          python Launcher.py --update_settings
+      - name: Pack the world
+        run: |
+          python world/tools/build_apworld.py --dir archipelago/worlds/ootxmm
+          python world/tools/build_apworld.py ootxmm.apworld
+      - name: Test
+        working-directory: archipelago
+        env:
+          SKIP_REQUIREMENTS_UPDATE: "1"
+        run: python -m pytest test/general test/benchmark worlds/ootxmm -n auto -q
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ootxmm.apworld
+          path: ootxmm.apworld
