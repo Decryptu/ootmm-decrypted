@@ -30,9 +30,26 @@ MacroSources = {
 LocationIDFile = "LocationIDs.json"
 LocationIDBase = {"OOT": 100000, "MM": 200000}
 
+# Item IDs work the same way, keyed by OoTMM's item ID (OOT_SWORD): OoT 1001-1999, MM 2001-2999, shared 3001-3999.
+ItemIDFile = "ItemIDs.json"
+ItemIDBase = {"OOT": 1000, "MM": 2000, "SHARED": 3000}
+# Not an item: OoTMM's placeholder for an empty check.
+ItemSkip = {"NOTHING"}
+
 def LoadYAML(Path):
     with open(Path, 'r', encoding='utf-8') as file:
         return yaml.safe_load(file) or {}
+
+def RunTypeScript(Code):
+    # Run from a file, not "tsx --eval": npx is a .cmd script on Windows, which needs the shell to
+    # launch, and cmd.exe would cut a multi-line argument and read ">" as a redirect.
+    ScriptPath = "_generate.mts"
+    with open(ScriptPath, 'w', encoding='utf-8') as file:
+        file.write(Code)
+    try:
+        subprocess.run(["npx", "tsx", ScriptPath], check=True, shell=sys.platform == "win32")
+    finally:
+        os.remove(ScriptPath)
 
 def GenerateMetaFiles():
     print("Generating world+macro files from OOTMM data...")
@@ -120,6 +137,78 @@ def UpdateLocationIDs():
         file.write("\n")
 
 
+def GenerateItemFile():
+    print("Generating item file from OoTMM item data...")
+    # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts).
+    TypeScriptConverter = r"""
+    import fs from 'node:fs';
+    import { Items } from './ootmm/packages/logic/src/items/defs.ts';
+    import * as Groups from './ootmm/packages/logic/src/items/groups.ts';
+    import { itemName } from './ootmm/packages/generator/lib/combo/names.ts';
+
+    const items = Object.keys(Items).map(id => ({
+      id,
+      name: itemName(id),
+      trap: Groups.TRAPS.has(Items[id]),
+      junk: Groups.JUNK.has(Items[id]),
+    }));
+    fs.writeFileSync('./GreatItemJSONdump.json', JSON.stringify(items, null, 1) + '\n', 'utf8');
+    """
+    RunTypeScript(TypeScriptConverter)
+    with open("GreatItemJSONdump.json", 'r') as file:
+        items = json.load(file)
+    UniqueItemNames(items)
+    with open("GreatItemJSONdump.json", 'w') as file:
+        json.dump(items, file, indent=1)
+        file.write("\n")
+
+
+def UniqueItemNames(items):
+    # Archipelago needs unique item names; OoTMM reuses some ("Blue Fire" exists for OoT, MM and shared).
+    # A reused name gets its game added to the OoT and MM items, leaving the shared one plain;
+    # any still reused gets its OoTMM ID added, except the first.
+    def Duplicates():
+        counts = {}
+        for item in items:
+            counts[item["name"]] = counts.get(item["name"], 0) + 1
+        return {name for name, count in counts.items() if count > 1}
+    suffix = {"OOT": " (OoT)", "MM": " (MM)"}
+    duplicates = Duplicates()
+    for item in items:
+        game = item["id"].split("_", 1)[0]
+        if item["name"] in duplicates and game in suffix and not item["name"].endswith(suffix[game]):
+            item["name"] += suffix[game]
+    seen = set()
+    for item in sorted(items, key=lambda item: item["id"]):
+        if item["name"] in seen:
+            item["name"] += f" ({item['id']})"
+        seen.add(item["name"])
+    if Duplicates():
+        raise ValueError(f"Item names still reused: {sorted(Duplicates())}")
+
+
+def UpdateItemIDs():
+    print("Updating the item ID registry...")
+    with open("GreatItemJSONdump.json", 'r') as file:
+        items = json.load(file)
+    ItemIDs = {}
+    if os.path.exists(ItemIDFile):
+        with open(ItemIDFile, 'r') as file:
+            ItemIDs = json.load(file)
+    for item in sorted(items, key=lambda item: item["id"]):
+        name = item["id"]
+        if name in ItemSkip or name in ItemIDs:
+            continue
+        base = ItemIDBase[name.split("_", 1)[0]]
+        ItemIDs[name] = max([i for i in ItemIDs.values() if base < i < base + 1000], default=base) + 1
+        print(f"  new item {ItemIDs[name]}: {name}")
+    if len(set(ItemIDs.values())) != len(ItemIDs):
+        raise ValueError(f"{ItemIDFile} has duplicate IDs")
+    with open(ItemIDFile, 'w') as file:
+        json.dump(dict(sorted(ItemIDs.items(), key=lambda entry: entry[1])), file, indent=1)
+        file.write("\n")
+
+
 def IsolateRegionData():
     print("Isolating location+entrance data from world files...")
     # As a test of strength, we'll isolate only the needed region data from the world dump.
@@ -182,13 +271,7 @@ def GenerateRawOptionsFile():
       'utf8'
     );
     """
-    
-    # npx is a .cmd script on Windows, which needs the shell to launch.
-    subprocess.run(
-    ["npx", "tsx", "--eval", TypeScriptConverter],
-    check=True,
-    shell=sys.platform == "win32",
-    )
+    RunTypeScript(TypeScriptConverter)
     
 def ConvertRawOptions():
     print("Converting raw options JSON to AP/python format...")
@@ -347,6 +430,8 @@ def ConvertRawOptions():
 def main():
     GenerateMetaFiles()
     UpdateLocationIDs()
+    GenerateItemFile()
+    UpdateItemIDs()
     IsolateRegionData()
     GenerateRawOptionsFile()
     ConvertRawOptions()
