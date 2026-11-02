@@ -1,5 +1,6 @@
 # Runs the world's tests the way .github/workflows/apworld.yml does: inside an Archipelago 0.6.8
-# source checkout, with the world copied to worlds/ootxmm (tools/build_apworld.py picks the files).
+# source checkout, with the world copied to worlds/ootxmm (tools/build_apworld.py picks the files)
+# and every other game removed (tools/prune_worlds.py).
 #
 #   pwsh tools/apworld-test.ps1                  # Archipelago's generic world tests plus ours
 #   pwsh tools/apworld-test.ps1 -k TestBase      # extra arguments go to pytest
@@ -46,6 +47,7 @@ if (-not (Test-Path $marker) -or (Get-Content $marker) -ne $apRef) {
 $world = Join-Path $ap "worlds\ootxmm"
 if (Test-Path $world) { Remove-Item -Recurse -Force $world }
 Run $python @((Join-Path $repo "tools\build_apworld.py"), "--dir", $world)
+Run $python @((Join-Path $repo "tools\prune_worlds.py"), $ap)
 
 Push-Location $ap
 try {
