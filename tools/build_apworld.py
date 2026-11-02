@@ -31,6 +31,7 @@ WORLD_FILES = [
     # The only metadata the world reads at runtime (ootxmm_staticdata.py).
     "raw/GreatWorldJSONdump.json",
     "raw/GreatMacroJSONdump.json",
+    "raw/LocationIDs.json",
 ]
 WORLD_DIRS = ["test"]
 
