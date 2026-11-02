@@ -1,3 +1,17 @@
+# Repository-wide generated and private inputs.
+#
+# Machine-specific files belong in `.git/info/exclude`.
+
+# The player's own ROMs (OoT 1.0 NTSC-U, MM NTSC-U). Never commit them.
+/roms/
+*.z64
+*.n64
+*.v64
+
+# Packed worlds and seeds.
+/dist/
+*.apworld
+
 raw/ootmm/*
 raw/tmpbuild
 
