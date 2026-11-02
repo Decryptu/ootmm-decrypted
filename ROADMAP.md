@@ -8,7 +8,7 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 ## Planned, in order
 | Item | Notes |
 |---|---|
-| More options | The world offers the settings that only change conditions or the ROM ([DEVELOPMENT.md](DEVELOPMENT.md#options)). The rest (the `port` class in `raw/SettingsClasses.json`) change which checks exist, the pool or the world's shape: port each with what `run()` in OoTMM's `packages/logic/src/world/transform.ts` does for it (check filters, souls, keys, shared items, `itemPool`), then let the generator offer it. The world creates every check (pots, grass and the like, which OoTMM leaves out by default) and uses OoTMM's base pool only |
+| More options | The world offers the settings that only change conditions or the ROM ([DEVELOPMENT.md](DEVELOPMENT.md#options)). The rest (the `port` class in `raw/SettingsClasses.json`) change which checks exist, the pool or the world's shape: port each with what `run()` in OoTMM's `packages/logic/src/world/transform.ts` does for it (check filters, souls, keys, shared items, `itemPool`), then add it to `Ported` ([DEVELOPMENT.md](DEVELOPMENT.md#options)). The check filters are ported; the pool is still OoTMM's base pool, so pool changes (souls, keys, shared items, `itemPool`, `pondFishShuffle`) come next |
 | Goal | The completion condition is OoTMM's `MM_MAJORA` event; follow OoTMM's `goal` setting (Ganon, Majora, both, Triforce), which is not offered yet |
 | ROM patch | Produce a per-player patch file that OoTMM's generator turns into the combo ROM, with this seed's item placements |
 | Client | Item send/receive with the running game (emulator connector, likely BizHawk like the other N64 worlds) |

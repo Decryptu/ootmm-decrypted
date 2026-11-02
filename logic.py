@@ -2,7 +2,8 @@
 
 OoTMM explores every area once per age, so each region exists as a child and an adult copy, and each
 condition is specialized to the copy's age and the player's settings and tricks. A condition on an item the
-pool never holds, or on an event nothing can trigger, is false, as it is for OoTMM. Copies no exit can reach
+pool never holds, or on an event nothing can trigger, is false, as it is for OoTMM. Checks the settings leave
+out (removed_checks) don't exist. Copies no exit can reach
 with every pool item, and exits, checks and events whose condition is then false, are left out.
 """
 from __future__ import annotations
@@ -31,6 +32,87 @@ Settings = dict[str, Any]
 
 _nodes = ootxmm_staticdata.OOTxMMLogic["nodes"]
 _areas = ootxmm_staticdata.OOTxMMLogic["areas"]
+_check_info = ootxmm_staticdata.OOTxMMCheckInfo
+
+# The check filters of run() in OoTMM's packages/logic/src/world/transform.ts (filterChecks*): setting key ->
+# the check type it shuffles in its game. A setting is a toggle or none, all, overworld or dungeons.
+CHECK_FILTERS = {
+    "shufflePotsOot": "pot", "shufflePotsMm": "pot", "shuffleCratesOot": "crate", "shuffleCratesMm": "crate",
+    "shuffleBarrelsMm": "barrel", "pondFishShuffle": "fish",
+    "shuffleFreeRupeesOot": "rupee", "shuffleFreeRupeesMm": "rupee",
+    "shuffleFreeHeartsOot": "heart", "shuffleFreeHeartsMm": "heart",
+    "shuffleHivesOot": "hive", "shuffleHivesMm": "hive", "shuffleGrassOot": "grass", "shuffleGrassMm": "grass",
+    "shuffleRocksOot": "rock", "shuffleRocksMm": "rock", "shuffleTreesOot": "tree", "shuffleTreesMm": "tree",
+    "shuffleBushOot": "bush", "shuffleBushMm": "bush", "shuffleSoilOot": "soil", "shuffleSoilMm": "soil",
+    "shuffleGossipFairiesOot": "gossip", "shuffleGossipBigFairiesOot": "gossip-big",
+    "shuffleGossipFairiesMm": "gossip", "shuffleGossipBigFairiesMm": "gossip-big",
+    "shuffleWonderItemsOot": "wonder", "shuffleWonderItemsMm": "wonder",
+    "shuffleButterfliesOot": "butterfly", "shuffleButterfliesMm": "butterfly",
+    "shuffleBouldersOot": "boulder", "shuffleBouldersMm": "boulder",
+    "shuffleRedBouldersOot": "boulder-red", "shuffleRedBouldersMm": "boulder-red",
+    "shuffleSilverBouldersOot": "boulder-silver", "shuffleSnowballsMm": "snowball",
+    "shuffleIciclesOot": "icicle", "shuffleIciclesMm": "icicle", "shuffleRedIceOot": "redice",
+    "fairyFountainFairyShuffleOot": "fairy", "fairyFountainFairyShuffleMm": "fairy",
+    "fairySpotShuffleOot": "fairy-spot",
+}
+
+# The check settings removed_checks follows: test/test_checks.py checks that every setting raw/Meta_Options.py
+# lists as ported (PORTED_SETTINGS in options.py) is one. A setting the world doesn't offer keeps OoTMM's default.
+CHECK_SETTINGS = [
+    *CHECK_FILTERS, "restoreBrokenActors", "shuffleMaskTrades", "divingGameRupeeShuffle",
+    "shuffleSkulltulaFinalReward", "shuffleTFGrassMm", "eggShuffle",
+]
+
+def _value(settings: Settings, key: str) -> Any:
+    # Settings the world doesn't offer keep OoTMM's default.
+    return settings[key] if key in settings else ootxmm_staticdata.OOTxMMSettingDefaults[key]
+
+def _set_has(value: Any, member: str) -> bool:
+    # An offered set setting is a list; OoTMM's default is {type: all, none or specific, values}.
+    if isinstance(value, dict):
+        return value.get("type") == "all" or member in value.get("values", [])
+    return member in value
+
+def removed_checks(settings: Settings) -> set[str]:
+    """The checks OoTMM leaves out with these settings, as run() in its world/transform.ts removes them."""
+    removed: set[str] = set()
+    def checks(type_: str, scene: str | None = None) -> list[str]:
+        return [name for name, (t, s, _) in _check_info["checks"].items() if t == type_ and scene in (None, s)]
+    for key, type_ in CHECK_FILTERS.items():
+        value = _value(settings, key)
+        prefix = "MM " if key.endswith("Mm") else "OOT "
+        for name in checks(type_):
+            in_dungeon = _check_info["checks"][name][2]
+            if name.startswith(prefix) and (value in (False, "none") or (value == "overworld" and in_dungeon)
+                                            or (value == "dungeons" and not in_dungeon)):
+                removed.add(name)
+    if not _value(settings, "restoreBrokenActors"):
+        removed.update(_check_info["brokenActors"])
+    if not _value(settings, "shuffleMaskTrades"):
+        removed.update(_check_info["sellMasks"])
+    if _value(settings, "goal") in ("triforce", "triforce3"):
+        removed.update(checks("pot", "OOT_GANON_TOWER") + checks("pot", "MM_LAIR_MAJORA"))
+    if not _value(settings, "shuffleTFGrassMm"):
+        removed.update(checks("grass", "MM_TERMINA_FIELD"))
+    # Water rocks need the Iron Boots and the Blast Mask at one age.
+    blast = (_value(settings, "mmAgeReqChildMaskBlast"), _value(settings, "mmAgeReqAdultMaskBlast"))
+    boots = (_value(settings, "mmAgeReqChildBootsIron"), _value(settings, "mmAgeReqAdultBootsIron"))
+    if not _value(settings, "bootsIronMm") or (blast[0] and boots[1]) or (blast[1] and boots[0]):
+        removed.update(_check_info["mmWaterRocks"])
+    if not _value(settings, "stoneMaskOot"):
+        removed.add("OOT Hyrule Castle Tree Guarded")
+    if (_value(settings, "logic") == "allLocations" and "MM_GORON_BOMB_JUMP" not in _value(settings, "tricks")
+            and _value(settings, "hookshotAnywhereMm") != "logical"):
+        removed.update(checks("tree", "MM_GORMAN_TRACK"))
+    if not _value(settings, "agelessStrength") or _set_has(_value(settings, "openDungeonsOot"), "fireChild"):
+        removed.update(f"OOT Death Mountain Crater Silver Boulder {i}" for i in (1, 2, 3))
+    if not _value(settings, "divingGameRupeeShuffle"):
+        removed.update(f"OOT Zora Domain Diving Game {color} Rupee" for color in ("Green", "Blue", "Red", "Purple", "Huge"))
+    if not _value(settings, "shuffleSkulltulaFinalReward"):
+        removed.add("OOT Skulltula House 100 Tokens")
+    if not _value(settings, "eggShuffle"):
+        removed.update(("OOT Hatch Chicken", "OOT Hatch Pocket Cucco"))
+    return removed
 
 class _Specializer:
     """Conditions specialized to an age and the settings, with the items and events that can't happen folded to false."""
@@ -132,9 +214,9 @@ class Logic:
     checks, events: name -> [(area, age, condition)]: the parents a check or event can be reached from.
     items: the OoTMM item IDs some condition asks for, which are the progression items.
     """
-    def __init__(self, settings: Settings):
+    def __init__(self, settings: Settings, removed: set[str]):
         # Start from every check's item and drop those whose check turns out unreachable, until it settles.
-        items = set(ootxmm_staticdata.OOTxMMCheckItems.values()) | set(EXTRA_ITEMS)
+        items = {item for name, item in ootxmm_staticdata.OOTxMMCheckItems.items() if name not in removed} | set(EXTRA_ITEMS)
         while True:
             regions, events = _explore(_Specializer(settings, items, None))
             specialize = _Specializer(settings, items, events)
@@ -150,6 +232,8 @@ class Logic:
             for area, age in sorted(regions):
                 for kind, targets in (("locations", checks), ("events", event_parents)):
                     for name, node in _areas[area][kind].items():
+                        if kind == "locations" and name in removed:
+                            continue
                         if (cond := specialize(node, age)) is not False:
                             targets.setdefault(name, []).append((area, age, cond))
             # The pool is the vanilla items of the checks that exist, so it depends on which can be reached.
@@ -175,8 +259,9 @@ LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) an
 _cache: dict[tuple, Logic] = {}
 
 def build(settings: Settings) -> Logic:
-    """The graph for these settings. Players with the same logic settings and tricks share one."""
-    key = (tuple(settings[k] for k in LOGIC_SETTINGS), tuple(sorted(settings["tricks"])))
+    """The graph for these settings. Players with the same logic settings, tricks and checks share one."""
+    removed = removed_checks(settings)
+    key = (tuple(settings[k] for k in LOGIC_SETTINGS), tuple(sorted(settings["tricks"])), frozenset(removed))
     if key not in _cache:
-        _cache[key] = Logic(settings)
+        _cache[key] = Logic(settings, removed)
     return _cache[key]
