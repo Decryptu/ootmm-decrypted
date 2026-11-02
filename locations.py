@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
 
-from . import items, ootxmm_staticdata
+from . import items, logic, ootxmm_staticdata, rules
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -11,57 +11,38 @@ if TYPE_CHECKING:
 class OOTxMMLocation(Location):
     game = "OOTxMM"
 
-class OOTxMMLocationData:
-    def __init__(
-        self,
-        id: int | None,
-        display_name: str,
-        core_name: str,
-        parents: list[str],
-    ):
-        self.id = id
-        self.display_name = display_name
-        self.core_name = core_name
-        # OoTMM lists some checks under several regions: the check is reachable from any of them.
-        self.parents = parents
-
-LocationParents: dict[str, list[str]] = {}
-for region, regiondata in ootxmm_staticdata.OOTxMMRegionData.items():
-    for regionlocation in regiondata.get("locations") or {}:
-        LocationParents.setdefault(regionlocation, []).append(region)
-
-# IDs come from the registry raw/GenerateMetadata.py keeps, so they stay the same across OoTMM releases.
-OOTxMMLocationList = [
-    OOTxMMLocationData(ootxmm_staticdata.OOTxMMLocationIDs[name], name, name, parents)
-    for name, parents in LocationParents.items()
-]
-
-LOCATION_NAME_TO_ID = {item.display_name: item.id for item in OOTxMMLocationList}
-
-def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
-    return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
+# Every check in the world dump has an ID, from the registry raw/GenerateMetadata.py keeps, so IDs stay
+# the same across OoTMM releases. Checks no region can reach at either age are not created.
+LOCATION_NAME_TO_ID = {
+    name: ootxmm_staticdata.OOTxMMLocationIDs[name]
+    for regiondata in ootxmm_staticdata.OOTxMMRegionData.values()
+    for name in regiondata.get("locations") or {}
+}
 
 def create_all_locations(world: OOTxMM) -> None:
-    create_regular_locations(world)
-    create_events(world)
+    for name, parents in logic.CHECKS.items():
+        location = OOTxMMLocation(world.player, name, LOCATION_NAME_TO_ID[name])
+        place(world, location, parents, "check")
+    # OoTMM's events become event items on locations of the same name.
+    for event, parents in logic.EVENTS.items():
+        location = OOTxMMLocation(world.player, event, None)
+        location.place_locked_item(items.OOTxMMItem(event, items.ItemClassification.progression, None, world.player))
+        place(world, location, parents, "event")
 
-def create_regular_locations(world: OOTxMM) -> None:
-    for location in OOTxMMLocationList:
-        loc = get_location_names_with_ids([location.display_name])
-        if len(location.parents) == 1:
-            world.get_region(location.parents[0]).add_locations(loc, OOTxMMLocation)
-            continue
-        # A location can only have one region, so a check with several parents gets its own region,
-        # entered from each parent. The access rule for each parent goes on that entrance.
-        check_region = Region(f"{location.display_name} (check)", world.player, world.multiworld)
-        world.multiworld.regions.append(check_region)
-        check_region.add_locations(loc, OOTxMMLocation)
-        for parent in location.parents:
-            world.get_region(parent).connect(check_region, f"{parent} to {location.display_name}")
-
-def create_events(world: OOTxMM) -> None:
-    final_boss_room = world.get_region("MM Moon")
-
-    final_boss_room.add_event(
-        "BEAT MAJORA", "Victory", location_type=OOTxMMLocation, item_type=items.OOTxMMItem
-    )
+def place(world: OOTxMM, location: OOTxMMLocation, parents: list, kind: str) -> None:
+    # A location has one region. OoTMM can list it under several regions and ages, meaning reachable from
+    # any of them: it then gets its own region, entered from each parent with that parent's condition.
+    if len(parents) == 1:
+        area, age, cond = parents[0]
+        region = world.get_region(logic.region_name(area, age))
+        rule = rules.compile_rule(world, cond, world.rule_cache)
+        if rule:
+            location.access_rule = rule
+    else:
+        region = Region(f"{location.name} ({kind})", world.player, world.multiworld)
+        world.multiworld.regions.append(region)
+        for area, age, cond in parents:
+            parent = world.get_region(logic.region_name(area, age))
+            parent.connect(region, f"{parent.name} to {location.name}", rules.compile_rule(world, cond, world.rule_cache))
+    location.parent_region = region
+    region.locations.append(location)

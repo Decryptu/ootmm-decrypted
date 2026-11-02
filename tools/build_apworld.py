@@ -19,6 +19,7 @@ WORLD_FILES = [
     "archipelago.json",
     "items.py",
     "locations.py",
+    "logic.py",
     "ootxmm_staticdata.py",
     "options.py",
     "regions.py",
@@ -30,7 +31,7 @@ WORLD_FILES = [
     "docs/setup_en.md",
     # The only metadata the world reads at runtime (ootxmm_staticdata.py).
     "raw/GreatWorldJSONdump.json",
-    "raw/GreatMacroJSONdump.json",
+    "raw/GreatLogicJSONdump.json",
     "raw/LocationIDs.json",
     "raw/GreatCheckItemJSONdump.json",
     "raw/GreatItemJSONdump.json",
