@@ -10,7 +10,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 ## Repository layout
 | Path | Contents |
 |---|---|
-| `world.py` | The `World` class: game name, origin region, the generation steps |
+| `world.py` | The `World` class: game name, origin region (`OOT SPAWN`), the generation steps |
 | `items.py` | Static item lists and the item ID scheme (below) |
 | `locations.py`, `regions.py` | Locations and regions built at import from `raw/GreatWorldJSONdump.json` |
 | `rules.py` | Access rules and the completion condition |
@@ -26,7 +26,15 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 `raw/GenerateMetadata.py` is the single place OoTMM data is converted. To regenerate:
 1. Put an OoTMM checkout of the release we track ([ROADMAP.md](ROADMAP.md#decisions)) in `raw/ootmm` (ignored by git): `git clone --depth 1 --branch v33.0 https://github.com/OoTMM/OoTMM.git raw/ootmm`. Name the release in the commit message.
 2. From `raw/` (the script uses relative paths), run `python GenerateMetadata.py`. It needs PyYAML, and Node with `npx tsx` for the settings step, which reads `ootmm/packages/core/src/settings/data.ts`.
-3. It merges `data/world` and `data/macros` into the `Great*` dumps, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`.
+3. It merges `data/world` and `data/macros` into the `Great*` dumps, splits out the `Isolated*` files, converts the settings into `GeneratedOptions.py` (skipping the names in `Meta_ForbiddenOptions.py`) and copies that over `../options.py`. Any error stops it.
+
+What the world data looks like, and why:
+- **Default variant only.** `WorldSources` lists the files OoTMM's `packages/data/build/world.ts` loads for default settings: no `dungeons_mq` (Master Quest) and no `mm/jp` (the `jpLayouts` Deku Palace). Those files reuse the vanilla region names, so they can't share one dump.
+- **Game prefix.** OoT and MM reuse names (shops, `GLOBAL`, `VOID`), so every region and location is named `OOT <name>` or `MM <name>`, like OoTMM's internal IDs. An exit that already starts with a prefix points into the other game. The spawn is `OOT SPAWN`.
+- **Reachable regions only.** Regions no exit chain reaches from `OOT SPAWN` are dropped and printed: stubs for the other Deku Palace layout, entrance-randomizer-only sources, and data OoTMM never connects (in v33.0, `Pirate Fortress Telescope` has `exit:` instead of `exits:`).
+- **Multi-region checks.** OoTMM lists some checks under several regions, meaning reachable from any of them. Archipelago gives a location one region, so `locations.py` puts each such check in its own `<check> (check)` region, with an entrance from every parent. That parent's access rule goes on the entrance.
+- **Macros** stay split as `common`, `OOT` and `MM`, since the same macro name differs per game.
+- **Options.** Archipelago reserves `random` on every Choice and rolls it itself, so OoTMM's own `random` value is skipped, and a `random` default becomes `default = "random"`.
 
 ## Items
 Items are static lists in `items.py`. Each ID is a one-digit game (`GID`), a one-digit category (`CID`) and a three-digit item number (`IID`): `OOT_FISH` is `11069` (OoT, item, 069), `MM_SOUL_NPC_DAMPE` is `22520` (MM, soul, 520).

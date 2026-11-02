@@ -916,13 +916,11 @@ class OOTxMM_mainprices_priceOotShops(Choice):
     - **affordable**: All prices are set to 10 rupees.
     - **vanilla**: All prices are set to their vanilla values.
     - **weighted**: All prices are randomized, but lower prices are favored.
-    - **random**: All prices are randomized.
     """
     display_name = "OoT Shop Prices"
     option_affordable = 0
     option_vanilla = 1
     option_weighted = 2
-    option_random = 3
     default = option_vanilla
 
 class OOTxMM_mainprices_priceOotScrubs(Choice):
@@ -931,13 +929,11 @@ class OOTxMM_mainprices_priceOotScrubs(Choice):
     - **affordable**: All prices are set to 10 rupees.
     - **vanilla**: All prices are set to their vanilla values.
     - **weighted**: All prices are randomized, but lower prices are favored.
-    - **random**: All prices are randomized.
     """
     display_name = "OoT Scrub Prices"
     option_affordable = 0
     option_vanilla = 1
     option_weighted = 2
-    option_random = 3
     default = option_vanilla
 
 class OOTxMM_mainprices_priceOotMerchants(Choice):
@@ -946,13 +942,11 @@ class OOTxMM_mainprices_priceOotMerchants(Choice):
     - **affordable**: All prices are set to 10 rupees.
     - **vanilla**: All prices are set to their vanilla values.
     - **weighted**: All prices are randomized, but lower prices are favored.
-    - **random**: All prices are randomized.
     """
     display_name = "OoT Merchants Prices"
     option_affordable = 0
     option_vanilla = 1
     option_weighted = 2
-    option_random = 3
     default = option_vanilla
 
 class OOTxMM_mainprices_priceMmShops(Choice):
@@ -961,13 +955,11 @@ class OOTxMM_mainprices_priceMmShops(Choice):
     - **affordable**: All prices are set to 10 rupees.
     - **vanilla**: All prices are set to their vanilla values.
     - **weighted**: All prices are randomized, but lower prices are favored.
-    - **random**: All prices are randomized.
     """
     display_name = "MM Shop Prices"
     option_affordable = 0
     option_vanilla = 1
     option_weighted = 2
-    option_random = 3
     default = option_vanilla
 
 class OOTxMM_mainprices_priceMmTingle(Choice):
@@ -976,13 +968,11 @@ class OOTxMM_mainprices_priceMmTingle(Choice):
     - **affordable**: All prices are set to 10 rupees.
     - **vanilla**: All prices are set to their vanilla values.
     - **weighted**: All prices are randomized, but lower prices are favored.
-    - **random**: All prices are randomized.
     """
     display_name = "MM Tingle Prices"
     option_affordable = 0
     option_vanilla = 1
     option_weighted = 2
-    option_random = 3
     default = option_vanilla
 
 class OOTxMM_mainevents_songEventsShuffleOot(Toggle):
@@ -1031,12 +1021,10 @@ class OOTxMM_mainevents_startingAge(Choice):
     Choose the starting age
     - **child**: Link will start off as Child
     - **adult**: Link will start off as Adult
-    - **random**: Link will start off as either Adult or Child, with a 50/50 probability
     """
     display_name = "Starting Age"
     option_child = 0
     option_adult = 1
-    option_random = 2
     default = option_child
 
 class OOTxMM_mainevents_swordlessAdult(Toggle):
