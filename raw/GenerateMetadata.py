@@ -1,42 +1,77 @@
 import yaml
+import glob
 import json
 import os
 import shutil
 
 import subprocess
+import sys
 
 from Meta_ForbiddenOptions import ForbiddenOptionNames
 
+# World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
+# vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
+WorldSources = {
+    "OOT": ["oot/overworld/**/*.yml", "oot/boss/**/*.yml", "oot/dungeons/*.yml"],
+    "MM": ["mm/overworld/**/*.yml", "mm/boss/**/*.yml", "mm/dungeons/*.yml", "mm/us/*.yml"],
+}
+
+SpawnRegion = "OOT SPAWN"
+
+MacroSources = {
+    "common": "macros_common.yml",
+    "OOT": "macros_oot.yml",
+    "MM": "macros_mm.yml",
+}
+
+def LoadYAML(Path):
+    with open(Path, 'r', encoding='utf-8') as file:
+        return yaml.safe_load(file) or {}
+
 def GenerateMetaFiles():
     print("Generating world+macro files from OOTMM data...")
-    # Source dumps of location and macro data
-    SourceWorld = "./ootmm/data/world"
-    SourceMacro = "./ootmm/data/macros"
 
     GreatWorldYAML = {}
     GreatMacroYAML = {}
 
-    # Generate a single merged yaml with all the source world data
-    for DirPath, DirName, FileName in os.walk(SourceWorld):
-        for File in FileName:
-            FullPath = os.path.join(DirPath, File)
-            with open(FullPath, 'r') as file:
-                # print(f"Dumping world {FullPath}...")
-                yamldata = yaml.safe_load(file)
-                GreatWorldYAML.update(yamldata)
+    # OoT and MM reuse region and location names (shops, GLOBAL, VOID), so every name gets its game
+    # as a prefix, the way OoTMM names them internally. An exit that already starts with a game prefix
+    # points into the other game.
+    for Game, Patterns in WorldSources.items():
+        GameWorld = {}
+        for Pattern in Patterns:
+            for FullPath in sorted(glob.glob(os.path.join("./ootmm/data/world", Pattern), recursive=True)):
+                GameWorld.update(LoadYAML(FullPath))
+        for Region, RegionData in GameWorld.items():
+            if RegionData.get("locations"):
+                RegionData["locations"] = {Game + " " + Name: Rule for Name, Rule in RegionData["locations"].items()}
+            if RegionData.get("exits"):
+                RegionData["exits"] = {
+                    (Target if Target.startswith(("OOT ", "MM ")) else Game + " " + Target): Rule
+                    for Target, Rule in RegionData["exits"].items()
+                }
+            GreatWorldYAML[Game + " " + Region] = RegionData
+
+    # Keep only regions some exit chain reaches from OoTMM's spawn. The rest are stubs for the other
+    # Deku Palace layout, entrance-randomizer-only sources, or data OoTMM itself never connects.
+    Reached = {SpawnRegion}
+    Pending = [SpawnRegion]
+    while Pending:
+        for Target in GreatWorldYAML[Pending.pop()].get("exits") or {}:
+            if Target not in Reached:
+                Reached.add(Target)
+                Pending.append(Target)
+    for Region in [Region for Region in GreatWorldYAML if Region not in Reached]:
+        print(f"  Dropping unreachable region: {Region}")
+        del GreatWorldYAML[Region]
 
     # Finally, dump the merged YAML structure into a single file
     with open("GreatWorldYMLdump.yaml", 'w') as outfile:
         yaml.dump(GreatWorldYAML, outfile,width=float("inf"))
 
-    # Generate a single merged yaml with all the source macro data
-    for DirPath, DirName, FileName in os.walk(SourceMacro):
-        for File in FileName:
-            FullPath = os.path.join(DirPath, File)
-            with open(FullPath, 'r') as file:
-                # print(f"Dumping macro {FullPath}...")
-                yamldata = yaml.safe_load(file)
-                GreatMacroYAML.update(yamldata)
+    # Macros keep their source split (common, OOT, MM), since the same macro name differs per game
+    for Section, File in MacroSources.items():
+        GreatMacroYAML[Section] = LoadYAML(os.path.join("./ootmm/data/macros", File))
 
     # Finally, dump the merged YAML structure into a single file
     with open("GreatMacroYMLdump.yaml", 'w') as outfile:
@@ -119,9 +154,11 @@ def GenerateRawOptionsFile():
     );
     """
     
+    # npx is a .cmd script on Windows, which needs the shell to launch.
     subprocess.run(
     ["npx", "tsx", "--eval", TypeScriptConverter],
     check=True,
+    shell=sys.platform == "win32",
     )
     
 def ConvertRawOptions():
@@ -181,6 +218,9 @@ def ConvertRawOptions():
             try:
                 OptionType = "Choice"
                 for Choice in Option["values"]:
+                    # Archipelago reserves "random" on every Choice and rolls it itself.
+                    if Choice["value"] == "random":
+                        continue
                     if Choice.get("description"):
                         DescriptionList.append("    - **" + Choice["value"] + "**: " + Choice["description"])
                     else:
@@ -235,7 +275,10 @@ def ConvertRawOptions():
             if len(ChoiceList) > 0:
                 for Choice in ChoiceList:
                     OptionsFile.append("    option_"+Choice+" = "+str(ChoiceList.index(Choice)))
-                OptionsFile.append("    default = option_" + Option["default"])
+                if Option["default"] == "random":
+                    OptionsFile.append("    default = \"random\"")
+                else:
+                    OptionsFile.append("    default = option_" + Option["default"])
             if len(RangeList) > 0:
                 OptionsFile.append("    range_start = " + str(RangeList["min"]))
                 OptionsFile.append("    range_end = " + str(RangeList["max"]))
@@ -273,14 +316,11 @@ def ConvertRawOptions():
 
 
 def main():
-    try:
-        GenerateMetaFiles()
-        IsolateRegionData()
-        GenerateRawOptionsFile()
-        ConvertRawOptions()    
-        shutil.copyfile("GeneratedOptions.py", "../options.py")
-    except Exception as e:
-        print(f"Error: {e}")
+    GenerateMetaFiles()
+    IsolateRegionData()
+    GenerateRawOptionsFile()
+    ConvertRawOptions()
+    shutil.copyfile("GeneratedOptions.py", "../options.py")
 
 if __name__ == "__main__":
     main()
