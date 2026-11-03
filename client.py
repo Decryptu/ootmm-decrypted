@@ -6,6 +6,7 @@ reports the checks to the server and answers the queries with the items the serv
 """
 from __future__ import annotations
 
+import logging
 import struct
 from typing import TYPE_CHECKING
 
@@ -18,11 +19,15 @@ from . import items, locations, ootxmm_staticdata
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
+logger = logging.getLogger("Client")
+
 RDRAM = "RDRAM"
 MAGIC = b"OoTMM-IPC-RAM-1\x00"
 RING = 0x800
 HEADER = 0x28  # magic (16), connected, alive, outHead, outTail, inHead, inTail (u32 each)
 HELLO_MAGIC = b"OoTMM\x7f\x01\x00"
+SCAN_CHUNK = 0x8000
+SCAN_READS_PER_POLL = 16
 
 OP_HELLO, OP_WAL, OP_WAL_QUERY, OP_WAL_ACK = 0x01, 0x02, 0x03, 0x04
 WAL_ITEM = 0x01
@@ -51,8 +56,10 @@ class OOTxMMClient(BizHawkClient):
     def reset(self) -> None:
         self.mailbox: int | None = None
         self.candidates: dict[int, int] = {}  # mailbox address -> alive counter last seen
+        self.scan_pos: int | None = 0  # next RAM address to scan, None when the scan is done
         self.seq_net = 0
         self.goals: set[str] = set()
+        self.last_query: int | None = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -75,16 +82,24 @@ class OOTxMMClient(BizHawkClient):
         # The magic is also in the game's code as a string constant, and after a game switch the other game's
         # mailbox stays in RAM: the live mailbox is the 16-aligned one whose alive counter moves. It only moves
         # in gameplay, not on the title screen or the file select.
-        if not self.candidates:
+        # The connector's replies are capped at 64 KB, so RAM is scanned a few small reads per poll. The mailbox
+        # is 16-aligned and the reads are too, so the magic is never split between two.
+        if self.scan_pos is not None:
             size = await bizhawk.get_memory_size(ctx.bizhawk_ctx, RDRAM)
-            chunk = 0x10000
-            reads = await bizhawk.read(ctx.bizhawk_ctx, [(base, chunk, RDRAM) for base in range(0, size, chunk)])
-            data = b"".join(reads)
-            start = data.find(MAGIC)
-            while start != -1:
-                if start % 16 == 0:
-                    self.candidates[start] = struct.unpack_from(">I", data, start + 20)[0]
-                start = data.find(MAGIC, start + 1)
+            for _ in range(SCAN_READS_PER_POLL):
+                if self.scan_pos >= size:
+                    self.scan_pos = None
+                    break
+                data = (await bizhawk.read(ctx.bizhawk_ctx, [(self.scan_pos, SCAN_CHUNK, RDRAM)]))[0]
+                start = data.find(MAGIC)
+                while start != -1:
+                    if start % 16 == 0:
+                        self.candidates[self.scan_pos + start] = struct.unpack_from(">I", data, start + 20)[0]
+                    start = data.find(MAGIC, start + 1)
+                self.scan_pos += SCAN_CHUNK
+            return
+        if not self.candidates:
+            self.scan_pos = 0
             return
         reads = await bizhawk.read(ctx.bizhawk_ctx, [(address, 24, RDRAM) for address in self.candidates])
         for address, raw in zip(list(self.candidates), reads):
@@ -95,6 +110,7 @@ class OOTxMMClient(BizHawkClient):
             if alive != self.candidates[address]:
                 self.mailbox = address
                 self.seq_net = 0
+                logger.info(f"Found the game's mailbox at 0x{address:X}")
                 return
             self.candidates[address] = alive
 
@@ -148,6 +164,7 @@ class OOTxMMClient(BizHawkClient):
                 # from 1 after the hello; the game's numbering is its own business.
                 self.seq_net = 1
                 replies = [struct.pack(">IB8sII", 0, OP_HELLO, HELLO_MAGIC, 0, 1)]
+                logger.info("Connected to the game")
                 query = None
             elif op == OP_WAL and len(packet) >= 10:
                 token, kind = struct.unpack_from(">IB", packet, 5)
@@ -161,6 +178,10 @@ class OOTxMMClient(BizHawkClient):
             elif op == OP_WAL_QUERY and len(packet) >= 9:
                 query = struct.unpack_from(">I", packet, 5)[0]
 
+        if query is not None and query != self.last_query:
+            # The game has taken every item before this index.
+            logger.info(f"The game has {query} of {len(ctx.items_received)} received items")
+            self.last_query = query
         if query is not None and query < len(ctx.items_received):
             replies.append(self.wal_item(ctx, query))
 
