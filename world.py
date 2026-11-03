@@ -1,10 +1,14 @@
+import json
+import os
 from collections.abc import Mapping
 from typing import Any
+
+from BaseClasses import ItemClassification
 
 from Options import Choice, OptionSet, Toggle
 from worlds.AutoWorld import World
 
-from . import web_world, options, items, locations, logic, regions, rules
+from . import web_world, options, prefill, items, locations, logic, regions, rules
 
 class OOTxMM(World):
     """
@@ -40,11 +44,34 @@ class OOTxMM(World):
     def create_items(self) -> None:
         items.create_all_items(self)
 
+    def pre_fill(self) -> None:
+        prefill.pre_fill(self)
+
+    def get_pre_fill_items(self) -> list:
+        # The items pre_fill took out of the pool and has not placed yet.
+        return getattr(self, "pre_fill_pending", [])
+
     def create_item(self, name: str) -> items.OOTxMMItem:
         return items.create_item_with_correct_classification(self, name)
 
     def get_filler_item_name(self) -> str:
         return items.get_random_filler_item(self)
+
+    def generate_output(self, output_directory: str) -> None:
+        # The player's file for the ROM patch (ootmm-ap/ap-patch.ts): settings and what is at each check.
+        data = {
+            "version": 1,
+            "seed": f"{self.multiworld.seed_name}-{self.player}",
+            "settings": self.ootmm_settings,
+            "locations": {
+                location.name: display_item(self, location.item)
+                for location in self.multiworld.get_locations(self.player)
+                if location.address is not None
+            },
+        }
+        name = f"{self.multiworld.get_out_file_name_base(self.player)}.ootxmm.json"
+        with open(os.path.join(output_directory, name), "w", encoding="utf-8") as f:
+            json.dump(data, f)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # The player's OoTMM settings, for the patch.
@@ -64,3 +91,19 @@ def ootmm_settings(opts: options.OOTxMMOptions) -> logic.Settings:
         else:
             settings[key] = int(option.value)
     return settings
+
+# What the game shows for another player's item: the item itself when it is an OoTMM one, else a stand-in
+# for how much it matters.
+FOREIGN_STAND_INS = {
+    ItemClassification.progression: "SHARED_TRIFORCE",
+    ItemClassification.useful: "OOT_HEART_PIECE",
+}
+
+def display_item(world: OOTxMM, item) -> list:
+    """[OoTMM item, own] for a location's item, as the ROM patch reads it."""
+    if item.game == world.game:
+        return [items.ITEM_BY_NAME[item.name].symbolic_id, item.player == world.player]
+    for classification, stand_in in FOREIGN_STAND_INS.items():
+        if item.classification & classification:
+            return [stand_in, False]
+    return ["OOT_RUPEE_GREEN", False]

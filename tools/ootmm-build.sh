@@ -30,6 +30,9 @@ for patch in "$REPO"/ootmm-patches/*.patch; do
   [ -e "$patch" ] || continue
   git apply "$patch"
 done
+# Our scripts that run on OoTMM's generator (ootmm-ap/), such as the ROM patch.
+mkdir -p packages/generator/lib/ap
+cp "$REPO"/ootmm-ap/* packages/generator/lib/ap/
 
 # OoTMM's build reads the ROMs (custom assets).
 mkdir -p roms
@@ -40,4 +43,5 @@ if [ $# -gt 0 ]; then
 else
   CMD="pnpm install --frozen-lockfile && ./scripts/deps.sh && pnpm nx run @ootmm/generator:build --prod"
 fi
-podman run --rm -v "$SRC:$SRC" -w "$SRC" -e CI=1 -e NX_DAEMON=false "$TOOLCHAIN" sh -c "$CMD"
+# Windows drives are mounted too, so a command can read and write files there (/mnt/c/...).
+podman run --rm -v "$SRC:$SRC" -v /mnt:/mnt -w "$SRC" -e CI=1 -e NX_DAEMON=false "$TOOLCHAIN" sh -c "$CMD"
