@@ -188,16 +188,21 @@ CheckLists = {"brokenActors": "BROKEN_ACTORS_CHECKS", "sellMasks": "SELL_MASKS_C
 def GenerateCheckInfoFile():
     # What OoTMM's check filters read about each check (see "Options" in DEVELOPMENT.md): its type, its scene
     # and whether that scene is a dungeon, from OoTMM's check data, and the lists it removes checks by name.
+    # Also each check's key, and the GIs the goal shows up as, for the client.
     print("Exporting check types...")
     RunTypeScript("""
     import fs from 'node:fs';
     import { CHECKS } from './ootmm/packages/data/lib/checks.ts';
     import { isLocationInDungeon } from './ootmm/packages/logic/src/locations.ts';
+    import { GI } from './ootmm/packages/generator/lib/combo/data.ts';
     const checks = Object.fromEntries(CHECKS.map(c => [c.location, [c.type, c.scene, isLocationInDungeon(c.scene)]]));
-    fs.writeFileSync('./_checks.json', JSON.stringify(checks), 'utf8');
+    const keys = Object.fromEntries(CHECKS.map(c => [c.location, c.key]));
+    const goalGi = { OOT_GANON: GI['OOT_TRIFORCE_FULL'].index, MM_MAJORA: GI['MM_MASK_MAJORA'].index };
+    fs.writeFileSync('./_checks.json', JSON.stringify({ checks, keys, goalGi }), 'utf8');
     """)
     with open("_checks.json", 'r') as file:
-        checks = json.load(file)
+        exported = json.load(file)
+    checks = exported["checks"]
     os.remove("_checks.json")
     with open("GreatCheckItemJSONdump.json", 'r') as file:
         names = sorted(json.load(file))
@@ -206,7 +211,10 @@ def GenerateCheckInfoFile():
         raise ValueError(f"No check data for {len(missing)} locations: {missing[:10]}")
     with open(os.path.join("ootmm", "packages", "logic", "src", "world", "transform.ts"), 'r', encoding='utf-8') as file:
         transform = file.read()
-    info = {"checks": {name: checks[name] for name in names}}
+    # The client reads checks off the game by key (the WAL item packets, "Client" in DEVELOPMENT.md), and the
+    # goal off the GIs the game sends itself on beating Ganon (play.c, sendSelfTriforce) and Majora.
+    info = {"checks": {name: checks[name] for name in names},
+            "keys": {name: exported["keys"][name] for name in names}, "goalGi": exported["goalGi"]}
     for key, const in CheckLists.items():
         match = re.search(rf"const {const} = \[(.*?)\];", transform, re.S)
         if match is None:
@@ -311,7 +319,7 @@ def GenerateLogicFile():
     print("Exporting the world logic...")
     # The world builder imports OoTMM's packages, which need their dependencies and the built data package.
     Shell = sys.platform == "win32"
-    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--ignore-scripts"], cwd="ootmm", check=True, shell=Shell)
+    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--filter", "@ootmm/generator...", "--ignore-scripts"], cwd="ootmm", check=True, shell=Shell)
     subprocess.run(["pnpm", "run", "build"], cwd=os.path.join("ootmm", "packages", "data"), check=True, shell=Shell)
     RunTypeScript("""
     import fs from 'node:fs';
@@ -459,18 +467,25 @@ def GenerateLogicFile():
 
 def GenerateItemFile():
     print("Generating item file from OoTMM item data...")
-    # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts).
+    # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts),
+    # and the GI the game gives each item by (gi() in generator randomizer/util.ts, for OoTMM's defaults of the
+    # settings it reads, none of which the world offers; shared items as their OoT version). The client sends
+    # received items by GI. Items the game has no GI for (none in the pool) get null.
     TypeScriptConverter = r"""
     import fs from 'node:fs';
     import { Items } from './ootmm/packages/logic/src/items/defs.ts';
     import * as Groups from './ootmm/packages/logic/src/items/groups.ts';
     import { itemName } from './ootmm/packages/generator/lib/combo/names.ts';
+    import { gi } from './ootmm/packages/generator/lib/combo/randomizer/util.ts';
+    import { DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
 
+    const giOf = (id: string) => { try { return gi(DEFAULT_SETTINGS, 'oot', Items[id], false); } catch { return null; } };
     const items = Object.keys(Items).map(id => ({
       id,
       name: itemName(id),
       trap: Groups.TRAPS.has(Items[id]),
       junk: Groups.JUNK.has(Items[id]),
+      gi: giOf(id),
     }));
     fs.writeFileSync('./GreatItemJSONdump.json', JSON.stringify(items, null, 1) + '\n', 'utf8');
     """

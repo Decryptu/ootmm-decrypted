@@ -17,6 +17,7 @@ PACKAGE = "ootxmm"
 WORLD_FILES = [
     "__init__.py",
     "archipelago.json",
+    "client.py",
     "items.py",
     "locations.py",
     "logic.py",

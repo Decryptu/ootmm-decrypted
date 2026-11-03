@@ -3,6432 +3,7504 @@
   "id": "MM_ARROW_FIRE",
   "name": "Fire Arrows (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 551
  },
  {
   "id": "MM_ARROW_ICE",
   "name": "Ice Arrows (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 552
  },
  {
   "id": "MM_ARROW_LIGHT",
   "name": "Light Arrows (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 553
  },
  {
   "id": "MM_ARROWS_10",
   "name": "10 Arrows (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 544
  },
  {
   "id": "MM_ARROWS_30",
   "name": "30 Arrows (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 545
  },
  {
   "id": "MM_ARROWS_40",
   "name": "40 Arrows (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 546
  },
  {
   "id": "MM_BIG_POE",
   "name": "Big Poe (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 595
  },
  {
   "id": "MM_BLUE_FIRE",
   "name": "Blue Fire (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 900
  },
  {
   "id": "MM_BOMB_BAG",
   "name": "Bomb Bag (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 541
  },
  {
   "id": "MM_BOMB",
   "name": "Bomb (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 534
  },
  {
   "id": "MM_BOMBCHU_10",
   "name": "10 Bombchu (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 540
  },
  {
   "id": "MM_BOMBCHU_20",
   "name": "20 Bombchu (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 560
  },
  {
   "id": "MM_BOMBCHU_5",
   "name": "5 Bombchu (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 575
  },
  {
   "id": "MM_BOMBCHU_BAG",
   "name": "Bombchu Bag (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 862
  },
  {
   "id": "MM_BOMBCHU",
   "name": "1 Bombchu (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 571
  },
  {
   "id": "MM_BOMBER_NOTEBOOK",
   "name": "Bombers' Notebook",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 585
  },
  {
   "id": "MM_BOMBS_10",
   "name": "10 Bombs (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 536
  },
  {
   "id": "MM_BOMBS_20",
   "name": "20 Bombs (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 537
  },
  {
   "id": "MM_BOMBS_30",
   "name": "30 Bombs (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 538
  },
  {
   "id": "MM_BOMBS_5",
   "name": "5 Bombs (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 535
  },
  {
   "id": "MM_BOOMERANG",
   "name": "Boomerang (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 890
  },
  {
   "id": "MM_BOOTS_HOVER",
   "name": "Hover Boots (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 874
  },
  {
   "id": "MM_BOOTS_IRON",
   "name": "Iron Boots (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 873
  },
  {
   "id": "MM_BOSS_KEY_GB",
   "name": "Boss Key (Great Bay Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 702
  },
  {
   "id": "MM_BOSS_KEY_SH",
   "name": "Boss Key (Snowhead Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 701
  },
  {
   "id": "MM_BOSS_KEY_ST",
   "name": "Boss Key (Stone Tower Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 703
  },
  {
   "id": "MM_BOSS_KEY_WF",
   "name": "Boss Key (Woodfall Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 700
  },
  {
   "id": "MM_BOTTLE_BIG_POE",
   "name": "Bottled Big Poe (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 861
  },
  {
   "id": "MM_BOTTLE_BLUE_FIRE",
   "name": "Bottle of Blue Fire (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 899
  },
  {
   "id": "MM_BOTTLE_CHATEAU",
   "name": "Bottle of Chateau Romani (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 598
  },
  {
   "id": "MM_BOTTLE_EMPTY",
   "name": "Empty Bottle (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 587
  },
  {
   "id": "MM_BOTTLE_FAIRY",
   "name": "Bottled Fairy (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 858
  },
  {
   "id": "MM_BOTTLE_MILK",
   "name": "Bottle of Milk (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 592
  },
  {
   "id": "MM_BOTTLE_POE",
   "name": "Bottled Poe (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 860
  },
  {
   "id": "MM_BOTTLE_POTION_BLUE",
   "name": "Bottle of Blue Potion (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 857
  },
  {
   "id": "MM_BOTTLE_POTION_GREEN",
   "name": "Bottle of Green Potion (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 856
  },
  {
   "id": "MM_BOTTLE_POTION_RED",
   "name": "Bottle of Red Potion (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 586
  },
  {
   "id": "MM_BOTTLE_RANDOM",
   "name": "Random Bottle (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "MM_BOTTLE_RUTO_LETTER",
   "name": "Ruto's Letter (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 898
  },
  {
   "id": "MM_BOTTLED_GOLD_DUST",
   "name": "Bottle of Gold Dust (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 596
  },
  {
   "id": "MM_BOW",
   "name": "Hero's Bow (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 548
  },
  {
   "id": "MM_BUGS",
   "name": "Bugs (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 594
  },
  {
   "id": "MM_BUTTON_A",
   "name": "A Button (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 851
  },
  {
   "id": "MM_BUTTON_C_DOWN",
   "name": "C-Down Button (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 855
  },
  {
   "id": "MM_BUTTON_C_LEFT",
   "name": "C-Left Button (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 853
  },
  {
   "id": "MM_BUTTON_C_RIGHT",
   "name": "C-Right Button (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 852
  },
  {
   "id": "MM_BUTTON_C_UP",
   "name": "C-Up Button (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 854
  },
  {
   "id": "MM_CHATEAU",
   "name": "Chateau Romani Refill (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 627
  },
  {
   "id": "MM_CLOCK",
   "name": "Progressive Clock (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 883
  },
  {
   "id": "MM_CLOCK1",
   "name": "Clock (MM, Day 1)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 883
  },
  {
   "id": "MM_CLOCK2",
   "name": "Clock (MM, Night 1)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 884
  },
  {
   "id": "MM_CLOCK3",
   "name": "Clock (MM, Day 2)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 885
  },
  {
   "id": "MM_CLOCK4",
   "name": "Clock (MM, Night 2)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 886
  },
  {
   "id": "MM_CLOCK5",
   "name": "Clock (MM, Day 3)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 887
  },
  {
   "id": "MM_CLOCK6",
   "name": "Clock (MM, Night 3)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 888
  },
  {
   "id": "MM_COMPASS_GB",
   "name": "Compass (Great Bay Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 710
  },
  {
   "id": "MM_COMPASS_SH",
   "name": "Compass (Snowhead Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 709
  },
  {
   "id": "MM_COMPASS_ST",
   "name": "Compass (Stone Tower Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 711
  },
  {
   "id": "MM_COMPASS_WF",
   "name": "Compass (Woodfall Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 708
  },
  {
   "id": "MM_DEED_LAND",
   "name": "Land Title Deed",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 632
  },
  {
   "id": "MM_DEED_MOUNTAIN",
   "name": "Mountain Title Deed",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 634
  },
  {
   "id": "MM_DEED_OCEAN",
   "name": "Ocean Title Deed",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 635
  },
  {
   "id": "MM_DEED_SWAMP",
   "name": "Swamp Title Deed",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 633
  },
  {
   "id": "MM_DEFENSE_UPGRADE",
   "name": "Double Defense (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 648
  },
  {
   "id": "MM_DEKU_SEEDS_30",
   "name": "30 Deku Seeds (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 730
  },
  {
   "id": "MM_DEKU_SEEDS_5",
   "name": "5 Deku Seeds (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 729
  },
  {
   "id": "MM_FAIRY_BIG",
   "name": "Big Fairy (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 869
  },
  {
   "id": "MM_FAIRY",
   "name": "Fairy (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 591
  },
  {
   "id": "MM_FISH",
   "name": "Fish (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 593
  },
  {
   "id": "MM_GREAT_FAIRY_SWORD",
   "name": "Great Fairy's Sword (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 576
  },
  {
   "id": "MM_GS_TOKEN_OCEAN",
   "name": "Ocean Skulltula Token",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 694
  },
  {
   "id": "MM_GS_TOKEN_SWAMP",
   "name": "Swamp Skulltula Token",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 693
  },
  {
   "id": "MM_HAMMER",
   "name": "Megaton Hammer (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 889
  },
  {
   "id": "MM_HEART_CONTAINER",
   "name": "Heart Container (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 524
  },
  {
   "id": "MM_HEART_PIECE",
   "name": "Piece of Heart (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 523
  },
  {
   "id": "MM_HOOKSHOT",
   "name": "Hookshot (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 581
  },
  {
   "id": "MM_KEY_RING_GB",
   "name": "Key Ring (Great Bay)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 848
  },
  {
   "id": "MM_KEY_RING_SH",
   "name": "Key Ring (Snowhead)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 847
  },
  {
   "id": "MM_KEY_RING_ST",
   "name": "Key Ring (Stone Tower)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 849
  },
  {
   "id": "MM_KEY_RING_WF",
   "name": "Key Ring (Woodfall)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 846
  },
  {
   "id": "MM_LENS",
   "name": "Lens of Truth (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 582
  },
  {
   "id": "MM_LETTER_TO_KAFEI",
   "name": "Letter to Kafei",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 638
  },
  {
   "id": "MM_LETTER_TO_MAMA",
   "name": "Letter to Mama",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 637
  },
  {
   "id": "MM_MAGIC_BEAN",
   "name": "Magic Bean (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 570
  },
  {
   "id": "MM_MAGIC_JAR_LARGE",
   "name": "Large Magic Jar (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 526
  },
  {
   "id": "MM_MAGIC_JAR_SMALL",
   "name": "Small Magic Jar (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 525
  },
  {
   "id": "MM_MAGIC_UPGRADE",
   "name": "Magic Upgrade (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 646
  },
  {
   "id": "MM_MAP_GB",
   "name": "Map (Great Bay Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 706
  },
  {
   "id": "MM_MAP_SH",
   "name": "Map (Snowhead Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 705
  },
  {
   "id": "MM_MAP_ST",
   "name": "Map (Stone Tower Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 707
  },
  {
   "id": "MM_MAP_WF",
   "name": "Map (Woodfall Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 704
  },
  {
   "id": "MM_MASK_ADULT",
   "name": "Adult Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 626
  },
  {
   "id": "MM_MASK_ALL_NIGHT",
   "name": "All-Night Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 605
  },
  {
   "id": "MM_MASK_BLAST",
   "name": "Blast Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 620
  },
  {
   "id": "MM_MASK_BREMEN",
   "name": "Bremen Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 619
  },
  {
   "id": "MM_MASK_BUNNY",
   "name": "Bunny Hood (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 606
  },
  {
   "id": "MM_MASK_CAPTAIN",
   "name": "Captain's Hat",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 603
  },
  {
   "id": "MM_MASK_COUPLE",
   "name": "Couple's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 612
  },
  {
   "id": "MM_MASK_DEKU",
   "name": "Deku Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 599
  },
  {
   "id": "MM_MASK_DON_GERO",
   "name": "Don Gero's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 615
  },
  {
   "id": "MM_MASK_FIERCE_DEITY",
   "name": "Fierce Deity's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 602
  },
  {
   "id": "MM_MASK_GARO",
   "name": "Garo's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 608
  },
  {
   "id": "MM_MASK_GERUDO",
   "name": "Gerudo Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 623
  },
  {
   "id": "MM_MASK_GIANT",
   "name": "Giant's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 604
  },
  {
   "id": "MM_MASK_GIBDO",
   "name": "Gibdo Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 614
  },
  {
   "id": "MM_MASK_GORON",
   "name": "Goron Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 600
  },
  {
   "id": "MM_MASK_GREAT_FAIRY",
   "name": "Great Fairy's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 613
  },
  {
   "id": "MM_MASK_KAFEI",
   "name": "Kafei's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 622
  },
  {
   "id": "MM_MASK_KAMARO",
   "name": "Kamaro's Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 616
  },
  {
   "id": "MM_MASK_KEATON",
   "name": "Keaton Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 607
  },
  {
   "id": "MM_MASK_POSTMAN",
   "name": "Postman's Hat",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 611
  },
  {
   "id": "MM_MASK_ROMANI",
   "name": "Romani's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 609
  },
  {
   "id": "MM_MASK_SCENTS",
   "name": "Mask of Scents",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 621
  },
  {
   "id": "MM_MASK_SKULL",
   "name": "Skull Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 624
  },
  {
   "id": "MM_MASK_SPOOKY",
   "name": "Spooky Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 625
  },
  {
   "id": "MM_MASK_STONE",
   "name": "Stone Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 618
  },
  {
   "id": "MM_MASK_TROUPE_LEADER",
   "name": "Circus Leader's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 610
  },
  {
   "id": "MM_MASK_TRUTH",
   "name": "Mask of Truth (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 617
  },
  {
   "id": "MM_MASK_ZORA",
   "name": "Zora Mask (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 601
  },
  {
   "id": "MM_MILK",
   "name": "Romani Milk",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 628
  },
  {
   "id": "MM_MOON_TEAR",
   "name": "Moon's Tear",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 631
  },
  {
   "id": "MM_NUT_UPGRADE",
   "name": "Deku Nut Upgrade (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 895
  },
  {
   "id": "MM_NUT",
   "name": "Nut (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 554
  },
  {
   "id": "MM_NUTS_10",
   "name": "10 Deku Nuts (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 556
  },
  {
   "id": "MM_NUTS_5",
   "name": "5 Deku Nuts (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 555
  },
  {
   "id": "MM_OCARINA",
   "name": "Ocarina (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 584
  },
  {
   "id": "MM_OWL_CLOCK_TOWN",
   "name": "Owl Statue (Clock Town)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 720
  },
  {
   "id": "MM_OWL_GREAT_BAY",
   "name": "Owl Statue (Great Bay)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 716
  },
  {
   "id": "MM_OWL_IKANA_CANYON",
   "name": "Owl Statue (Ikana Canyon)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 724
  },
  {
   "id": "MM_OWL_MILK_ROAD",
   "name": "Owl Statue (Milk Road)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 721
  },
  {
   "id": "MM_OWL_MOUNTAIN_VILLAGE",
   "name": "Owl Statue (Mountain Village)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 719
  },
  {
   "id": "MM_OWL_SNOWHEAD",
   "name": "Owl Statue (Snowhead)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 718
  },
  {
   "id": "MM_OWL_SOUTHERN_SWAMP",
   "name": "Owl Statue (Southern Swamp)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 723
  },
  {
   "id": "MM_OWL_STONE_TOWER",
   "name": "Owl Statue (Stone Tower)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 725
  },
  {
   "id": "MM_OWL_WOODFALL",
   "name": "Owl Statue (Woodfall)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 722
  },
  {
   "id": "MM_OWL_ZORA_CAPE",
   "name": "Owl Statue (Zora Cape)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 717
  },
  {
   "id": "MM_PENDANT_OF_MEMORIES",
   "name": "Pendant of Memories",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 639
  },
  {
   "id": "MM_PICTOGRAPH_BOX",
   "name": "Pictograph Box",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 583
  },
  {
   "id": "MM_PLATINUM_TOKEN",
   "name": "Platinum Token (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 695
  },
  {
   "id": "MM_POE",
   "name": "Poe (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 859
  },
  {
   "id": "MM_POTION_BLUE",
   "name": "Blue Potion (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 590
  },
  {
   "id": "MM_POTION_GREEN",
   "name": "Green Potion (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 589
  },
  {
   "id": "MM_POTION_RED",
   "name": "Red Potion (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 588
  },
  {
   "id": "MM_POWDER_KEG",
   "name": "Powder Keg (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 569
  },
  {
   "id": "MM_RECOVERY_HEART",
   "name": "Recovery Heart (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 522
  },
  {
   "id": "MM_REMAINS_GOHT",
   "name": "Goht's Remains",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 690
  },
  {
   "id": "MM_REMAINS_GYORG",
   "name": "Gyorg's Remains",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 691
  },
  {
   "id": "MM_REMAINS_ODOLWA",
   "name": "Odolwa's Remains",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 689
  },
  {
   "id": "MM_REMAINS_TWINMOLD",
   "name": "Twinmold's Remains",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 692
  },
  {
   "id": "MM_ROOM_KEY",
   "name": "Room Key",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 636
  },
  {
   "id": "MM_RUPEE_BLUE",
   "name": "Blue Rupee (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 514
  },
  {
   "id": "MM_RUPEE_GOLD",
   "name": "Gold Rupee (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 519
  },
  {
   "id": "MM_RUPEE_GREEN",
   "name": "Green Rupee (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 513
  },
  {
   "id": "MM_RUPEE_PURPLE",
   "name": "Purple Rupee (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 517
  },
  {
   "id": "MM_RUPEE_RED",
   "name": "Red Rupee (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 516
  },
  {
   "id": "MM_RUPEE_SILVER",
   "name": "Silver Rupee (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 518
  },
  {
   "id": "MM_RUSTY_KEY_BENEATH_GRAVEYARD",
   "name": "Rusty Key (Beneath the Graveyard)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 916
  },
  {
   "id": "MM_RUSTY_KEY_BLACKSMITH",
   "name": "Rusty Key (Blacksmith)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 913
  },
  {
   "id": "MM_RUSTY_KEY_BOMB_SHOP",
   "name": "Rusty Key (Bomb Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 906
  },
  {
   "id": "MM_RUSTY_KEY_CUCCO_SHACK",
   "name": "Rusty Key (Cucco Shack)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 926
  },
  {
   "id": "MM_RUSTY_KEY_CURIOSITY_SHOP",
   "name": "Rusty Key (Curiosity Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 908
  },
  {
   "id": "MM_RUSTY_KEY_DAMPE_HOUSE",
   "name": "Rusty Key (Dampe's House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 917
  },
  {
   "id": "MM_RUSTY_KEY_DOG_RACETRACK",
   "name": "Rusty Key (Doggy Racetrack)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 925
  },
  {
   "id": "MM_RUSTY_KEY_GRANDMA_ROOM",
   "name": "Rusty Key (Grandma's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 937
  },
  {
   "id": "MM_RUSTY_KEY_HONEY_DARLING",
   "name": "Rusty Key (Honey & Darling)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 923
  },
  {
   "id": "MM_RUSTY_KEY_KAFEI_HIDEOUT",
   "name": "Rusty Key (Kafei's Hideout)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 909
  },
  {
   "id": "MM_RUSTY_KEY_LABORATORY",
   "name": "Rusty Key (Oceanic Laboratory)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 915
  },
  {
   "id": "MM_RUSTY_KEY_LOTTERY",
   "name": "Rusty Key (Lottery)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 905
  },
  {
   "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE_KAFEI",
   "name": "Rusty Key (Kafei's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 921
  },
  {
   "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE_OFFICE",
   "name": "Rusty Key (Mayor's Residence Office)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 919
  },
  {
   "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE_SALON",
   "name": "Rusty Key (Mayor's Residence Salon)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 920
  },
  {
   "id": "MM_RUSTY_KEY_MAYOR_RESIDENCE",
   "name": "Rusty Key (Mayor's Residence)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 918
  },
  {
   "id": "MM_RUSTY_KEY_MILK_BAR",
   "name": "Rusty Key (Milk Bar)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 924
  },
  {
   "id": "MM_RUSTY_KEY_MUSIC_HOUSE",
   "name": "Rusty Key (Music House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 914
  },
  {
   "id": "MM_RUSTY_KEY_OBSERVATORY",
   "name": "Rusty Key (Observatory)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 912
  },
  {
   "id": "MM_RUSTY_KEY_POST_OFFICE",
   "name": "Rusty Key (Post Office)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 903
  },
  {
   "id": "MM_RUSTY_KEY_POTION_SHOP",
   "name": "Rusty Key (Potion Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 902
  },
  {
   "id": "MM_RUSTY_KEY_RANCH_BARN",
   "name": "Rusty Key (Romani Ranch Barn)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 928
  },
  {
   "id": "MM_RUSTY_KEY_RANCH_HOUSE_ROOM",
   "name": "Rusty Key (Romani's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 929
  },
  {
   "id": "MM_RUSTY_KEY_RANCH_HOUSE",
   "name": "Rusty Key (Romani Ranch House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 927
  },
  {
   "id": "MM_RUSTY_KEY_STOCK_POT_INN_DORMITORY",
   "name": "Rusty Key (Stock Pot Inn Dormitory)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 939
  },
  {
   "id": "MM_RUSTY_KEY_STOCK_POT_INN_ROOF",
   "name": "Rusty Key (Stock Pot Inn Roof)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 936
  },
  {
   "id": "MM_RUSTY_KEY_STOCK_POT_INN_STAFF_ROOM",
   "name": "Rusty Key (Stock Pot Inn Staff Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 938
  },
  {
   "id": "MM_RUSTY_KEY_STOCK_POT_INN",
   "name": "Rusty Key (Stock Pot Inn)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 935
  },
  {
   "id": "MM_RUSTY_KEY_SWAMP_ARCHERY",
   "name": "Rusty Key (Swamp Archery)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 911
  },
  {
   "id": "MM_RUSTY_KEY_SWORDSMAN_SCHOOL",
   "name": "Rusty Key (Swordsman School)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 904
  },
  {
   "id": "MM_RUSTY_KEY_TOURIST_INFORMATION",
   "name": "Rusty Key (Tourist Information)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 901
  },
  {
   "id": "MM_RUSTY_KEY_TOWN_ARCHERY",
   "name": "Rusty Key (Town Archery)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 910
  },
  {
   "id": "MM_RUSTY_KEY_TRADING_POST",
   "name": "Rusty Key (Trading Post)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 907
  },
  {
   "id": "MM_RUSTY_KEY_TREASURE_CHEST_GAME",
   "name": "Rusty Key (Treasure Game)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 922
  },
  {
   "id": "MM_RUSTY_KEY_ZORA_EVAN_ROOM",
   "name": "Rusty Key (Evan's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 934
  },
  {
   "id": "MM_RUSTY_KEY_ZORA_JAPAS_ROOM",
   "name": "Rusty Key (Japas' Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 931
  },
  {
   "id": "MM_RUSTY_KEY_ZORA_LULU_ROOM",
   "name": "Rusty Key (Lulu's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 933
  },
  {
   "id": "MM_RUSTY_KEY_ZORA_SHOP",
   "name": "Rusty Key (Zora Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 930
  },
  {
   "id": "MM_RUSTY_KEY_ZORA_TIJO_ROOM",
   "name": "Rusty Key (Tijo's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 932
  },
  {
   "id": "MM_SCALE",
   "name": "Progressive Scale (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 878
  },
  {
   "id": "MM_SHIELD_DEKU",
   "name": "Deku Shield (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 564
  },
  {
   "id": "MM_SHIELD_HERO",
   "name": "Hero's Shield",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 565
  },
  {
   "id": "MM_SHIELD_MIRROR",
   "name": "Mirror Shield (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 566
  },
  {
   "id": "MM_SHIELD",
   "name": "Progressive Shield (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 567
  },
  {
   "id": "MM_SHOVEL",
   "name": "Shovel (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 940
  },
  {
   "id": "MM_SKELETON_KEY",
   "name": "Skeleton Key (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 850
  },
  {
   "id": "MM_SLINGSHOT",
   "name": "Fairy Slingshot (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 728
  },
  {
   "id": "MM_SMALL_KEY_GB",
   "name": "Small Key (Great Bay Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 698
  },
  {
   "id": "MM_SMALL_KEY_SH",
   "name": "Small Key (Snowhead Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 697
  },
  {
   "id": "MM_SMALL_KEY_ST",
   "name": "Small Key (Stone Tower Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 699
  },
  {
   "id": "MM_SMALL_KEY_WF",
   "name": "Small Key (Woodfall Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 696
  },
  {
   "id": "MM_SONG_AWAKENING",
   "name": "Sonata of Awakening (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 650
  },
  {
   "id": "MM_SONG_EMPTINESS",
   "name": "Elegy of Emptiness (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 653
  },
  {
   "id": "MM_SONG_EPONA",
   "name": "Epona's Song (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 657
  },
  {
   "id": "MM_SONG_GORON_HALF",
   "name": "Progressive Goron Lullaby (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 669
  },
  {
   "id": "MM_SONG_GORON",
   "name": "Goron Lullaby (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 651
  },
  {
   "id": "MM_SONG_HEALING",
   "name": "Song of Healing (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 656
  },
  {
   "id": "MM_SONG_NOTE_AWAKENING",
   "name": "Note from Sonata of Awakening (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 670
  },
  {
   "id": "MM_SONG_NOTE_EMPTINESS",
   "name": "Note from Elegy of Emptiness (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 673
  },
  {
   "id": "MM_SONG_NOTE_EPONA",
   "name": "Note from Epona's Song (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 677
  },
  {
   "id": "MM_SONG_NOTE_GORON",
   "name": "Note from Goron Lullaby (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 671
  },
  {
   "id": "MM_SONG_NOTE_HEALING",
   "name": "Note from Song of Healing (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 676
  },
  {
   "id": "MM_SONG_NOTE_ORDER",
   "name": "Note from Oath to Order (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 674
  },
  {
   "id": "MM_SONG_NOTE_SARIA",
   "name": "Note from Saria's Song (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 688
  },
  {
   "id": "MM_SONG_NOTE_SOARING",
   "name": "Note from Song of Soaring (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 678
  },
  {
   "id": "MM_SONG_NOTE_STORMS",
   "name": "Note from Song of Storms (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 679
  },
  {
   "id": "MM_SONG_NOTE_SUN",
   "name": "Note from Sun's Song (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 680
  },
  {
   "id": "MM_SONG_NOTE_TIME",
   "name": "Note from Song of Time (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 675
  },
  {
   "id": "MM_SONG_NOTE_TP_FIRE",
   "name": "Note from Bolero of Fire (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 682
  },
  {
   "id": "MM_SONG_NOTE_TP_FOREST",
   "name": "Note from Minuet of Forest (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 681
  },
  {
   "id": "MM_SONG_NOTE_TP_LIGHT",
   "name": "Note from Prelude of Light (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 686
  },
  {
   "id": "MM_SONG_NOTE_TP_SHADOW",
   "name": "Note from Nocturne of Shadow (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 685
  },
  {
   "id": "MM_SONG_NOTE_TP_SPIRIT",
   "name": "Note from Requiem of Spirit (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 684
  },
  {
   "id": "MM_SONG_NOTE_TP_WATER",
   "name": "Note from Serenade of Water (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 683
  },
  {
   "id": "MM_SONG_NOTE_ZELDA",
   "name": "Note from Zelda's Lullaby (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 687
  },
  {
   "id": "MM_SONG_NOTE_ZORA",
   "name": "Note from New Wave Bossa Nova (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 672
  },
  {
   "id": "MM_SONG_ORDER",
   "name": "Oath to Order (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 654
  },
  {
   "id": "MM_SONG_SARIA",
   "name": "Saria's Song (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 668
  },
  {
   "id": "MM_SONG_SOARING",
   "name": "Song of Soaring (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 658
  },
  {
   "id": "MM_SONG_STORMS",
   "name": "Song of Storms (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 659
  },
  {
   "id": "MM_SONG_SUN",
   "name": "Sun's Song (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 660
  },
  {
   "id": "MM_SONG_TIME",
   "name": "Song of Time (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 655
  },
  {
   "id": "MM_SONG_TP_FIRE",
   "name": "Bolero of Fire (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 662
  },
  {
   "id": "MM_SONG_TP_FOREST",
   "name": "Minuet of Forest (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 661
  },
  {
   "id": "MM_SONG_TP_LIGHT",
   "name": "Prelude of Light (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 666
  },
  {
   "id": "MM_SONG_TP_SHADOW",
   "name": "Nocturne of Shadow (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 665
  },
  {
   "id": "MM_SONG_TP_SPIRIT",
   "name": "Requiem of Spirit (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 664
  },
  {
   "id": "MM_SONG_TP_WATER",
   "name": "Serenade of Water (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 663
  },
  {
   "id": "MM_SONG_ZELDA",
   "name": "Zelda's Lullaby (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 667
  },
  {
   "id": "MM_SONG_ZORA",
   "name": "New Wave Bossa Nova (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 652
  },
  {
   "id": "MM_SOUL_ANIMAL_BUTTERFLY",
   "name": "Soul of Butterflies (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 842
  },
  {
   "id": "MM_SOUL_ANIMAL_COW",
   "name": "Soul of Cows (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 840
  },
  {
   "id": "MM_SOUL_ANIMAL_CUCCO",
   "name": "Soul of Cuccos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 839
  },
  {
   "id": "MM_SOUL_ANIMAL_DOG",
   "name": "Soul of Dogs (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 841
  },
  {
   "id": "MM_SOUL_BOSS_GOHT",
   "name": "Soul of Goht",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 782
  },
  {
   "id": "MM_SOUL_BOSS_GYORG",
   "name": "Soul of Gyorg",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 783
  },
  {
   "id": "MM_SOUL_BOSS_IGOS",
   "name": "Soul of Igos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 785
  },
  {
   "id": "MM_SOUL_BOSS_ODOLWA",
   "name": "Soul of Odolwa",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 781
  },
  {
   "id": "MM_SOUL_BOSS_TWINMOLD",
   "name": "Soul of Twinmold",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 784
  },
  {
   "id": "MM_SOUL_ENEMY_ARMOS",
   "name": "Soul of Armos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 741
  },
  {
   "id": "MM_SOUL_ENEMY_BAD_BAT",
   "name": "Soul of Bad Bats",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 775
  },
  {
   "id": "MM_SOUL_ENEMY_BEAMOS",
   "name": "Soul of Beamos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 745
  },
  {
   "id": "MM_SOUL_ENEMY_BIO_BABA",
   "name": "Soul of Bio Babas",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 770
  },
  {
   "id": "MM_SOUL_ENEMY_BOE",
   "name": "Soul of Boes",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 768
  },
  {
   "id": "MM_SOUL_ENEMY_BUBBLE",
   "name": "Soul of Bubbles (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 744
  },
  {
   "id": "MM_SOUL_ENEMY_CAPTAIN_KEETA",
   "name": "Soul of Captain Keeta",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 778
  },
  {
   "id": "MM_SOUL_ENEMY_CHUCHU",
   "name": "Soul of Chuchus",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 756
  },
  {
   "id": "MM_SOUL_ENEMY_DEEP_PYTHON",
   "name": "Soul of Deep Pythons",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 757
  },
  {
   "id": "MM_SOUL_ENEMY_DEKU_BABA",
   "name": "Soul of Deku Babas (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 742
  },
  {
   "id": "MM_SOUL_ENEMY_DEKU_SCRUB",
   "name": "Soul of Deku Scrubs (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 743
  },
  {
   "id": "MM_SOUL_ENEMY_DEXIHAND",
   "name": "Soul of Dexihands",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 761
  },
  {
   "id": "MM_SOUL_ENEMY_DODONGO",
   "name": "Soul of Dodongos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 735
  },
  {
   "id": "MM_SOUL_ENEMY_DRAGONFLY",
   "name": "Soul of Dragonflies",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 762
  },
  {
   "id": "MM_SOUL_ENEMY_EENO",
   "name": "Soul of Eenoes",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 763
  },
  {
   "id": "MM_SOUL_ENEMY_EYEGORE",
   "name": "Soul of Eyegores",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 764
  },
  {
   "id": "MM_SOUL_ENEMY_FLOORMASTER",
   "name": "Soul of Floormasters (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 755
  },
  {
   "id": "MM_SOUL_ENEMY_FLYING_POT",
   "name": "Soul of Flying Pots (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 754
  },
  {
   "id": "MM_SOUL_ENEMY_FREEZARD",
   "name": "Soul of Freezards (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 751
  },
  {
   "id": "MM_SOUL_ENEMY_GARO",
   "name": "Soul of Garo",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 771
  },
  {
   "id": "MM_SOUL_ENEMY_GEKKO",
   "name": "Soul of Gekkos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 774
  },
  {
   "id": "MM_SOUL_ENEMY_GOMESS",
   "name": "Soul of Gomess",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 773
  },
  {
   "id": "MM_SOUL_ENEMY_GUAY",
   "name": "Soul of Guays (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 753
  },
  {
   "id": "MM_SOUL_ENEMY_HIPLOOP",
   "name": "Soul of Hiploops",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 765
  },
  {
   "id": "MM_SOUL_ENEMY_IRON_KNUCKLE",
   "name": "Soul of Iron Knuckles (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 750
  },
  {
   "id": "MM_SOUL_ENEMY_KEESE",
   "name": "Soul of Keese (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 736
  },
  {
   "id": "MM_SOUL_ENEMY_LEEVER",
   "name": "Soul of Leevers (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 759
  },
  {
   "id": "MM_SOUL_ENEMY_LIKE_LIKE",
   "name": "Soul of Like Likes (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 749
  },
  {
   "id": "MM_SOUL_ENEMY_LIZALFOS_DINOLFOS",
   "name": "Soul of Lizalfos/Dinolfos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 739
  },
  {
   "id": "MM_SOUL_ENEMY_NEJIRON",
   "name": "Soul of Nejirons",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 769
  },
  {
   "id": "MM_SOUL_ENEMY_OCTOROK",
   "name": "Soul of Octoroks (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 733
  },
  {
   "id": "MM_SOUL_ENEMY_PEAHAT",
   "name": "Soul of Peahats (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 738
  },
  {
   "id": "MM_SOUL_ENEMY_POE",
   "name": "Soul of Poes (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 780
  },
  {
   "id": "MM_SOUL_ENEMY_REAL_BOMBCHU",
   "name": "Soul of Real Bombchu",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 766
  },
  {
   "id": "MM_SOUL_ENEMY_REDEAD_GIBDO",
   "name": "Soul of ReDeads/Gibdos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 746
  },
  {
   "id": "MM_SOUL_ENEMY_SHELL_BLADE",
   "name": "Soul of Shell Blades (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 748
  },
  {
   "id": "MM_SOUL_ENEMY_SKULLFISH",
   "name": "Soul of Skullfish (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 760
  },
  {
   "id": "MM_SOUL_ENEMY_SKULLTULA",
   "name": "Soul of Skulltulas (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 740
  },
  {
   "id": "MM_SOUL_ENEMY_SKULLWALLTULA",
   "name": "Soul of Skullwalltulas (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 747
  },
  {
   "id": "MM_SOUL_ENEMY_SNAPPER",
   "name": "Soul of Snappers",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 776
  },
  {
   "id": "MM_SOUL_ENEMY_STALCHILD",
   "name": "Soul of Stalchildren (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 758
  },
  {
   "id": "MM_SOUL_ENEMY_TAKKURI",
   "name": "Soul of Takkuri",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 767
  },
  {
   "id": "MM_SOUL_ENEMY_TEKTITE",
   "name": "Soul of Tektites (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 737
  },
  {
   "id": "MM_SOUL_ENEMY_THIEVES",
   "name": "Soul of the Fighting Pirates",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 779
  },
  {
   "id": "MM_SOUL_ENEMY_WALLMASTER",
   "name": "Soul of Wallmasters (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 734
  },
  {
   "id": "MM_SOUL_ENEMY_WART",
   "name": "Soul of Warts",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 777
  },
  {
   "id": "MM_SOUL_ENEMY_WIZZROBE",
   "name": "Soul of Wizzrobes",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 772
  },
  {
   "id": "MM_SOUL_ENEMY_WOLFOS",
   "name": "Soul of Wolfos (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 752
  },
  {
   "id": "MM_SOUL_MISC_BUSINESS_SCRUB",
   "name": "Soul of Business Scrubs (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 844
  },
  {
   "id": "MM_SOUL_MISC_GS",
   "name": "Soul of Gold Skulltulas (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 843
  },
  {
   "id": "MM_SOUL_NPC_ANJU",
   "name": "Soul of Anju (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 827
  },
  {
   "id": "MM_SOUL_NPC_AROMA",
   "name": "Soul of Madame Aroma (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 786
  },
  {
   "id": "MM_SOUL_NPC_ASTRONOMER",
   "name": "Soul of Astronomer (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 814
  },
  {
   "id": "MM_SOUL_NPC_BANKER",
   "name": "Soul of the Banker (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 836
  },
  {
   "id": "MM_SOUL_NPC_BAZAAR_SHOPKEEPER",
   "name": "Soul of Swamp Archery Owner (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 788
  },
  {
   "id": "MM_SOUL_NPC_BEAN_SALESMAN",
   "name": "Soul of the Bean Salesman (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 825
  },
  {
   "id": "MM_SOUL_NPC_BIGGORON",
   "name": "Soul of Biggoron (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 812
  },
  {
   "id": "MM_SOUL_NPC_BLACKSMITHS",
   "name": "Soul of Blacksmiths",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 816
  },
  {
   "id": "MM_SOUL_NPC_BOMBCHU_BOWLING_LADY",
   "name": "Soul of Chest Game Lady (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 817
  },
  {
   "id": "MM_SOUL_NPC_BOMBCHU_SHOPKEEPER",
   "name": "Soul of the Bomb Shop Owner (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 791
  },
  {
   "id": "MM_SOUL_NPC_BOMBERS",
   "name": "Soul of Bombers (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 792
  },
  {
   "id": "MM_SOUL_NPC_BUTLER_DEKU",
   "name": "Soul of the Deku Butler",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 793
  },
  {
   "id": "MM_SOUL_NPC_CARPENTERS",
   "name": "Soul of Carpenters (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 826
  },
  {
   "id": "MM_SOUL_NPC_CARPET_MAN",
   "name": "Soul of Swordsman (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 833
  },
  {
   "id": "MM_SOUL_NPC_CHEST_GAME_OWNER",
   "name": "Soul of the Fisherman (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 801
  },
  {
   "id": "MM_SOUL_NPC_CITIZEN",
   "name": "Soul of Citizens (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 794
  },
  {
   "id": "MM_SOUL_NPC_COMPOSER_BROS",
   "name": "Soul of Composer Bros. (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 795
  },
  {
   "id": "MM_SOUL_NPC_DAMPE",
   "name": "Soul of Dampe (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 796
  },
  {
   "id": "MM_SOUL_NPC_DEKU_KING",
   "name": "Soul of the Deku King",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 797
  },
  {
   "id": "MM_SOUL_NPC_DEKU_PRINCESS",
   "name": "Soul of the Deku Princess",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 798
  },
  {
   "id": "MM_SOUL_NPC_DOG_LADY",
   "name": "Soul of Dog Lady (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 832
  },
  {
   "id": "MM_SOUL_NPC_FISHING_POND_OWNER",
   "name": "Soul of Trading Post Owner (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 820
  },
  {
   "id": "MM_SOUL_NPC_GORMAN",
   "name": "Soul of Gorman & Bros. (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 830
  },
  {
   "id": "MM_SOUL_NPC_GORON_CHILD",
   "name": "Soul of the Goron Baby (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 790
  },
  {
   "id": "MM_SOUL_NPC_GORON_ELDER",
   "name": "Soul of the Goron Elder",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 800
  },
  {
   "id": "MM_SOUL_NPC_GORON_SHOPKEEPER",
   "name": "Soul of the Goron Shopkeeper (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 802
  },
  {
   "id": "MM_SOUL_NPC_GORON",
   "name": "Soul of Gorons (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 789
  },
  {
   "id": "MM_SOUL_NPC_GROG",
   "name": "Soul of Grog (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 831
  },
  {
   "id": "MM_SOUL_NPC_GURU_GURU",
   "name": "Soul of Guru-Guru (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 828
  },
  {
   "id": "MM_SOUL_NPC_HONEY_DARLING",
   "name": "Soul of Honey & Darling (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 803
  },
  {
   "id": "MM_SOUL_NPC_KAFEI",
   "name": "Soul of Kafei",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 807
  },
  {
   "id": "MM_SOUL_NPC_KEATON",
   "name": "Soul of Keaton",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 808
  },
  {
   "id": "MM_SOUL_NPC_KOUME_KOTAKE",
   "name": "Soul of Koume and Kotake",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 809
  },
  {
   "id": "MM_SOUL_NPC_MALON",
   "name": "Soul of Romani/Cremia (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 824
  },
  {
   "id": "MM_SOUL_NPC_MAYOR_DOTOUR",
   "name": "Soul of Mayor Dotour",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 810
  },
  {
   "id": "MM_SOUL_NPC_MEDIGORON",
   "name": "Soul of Keg Trial Goron (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 811
  },
  {
   "id": "MM_SOUL_NPC_MOON_CHILDREN",
   "name": "Soul of Moon Children",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 837
  },
  {
   "id": "MM_SOUL_NPC_OLD_HAG",
   "name": "Soul of Anju's Grandmother (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 834
  },
  {
   "id": "MM_SOUL_NPC_PLAYGROUND_SCRUBS",
   "name": "Soul of Playground Scrubs",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 799
  },
  {
   "id": "MM_SOUL_NPC_POE_COLLECTOR",
   "name": "Soul of Ghost Hut Owner (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 815
  },
  {
   "id": "MM_SOUL_NPC_ROOFTOP_MAN",
   "name": "Soul of Part-Timer (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 821
  },
  {
   "id": "MM_SOUL_NPC_RUTO",
   "name": "Soul of Lulu (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 805
  },
  {
   "id": "MM_SOUL_NPC_SCIENTIST",
   "name": "Soul of the Scientist (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 829
  },
  {
   "id": "MM_SOUL_NPC_SHOOTING_GALLERY_OWNER",
   "name": "Soul of Town Archery Owner (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 787
  },
  {
   "id": "MM_SOUL_NPC_TALON",
   "name": "Soul of Mr. Barten (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 813
  },
  {
   "id": "MM_SOUL_NPC_THIEVES",
   "name": "Soul of the Patrolling Pirates and their Chief",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 838
  },
  {
   "id": "MM_SOUL_NPC_TINGLE",
   "name": "Soul of Tingle",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 818
  },
  {
   "id": "MM_SOUL_NPC_TOILET_HAND",
   "name": "Soul of Toilet Hand",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 819
  },
  {
   "id": "MM_SOUL_NPC_TOTO",
   "name": "Soul of Toto (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 804
  },
  {
   "id": "MM_SOUL_NPC_TOURIST_CENTER",
   "name": "Soul of Tourist Center Owner",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 835
  },
  {
   "id": "MM_SOUL_NPC_ZORA_MUSICIANS",
   "name": "Soul of the Zora Musicians",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 806
  },
  {
   "id": "MM_SOUL_NPC_ZORA_SHOPKEEPER",
   "name": "Soul of the Zora Shopkeeper (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 823
  },
  {
   "id": "MM_SOUL_NPC_ZORA",
   "name": "Soul of Zoras (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 822
  },
  {
   "id": "MM_SPELL_FIRE",
   "name": "Din's Fire (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 870
  },
  {
   "id": "MM_SPELL_LOVE",
   "name": "Nayru's Love (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 872
  },
  {
   "id": "MM_SPELL_WIND",
   "name": "Farore's Wind (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 871
  },
  {
   "id": "MM_SPIN_UPGRADE",
   "name": "Spin Attack Upgrade (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 649
  },
  {
   "id": "MM_STICK_UPGRADE",
   "name": "Deku Stick Upgrade (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 892
  },
  {
   "id": "MM_STICK",
   "name": "Deku Stick (MM)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 539
  },
  {
   "id": "MM_STONE_OF_AGONY",
   "name": "Stone of Agony (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 897
  },
  {
   "id": "MM_STRAY_FAIRY_GB",
   "name": "Stray Fairy (Great Bay Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 530
  },
  {
   "id": "MM_STRAY_FAIRY_SH",
   "name": "Stray Fairy (Snowhead Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 529
  },
  {
   "id": "MM_STRAY_FAIRY_ST",
   "name": "Stray Fairy (Stone Tower Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 531
  },
  {
   "id": "MM_STRAY_FAIRY_TOWN",
   "name": "Stray Fairy (Clock Town)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 532
  },
  {
   "id": "MM_STRAY_FAIRY_WF",
   "name": "Stray Fairy (Woodfall Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 528
  },
  {
   "id": "MM_STRENGTH",
   "name": "Progressive Strength (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 880
  },
  {
   "id": "MM_SWORD",
   "name": "Progressive Sword (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 572
  },
  {
   "id": "MM_TRANSCENDENT_FAIRY",
   "name": "Transcendent Fairy",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 533
  },
  {
   "id": "MM_TUNIC_GORON",
   "name": "Goron Tunic (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 875
  },
  {
   "id": "MM_TUNIC_ZORA",
   "name": "Zora Tunic (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 876
  },
  {
   "id": "MM_WALLET",
   "name": "Progressive Wallet (MM)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 520
  },
  {
   "id": "MM_WORLD_MAP_CLOCK_TOWN",
   "name": "World Map of Clock Town",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 640
  },
  {
   "id": "MM_WORLD_MAP_GREAT_BAY",
   "name": "World Map of Great Bay",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 644
  },
  {
   "id": "MM_WORLD_MAP_ROMANI_RANCH",
   "name": "World Map of Ranch",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 643
  },
  {
   "id": "MM_WORLD_MAP_SNOWHEAD",
   "name": "World Map of Snowhead",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 642
  },
  {
   "id": "MM_WORLD_MAP_STONE_TOWER",
   "name": "World Map of Stone Tower",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 645
  },
  {
   "id": "MM_WORLD_MAP_WOODFALL",
   "name": "World Map of Woodfall",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 641
  },
  {
   "id": "OOT_ARROW_FIRE",
   "name": "Fire Arrows (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 88
  },
  {
   "id": "OOT_ARROW_ICE",
   "name": "Ice Arrows (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 89
  },
  {
   "id": "OOT_ARROW_LIGHT",
   "name": "Light Arrows (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 90
  },
  {
   "id": "OOT_ARROWS_10",
   "name": "10 Arrows (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 74
  },
  {
   "id": "OOT_ARROWS_30",
   "name": "30 Arrows (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 75
  },
  {
   "id": "OOT_ARROWS_5",
   "name": "5 Arrows (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 73
  },
  {
   "id": "OOT_BIG_POE",
   "name": "Big Poe (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 112
  },
  {
   "id": "OOT_BLUE_FIRE",
   "name": "Blue Fire (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 110
  },
  {
   "id": "OOT_BOMB_BAG",
   "name": "Bomb Bag (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 50
  },
  {
   "id": "OOT_BOMB",
   "name": "Bomb (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 101
  },
  {
   "id": "OOT_BOMBCHU_10",
   "name": "10 Bombchu (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 3
  },
  {
   "id": "OOT_BOMBCHU_20",
   "name": "20 Bombchu (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 107
  },
  {
   "id": "OOT_BOMBCHU_5",
   "name": "5 Bombchu (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 106
  },
  {
   "id": "OOT_BOMBCHU_BAG",
   "name": "Bombchu Bag (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 453
  },
  {
   "id": "OOT_BOMBS_10",
   "name": "10 Bombs (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 102
  },
  {
   "id": "OOT_BOMBS_20",
   "name": "20 Bombs (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 103
  },
  {
   "id": "OOT_BOMBS_30",
   "name": "30 Bombs (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 104
  },
  {
   "id": "OOT_BOMBS_5",
   "name": "5 Bombs (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 1
  },
  {
   "id": "OOT_BOOMERANG",
   "name": "Boomerang (OOT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 6
  },
  {
   "id": "OOT_BOOTS_HOVER",
   "name": "Hover Boots (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 47
  },
  {
   "id": "OOT_BOOTS_IRON",
   "name": "Iron Boots (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 46
  },
  {
   "id": "OOT_BOSS_KEY_FIRE",
   "name": "Boss Key (Fire Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 195
  },
  {
   "id": "OOT_BOSS_KEY_FOREST",
   "name": "Boss Key (Forest Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 194
  },
  {
   "id": "OOT_BOSS_KEY_GANON",
   "name": "Boss Key (Ganon's Castle)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 199
  },
  {
   "id": "OOT_BOSS_KEY_SHADOW",
   "name": "Boss Key (Shadow Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 198
  },
  {
   "id": "OOT_BOSS_KEY_SPIRIT",
   "name": "Boss Key (Spirit Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 197
  },
  {
   "id": "OOT_BOSS_KEY_WATER",
   "name": "Boss Key (Water Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 196
  },
  {
   "id": "OOT_BOTTLE_BIG_POE",
   "name": "Bottled Big Poe (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 402
  },
  {
   "id": "OOT_BOTTLE_BLUE_FIRE",
   "name": "Bottle of Blue Fire (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 403
  },
  {
   "id": "OOT_BOTTLE_CHATEAU",
   "name": "Bottle of Chateau Romani (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 474
  },
  {
   "id": "OOT_BOTTLE_EMPTY",
   "name": "Empty Bottle (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 15
  },
  {
   "id": "OOT_BOTTLE_FAIRY",
   "name": "Bottled Fairy (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 400
  },
  {
   "id": "OOT_BOTTLE_MILK",
   "name": "Bottle of Milk (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 20
  },
  {
   "id": "OOT_BOTTLE_POE",
   "name": "Bottled Poe (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 401
  },
  {
   "id": "OOT_BOTTLE_POTION_BLUE",
   "name": "Bottle of Blue Potion (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 399
  },
  {
   "id": "OOT_BOTTLE_POTION_GREEN",
   "name": "Bottle of Green Potion (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 398
  },
  {
   "id": "OOT_BOTTLE_POTION_RED",
   "name": "Bottle of Red Potion (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 397
  },
  {
   "id": "OOT_BOTTLE_RANDOM",
   "name": "Random Bottle (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "OOT_BOTTLE_RUTO_LETTER",
   "name": "Ruto's Letter (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 21
  },
  {
   "id": "OOT_BOTTLED_GOLD_DUST",
   "name": "Bottle of Gold Dust (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 473
  },
  {
   "id": "OOT_BOW",
   "name": "Fairy Bow (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 4
  },
  {
   "id": "OOT_BROKEN_GORON_SWORD",
   "name": "Broken Goron's Sword",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 34
  },
  {
   "id": "OOT_BUGS",
   "name": "Bugs (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 109
  },
  {
   "id": "OOT_BUTTON_A",
   "name": "A Button (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 390
  },
  {
   "id": "OOT_BUTTON_C_DOWN",
   "name": "C-Down Button (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 394
  },
  {
   "id": "OOT_BUTTON_C_LEFT",
   "name": "C-Left Button (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 392
  },
  {
   "id": "OOT_BUTTON_C_RIGHT",
   "name": "C-Right Button (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 391
  },
  {
   "id": "OOT_BUTTON_C_UP",
   "name": "C-Up Button (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 393
  },
  {
   "id": "OOT_CHATEAU",
   "name": "Chateau Romani Refill (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 470
  },
  {
   "id": "OOT_CHICKEN",
   "name": "Chicken",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 25
  },
  {
   "id": "OOT_CLAIM_CHECK",
   "name": "Claim Check",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 38
  },
  {
   "id": "OOT_CLOCK",
   "name": "Clock (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 511
  },
  {
   "id": "OOT_COIN_BLUE",
   "name": "Coin (Blue)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 362
  },
  {
   "id": "OOT_COIN_GREEN",
   "name": "Coin (Green)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 361
  },
  {
   "id": "OOT_COIN_RED",
   "name": "Coin (Red)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 360
  },
  {
   "id": "OOT_COIN_YELLOW",
   "name": "Coin (Yellow)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 363
  },
  {
   "id": "OOT_COJIRO",
   "name": "Cojiro",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 14
  },
  {
   "id": "OOT_COMPASS_BOTW",
   "name": "Compass (Bottom of the Well)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 218
  },
  {
   "id": "OOT_COMPASS_DC",
   "name": "Compass (Dodongo's Cavern)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 211
  },
  {
   "id": "OOT_COMPASS_DT",
   "name": "Compass (Deku Tree)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 210
  },
  {
   "id": "OOT_COMPASS_FIRE",
   "name": "Compass (Fire Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 214
  },
  {
   "id": "OOT_COMPASS_FOREST",
   "name": "Compass (Forest Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 213
  },
  {
   "id": "OOT_COMPASS_IC",
   "name": "Compass (Ice Cavern)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 219
  },
  {
   "id": "OOT_COMPASS_JJ",
   "name": "Compass (Jabu-Jabu's Belly)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 212
  },
  {
   "id": "OOT_COMPASS_SHADOW",
   "name": "Compass (Shadow Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 217
  },
  {
   "id": "OOT_COMPASS_SPIRIT",
   "name": "Compass (Spirit Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 216
  },
  {
   "id": "OOT_COMPASS_WATER",
   "name": "Compass (Water Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 215
  },
  {
   "id": "OOT_DEFENSE_UPGRADE",
   "name": "Double Defense (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 182
  },
  {
   "id": "OOT_DEKU_SEEDS_30",
   "name": "30 Deku Seeds (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 105
  },
  {
   "id": "OOT_DEKU_SEEDS_5",
   "name": "5 Deku Seeds (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 60
  },
  {
   "id": "OOT_EYE_DROPS",
   "name": "Eye Drops",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 37
  },
  {
   "id": "OOT_EYEBALL_FROG",
   "name": "Eyeball Frog",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 36
  },
  {
   "id": "OOT_FAIRY_BIG",
   "name": "Big Fairy (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 463
  },
  {
   "id": "OOT_FAIRY",
   "name": "Fairy (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 19
  },
  {
   "id": "OOT_FISH",
   "name": "Fish (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 108
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_10LBS",
   "name": "Adult Fish (10 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 423
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_11LBS",
   "name": "Adult Fish (11 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 424
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_12LBS",
   "name": "Adult Fish (12 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 425
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_13LBS",
   "name": "Adult Fish (13 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 426
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_14LBS",
   "name": "Adult Fish (14 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 427
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_15LBS",
   "name": "Adult Fish (15 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 428
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_16LBS",
   "name": "Adult Fish (16 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 429
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_17LBS",
   "name": "Adult Fish (17 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 430
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_18LBS",
   "name": "Adult Fish (18 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 431
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_19LBS",
   "name": "Adult Fish (19 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 432
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_20LBS",
   "name": "Adult Fish (20 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 433
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_21LBS",
   "name": "Adult Fish (21 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 434
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_22LBS",
   "name": "Adult Fish (22 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 435
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_23LBS",
   "name": "Adult Fish (23 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 436
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_24LBS",
   "name": "Adult Fish (24 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 437
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_25LBS",
   "name": "Adult Fish (25 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 438
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_4LBS",
   "name": "Adult Fish (4 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 417
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_5LBS",
   "name": "Adult Fish (5 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 418
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_6LBS",
   "name": "Adult Fish (6 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 419
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_7LBS",
   "name": "Adult Fish (7 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 420
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_8LBS",
   "name": "Adult Fish (8 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 421
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH_9LBS",
   "name": "Adult Fish (9 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 422
  },
  {
   "id": "OOT_FISHING_POND_ADULT_FISH",
   "name": "Adult Fish (Placeholder)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_29LBS",
   "name": "Adult Loach (29 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 445
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_30LBS",
   "name": "Adult Loach (30 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 446
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_31LBS",
   "name": "Adult Loach (31 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 447
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_32LBS",
   "name": "Adult Loach (32 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 448
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_33LBS",
   "name": "Adult Loach (33 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 449
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_34LBS",
   "name": "Adult Loach (34 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 450
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_35LBS",
   "name": "Adult Loach (35 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 451
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH_36LBS",
   "name": "Adult Loach (36 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 452
  },
  {
   "id": "OOT_FISHING_POND_ADULT_LOACH",
   "name": "Adult Loach (Placeholder)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_10LBS",
   "name": "Child Fish (10 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 412
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_11LBS",
   "name": "Child Fish (11 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 413
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_12LBS",
   "name": "Child Fish (12 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 414
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_13LBS",
   "name": "Child Fish (13 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 415
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_14LBS",
   "name": "Child Fish (14 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 416
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_2LBS",
   "name": "Child Fish (2 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 404
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_3LBS",
   "name": "Child Fish (3 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 405
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_4LBS",
   "name": "Child Fish (4 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 406
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_5LBS",
   "name": "Child Fish (5 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 407
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_6LBS",
   "name": "Child Fish (6 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 408
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_7LBS",
   "name": "Child Fish (7 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 409
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_8LBS",
   "name": "Child Fish (8 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 410
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH_9LBS",
   "name": "Child Fish (9 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 411
  },
  {
   "id": "OOT_FISHING_POND_CHILD_FISH",
   "name": "Child Fish (Placeholder)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH_14LBS",
   "name": "Child Loach (14 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 439
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH_15LBS",
   "name": "Child Loach (15 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 440
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH_16LBS",
   "name": "Child Loach (16 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 441
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH_17LBS",
   "name": "Child Loach (17 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 442
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH_18LBS",
   "name": "Child Loach (18 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 443
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH_19LBS",
   "name": "Child Loach (19 pounds)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 444
  },
  {
   "id": "OOT_FISHING_POND_CHILD_LOACH",
   "name": "Child Loach (Placeholder)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "OOT_GERUDO_CARD",
   "name": "Gerudo's Membership Card",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 58
  },
  {
   "id": "OOT_GREAT_FAIRY_SWORD",
   "name": "Great Fairy's Sword (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 468
  },
  {
   "id": "OOT_GS_TOKEN",
   "name": "Gold Skulltula Token",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 91
  },
  {
   "id": "OOT_HAMMER",
   "name": "Megaton Hammer (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 13
  },
  {
   "id": "OOT_HEART_CONTAINER",
   "name": "Heart Container (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 61
  },
  {
   "id": "OOT_HEART_PIECE",
   "name": "Piece of Heart (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 62
  },
  {
   "id": "OOT_HOOKSHOT",
   "name": "Progressive Hookshot (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 8
  },
  {
   "id": "OOT_KEY_RING_BOTW",
   "name": "Key Ring (Well)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 356
  },
  {
   "id": "OOT_KEY_RING_FIRE",
   "name": "Key Ring (Fire)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 351
  },
  {
   "id": "OOT_KEY_RING_FOREST",
   "name": "Key Ring (Forest)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 350
  },
  {
   "id": "OOT_KEY_RING_GANON",
   "name": "Key Ring (Ganon)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 355
  },
  {
   "id": "OOT_KEY_RING_GF",
   "name": "Key Ring (Hideout)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 357
  },
  {
   "id": "OOT_KEY_RING_GTG",
   "name": "Key Ring (GTG)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 358
  },
  {
   "id": "OOT_KEY_RING_SHADOW",
   "name": "Key Ring (Shadow)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 354
  },
  {
   "id": "OOT_KEY_RING_SPIRIT",
   "name": "Key Ring (Spirit)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 353
  },
  {
   "id": "OOT_KEY_RING_TCG",
   "name": "Key Ring (Chest Game)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 396
  },
  {
   "id": "OOT_KEY_RING_WATER",
   "name": "Key Ring (Water)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 352
  },
  {
   "id": "OOT_LENS",
   "name": "Lens of Truth (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 10
  },
  {
   "id": "OOT_MAGIC_BEAN",
   "name": "Magic Beans (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 22
  },
  {
   "id": "OOT_MAGIC_JAR_LARGE",
   "name": "Large Magic Jar (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 68
  },
  {
   "id": "OOT_MAGIC_JAR_SMALL",
   "name": "Small Magic Jar (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 67
  },
  {
   "id": "OOT_MAGIC_UPGRADE",
   "name": "Magic Upgrade (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 180
  },
  {
   "id": "OOT_MAP_BOTW",
   "name": "Map (Bottom of the Well)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 208
  },
  {
   "id": "OOT_MAP_DC",
   "name": "Map (Dodongo's Cavern)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 201
  },
  {
   "id": "OOT_MAP_DT",
   "name": "Map (Deku Tree)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 200
  },
  {
   "id": "OOT_MAP_FIRE",
   "name": "Map (Fire Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 204
  },
  {
   "id": "OOT_MAP_FOREST",
   "name": "Map (Forest Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 203
  },
  {
   "id": "OOT_MAP_IC",
   "name": "Map (Ice Cavern)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 209
  },
  {
   "id": "OOT_MAP_JJ",
   "name": "Map (Jabu-Jabu's Belly)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 202
  },
  {
   "id": "OOT_MAP_SHADOW",
   "name": "Map (Shadow Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 207
  },
  {
   "id": "OOT_MAP_SPIRIT",
   "name": "Map (Spirit Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 206
  },
  {
   "id": "OOT_MAP_WATER",
   "name": "Map (Water Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 205
  },
  {
   "id": "OOT_MASK_BLAST",
   "name": "Blast Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 464
  },
  {
   "id": "OOT_MASK_BUNNY",
   "name": "Bunny Hood (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 27
  },
  {
   "id": "OOT_MASK_GERUDO",
   "name": "Gerudo Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 83
  },
  {
   "id": "OOT_MASK_GORON",
   "name": "Goron Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 81
  },
  {
   "id": "OOT_MASK_KAMARO",
   "name": "Kamaro's Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 466
  },
  {
   "id": "OOT_MASK_KEATON",
   "name": "Keaton Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 26
  },
  {
   "id": "OOT_MASK_SKULL",
   "name": "Skull Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 23
  },
  {
   "id": "OOT_MASK_SPOOKY",
   "name": "Spooky Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 24
  },
  {
   "id": "OOT_MASK_STONE",
   "name": "Stone Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 465
  },
  {
   "id": "OOT_MASK_TRUTH",
   "name": "Mask of Truth (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 28
  },
  {
   "id": "OOT_MASK_ZORA",
   "name": "Zora Mask (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 82
  },
  {
   "id": "OOT_MEDALLION_FIRE",
   "name": "Fire Medallion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 175
  },
  {
   "id": "OOT_MEDALLION_FOREST",
   "name": "Forest Medallion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 174
  },
  {
   "id": "OOT_MEDALLION_LIGHT",
   "name": "Light Medallion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 179
  },
  {
   "id": "OOT_MEDALLION_SHADOW",
   "name": "Shadow Medallion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 178
  },
  {
   "id": "OOT_MEDALLION_SPIRIT",
   "name": "Spirit Medallion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 177
  },
  {
   "id": "OOT_MEDALLION_WATER",
   "name": "Water Medallion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 176
  },
  {
   "id": "OOT_MILK",
   "name": "Lon Lon Milk (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 80
  },
  {
   "id": "OOT_NUT_UPGRADE",
   "name": "Deku Nut Upgrade (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 121
  },
  {
   "id": "OOT_NUTS_10",
   "name": "10 Deku Nuts (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 100
  },
  {
   "id": "OOT_NUTS_5_ALT",
   "name": "5 Deku Nuts (OoT) (OOT_NUTS_5_ALT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 99
  },
  {
   "id": "OOT_NUTS_5",
   "name": "5 Deku Nuts (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 2
  },
  {
   "id": "OOT_OCARINA",
   "name": "Progressive Ocarina (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 59
  },
  {
   "id": "OOT_ODD_MUSHROOM",
   "name": "Odd Mushroom",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 31
  },
  {
   "id": "OOT_ODD_POTION",
   "name": "Odd Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 32
  },
  {
   "id": "OOT_PLATINUM_TOKEN",
   "name": "Platinum Token (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 483
  },
  {
   "id": "OOT_POACHER_SAW",
   "name": "Poacher's Saw",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 33
  },
  {
   "id": "OOT_POCKET_CUCCO",
   "name": "Pocket Cucco",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 30
  },
  {
   "id": "OOT_POCKET_EGG",
   "name": "Pocket Egg",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 29
  },
  {
   "id": "OOT_POE",
   "name": "Poe (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 111
  },
  {
   "id": "OOT_POTION_BLUE",
   "name": "Blue Potion (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 18
  },
  {
   "id": "OOT_POTION_GREEN",
   "name": "Green Potion (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 17
  },
  {
   "id": "OOT_POTION_RED",
   "name": "Red Potion (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 16
  },
  {
   "id": "OOT_POUCH_SILVER_BOTW",
   "name": "Silver Rupee Pouch (Bottom of the Well)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 368
  },
  {
   "id": "OOT_POUCH_SILVER_DC",
   "name": "Silver Rupee Pouch (Dodongo's Cavern)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 367
  },
  {
   "id": "OOT_POUCH_SILVER_GANON_FIRE",
   "name": "Silver Rupee Pouch (Ganon's Castle - Fire Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 385
  },
  {
   "id": "OOT_POUCH_SILVER_GANON_FOREST",
   "name": "Silver Rupee Pouch (Ganon's Castle - Forest Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 386
  },
  {
   "id": "OOT_POUCH_SILVER_GANON_LIGHT",
   "name": "Silver Rupee Pouch (Ganon's Castle - Light Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 384
  },
  {
   "id": "OOT_POUCH_SILVER_GANON_SHADOW",
   "name": "Silver Rupee Pouch (Ganon's Castle - Shadow Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 387
  },
  {
   "id": "OOT_POUCH_SILVER_GANON_SPIRIT",
   "name": "Silver Rupee Pouch (Ganon's Castle - Spirit Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 383
  },
  {
   "id": "OOT_POUCH_SILVER_GANON_WATER",
   "name": "Silver Rupee Pouch (Ganon's Castle - Water Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 388
  },
  {
   "id": "OOT_POUCH_SILVER_GTG_LAVA",
   "name": "Silver Rupee Pouch (Gerudo Training Ground - Lava)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 381
  },
  {
   "id": "OOT_POUCH_SILVER_GTG_SLOPES",
   "name": "Silver Rupee Pouch (Gerudo Training Ground - Slopes)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 380
  },
  {
   "id": "OOT_POUCH_SILVER_GTG_WATER",
   "name": "Silver Rupee Pouch (Gerudo Training Ground - Water)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 382
  },
  {
   "id": "OOT_POUCH_SILVER_IC_BLOCK",
   "name": "Silver Rupee Pouch (Ice Cavern - Block)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 379
  },
  {
   "id": "OOT_POUCH_SILVER_IC_SCYTHE",
   "name": "Silver Rupee Pouch (Ice Cavern - Scythe)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 378
  },
  {
   "id": "OOT_POUCH_SILVER_SHADOW_BLADES",
   "name": "Silver Rupee Pouch (Shadow Temple - Invisible Blades)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 377
  },
  {
   "id": "OOT_POUCH_SILVER_SHADOW_PIT",
   "name": "Silver Rupee Pouch (Shadow Temple - Large Pits)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 375
  },
  {
   "id": "OOT_POUCH_SILVER_SHADOW_SCYTHE",
   "name": "Silver Rupee Pouch (Shadow Temple - Scythe)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 374
  },
  {
   "id": "OOT_POUCH_SILVER_SHADOW_SPIKES",
   "name": "Silver Rupee Pouch (Shadow Temple - Spikes)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 376
  },
  {
   "id": "OOT_POUCH_SILVER_SPIRIT_ADULT",
   "name": "Silver Rupee Pouch (Spirit Temple - Adult)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 373
  },
  {
   "id": "OOT_POUCH_SILVER_SPIRIT_BOULDERS",
   "name": "Silver Rupee Pouch (Spirit Temple - Boulders)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 371
  },
  {
   "id": "OOT_POUCH_SILVER_SPIRIT_CHILD",
   "name": "Silver Rupee Pouch (Spirit Temple - Child)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 369
  },
  {
   "id": "OOT_POUCH_SILVER_SPIRIT_LOBBY",
   "name": "Silver Rupee Pouch (Spirit Temple - Lobby)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 372
  },
  {
   "id": "OOT_POUCH_SILVER_SPIRIT_SUN",
   "name": "Silver Rupee Pouch (Spirit Temple - Sun Block)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 370
  },
  {
   "id": "OOT_POWDER_KEG",
   "name": "Powder Keg (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 475
  },
  {
   "id": "OOT_PRESCRIPTION",
   "name": "Prescription",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 35
  },
  {
   "id": "OOT_RECOVERY_HEART",
   "name": "Recovery Heart (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 72
  },
  {
   "id": "OOT_RUPEE_BLUE",
   "name": "Blue Rupee (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 77
  },
  {
   "id": "OOT_RUPEE_GREEN",
   "name": "Green Rupee (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 76
  },
  {
   "id": "OOT_RUPEE_HUGE",
   "name": "Gold Rupee (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 86
  },
  {
   "id": "OOT_RUPEE_MAGICAL",
   "name": "Magical Silver Rupee",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 389
  },
  {
   "id": "OOT_RUPEE_PURPLE",
   "name": "Purple Rupee (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 85
  },
  {
   "id": "OOT_RUPEE_RAINBOW",
   "name": "Rainbow Rupee (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 130
  },
  {
   "id": "OOT_RUPEE_RED",
   "name": "Red Rupee (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 78
  },
  {
   "id": "OOT_RUPEE_SILVER_BOTW",
   "name": "Silver Rupee (Bottom of the Well)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 225
  },
  {
   "id": "OOT_RUPEE_SILVER_DC",
   "name": "Silver Rupee (Dodongo's Cavern)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 224
  },
  {
   "id": "OOT_RUPEE_SILVER_GANON_FIRE",
   "name": "Silver Rupee (Ganon's Castle - Fire Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 242
  },
  {
   "id": "OOT_RUPEE_SILVER_GANON_FOREST",
   "name": "Silver Rupee (Ganon's Castle - Forest Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 243
  },
  {
   "id": "OOT_RUPEE_SILVER_GANON_LIGHT",
   "name": "Silver Rupee (Ganon's Castle - Light Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 241
  },
  {
   "id": "OOT_RUPEE_SILVER_GANON_SHADOW",
   "name": "Silver Rupee (Ganon's Castle - Shadow Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 244
  },
  {
   "id": "OOT_RUPEE_SILVER_GANON_SPIRIT",
   "name": "Silver Rupee (Ganon's Castle - Spirit Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 240
  },
  {
   "id": "OOT_RUPEE_SILVER_GANON_WATER",
   "name": "Silver Rupee (Ganon's Castle - Water Trial)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 245
  },
  {
   "id": "OOT_RUPEE_SILVER_GTG_LAVA",
   "name": "Silver Rupee (Gerudo Training Ground - Lava)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 238
  },
  {
   "id": "OOT_RUPEE_SILVER_GTG_SLOPES",
   "name": "Silver Rupee (Gerudo Training Ground - Slopes)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 237
  },
  {
   "id": "OOT_RUPEE_SILVER_GTG_WATER",
   "name": "Silver Rupee (Gerudo Training Ground - Water)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 239
  },
  {
   "id": "OOT_RUPEE_SILVER_IC_BLOCK",
   "name": "Silver Rupee (Ice Cavern - Block)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 236
  },
  {
   "id": "OOT_RUPEE_SILVER_IC_SCYTHE",
   "name": "Silver Rupee (Ice Cavern - Scythe)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 235
  },
  {
   "id": "OOT_RUPEE_SILVER_SHADOW_BLADES",
   "name": "Silver Rupee (Shadow Temple - Invisible Blades)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 234
  },
  {
   "id": "OOT_RUPEE_SILVER_SHADOW_PIT",
   "name": "Silver Rupee (Shadow Temple - Large Pits)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 232
  },
  {
   "id": "OOT_RUPEE_SILVER_SHADOW_SCYTHE",
   "name": "Silver Rupee (Shadow Temple - Scythe)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 231
  },
  {
   "id": "OOT_RUPEE_SILVER_SHADOW_SPIKES",
   "name": "Silver Rupee (Shadow Temple - Spikes)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 233
  },
  {
   "id": "OOT_RUPEE_SILVER_SPIRIT_ADULT",
   "name": "Silver Rupee (Spirit Temple - Adult)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 230
  },
  {
   "id": "OOT_RUPEE_SILVER_SPIRIT_BOULDERS",
   "name": "Silver Rupee (Spirit Temple - Boulders)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 228
  },
  {
   "id": "OOT_RUPEE_SILVER_SPIRIT_CHILD",
   "name": "Silver Rupee (Spirit Temple - Child)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 226
  },
  {
   "id": "OOT_RUPEE_SILVER_SPIRIT_LOBBY",
   "name": "Silver Rupee (Spirit Temple - Lobby)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 229
  },
  {
   "id": "OOT_RUPEE_SILVER_SPIRIT_SUN",
   "name": "Silver Rupee (Spirit Temple - Sun Block)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 227
  },
  {
   "id": "OOT_RUSTY_KEY_ADULT_BAZAAR",
   "name": "Rusty Key (Adult Bazaar)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 508
  },
  {
   "id": "OOT_RUSTY_KEY_ADULT_POTION_SHOP_BACK",
   "name": "Rusty Key (Adult Potion Shop Back)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 510
  },
  {
   "id": "OOT_RUSTY_KEY_ADULT_POTION_SHOP",
   "name": "Rusty Key (Adult Potion Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 509
  },
  {
   "id": "OOT_RUSTY_KEY_ADULT_SHOOTING_GALLERY",
   "name": "Rusty Key (Adult Shooting Gallery)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 506
  },
  {
   "id": "OOT_RUSTY_KEY_BACK_ALLEY_HOUSE",
   "name": "Rusty Key (Back Alley House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 488
  },
  {
   "id": "OOT_RUSTY_KEY_BOMBCHU_BOWLING",
   "name": "Rusty Key (Bombchu Bowling)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 494
  },
  {
   "id": "OOT_RUSTY_KEY_BOMBCHU_SHOP",
   "name": "Rusty Key (Bombchu Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 489
  },
  {
   "id": "OOT_RUSTY_KEY_CARPENTER_HOUSE",
   "name": "Rusty Key (Carpenter House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 504
  },
  {
   "id": "OOT_RUSTY_KEY_CHILD_BAZAAR",
   "name": "Rusty Key (Child Bazaar)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 491
  },
  {
   "id": "OOT_RUSTY_KEY_CHILD_POTION_SHOP",
   "name": "Rusty Key (Child Potion Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 492
  },
  {
   "id": "OOT_RUSTY_KEY_CHILD_SHOOTING_GALLERY",
   "name": "Rusty Key (Child Shooting Gallery)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 493
  },
  {
   "id": "OOT_RUSTY_KEY_DOG_LADY_HOUSE",
   "name": "Rusty Key (Dog Lady House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 487
  },
  {
   "id": "OOT_RUSTY_KEY_FISHING_POND",
   "name": "Rusty Key (Fishing Pond)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 496
  },
  {
   "id": "OOT_RUSTY_KEY_GRANNY_POTION_SHOP",
   "name": "Rusty Key (Granny Potion Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 505
  },
  {
   "id": "OOT_RUSTY_KEY_GRAVEYARD",
   "name": "Rusty Key (Kakariko Graveyard Hut)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 501
  },
  {
   "id": "OOT_RUSTY_KEY_GUARD_HOUSE",
   "name": "Rusty Key (Guard House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 485
  },
  {
   "id": "OOT_RUSTY_KEY_HYRULE_CASTLE",
   "name": "Rusty Key (Hyrule Castle)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 486
  },
  {
   "id": "OOT_RUSTY_KEY_IMPA_HOUSE",
   "name": "Rusty Key (Impa's House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 503
  },
  {
   "id": "OOT_RUSTY_KEY_LABORATORY",
   "name": "Rusty Key (Laboratory)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 495
  },
  {
   "id": "OOT_RUSTY_KEY_MASK_SHOP",
   "name": "Rusty Key (Mask Shop)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 490
  },
  {
   "id": "OOT_RUSTY_KEY_RANCH_HOUSE_ROOM",
   "name": "Rusty Key (Malon's Room)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 500
  },
  {
   "id": "OOT_RUSTY_KEY_RANCH_HOUSE",
   "name": "Rusty Key (Ranch House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 499
  },
  {
   "id": "OOT_RUSTY_KEY_RANCH_STABLE",
   "name": "Rusty Key (Ranch Stable)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 498
  },
  {
   "id": "OOT_RUSTY_KEY_SILO",
   "name": "Rusty Key (Silo)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 497
  },
  {
   "id": "OOT_RUSTY_KEY_SKULLTULA_HOUSE",
   "name": "Rusty Key (Skulltula House)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 507
  },
  {
   "id": "OOT_RUSTY_KEY_TREASURE_CHEST_GAME",
   "name": "Rusty Key (Treasure Chest Game)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 484
  },
  {
   "id": "OOT_RUSTY_KEY_WINDMILL",
   "name": "Rusty Key (Windmill)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 502
  },
  {
   "id": "OOT_SCALE",
   "name": "Progressive Scale (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 55
  },
  {
   "id": "OOT_SHIELD_DEKU",
   "name": "Deku Shield (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 41
  },
  {
   "id": "OOT_SHIELD_HYLIAN",
   "name": "Hylian Shield",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 42
  },
  {
   "id": "OOT_SHIELD_MIRROR",
   "name": "Mirror Shield (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 43
  },
  {
   "id": "OOT_SHIELD",
   "name": "Progressive Shield (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 183
  },
  {
   "id": "OOT_SHOVEL",
   "name": "Shovel (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 512
  },
  {
   "id": "OOT_SKELETON_KEY",
   "name": "Skeleton Key (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 359
  },
  {
   "id": "OOT_SLINGSHOT",
   "name": "Fairy Slingshot (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 5
  },
  {
   "id": "OOT_SMALL_KEY_BOTW",
   "name": "Small Key (Bottom of the Well)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 191
  },
  {
   "id": "OOT_SMALL_KEY_FIRE",
   "name": "Small Key (Fire Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 186
  },
  {
   "id": "OOT_SMALL_KEY_FOREST",
   "name": "Small Key (Forest Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 185
  },
  {
   "id": "OOT_SMALL_KEY_GANON",
   "name": "Small Key (Ganon's Castle)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 190
  },
  {
   "id": "OOT_SMALL_KEY_GF",
   "name": "Small Key (Gerudo's Fortress)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 192
  },
  {
   "id": "OOT_SMALL_KEY_GTG",
   "name": "Small Key (Gerudo's Training Ground)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 193
  },
  {
   "id": "OOT_SMALL_KEY_SHADOW",
   "name": "Small Key (Shadow Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 189
  },
  {
   "id": "OOT_SMALL_KEY_SPIRIT",
   "name": "Small Key (Spirit Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 188
  },
  {
   "id": "OOT_SMALL_KEY_TCG",
   "name": "Small Key (Chest Game)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 395
  },
  {
   "id": "OOT_SMALL_KEY_WATER",
   "name": "Small Key (Water Temple)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 187
  },
  {
   "id": "OOT_SONG_AWAKENING",
   "name": "Sonata of Awakening (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 146
  },
  {
   "id": "OOT_SONG_EMPTINESS",
   "name": "Elegy of Emptiness (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 143
  },
  {
   "id": "OOT_SONG_EPONA",
   "name": "Epona's Song (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 138
  },
  {
   "id": "OOT_SONG_GORON_HALF",
   "name": "Progressive Goron Lullaby (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 148
  },
  {
   "id": "OOT_SONG_GORON",
   "name": "Goron Lullaby (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 147
  },
  {
   "id": "OOT_SONG_HEALING",
   "name": "Song of Healing (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 144
  },
  {
   "id": "OOT_SONG_NOTE_AWAKENING",
   "name": "Note from Sonata of Awakening (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 166
  },
  {
   "id": "OOT_SONG_NOTE_EMPTINESS",
   "name": "Note from Elegy of Emptiness (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 163
  },
  {
   "id": "OOT_SONG_NOTE_EPONA",
   "name": "Note from Epona's Song (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 158
  },
  {
   "id": "OOT_SONG_NOTE_GORON",
   "name": "Note from Goron Lullaby (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 167
  },
  {
   "id": "OOT_SONG_NOTE_HEALING",
   "name": "Note from Song of Healing (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 164
  },
  {
   "id": "OOT_SONG_NOTE_ORDER",
   "name": "Note from Oath to Order (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 169
  },
  {
   "id": "OOT_SONG_NOTE_SARIA",
   "name": "Note from Saria's Song (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 159
  },
  {
   "id": "OOT_SONG_NOTE_SOARING",
   "name": "Note from Song of Soaring (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 165
  },
  {
   "id": "OOT_SONG_NOTE_STORMS",
   "name": "Note from Song of Storms (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 162
  },
  {
   "id": "OOT_SONG_NOTE_SUN",
   "name": "Note from Sun's Song (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 160
  },
  {
   "id": "OOT_SONG_NOTE_TIME",
   "name": "Note from Song of Time (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 161
  },
  {
   "id": "OOT_SONG_NOTE_TP_FIRE",
   "name": "Note from Bolero of Fire (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 152
  },
  {
   "id": "OOT_SONG_NOTE_TP_FOREST",
   "name": "Note from Minuet of Forest (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 151
  },
  {
   "id": "OOT_SONG_NOTE_TP_LIGHT",
   "name": "Note from Prelude of Light (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 156
  },
  {
   "id": "OOT_SONG_NOTE_TP_SHADOW",
   "name": "Note from Nocturne of Shadow (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 155
  },
  {
   "id": "OOT_SONG_NOTE_TP_SPIRIT",
   "name": "Note from Requiem of Spirit (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 154
  },
  {
   "id": "OOT_SONG_NOTE_TP_WATER",
   "name": "Note from Serenade of Water (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 153
  },
  {
   "id": "OOT_SONG_NOTE_ZELDA",
   "name": "Note from Zelda's Lullaby (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 157
  },
  {
   "id": "OOT_SONG_NOTE_ZORA",
   "name": "Note from New Wave Bossa Nova (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 168
  },
  {
   "id": "OOT_SONG_ORDER",
   "name": "Oath to Order (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 150
  },
  {
   "id": "OOT_SONG_SARIA",
   "name": "Saria's Song (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 139
  },
  {
   "id": "OOT_SONG_SOARING",
   "name": "Song of Soaring (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 145
  },
  {
   "id": "OOT_SONG_STORMS",
   "name": "Song of Storms (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 142
  },
  {
   "id": "OOT_SONG_SUN",
   "name": "Sun's Song (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 140
  },
  {
   "id": "OOT_SONG_TIME",
   "name": "Song of Time (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 141
  },
  {
   "id": "OOT_SONG_TP_FIRE",
   "name": "Bolero of Fire (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 132
  },
  {
   "id": "OOT_SONG_TP_FOREST",
   "name": "Minuet of Forest (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 131
  },
  {
   "id": "OOT_SONG_TP_LIGHT",
   "name": "Prelude of Light (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 136
  },
  {
   "id": "OOT_SONG_TP_SHADOW",
   "name": "Nocturne of Shadow (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 135
  },
  {
   "id": "OOT_SONG_TP_SPIRIT",
   "name": "Requiem of Spirit (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 134
  },
  {
   "id": "OOT_SONG_TP_WATER",
   "name": "Serenade of Water (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 133
  },
  {
   "id": "OOT_SONG_ZELDA",
   "name": "Zelda's Lullaby (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 137
  },
  {
   "id": "OOT_SONG_ZORA",
   "name": "New Wave Bossa Nova (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 149
  },
  {
   "id": "OOT_SOUL_ANIMAL_BUTTERFLY",
   "name": "Soul of Butterflies (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 346
  },
  {
   "id": "OOT_SOUL_ANIMAL_COW",
   "name": "Soul of Cows (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 344
  },
  {
   "id": "OOT_SOUL_ANIMAL_CUCCO",
   "name": "Soul of Cuccos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 343
  },
  {
   "id": "OOT_SOUL_ANIMAL_DOG",
   "name": "Soul of Dogs (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 345
  },
  {
   "id": "OOT_SOUL_BOSS_BARINADE",
   "name": "Soul of Barinade",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 291
  },
  {
   "id": "OOT_SOUL_BOSS_BONGO_BONGO",
   "name": "Soul of Bongo Bongo",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 295
  },
  {
   "id": "OOT_SOUL_BOSS_KING_DODONGO",
   "name": "Soul of King Dodongo",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 290
  },
  {
   "id": "OOT_SOUL_BOSS_MORPHA",
   "name": "Soul of Morpha",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 294
  },
  {
   "id": "OOT_SOUL_BOSS_PHANTOM_GANON",
   "name": "Soul of Phantom Ganon",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 292
  },
  {
   "id": "OOT_SOUL_BOSS_QUEEN_GOHMA",
   "name": "Soul of Queen Gohma",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 289
  },
  {
   "id": "OOT_SOUL_BOSS_TWINROVA",
   "name": "Soul of Twinrova",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 296
  },
  {
   "id": "OOT_SOUL_BOSS_VOLVAGIA",
   "name": "Soul of Volvagia",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 293
  },
  {
   "id": "OOT_SOUL_ENEMY_ANUBIS",
   "name": "Soul of Anubis",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 278
  },
  {
   "id": "OOT_SOUL_ENEMY_ARMOS",
   "name": "Soul of Armos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 265
  },
  {
   "id": "OOT_SOUL_ENEMY_BABY_DODONGO",
   "name": "Soul of Baby Dodongos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 257
  },
  {
   "id": "OOT_SOUL_ENEMY_BEAMOS",
   "name": "Soul of Beamos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 269
  },
  {
   "id": "OOT_SOUL_ENEMY_BIRI_BARI",
   "name": "Soul of Biris/Baris",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 259
  },
  {
   "id": "OOT_SOUL_ENEMY_BUBBLE",
   "name": "Soul of Bubbles (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 268
  },
  {
   "id": "OOT_SOUL_ENEMY_DARK_LINK",
   "name": "Soul of Dark Link",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 258
  },
  {
   "id": "OOT_SOUL_ENEMY_DEAD_HAND",
   "name": "Soul of Dead Hands",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 274
  },
  {
   "id": "OOT_SOUL_ENEMY_DEKU_BABA",
   "name": "Soul of Deku Babas (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 266
  },
  {
   "id": "OOT_SOUL_ENEMY_DEKU_SCRUB",
   "name": "Soul of Deku Scrubs (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 267
  },
  {
   "id": "OOT_SOUL_ENEMY_DODONGO",
   "name": "Soul of Dodongos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 249
  },
  {
   "id": "OOT_SOUL_ENEMY_FLARE_DANCER",
   "name": "Soul of Flare Dancers",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 273
  },
  {
   "id": "OOT_SOUL_ENEMY_FLOORMASTER",
   "name": "Soul of Floormasters (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 270
  },
  {
   "id": "OOT_SOUL_ENEMY_FLYING_POT",
   "name": "Soul of Flying Pots (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 281
  },
  {
   "id": "OOT_SOUL_ENEMY_FREEZARD",
   "name": "Soul of Freezards (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 282
  },
  {
   "id": "OOT_SOUL_ENEMY_GOHMA_LARVA",
   "name": "Soul of Gohma Larvae",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 255
  },
  {
   "id": "OOT_SOUL_ENEMY_GUAY",
   "name": "Soul of Guays (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 286
  },
  {
   "id": "OOT_SOUL_ENEMY_IRON_KNUCKLE",
   "name": "Soul of Iron Knuckles (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 279
  },
  {
   "id": "OOT_SOUL_ENEMY_KEESE",
   "name": "Soul of Keese (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 250
  },
  {
   "id": "OOT_SOUL_ENEMY_LEEVER",
   "name": "Soul of Leevers (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 252
  },
  {
   "id": "OOT_SOUL_ENEMY_LIKE_LIKE",
   "name": "Soul of Like Likes (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 276
  },
  {
   "id": "OOT_SOUL_ENEMY_LIZALFOS_DINOLFOS",
   "name": "Soul of Lizalfos/Dinolfos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 254
  },
  {
   "id": "OOT_SOUL_ENEMY_MOBLIN",
   "name": "Soul of Moblins",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 264
  },
  {
   "id": "OOT_SOUL_ENEMY_OCTOROK",
   "name": "Soul of Octoroks (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 247
  },
  {
   "id": "OOT_SOUL_ENEMY_PARASITE",
   "name": "Soul of Jabu-Jabu's Parasites",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 261
  },
  {
   "id": "OOT_SOUL_ENEMY_PEAHAT",
   "name": "Soul of Peahats (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 253
  },
  {
   "id": "OOT_SOUL_ENEMY_POE",
   "name": "Soul of Poes (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 288
  },
  {
   "id": "OOT_SOUL_ENEMY_REDEAD_GIBDO",
   "name": "Soul of ReDeads/Gibdos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 271
  },
  {
   "id": "OOT_SOUL_ENEMY_SHABOM",
   "name": "Soul of Shaboms",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 256
  },
  {
   "id": "OOT_SOUL_ENEMY_SHELL_BLADE",
   "name": "Soul of Shell Blades (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 275
  },
  {
   "id": "OOT_SOUL_ENEMY_SKULL_KID",
   "name": "Soul of Skull Kids (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 280
  },
  {
   "id": "OOT_SOUL_ENEMY_SKULLTULA",
   "name": "Soul of Skulltulas (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 262
  },
  {
   "id": "OOT_SOUL_ENEMY_SKULLWALLTULA",
   "name": "Soul of Skullwalltulas (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 272
  },
  {
   "id": "OOT_SOUL_ENEMY_SPIKE",
   "name": "Soul of Spikes",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 277
  },
  {
   "id": "OOT_SOUL_ENEMY_STALCHILD",
   "name": "Soul of Stalchildren (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 285
  },
  {
   "id": "OOT_SOUL_ENEMY_STALFOS",
   "name": "Soul of Stalfos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 246
  },
  {
   "id": "OOT_SOUL_ENEMY_STINGER",
   "name": "Soul of Stingers",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 283
  },
  {
   "id": "OOT_SOUL_ENEMY_TAILPASARN",
   "name": "Soul of Tailpasarans",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 260
  },
  {
   "id": "OOT_SOUL_ENEMY_TEKTITE",
   "name": "Soul of Tektites (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 251
  },
  {
   "id": "OOT_SOUL_ENEMY_THIEVES",
   "name": "Soul of the Fighting Gerudos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 287
  },
  {
   "id": "OOT_SOUL_ENEMY_TORCH_SLUG",
   "name": "Soul of Torch Slugs",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 263
  },
  {
   "id": "OOT_SOUL_ENEMY_WALLMASTER",
   "name": "Soul of Wallmasters (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 248
  },
  {
   "id": "OOT_SOUL_ENEMY_WOLFOS",
   "name": "Soul of Wolfos (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 284
  },
  {
   "id": "OOT_SOUL_MISC_BUSINESS_SCRUB",
   "name": "Soul of Business Scrubs (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 348
  },
  {
   "id": "OOT_SOUL_MISC_GS",
   "name": "Soul of Gold Skulltulas (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 347
  },
  {
   "id": "OOT_SOUL_NPC_ANJU",
   "name": "Soul of Cucco Lady (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 303
  },
  {
   "id": "OOT_SOUL_NPC_ASTRONOMER",
   "name": "Soul of the Astronomer (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 332
  },
  {
   "id": "OOT_SOUL_NPC_BANKER",
   "name": "Soul of the Beggar (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 341
  },
  {
   "id": "OOT_SOUL_NPC_BAZAAR_SHOPKEEPER",
   "name": "Soul of Bazaar Shopkeeper (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 321
  },
  {
   "id": "OOT_SOUL_NPC_BEAN_SALESMAN",
   "name": "Soul of the Bean Salesman (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 334
  },
  {
   "id": "OOT_SOUL_NPC_BIGGORON",
   "name": "Soul of Biggoron (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 316
  },
  {
   "id": "OOT_SOUL_NPC_BOMBCHU_BOWLING_LADY",
   "name": "Soul of Bombchu Bowling Lady (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 324
  },
  {
   "id": "OOT_SOUL_NPC_BOMBCHU_SHOPKEEPER",
   "name": "Soul of Bombchu Shopkeeper (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 322
  },
  {
   "id": "OOT_SOUL_NPC_BOMBERS",
   "name": "Soul of Graveyard Kid (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 328
  },
  {
   "id": "OOT_SOUL_NPC_CARPENTERS",
   "name": "Soul of Carpenters (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 304
  },
  {
   "id": "OOT_SOUL_NPC_CARPET_MAN",
   "name": "Soul of the Carpet Man (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 339
  },
  {
   "id": "OOT_SOUL_NPC_CHEST_GAME_OWNER",
   "name": "Soul of Chest Game Owner (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 325
  },
  {
   "id": "OOT_SOUL_NPC_CITIZEN",
   "name": "Soul of the Citizens (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 310
  },
  {
   "id": "OOT_SOUL_NPC_COMPOSER_BROS",
   "name": "Soul of Composer Bros. (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 330
  },
  {
   "id": "OOT_SOUL_NPC_DAMPE",
   "name": "Soul of Dampe (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 327
  },
  {
   "id": "OOT_SOUL_NPC_DARUNIA",
   "name": "Soul of Darunia",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 298
  },
  {
   "id": "OOT_SOUL_NPC_DOG_LADY",
   "name": "Soul of the Dog Lady (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 338
  },
  {
   "id": "OOT_SOUL_NPC_FISHING_POND_OWNER",
   "name": "Soul of Fishing Pond Owner (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 313
  },
  {
   "id": "OOT_SOUL_NPC_GORMAN",
   "name": "Soul of Ingo (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 336
  },
  {
   "id": "OOT_SOUL_NPC_GORON_CHILD",
   "name": "Soul of Goron Child (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 317
  },
  {
   "id": "OOT_SOUL_NPC_GORON_SHOPKEEPER",
   "name": "Soul of Goron Shopkeeper (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 318
  },
  {
   "id": "OOT_SOUL_NPC_GORON",
   "name": "Soul of Goron (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 314
  },
  {
   "id": "OOT_SOUL_NPC_GROG",
   "name": "Soul of the Punk Kid (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 337
  },
  {
   "id": "OOT_SOUL_NPC_GURU_GURU",
   "name": "Soul of Guru-Guru (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 305
  },
  {
   "id": "OOT_SOUL_NPC_HONEY_DARLING",
   "name": "Soul of Honey & Darling (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 331
  },
  {
   "id": "OOT_SOUL_NPC_HYLIAN_GUARD",
   "name": "Soul of Hylian Guard",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 309
  },
  {
   "id": "OOT_SOUL_NPC_KING_ZORA",
   "name": "Soul of King Zora",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 300
  },
  {
   "id": "OOT_SOUL_NPC_KOKIRI_SHOPKEEPER",
   "name": "Soul of Kokiri Shopkeeper",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 308
  },
  {
   "id": "OOT_SOUL_NPC_KOKIRI",
   "name": "Soul of Kokiri",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 307
  },
  {
   "id": "OOT_SOUL_NPC_MALON",
   "name": "Soul of Malon (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 311
  },
  {
   "id": "OOT_SOUL_NPC_MEDIGORON",
   "name": "Soul of Medigoron (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 315
  },
  {
   "id": "OOT_SOUL_NPC_MIDO",
   "name": "Soul of Mido",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 306
  },
  {
   "id": "OOT_SOUL_NPC_OLD_HAG",
   "name": "Soul of the Old Hag (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 340
  },
  {
   "id": "OOT_SOUL_NPC_POE_COLLECTOR",
   "name": "Soul of Poe Collector (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 329
  },
  {
   "id": "OOT_SOUL_NPC_POTION_SHOPKEEPER",
   "name": "Soul of Potion Shopkeeper",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 323
  },
  {
   "id": "OOT_SOUL_NPC_ROOFTOP_MAN",
   "name": "Soul of the Rooftop Man (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 333
  },
  {
   "id": "OOT_SOUL_NPC_RUTO",
   "name": "Soul of Ruto (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 299
  },
  {
   "id": "OOT_SOUL_NPC_SARIA",
   "name": "Soul of Saria",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 297
  },
  {
   "id": "OOT_SOUL_NPC_SCIENTIST",
   "name": "Soul of the Scientist (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 335
  },
  {
   "id": "OOT_SOUL_NPC_SHEIK",
   "name": "Soul of Sheik",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 302
  },
  {
   "id": "OOT_SOUL_NPC_SHOOTING_GALLERY_OWNER",
   "name": "Soul of Shooting Gallery Owner (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 326
  },
  {
   "id": "OOT_SOUL_NPC_TALON",
   "name": "Soul of Talon (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 312
  },
  {
   "id": "OOT_SOUL_NPC_THIEVES",
   "name": "Soul of the Patrolling Gerudos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 342
  },
  {
   "id": "OOT_SOUL_NPC_ZELDA",
   "name": "Soul of Zelda",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 301
  },
  {
   "id": "OOT_SOUL_NPC_ZORA_SHOPKEEPER",
   "name": "Soul of Zora Shopkeeper (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 320
  },
  {
   "id": "OOT_SOUL_NPC_ZORA",
   "name": "Soul of Zora (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 319
  },
  {
   "id": "OOT_SPELL_FIRE",
   "name": "Din's Fire (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 92
  },
  {
   "id": "OOT_SPELL_LOVE",
   "name": "Nayru's Love (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 94
  },
  {
   "id": "OOT_SPELL_WIND",
   "name": "Farore's Wind (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 93
  },
  {
   "id": "OOT_SPIN_UPGRADE",
   "name": "Spin Attack Upgrade (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 461
  },
  {
   "id": "OOT_STICK_UPGRADE",
   "name": "Deku Stick Upgrade (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 119
  },
  {
   "id": "OOT_STICK",
   "name": "Deku Stick (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 7
  },
  {
   "id": "OOT_STICKS_10",
   "name": "10 Deku Sticks (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 98
  },
  {
   "id": "OOT_STICKS_5",
   "name": "5 Deku Sticks (OoT)",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 97
  },
  {
   "id": "OOT_STONE_EMERALD",
   "name": "Kokiri's Emerald",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 171
  },
  {
   "id": "OOT_STONE_OF_AGONY",
   "name": "Stone of Agony (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 57
  },
  {
   "id": "OOT_STONE_RUBY",
   "name": "Goron's Ruby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 172
  },
  {
   "id": "OOT_STONE_SAPPHIRE",
   "name": "Zora's Sapphire",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 173
  },
  {
   "id": "OOT_STRENGTH",
   "name": "Progressive Strength (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 84
  },
  {
   "id": "OOT_SWORD_BIGGORON",
   "name": "Biggoron's Sword",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 87
  },
  {
   "id": "OOT_SWORD_GORON",
   "name": "Progressive Goron Sword",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 40
  },
  {
   "id": "OOT_SWORD_KNIFE",
   "name": "Giant's Knife",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 40
  },
  {
   "id": "OOT_SWORD_KOKIRI",
   "name": "Kokiri Sword (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 39
  },
  {
   "id": "OOT_SWORD_MASTER",
   "name": "Master Sword",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 170
  },
  {
   "id": "OOT_SWORD",
   "name": "Progressive Sword (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 39
  },
  {
   "id": "OOT_TRAP_ANTI_MAGIC",
   "name": "Anti-Magic Trap",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 480
  },
  {
   "id": "OOT_TRAP_DRAIN",
   "name": "Drain Trap",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 479
  },
  {
   "id": "OOT_TRAP_FIRE",
   "name": "Fire Trap",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 477
  },
  {
   "id": "OOT_TRAP_ICE",
   "name": "Ice Trap",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 476
  },
  {
   "id": "OOT_TRAP_KNOCKBACK",
   "name": "Knockback Trap",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 481
  },
  {
   "id": "OOT_TRAP_RUPOOR",
   "name": "Rupoor",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 482
  },
  {
   "id": "OOT_TRAP_SHOCK",
   "name": "Shock Trap",
   "trap": true,
-  "junk": true
+  "junk": true,
+  "gi": 478
  },
  {
   "id": "OOT_TUNIC_GORON",
   "name": "Goron Tunic (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 44
  },
  {
   "id": "OOT_TUNIC_ZORA",
   "name": "Zora Tunic (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 45
  },
  {
   "id": "OOT_WALLET",
   "name": "Progressive Wallet (OoT)",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 69
  },
  {
   "id": "OOT_WEIRD_EGG",
   "name": "Weird Egg",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 71
  },
  {
   "id": "OOT_ZELDA_LETTER",
   "name": "Zelda's Letter",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 11
  },
  {
   "id": "SHARED_ARROW_FIRE",
   "name": "Fire Arrows",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 88
  },
  {
   "id": "SHARED_ARROW_ICE",
   "name": "Ice Arrows",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 89
  },
  {
   "id": "SHARED_ARROW_LIGHT",
   "name": "Light Arrows",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 90
  },
  {
   "id": "SHARED_ARROWS_10",
   "name": "10 Arrows",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 74
  },
  {
   "id": "SHARED_ARROWS_30",
   "name": "30 Arrows",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 75
  },
  {
   "id": "SHARED_ARROWS_40",
   "name": "40 Arrows",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 546
  },
  {
   "id": "SHARED_ARROWS_5",
   "name": "5 Arrows",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 73
  },
  {
   "id": "SHARED_BIG_POE",
   "name": "Big Poe",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 112
  },
  {
   "id": "SHARED_BLUE_FIRE",
   "name": "Blue Fire",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 110
  },
  {
   "id": "SHARED_BOMB_BAG",
   "name": "Bomb Bag",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 50
  },
  {
   "id": "SHARED_BOMB",
   "name": "1 Bomb",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 101
  },
  {
   "id": "SHARED_BOMBCHU_10",
   "name": "10 Bombchu",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 3
  },
  {
   "id": "SHARED_BOMBCHU_20",
   "name": "20 Bombchu",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 107
  },
  {
   "id": "SHARED_BOMBCHU_5",
   "name": "5 Bombchu",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 106
  },
  {
   "id": "SHARED_BOMBCHU_BAG",
   "name": "Bombchu Bag",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 453
  },
  {
   "id": "SHARED_BOMBCHU",
   "name": "Bombchu",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 571
  },
  {
   "id": "SHARED_BOMBS_10",
   "name": "10 Bombs",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 102
  },
  {
   "id": "SHARED_BOMBS_20",
   "name": "20 Bombs",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 103
  },
  {
   "id": "SHARED_BOMBS_30",
   "name": "30 Bombs",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 104
  },
  {
   "id": "SHARED_BOMBS_5",
   "name": "5 Bombs",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 1
  },
  {
   "id": "SHARED_BOOMERANG",
   "name": "Boomerang",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 6
  },
  {
   "id": "SHARED_BOOTS_HOVER",
   "name": "Hover Boots",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 47
  },
  {
   "id": "SHARED_BOOTS_IRON",
   "name": "Iron Boots",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 46
  },
  {
   "id": "SHARED_BOTTLE_BIG_POE",
   "name": "Bottled Big Poe",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 402
  },
  {
   "id": "SHARED_BOTTLE_BLUE_FIRE",
   "name": "Bottle of Blue Fire",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 403
  },
  {
   "id": "SHARED_BOTTLE_CHATEAU",
   "name": "Bottle of Chateau Romani",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 474
  },
  {
   "id": "SHARED_BOTTLE_EMPTY",
   "name": "Empty Bottle",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 15
  },
  {
   "id": "SHARED_BOTTLE_FAIRY",
   "name": "Bottled Fairy",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 400
  },
  {
   "id": "SHARED_BOTTLE_MILK",
   "name": "Bottle of Milk",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 20
  },
  {
   "id": "SHARED_BOTTLE_POE",
   "name": "Bottled Poe",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 401
  },
  {
   "id": "SHARED_BOTTLE_POTION_BLUE",
   "name": "Bottle of Blue Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 399
  },
  {
   "id": "SHARED_BOTTLE_POTION_GREEN",
   "name": "Bottle of Green Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 398
  },
  {
   "id": "SHARED_BOTTLE_POTION_RED",
   "name": "Bottle of Red Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 397
  },
  {
   "id": "SHARED_BOTTLE_RANDOM",
   "name": "Random Bottle",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": null
  },
  {
   "id": "SHARED_BOTTLE_RUTO_LETTER",
   "name": "Ruto's Letter",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 21
  },
  {
   "id": "SHARED_BOTTLED_GOLD_DUST",
   "name": "Bottle of Gold Dust",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 473
  },
  {
   "id": "SHARED_BOW",
   "name": "Bow",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 4
  },
  {
   "id": "SHARED_BUGS",
   "name": "Bugs",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 109
  },
  {
   "id": "SHARED_BUTTON_A",
   "name": "A Button",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 390
  },
  {
   "id": "SHARED_BUTTON_C_DOWN",
   "name": "C-Down Button",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 394
  },
  {
   "id": "SHARED_BUTTON_C_LEFT",
   "name": "C-Left Button",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 392
  },
  {
   "id": "SHARED_BUTTON_C_RIGHT",
   "name": "C-Right Button",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 391
  },
  {
   "id": "SHARED_BUTTON_C_UP",
   "name": "C-Up Button",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 393
  },
  {
   "id": "SHARED_CHATEAU",
   "name": "Chateau Romani Refill",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 470
  },
  {
   "id": "SHARED_DEFENSE_UPGRADE",
   "name": "Double Defense",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 182
  },
  {
   "id": "SHARED_DEKU_SEEDS_30",
   "name": "30 Deku Seeds",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 105
  },
  {
   "id": "SHARED_DEKU_SEEDS_5",
   "name": "5 Deku Seeds",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 60
  },
  {
   "id": "SHARED_FAIRY_BIG",
   "name": "Big Fairy",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 463
  },
  {
   "id": "SHARED_FAIRY",
   "name": "Fairy",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 19
  },
  {
   "id": "SHARED_FISH",
   "name": "Fish",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 108
  },
  {
   "id": "SHARED_GREAT_FAIRY_SWORD",
   "name": "Great Fairy's Sword",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 468
  },
  {
   "id": "SHARED_HAMMER",
   "name": "Megaton Hammer",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 13
  },
  {
   "id": "SHARED_HEART_CONTAINER",
   "name": "Heart Container",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 61
  },
  {
   "id": "SHARED_HEART_PIECE",
   "name": "Piece of Heart",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 62
  },
  {
   "id": "SHARED_HOOKSHOT",
   "name": "Progressive Hookshot",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 8
  },
  {
   "id": "SHARED_LENS",
   "name": "Lens of Truth",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 10
  },
  {
   "id": "SHARED_MAGIC_JAR_LARGE",
   "name": "Large Magic Jar",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 68
  },
  {
   "id": "SHARED_MAGIC_JAR_SMALL",
   "name": "Small Magic Jar",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 67
  },
  {
   "id": "SHARED_MAGIC_UPGRADE",
   "name": "Magic Upgrade",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 180
  },
  {
   "id": "SHARED_MASK_BLAST",
   "name": "Blast Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 464
  },
  {
   "id": "SHARED_MASK_BUNNY",
   "name": "Bunny Hood",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 27
  },
  {
   "id": "SHARED_MASK_GERUDO",
   "name": "Gerudo Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 83
  },
  {
   "id": "SHARED_MASK_GORON",
   "name": "Goron Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 81
  },
  {
   "id": "SHARED_MASK_KAMARO",
   "name": "Kamaro's Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 466
  },
  {
   "id": "SHARED_MASK_KEATON",
   "name": "Keaton Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 26
  },
  {
   "id": "SHARED_MASK_SKULL",
   "name": "Skull Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 23
  },
  {
   "id": "SHARED_MASK_SPOOKY",
   "name": "Spooky Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 24
  },
  {
   "id": "SHARED_MASK_STONE",
   "name": "Stone Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 465
  },
  {
   "id": "SHARED_MASK_TRUTH",
   "name": "Mask of Truth",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 28
  },
  {
   "id": "SHARED_MASK_ZORA",
   "name": "Zora Mask",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 82
  },
  {
   "id": "SHARED_MILK",
   "name": "Milk",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 80
  },
  {
   "id": "SHARED_NUT_UPGRADE",
   "name": "Deku Nut Upgrade",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 121
  },
  {
   "id": "SHARED_NUT",
   "name": "Deku Nut",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 554
  },
  {
   "id": "SHARED_NUTS_10",
   "name": "10 Deku Nuts",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 100
  },
  {
   "id": "SHARED_NUTS_5",
   "name": "5 Deku Nuts",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 2
  },
  {
   "id": "SHARED_OCARINA",
   "name": "Progressive Ocarina",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 59
  },
  {
   "id": "SHARED_PLATINUM_TOKEN",
   "name": "Platinum Token",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 483
  },
  {
   "id": "SHARED_POE",
   "name": "Poe",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 111
  },
  {
   "id": "SHARED_POTION_BLUE",
   "name": "Blue Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 18
  },
  {
   "id": "SHARED_POTION_GREEN",
   "name": "Green Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 17
  },
  {
   "id": "SHARED_POTION_RED",
   "name": "Red Potion",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 16
  },
  {
   "id": "SHARED_POWDER_KEG",
   "name": "Powder Keg",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 475
  },
  {
   "id": "SHARED_RECOVERY_HEART",
   "name": "Recovery Heart",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 72
  },
  {
   "id": "SHARED_RUPEE_BLUE",
   "name": "Blue Rupee",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 77
  },
  {
   "id": "SHARED_RUPEE_GOLD",
   "name": "Gold Rupee",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 86
  },
  {
   "id": "SHARED_RUPEE_GREEN",
   "name": "Green Rupee",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 76
  },
  {
   "id": "SHARED_RUPEE_PURPLE",
   "name": "Purple Rupee",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 85
  },
  {
   "id": "SHARED_RUPEE_RAINBOW",
   "name": "Rainbow Rupee",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 130
  },
  {
   "id": "SHARED_RUPEE_RED",
   "name": "Red Rupee",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 78
  },
  {
   "id": "SHARED_RUPEE_SILVER",
   "name": "Silver Rupee",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 518
  },
  {
   "id": "SHARED_SCALE",
   "name": "Progressive Scale",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 55
  },
  {
   "id": "SHARED_SHIELD_DEKU",
   "name": "Deku Shield",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 41
  },
  {
   "id": "SHARED_SHIELD_HYLIAN",
   "name": "Hylian/Hero Shield",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 42
  },
  {
   "id": "SHARED_SHIELD_MIRROR",
   "name": "Mirror Shield",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 43
  },
  {
   "id": "SHARED_SHIELD",
   "name": "Progressive Shield",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 183
  },
  {
   "id": "SHARED_SHOVEL",
   "name": "Shovel",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 512
  },
  {
   "id": "SHARED_SKELETON_KEY",
   "name": "Skeleton Key",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 359
  },
  {
   "id": "SHARED_SLINGSHOT",
   "name": "Fairy Slingshot",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 5
  },
  {
   "id": "SHARED_SONG_AWAKENING",
   "name": "Sonata of Awakening",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 146
  },
  {
   "id": "SHARED_SONG_EMPTINESS",
   "name": "Elegy of Emptiness",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 143
  },
  {
   "id": "SHARED_SONG_EPONA",
   "name": "Epona's Song",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 138
  },
  {
   "id": "SHARED_SONG_GORON_HALF",
   "name": "Progressive Goron Lullaby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 148
  },
  {
   "id": "SHARED_SONG_GORON",
   "name": "Goron Lullaby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 147
  },
  {
   "id": "SHARED_SONG_HEALING",
   "name": "Song of Healing",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 144
  },
  {
   "id": "SHARED_SONG_NOTE_AWAKENING",
   "name": "Note from Sonata of Awakening",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 166
  },
  {
   "id": "SHARED_SONG_NOTE_EMPTINESS",
   "name": "Note from Elegy of Emptiness",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 163
  },
  {
   "id": "SHARED_SONG_NOTE_EPONA",
   "name": "Note from Epona's Song",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 158
  },
  {
   "id": "SHARED_SONG_NOTE_GORON",
   "name": "Note from Goron Lullaby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 167
  },
  {
   "id": "SHARED_SONG_NOTE_HEALING",
   "name": "Note from Song of Healing",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 164
  },
  {
   "id": "SHARED_SONG_NOTE_ORDER",
   "name": "Note from Oath to Order",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 169
  },
  {
   "id": "SHARED_SONG_NOTE_SARIA",
   "name": "Note from Saria's Song",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 159
  },
  {
   "id": "SHARED_SONG_NOTE_SOARING",
   "name": "Note from Song of Soaring",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 165
  },
  {
   "id": "SHARED_SONG_NOTE_STORMS",
   "name": "Note from Song of Storms",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 162
  },
  {
   "id": "SHARED_SONG_NOTE_SUN",
   "name": "Note from Sun's Song",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 160
  },
  {
   "id": "SHARED_SONG_NOTE_TIME",
   "name": "Note from Song of Time",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 161
  },
  {
   "id": "SHARED_SONG_NOTE_TP_FIRE",
   "name": "Note from Bolero of Fire",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 152
  },
  {
   "id": "SHARED_SONG_NOTE_TP_FOREST",
   "name": "Note from Minuet of Forest",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 151
  },
  {
   "id": "SHARED_SONG_NOTE_TP_LIGHT",
   "name": "Note from Prelude of Light",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 156
  },
  {
   "id": "SHARED_SONG_NOTE_TP_SHADOW",
   "name": "Note from Nocturne of Shadow",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 155
  },
  {
   "id": "SHARED_SONG_NOTE_TP_SPIRIT",
   "name": "Note from Requiem of Spirit",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 154
  },
  {
   "id": "SHARED_SONG_NOTE_TP_WATER",
   "name": "Note from Serenade of Water",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 153
  },
  {
   "id": "SHARED_SONG_NOTE_ZELDA",
   "name": "Note from Zelda's Lullaby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 157
  },
  {
   "id": "SHARED_SONG_NOTE_ZORA",
   "name": "Note from New Wave Bossa Nova",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 168
  },
  {
   "id": "SHARED_SONG_ORDER",
   "name": "Oath to Order",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 150
  },
  {
   "id": "SHARED_SONG_SARIA",
   "name": "Saria's Song",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 139
  },
  {
   "id": "SHARED_SONG_SOARING",
   "name": "Song of Soaring",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 145
  },
  {
   "id": "SHARED_SONG_STORMS",
   "name": "Song of Storms",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 142
  },
  {
   "id": "SHARED_SONG_SUN",
   "name": "Sun's Song",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 140
  },
  {
   "id": "SHARED_SONG_TIME",
   "name": "Song of Time",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 141
  },
  {
   "id": "SHARED_SONG_TP_FIRE",
   "name": "Bolero of Fire",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 132
  },
  {
   "id": "SHARED_SONG_TP_FOREST",
   "name": "Minuet of Forest",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 131
  },
  {
   "id": "SHARED_SONG_TP_LIGHT",
   "name": "Prelude of Light",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 136
  },
  {
   "id": "SHARED_SONG_TP_SHADOW",
   "name": "Nocturne of Shadow",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 135
  },
  {
   "id": "SHARED_SONG_TP_SPIRIT",
   "name": "Requiem of Spirit",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 134
  },
  {
   "id": "SHARED_SONG_TP_WATER",
   "name": "Serenade of Water",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 133
  },
  {
   "id": "SHARED_SONG_ZELDA",
   "name": "Zelda's Lullaby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 137
  },
  {
   "id": "SHARED_SONG_ZORA",
   "name": "New Wave Bossa Nova",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 149
  },
  {
   "id": "SHARED_SOUL_ANIMAL_BUTTERFLY",
   "name": "Soul of Butterflies",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 346
  },
  {
   "id": "SHARED_SOUL_ANIMAL_COW",
   "name": "Soul of Cows",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 344
  },
  {
   "id": "SHARED_SOUL_ANIMAL_CUCCO",
   "name": "Soul of Cuccos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 343
  },
  {
   "id": "SHARED_SOUL_ANIMAL_DOG",
   "name": "Soul of Dogs",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 345
  },
  {
   "id": "SHARED_SOUL_ENEMY_ARMOS",
   "name": "Soul of Armos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 265
  },
  {
   "id": "SHARED_SOUL_ENEMY_BEAMOS",
   "name": "Soul of Beamos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 269
  },
  {
   "id": "SHARED_SOUL_ENEMY_BUBBLE",
   "name": "Soul of Bubbles",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 268
  },
  {
   "id": "SHARED_SOUL_ENEMY_DEKU_BABA",
   "name": "Soul of Deku Babas",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 266
  },
  {
   "id": "SHARED_SOUL_ENEMY_DEKU_SCRUB",
   "name": "Soul of Deku Scrubs",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 267
  },
  {
   "id": "SHARED_SOUL_ENEMY_DODONGO",
   "name": "Soul of Dodongos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 249
  },
  {
   "id": "SHARED_SOUL_ENEMY_FLOORMASTER",
   "name": "Soul of Floormasters",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 270
  },
  {
   "id": "SHARED_SOUL_ENEMY_FLYING_POT",
   "name": "Soul of Flying Pots",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 281
  },
  {
   "id": "SHARED_SOUL_ENEMY_FREEZARD",
   "name": "Soul of Freezards",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 282
  },
  {
   "id": "SHARED_SOUL_ENEMY_GUAY",
   "name": "Soul of Guays",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 286
  },
  {
   "id": "SHARED_SOUL_ENEMY_IRON_KNUCKLE",
   "name": "Soul of Iron Knuckles",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 279
  },
  {
   "id": "SHARED_SOUL_ENEMY_KEESE",
   "name": "Soul of Keese",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 250
  },
  {
   "id": "SHARED_SOUL_ENEMY_LEEVER",
   "name": "Soul of Leevers",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 252
  },
  {
   "id": "SHARED_SOUL_ENEMY_LIKE_LIKE",
   "name": "Soul of Like Likes",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 276
  },
  {
   "id": "SHARED_SOUL_ENEMY_LIZALFOS_DINOLFOS",
   "name": "Soul of Lizalfos/Dinolfos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 254
  },
  {
   "id": "SHARED_SOUL_ENEMY_OCTOROK",
   "name": "Soul of Octoroks",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 247
  },
  {
   "id": "SHARED_SOUL_ENEMY_PEAHAT",
   "name": "Soul of Peahats",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 253
  },
  {
   "id": "SHARED_SOUL_ENEMY_POE",
   "name": "Soul of Poes",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 288
  },
  {
   "id": "SHARED_SOUL_ENEMY_REDEAD_GIBDO",
   "name": "Soul of ReDeads/Gibdos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 271
  },
  {
   "id": "SHARED_SOUL_ENEMY_SHELL_BLADE",
   "name": "Soul of Shell Blades",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 275
  },
  {
   "id": "SHARED_SOUL_ENEMY_SKULLTULA",
   "name": "Soul of Skulltulas",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 262
  },
  {
   "id": "SHARED_SOUL_ENEMY_SKULLWALLTULA",
   "name": "Soul of Skullwalltulas",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 272
  },
  {
   "id": "SHARED_SOUL_ENEMY_STALCHILD",
   "name": "Soul of Stalchildren",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 285
  },
  {
   "id": "SHARED_SOUL_ENEMY_TEKTITE",
   "name": "Soul of Tektites",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 251
  },
  {
   "id": "SHARED_SOUL_ENEMY_THIEVES",
   "name": "Soul of Fighting Thieves",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 287
  },
  {
   "id": "SHARED_SOUL_ENEMY_WALLMASTER",
   "name": "Soul of Wallmasters",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 248
  },
  {
   "id": "SHARED_SOUL_ENEMY_WOLFOS",
   "name": "Soul of Wolfos",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 284
  },
  {
   "id": "SHARED_SOUL_MISC_BUSINESS_SCRUB",
   "name": "Soul of Business Scrubs",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 348
  },
  {
   "id": "SHARED_SOUL_MISC_GS",
   "name": "Soul of Gold Skulltulas",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 347
  },
  {
   "id": "SHARED_SOUL_NPC_ANJU",
   "name": "Soul of Cucco Lady/Anju",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 303
  },
  {
   "id": "SHARED_SOUL_NPC_ASTRONOMER",
   "name": "Soul of the Astronomer",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 332
  },
  {
   "id": "SHARED_SOUL_NPC_BANKER",
   "name": "Soul of the Beggar/Banker",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 341
  },
  {
   "id": "SHARED_SOUL_NPC_BAZAAR_SHOPKEEPER",
   "name": "Soul of the Bazaar/Swamp Archery Owner",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 321
  },
  {
   "id": "SHARED_SOUL_NPC_BEAN_SALESMAN",
   "name": "Soul of the Bean Salesman",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 334
  },
  {
   "id": "SHARED_SOUL_NPC_BIGGORON",
   "name": "Soul of Biggoron",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 316
  },
  {
   "id": "SHARED_SOUL_NPC_BOMBCHU_BOWLING_LADY",
   "name": "Soul of Bombchu Bowling/Chest Game Lady",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 324
  },
  {
   "id": "SHARED_SOUL_NPC_BOMBCHU_SHOPKEEPER",
   "name": "Soul of the Bombchu/Bomb Shop Owner",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 322
  },
  {
   "id": "SHARED_SOUL_NPC_BOMBERS",
   "name": "Soul of the Graveyard Kid/Bombers",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 328
  },
  {
   "id": "SHARED_SOUL_NPC_CARPENTERS",
   "name": "Soul of Carpenters",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 304
  },
  {
   "id": "SHARED_SOUL_NPC_CARPET_MAN",
   "name": "Soul of the Carpet Man/Swordsman",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 339
  },
  {
   "id": "SHARED_SOUL_NPC_CHEST_GAME_OWNER",
   "name": "Soul of the Chest Game Owner/Fisherman",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 325
  },
  {
   "id": "SHARED_SOUL_NPC_CITIZEN",
   "name": "Soul of Citizens",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 310
  },
  {
   "id": "SHARED_SOUL_NPC_COMPOSER_BROS",
   "name": "Soul of Composer Bros.",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 330
  },
  {
   "id": "SHARED_SOUL_NPC_DAMPE",
   "name": "Soul of Dampe",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 327
  },
  {
   "id": "SHARED_SOUL_NPC_DOG_LADY",
   "name": "Soul of the Dog Lady",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 338
  },
  {
   "id": "SHARED_SOUL_NPC_FISHING_POND_OWNER",
   "name": "Soul of Fishing Pond/Trading Post Owner",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 313
  },
  {
   "id": "SHARED_SOUL_NPC_GORMAN",
   "name": "Soul of Ingo/Gorman & Bros.",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 336
  },
  {
   "id": "SHARED_SOUL_NPC_GORON_CHILD",
   "name": "Soul of the Goron Child/Baby",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 317
  },
  {
   "id": "SHARED_SOUL_NPC_GORON_SHOPKEEPER",
   "name": "Soul of the Goron Shopkeeper",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 318
  },
  {
   "id": "SHARED_SOUL_NPC_GORON",
   "name": "Soul of Gorons",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 314
  },
  {
   "id": "SHARED_SOUL_NPC_GROG",
   "name": "Soul of the Punk Kid/Grog",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 337
  },
  {
   "id": "SHARED_SOUL_NPC_GURU_GURU",
   "name": "Soul of Guru-Guru",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 305
  },
  {
   "id": "SHARED_SOUL_NPC_HONEY_DARLING",
   "name": "Soul of Honey & Darling",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 331
  },
  {
   "id": "SHARED_SOUL_NPC_MALON",
   "name": "Soul of Malon/Romani/Cremia",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 311
  },
  {
   "id": "SHARED_SOUL_NPC_MEDIGORON",
   "name": "Soul of Medigoron/Keg Trial Goron",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 315
  },
  {
   "id": "SHARED_SOUL_NPC_OLD_HAG",
   "name": "Soul of the Old Hag/Anju's Grandmother",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 340
  },
  {
   "id": "SHARED_SOUL_NPC_POE_COLLECTOR",
   "name": "Soul of Poe Collector/Ghost Hut Owner",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 329
  },
  {
   "id": "SHARED_SOUL_NPC_ROOFTOP_MAN",
   "name": "Soul of Rooftop Man/Part-Timer",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 333
  },
  {
   "id": "SHARED_SOUL_NPC_RUTO",
   "name": "Soul of Ruto/Lulu",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 299
  },
  {
   "id": "SHARED_SOUL_NPC_SCIENTIST",
   "name": "Soul of the Scientist",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 335
  },
  {
   "id": "SHARED_SOUL_NPC_SHOOTING_GALLERY_OWNER",
   "name": "Soul of the Shooting Gallery/Town Archery Owner",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 326
  },
  {
   "id": "SHARED_SOUL_NPC_TALON",
   "name": "Soul of Talon/Mr. Barten",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 312
  },
  {
   "id": "SHARED_SOUL_NPC_THIEVES",
   "name": "Soul of the Patrolling Thieves and their Chief",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 342
  },
  {
   "id": "SHARED_SOUL_NPC_ZORA_SHOPKEEPER",
   "name": "Soul of the Zora Shopkeeper",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 320
  },
  {
   "id": "SHARED_SOUL_NPC_ZORA",
   "name": "Soul of Zoras",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 319
  },
  {
   "id": "SHARED_SPELL_FIRE",
   "name": "Din's Fire",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 92
  },
  {
   "id": "SHARED_SPELL_LOVE",
   "name": "Nayru's Love",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 94
  },
  {
   "id": "SHARED_SPELL_WIND",
   "name": "Farore's Wind",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 93
  },
  {
   "id": "SHARED_SPIN_UPGRADE",
   "name": "Spin Attack Upgrade",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 461
  },
  {
   "id": "SHARED_STICK_UPGRADE",
   "name": "Deku Stick Upgrade",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 119
  },
  {
   "id": "SHARED_STICK",
   "name": "Deku Stick",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 7
  },
  {
   "id": "SHARED_STICKS_10",
   "name": "10 Deku Sticks",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 98
  },
  {
   "id": "SHARED_STICKS_5",
   "name": "5 Deku Sticks",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 97
  },
  {
   "id": "SHARED_STONE_OF_AGONY",
   "name": "Stone of Agony",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 57
  },
  {
   "id": "SHARED_STRENGTH",
   "name": "Progressive Strength",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 84
  },
  {
   "id": "SHARED_SWORD",
   "name": "Progressive Sword",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 39
  },
  {
   "id": "SHARED_TRIFORCE_COURAGE",
   "name": "Triforce of Courage",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 365
  },
  {
   "id": "SHARED_TRIFORCE_POWER",
   "name": "Triforce of Power",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 364
  },
  {
   "id": "SHARED_TRIFORCE_WISDOM",
   "name": "Triforce of Wisdom",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 366
  },
  {
   "id": "SHARED_TRIFORCE",
   "name": "Triforce Piece",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 222
  },
  {
   "id": "SHARED_TUNIC_GORON",
   "name": "Goron Tunic",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 44
  },
  {
   "id": "SHARED_TUNIC_ZORA",
   "name": "Zora Tunic",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 45
  },
  {
   "id": "SHARED_WALLET",
   "name": "Progressive Wallet",
   "trap": false,
-  "junk": false
+  "junk": false,
+  "gi": 69
  },
  {
   "id": "NOTHING",
   "name": "Nothing",
   "trap": false,
-  "junk": true
+  "junk": true,
+  "gi": 943
  }
 ]
