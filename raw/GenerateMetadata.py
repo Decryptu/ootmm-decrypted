@@ -220,6 +220,52 @@ def GenerateCheckInfoFile():
         file.write("\n")
 
 
+def GenerateFillFile():
+    # What OoTMM's solver (packages/logic/src/solver/solve.ts) does before its main fill, for its default
+    # settings of the item placement settings, none of which the world offers yet (see "Item pool" in
+    # DEVELOPMENT.md): the checks that keep their vanilla item (fixedLocations, from its fixer), the songs and
+    # dungeon rewards and the checks they go to (placeSemiShuffled), and each dungeon's checks and the items that
+    # stay in it (fixDungeon, DUNGEON_ITEMS). Read from a world with every check filter on, so every check is in.
+    print("Exporting OoTMM's pre-fill...")
+    with open("GreatSettingsJSONdump.json", 'r') as file:
+        types = {s["key"]: s["type"] for s in json.load(file)["settings"]}
+    with open("_fill.json", 'w') as file:
+        json.dump({key: ("all" if types[key] == "enum" else True) for key in PortedChecks}, file)
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
+    import { Items, ItemHelpers } from './ootmm/packages/logic/src/items/index.ts';
+    const checkSettings = JSON.parse(fs.readFileSync('_fill.json', 'utf8'));
+    const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings } } as any);
+    const world = state.worlds[0];
+    const items = Object.values(Items) as any[];
+    fs.writeFileSync('_fill.json', JSON.stringify({
+      fixed: [...state.fixedLocations].map((l: string) => l.split('@')[0]).sort(),
+      songLocations: [...world.songLocations].sort(),
+      songItems: items.filter(i => ItemHelpers.isSong(i)).map(i => i.id).sort(),
+      warpLocations: [...world.warpLocations].sort(),
+      rewardItems: items.filter(i => ItemHelpers.isDungeonReward(i)).map(i => i.id).sort(),
+      dungeons: Object.fromEntries(Object.entries(world.dungeons).map(([k, v]: [string, any]) => [k, [...v].sort()])),
+    }), 'utf8');
+    """)
+    with open("_fill.json", 'r') as file:
+        fill = json.load(file)
+    os.remove("_fill.json")
+    with open(os.path.join("ootmm", "packages", "logic", "src", "solver", "solve.ts"), 'r', encoding='utf-8') as file:
+        solve = file.read()
+    match = re.search(r"const DUNGEON_ITEMS = \{(.*?)\n\};", solve, re.S)
+    if match is None:
+        raise ValueError("DUNGEON_ITEMS not found in solve.ts")
+    fill["dungeonItems"] = {dungeon: re.findall(r"Items\.(\w+)", items)
+                            for dungeon, items in re.findall(r"(\w+): \[(.*?)\]", match.group(1), re.S)}
+    unknown = set(fill["dungeonItems"]) - set(fill["dungeons"])
+    if unknown:
+        raise ValueError(f"DUNGEON_ITEMS names unknown dungeons: {unknown}")
+    with open("GreatFillJSONdump.json", 'w') as file:
+        json.dump(fill, file, indent=1)
+        file.write("\n")
+
 def GenerateCheckSamples():
     # OoTMM's own check set for a few settings of the ported check settings: test/test_checks.py checks that
     # logic.removed_checks leaves the same ones. Hashed, as the lists are long.
@@ -670,6 +716,7 @@ def main():
     UpdateLocationIDs()
     GenerateCheckItemFile()
     GenerateCheckInfoFile()
+    GenerateFillFile()
     GenerateCheckSamples()
     GenerateItemFile()
     UpdateItemIDs()
