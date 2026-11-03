@@ -36,6 +36,7 @@
   "autoInvert"
  ],
  "ported": [
+  "goal",
   "shufflePotsOot",
   "shufflePotsMm",
   "shuffleCratesOot",
@@ -136,7 +137,6 @@
   "cutsceneIntroMajora"
  ],
  "port": [
-  "goal",
   "triforceGoal",
   "triforcePieces",
   "logic",

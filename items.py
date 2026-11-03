@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 
-from . import logic, ootxmm_staticdata
+from . import logic, prefill, ootxmm_staticdata
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -63,9 +63,12 @@ def create_all_items(world: OOTxMM) -> None:
     # OoTMM's base pool (makePools in packages/logic/src/world/transform.ts): the vanilla item of every
     # check, plus the extra items. The pool must match the number of locations, so the extra items
     # replace random filler.
+    prefill.place_fixed(world)
     unfilled = world.multiworld.get_unfilled_locations(world.player)
     pool = [ITEM_BY_SYMBOLIC_ID[ootxmm_staticdata.OOTxMMCheckItems[location.name]] for location in unfilled]
+    pool = [ITEM_BY_NAME[get_random_filler_item(world)] if prefill.removed_item(world, item.symbolic_id) else item for item in pool]
     filler = [i for i, item in enumerate(pool) if classification(world, item) == ItemClassification.filler]
     for i, extra in zip(world.random.sample(filler, len(logic.EXTRA_ITEMS)), logic.EXTRA_ITEMS):
         pool[i] = ITEM_BY_SYMBOLIC_ID[extra]
-    world.multiworld.itempool += [create_item_with_correct_classification(world, item.display_name) for item in pool]
+    created = [create_item_with_correct_classification(world, item.display_name) for item in pool]
+    world.multiworld.itempool += prefill.split_pool(world, created)

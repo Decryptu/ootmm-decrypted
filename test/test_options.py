@@ -41,3 +41,24 @@ class TestOpenWithEveryTrick(OOTxMMTestBase):
         self.assertEqual(settings["doorOfTime"], "open")
         self.assertTrue(settings["openMaskShop"])
         self.assertEqual(settings["tricks"], sorted(OOTxMM_tricks.valid_keys))
+
+
+class TestGoalBoth(OOTxMMTestBase):
+    # The default goal: Ganon and Majora.
+    def test_needs_both_bosses(self) -> None:
+        state = self.multiworld.state.copy()
+        state.collect(self.multiworld.get_location("MM_MAJORA", self.player).item, True)
+        self.assertFalse(self.multiworld.completion_condition[self.player](state))
+        state.collect(self.multiworld.get_location("OOT_GANON", self.player).item, True)
+        self.assertTrue(self.multiworld.completion_condition[self.player](state))
+
+
+class TestGoalGanon(OOTxMMTestBase):
+    options = {"goal": "ganon"}
+
+    def test_needs_ganon_only(self) -> None:
+        state = self.multiworld.state.copy()
+        state.collect(self.multiworld.get_location("MM_MAJORA", self.player).item, True)
+        self.assertFalse(self.multiworld.completion_condition[self.player](state))
+        state.collect(self.multiworld.get_location("OOT_GANON", self.player).item, True)
+        self.assertTrue(self.multiworld.completion_condition[self.player](state))

@@ -10,7 +10,7 @@ It continues Quasky's [AP-OOTMM](https://github.com/Quasky/AP-OOTMM), with its f
 
 ## Status
 
-Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions, locations and items are in, the pool is OoTMM's base pool, the logic is OoTMM's, and the settings that only change conditions or the ROM, or which checks exist (pots, grass and the like), are offered as options (time of day is not tracked yet), and there is no ROM patch or client. [ROADMAP.md](ROADMAP.md) lists what is left.
+Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions, locations and items are in, the pool is OoTMM's base pool placed as OoTMM's defaults place it, the logic is OoTMM's, and the settings that only change conditions or the ROM, or which checks exist (pots, grass and the like), are offered as options (time of day is not tracked yet). A player's ROM can be built from the seed, but only with the OoTMM toolchain, and the BizHawk client connects to the game in BizHawk but has not been through a real play session yet. [ROADMAP.md](ROADMAP.md) lists what is left.
 
 ## What you need
 
