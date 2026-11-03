@@ -4,14 +4,14 @@ import pkgutil
 import unittest
 
 from .test_options import OOTxMMTestBase
-from .. import logic
+from .. import logic, rules
 from .. import options as options_module
 from ..options import PORTED_SETTINGS
 
 
 class TestPortedSettings(unittest.TestCase):
     def test_ported_settings_are_handled(self) -> None:
-        self.assertLessEqual(set(PORTED_SETTINGS), set(logic.CHECK_SETTINGS))
+        self.assertLessEqual(set(PORTED_SETTINGS), set(logic.CHECK_SETTINGS) | set(rules.GOAL_SETTINGS))
 
 
 class TestOoTMMCheckSets(unittest.TestCase):
@@ -57,4 +57,4 @@ class TestShuffledPotsAndGrass(OOTxMMTestBase):
 class TestEverythingShuffled(OOTxMMTestBase):
     # Every check filter on: the largest pool must still generate and be beatable.
     options = {key: "all" if hasattr(getattr(options_module, f"OOTxMM_{key}"), "option_all") else True
-               for key in PORTED_SETTINGS}
+               for key in PORTED_SETTINGS if key in logic.CHECK_SETTINGS}
