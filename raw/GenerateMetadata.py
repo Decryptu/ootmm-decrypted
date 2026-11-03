@@ -11,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories, Ported
+from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -226,7 +226,7 @@ def GenerateCheckSamples():
     print("Sampling OoTMM's check sets...")
     with open("GreatSettingsJSONdump.json", 'r') as file:
         types = {s["key"]: s["type"] for s in json.load(file)["settings"]}
-    samples = [{}] + [{key: (value if types[key] == "enum" else toggle) for key in Ported}
+    samples = [{}] + [{key: (value if types[key] == "enum" else toggle) for key in PortedChecks}
                       for value, toggle in (("all", True), ("overworld", True), ("dungeons", False))]
     with open("_samples.json", 'w') as file:
         json.dump(samples, file)
@@ -612,7 +612,8 @@ def ConvertRawOptions():
         body = [f"    display_name = {json.dumps(setting['name'])}"]
         if setting["type"] == "enum":
             # Archipelago reserves "random" on every Choice and rolls it itself.
-            values = [v for v in setting["values"] if v["value"] != "random"]
+            values = [v for v in setting["values"] if v["value"] != "random"
+                      and v["value"] in OfferedValues.get(key, [v["value"]])]
             doc += [f"- **{v['value']}**: {v['description']}" if v.get("description") else f"- **{v['value']}**" for v in values]
             body += [f"    option_{v['value']} = {i}" for i, v in enumerate(values)]
             # Archipelago lowercases option names; OoTMM's values keep their case.
