@@ -9,3 +9,4 @@ OOTxMMCheckItems = json.loads((pkgutil.get_data(__name__, 'raw/GreatCheckItemJSO
 OOTxMMLogic = json.loads((pkgutil.get_data(__name__, 'raw/GreatLogicJSONdump.json')).decode('utf-8'))
 OOTxMMCheckInfo = json.loads((pkgutil.get_data(__name__, 'raw/GreatCheckInfoJSONdump.json')).decode('utf-8'))
 OOTxMMSettingDefaults = json.loads((pkgutil.get_data(__name__, 'raw/GreatSettingsJSONdump.json')).decode('utf-8'))["defaults"]
+OOTxMMFill = json.loads((pkgutil.get_data(__name__, 'raw/GreatFillJSONdump.json')).decode('utf-8'))

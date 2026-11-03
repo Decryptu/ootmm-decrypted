@@ -34,8 +34,10 @@ NotOfferedCategories = [
 ]
 
 # Settings OoTMM's code reads outside conditions whose effect the world ports (see "Options" in DEVELOPMENT.md).
-# Each one is offered; test/test_checks.py checks that logic.py handles each.
-Ported = [
+# Each one is offered; test/test_checks.py checks that logic.py or rules.py handles each.
+
+# Check filters, ported in logic.py. GenerateCheckSamples samples OoTMM's check sets over these.
+PortedChecks = [
     # Check filters: which checks exist (filterChecks* and the removals before makePools in run(),
     # packages/logic/src/world/transform.ts), ported in logic.py.
     # pondFishShuffle also adds fish of random weights to the pool, so it is not one of them yet.
@@ -53,3 +55,14 @@ Ported = [
     "shuffleSilverBouldersOot", "shuffleSnowballsMm", "shuffleIciclesOot", "shuffleIciclesMm", "shuffleRedIceOot",
     "fairyFountainFairyShuffleOot", "fairyFountainFairyShuffleMm", "fairySpotShuffleOot",
 ]
+
+# The completion condition, ported in rules.py.
+PortedGoal = ["goal"]
+
+Ported = PortedChecks + PortedGoal
+
+# Enum settings offered with only some of their values: the others need what the world doesn't port yet.
+# The Triforce goals add Triforce pieces to the pool (makePools in packages/logic/src/world/transform.ts).
+OfferedValues = {
+    "goal": ["any", "ganon", "majora", "both"],
+}

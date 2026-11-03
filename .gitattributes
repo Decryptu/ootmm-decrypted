@@ -2,14 +2,16 @@
 # git's core.autocrlf, keeps a CRLF checkout clean for every git that reads it.
 * text=auto
 
-# CI entry points and everything packed into the .apworld must be the same bytes
-# after a Windows checkout.
+# CI entry points, everything packed into the .apworld and what runs in the OoTMM
+# toolchain under WSL must be the same bytes after a Windows checkout.
 *.sh text eol=lf
 *.py text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
 *.json text eol=lf
 *.md text eol=lf
+*.patch text eol=lf
+*.ts text eol=lf
 
 *.png binary
 *.z64 binary

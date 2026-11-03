@@ -11,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories, Ported
+from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -188,16 +188,21 @@ CheckLists = {"brokenActors": "BROKEN_ACTORS_CHECKS", "sellMasks": "SELL_MASKS_C
 def GenerateCheckInfoFile():
     # What OoTMM's check filters read about each check (see "Options" in DEVELOPMENT.md): its type, its scene
     # and whether that scene is a dungeon, from OoTMM's check data, and the lists it removes checks by name.
+    # Also each check's key, and the GIs the goal shows up as, for the client.
     print("Exporting check types...")
     RunTypeScript("""
     import fs from 'node:fs';
     import { CHECKS } from './ootmm/packages/data/lib/checks.ts';
     import { isLocationInDungeon } from './ootmm/packages/logic/src/locations.ts';
+    import { GI } from './ootmm/packages/generator/lib/combo/data.ts';
     const checks = Object.fromEntries(CHECKS.map(c => [c.location, [c.type, c.scene, isLocationInDungeon(c.scene)]]));
-    fs.writeFileSync('./_checks.json', JSON.stringify(checks), 'utf8');
+    const keys = Object.fromEntries(CHECKS.map(c => [c.location, c.key]));
+    const goalGi = { OOT_GANON: GI['OOT_TRIFORCE_FULL'].index, MM_MAJORA: GI['MM_MASK_MAJORA'].index };
+    fs.writeFileSync('./_checks.json', JSON.stringify({ checks, keys, goalGi }), 'utf8');
     """)
     with open("_checks.json", 'r') as file:
-        checks = json.load(file)
+        exported = json.load(file)
+    checks = exported["checks"]
     os.remove("_checks.json")
     with open("GreatCheckItemJSONdump.json", 'r') as file:
         names = sorted(json.load(file))
@@ -206,7 +211,10 @@ def GenerateCheckInfoFile():
         raise ValueError(f"No check data for {len(missing)} locations: {missing[:10]}")
     with open(os.path.join("ootmm", "packages", "logic", "src", "world", "transform.ts"), 'r', encoding='utf-8') as file:
         transform = file.read()
-    info = {"checks": {name: checks[name] for name in names}}
+    # The client reads checks off the game by key (the WAL item packets, "Client" in DEVELOPMENT.md), and the
+    # goal off the GIs the game sends itself on beating Ganon (play.c, sendSelfTriforce) and Majora.
+    info = {"checks": {name: checks[name] for name in names},
+            "keys": {name: exported["keys"][name] for name in names}, "goalGi": exported["goalGi"]}
     for key, const in CheckLists.items():
         match = re.search(rf"const {const} = \[(.*?)\];", transform, re.S)
         if match is None:
@@ -220,13 +228,59 @@ def GenerateCheckInfoFile():
         file.write("\n")
 
 
+def GenerateFillFile():
+    # What OoTMM's solver (packages/logic/src/solver/solve.ts) does before its main fill, for its default
+    # settings of the item placement settings, none of which the world offers yet (see "Item pool" in
+    # DEVELOPMENT.md): the checks that keep their vanilla item (fixedLocations, from its fixer), the songs and
+    # dungeon rewards and the checks they go to (placeSemiShuffled), and each dungeon's checks and the items that
+    # stay in it (fixDungeon, DUNGEON_ITEMS). Read from a world with every check filter on, so every check is in.
+    print("Exporting OoTMM's pre-fill...")
+    with open("GreatSettingsJSONdump.json", 'r') as file:
+        types = {s["key"]: s["type"] for s in json.load(file)["settings"]}
+    with open("_fill.json", 'w') as file:
+        json.dump({key: ("all" if types[key] == "enum" else True) for key in PortedChecks}, file)
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
+    import { Items, ItemHelpers } from './ootmm/packages/logic/src/items/index.ts';
+    const checkSettings = JSON.parse(fs.readFileSync('_fill.json', 'utf8'));
+    const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings } } as any);
+    const world = state.worlds[0];
+    const items = Object.values(Items) as any[];
+    fs.writeFileSync('_fill.json', JSON.stringify({
+      fixed: [...state.fixedLocations].map((l: string) => l.split('@')[0]).sort(),
+      songLocations: [...world.songLocations].sort(),
+      songItems: items.filter(i => ItemHelpers.isSong(i)).map(i => i.id).sort(),
+      warpLocations: [...world.warpLocations].sort(),
+      rewardItems: items.filter(i => ItemHelpers.isDungeonReward(i)).map(i => i.id).sort(),
+      dungeons: Object.fromEntries(Object.entries(world.dungeons).map(([k, v]: [string, any]) => [k, [...v].sort()])),
+    }), 'utf8');
+    """)
+    with open("_fill.json", 'r') as file:
+        fill = json.load(file)
+    os.remove("_fill.json")
+    with open(os.path.join("ootmm", "packages", "logic", "src", "solver", "solve.ts"), 'r', encoding='utf-8') as file:
+        solve = file.read()
+    match = re.search(r"const DUNGEON_ITEMS = \{(.*?)\n\};", solve, re.S)
+    if match is None:
+        raise ValueError("DUNGEON_ITEMS not found in solve.ts")
+    fill["dungeonItems"] = {dungeon: re.findall(r"Items\.(\w+)", items)
+                            for dungeon, items in re.findall(r"(\w+): \[(.*?)\]", match.group(1), re.S)}
+    unknown = set(fill["dungeonItems"]) - set(fill["dungeons"])
+    if unknown:
+        raise ValueError(f"DUNGEON_ITEMS names unknown dungeons: {unknown}")
+    with open("GreatFillJSONdump.json", 'w') as file:
+        json.dump(fill, file, indent=1)
+        file.write("\n")
+
 def GenerateCheckSamples():
     # OoTMM's own check set for a few settings of the ported check settings: test/test_checks.py checks that
     # logic.removed_checks leaves the same ones. Hashed, as the lists are long.
     print("Sampling OoTMM's check sets...")
     with open("GreatSettingsJSONdump.json", 'r') as file:
         types = {s["key"]: s["type"] for s in json.load(file)["settings"]}
-    samples = [{}] + [{key: (value if types[key] == "enum" else toggle) for key in Ported}
+    samples = [{}] + [{key: (value if types[key] == "enum" else toggle) for key in PortedChecks}
                       for value, toggle in (("all", True), ("overworld", True), ("dungeons", False))]
     with open("_samples.json", 'w') as file:
         json.dump(samples, file)
@@ -265,7 +319,7 @@ def GenerateLogicFile():
     print("Exporting the world logic...")
     # The world builder imports OoTMM's packages, which need their dependencies and the built data package.
     Shell = sys.platform == "win32"
-    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--ignore-scripts"], cwd="ootmm", check=True, shell=Shell)
+    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--filter", "@ootmm/generator...", "--ignore-scripts"], cwd="ootmm", check=True, shell=Shell)
     subprocess.run(["pnpm", "run", "build"], cwd=os.path.join("ootmm", "packages", "data"), check=True, shell=Shell)
     RunTypeScript("""
     import fs from 'node:fs';
@@ -413,18 +467,25 @@ def GenerateLogicFile():
 
 def GenerateItemFile():
     print("Generating item file from OoTMM item data...")
-    # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts).
+    # OoTMM's item list (logic/src/items/defs.ts), groups (groups.ts) and display names (generator names.ts),
+    # and the GI the game gives each item by (gi() in generator randomizer/util.ts, for OoTMM's defaults of the
+    # settings it reads, none of which the world offers; shared items as their OoT version). The client sends
+    # received items by GI. Items the game has no GI for (none in the pool) get null.
     TypeScriptConverter = r"""
     import fs from 'node:fs';
     import { Items } from './ootmm/packages/logic/src/items/defs.ts';
     import * as Groups from './ootmm/packages/logic/src/items/groups.ts';
     import { itemName } from './ootmm/packages/generator/lib/combo/names.ts';
+    import { gi } from './ootmm/packages/generator/lib/combo/randomizer/util.ts';
+    import { DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
 
+    const giOf = (id: string) => { try { return gi(DEFAULT_SETTINGS, 'oot', Items[id], false); } catch { return null; } };
     const items = Object.keys(Items).map(id => ({
       id,
       name: itemName(id),
       trap: Groups.TRAPS.has(Items[id]),
       junk: Groups.JUNK.has(Items[id]),
+      gi: giOf(id),
     }));
     fs.writeFileSync('./GreatItemJSONdump.json', JSON.stringify(items, null, 1) + '\n', 'utf8');
     """
@@ -612,7 +673,8 @@ def ConvertRawOptions():
         body = [f"    display_name = {json.dumps(setting['name'])}"]
         if setting["type"] == "enum":
             # Archipelago reserves "random" on every Choice and rolls it itself.
-            values = [v for v in setting["values"] if v["value"] != "random"]
+            values = [v for v in setting["values"] if v["value"] != "random"
+                      and v["value"] in OfferedValues.get(key, [v["value"]])]
             doc += [f"- **{v['value']}**: {v['description']}" if v.get("description") else f"- **{v['value']}**" for v in values]
             body += [f"    option_{v['value']} = {i}" for i, v in enumerate(values)]
             # Archipelago lowercases option names; OoTMM's values keep their case.
@@ -669,6 +731,7 @@ def main():
     UpdateLocationIDs()
     GenerateCheckItemFile()
     GenerateCheckInfoFile()
+    GenerateFillFile()
     GenerateCheckSamples()
     GenerateItemFile()
     UpdateItemIDs()

@@ -1,0 +1,177 @@
+diff --git a/packages/generator/include/combo/ipc.h b/packages/generator/include/combo/ipc.h
+index e91385d..5532faf 100644
+--- a/packages/generator/include/combo/ipc.h
++++ b/packages/generator/include/combo/ipc.h
+@@ -3,6 +3,7 @@
+ 
+ #define IPC_SYSTEM_NONE         0
+ #define IPC_SYSTEM_PROJECT64    1
++#define IPC_SYSTEM_RAM          2
+ 
+ typedef struct
+ {
+diff --git a/packages/generator/src/common/ipc/ipc.c b/packages/generator/src/common/ipc/ipc.c
+index de1ddb1..d4fb7b0 100644
+--- a/packages/generator/src/common/ipc/ipc.c
++++ b/packages/generator/src/common/ipc/ipc.c
+@@ -11,8 +11,8 @@ void IPC_Init(void)
+         gIPC.systemType = IPC_SYSTEM_PROJECT64;
+     else
+     {
+-        IPC_Init_Null();
+-        gIPC.systemType = IPC_SYSTEM_NONE;
++        IPC_Init_Ram();
++        gIPC.systemType = IPC_SYSTEM_RAM;
+     }
+ 
+     gIPC.isInitialized = 1;
+diff --git a/packages/generator/src/common/ipc/ipc.h b/packages/generator/src/common/ipc/ipc.h
+index b739aff..dcb7f77 100644
+--- a/packages/generator/src/common/ipc/ipc.h
++++ b/packages/generator/src/common/ipc/ipc.h
+@@ -22,4 +22,6 @@ int IPC_Init_Project64(void);
+ 
+ int IPC_Init_Null(void);
+ 
++int IPC_Init_Ram(void);
++
+ #endif
+diff --git a/packages/generator/src/common/ipc/ram.c b/packages/generator/src/common/ipc/ram.c
+new file mode 100755
+index 0000000..18a3023
+--- /dev/null
++++ b/packages/generator/src/common/ipc/ram.c
+@@ -0,0 +1,133 @@
++#include "ipc.h"
++
++/*
++ * IPC through a mailbox in RDRAM, for emulators that can read and write memory from a script but can't
++ * emulate the Project64 cartridge registers (BizHawk). The client finds the mailbox by its magic, which is
++ * written at init, so no copy of it exists in RAM before.
++ *
++ * Two byte rings of length-prefixed packets (u16 length, then the packet), one per direction. Each side
++ * only moves its own index: the game writes gameToClient and outHead and reads clientToGame up to inHead;
++ * the client does the reverse with outTail and inTail. All fields are big-endian, as the N64.
++ * The client sets connected to 1 while attached, and to 0 before it detaches. The other game's mailbox
++ * can stay in RAM after a game switch: the live one is the one whose alive counter moves.
++ *
++ * The game accesses the mailbox uncached (KSEG1), so an emulator that models the data cache sees the
++ * same memory as the client.
++ */
++
++#define IPC_RAM_MAGIC       "OoTMM-IPC-RAM-1"
++#define IPC_RAM_RING_SIZE   0x800
++
++typedef struct
++{
++    char    magic[16];
++    u32     connected;      /* Client */
++    u32     alive;          /* Game: counts up every frame, so the client can tell a live mailbox from a stale copy */
++    u32     outHead;        /* Game */
++    u32     outTail;        /* Client */
++    u32     inHead;         /* Client */
++    u32     inTail;         /* Game */
++    u8      gameToClient[IPC_RAM_RING_SIZE];
++    u8      clientToGame[IPC_RAM_RING_SIZE];
++}
++IPCRamMailbox;
++
++ALIGNED(16) static IPCRamMailbox sMailbox;
++
++static volatile IPCRamMailbox* Mailbox(void)
++{
++    return (volatile IPCRamMailbox*)(((u32)&sMailbox & 0x1fffffff) | 0xa0000000);
++}
++
++static void IPC_Ram_Refresh(void)
++{
++    volatile IPCRamMailbox* m;
++
++    m = Mailbox();
++    m->alive++;
++    gIPC.isConnected = !!m->connected;
++}
++
++static int IPC_Ram_Read(void* buf, u32 len)
++{
++    volatile IPCRamMailbox* m;
++    u32 tail;
++    u32 size;
++    u8* dst;
++
++    m = Mailbox();
++    gIPC.isConnected = !!m->connected;
++    tail = m->inTail;
++    if (tail == m->inHead)
++        return 0;
++
++    size = (m->clientToGame[tail] << 8) | m->clientToGame[(tail + 1) % IPC_RAM_RING_SIZE];
++    tail = (tail + 2) % IPC_RAM_RING_SIZE;
++
++    /* Too large for the caller: drop it, as a lost packet */
++    dst = buf;
++    for (u32 i = 0; i < size; ++i)
++    {
++        if (i < len)
++            dst[i] = m->clientToGame[tail];
++        tail = (tail + 1) % IPC_RAM_RING_SIZE;
++    }
++    m->inTail = tail;
++    return (size <= len) ? (int)size : 0;
++}
++
++static int IPC_Ram_Write(const void* buf, u32 len)
++{
++    volatile IPCRamMailbox* m;
++    u32 head;
++    u32 used;
++    const u8* src;
++
++    m = Mailbox();
++    gIPC.isConnected = !!m->connected;
++    if (!gIPC.isConnected)
++        return 0;
++
++    /* Keep one byte free, so head == tail always means empty */
++    head = m->outHead;
++    used = (head + IPC_RAM_RING_SIZE - m->outTail) % IPC_RAM_RING_SIZE;
++    if (used + len + 2 >= IPC_RAM_RING_SIZE)
++        return 0;
++
++    src = buf;
++    m->gameToClient[head] = (len >> 8) & 0xff;
++    m->gameToClient[(head + 1) % IPC_RAM_RING_SIZE] = len & 0xff;
++    head = (head + 2) % IPC_RAM_RING_SIZE;
++    for (u32 i = 0; i < len; ++i)
++    {
++        m->gameToClient[head] = src[i];
++        head = (head + 1) % IPC_RAM_RING_SIZE;
++    }
++    m->outHead = head;
++    return (int)len;
++}
++
++int IPC_Init_Ram(void)
++{
++    volatile IPCRamMailbox* m;
++    const char* magic;
++
++    m = Mailbox();
++    m->connected = 0;
++    m->alive = 0;
++    m->outHead = 0;
++    m->outTail = 0;
++    m->inHead = 0;
++    m->inTail = 0;
++
++    /* Last, so a client never finds a half-initialized mailbox */
++    magic = IPC_RAM_MAGIC;
++    for (int i = 0; i < sizeof(m->magic); ++i)
++        m->magic[i] = magic[i];
++
++    gIPC.cbRefresh = IPC_Ram_Refresh;
++    gIPC.cbRead = IPC_Ram_Read;
++    gIPC.cbWrite = IPC_Ram_Write;
++    gIPC.isConnected = 0;
++    return 1;
++}
