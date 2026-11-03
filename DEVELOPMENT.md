@@ -21,7 +21,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 | `raw/` | `GenerateMetadata.py` and its outputs. Only the `GreatWorld`, `GreatLogic`, `GreatCheckItem`, `GreatCheckInfo`, `GreatSettings` and `GreatItem` JSON dumps, `LocationIDs.json` and `ItemIDs.json` ship in the apworld (`tools/build_apworld.py`); the YAML, `Isolated*` and `SettingsClasses.json` files are intermediates kept for reading and diffing. The generator also writes `test/check_samples.json` ([Options](#options)) |
 | `test/` | The world's own tests, run with Archipelago's ([Build and test](#build-and-test)) |
 | `assets/` | Logo |
-| `tools/` | Our scripts: pack the world, prune other games from the test checkout, test it, import upstream |
+| `tools/` | Our scripts: pack the world, prune other games from the test checkout, test it, build OoTMM, import upstream |
 | `roms/` | The developer's own ROMs (`oot.z64`, `mm.z64`), ignored by git |
 
 ## Metadata
@@ -92,6 +92,13 @@ OoTMM also lists a second OoT CRC (`d423e8b0`, SHA-256 `d38fd6ff…`). Keep ROMs
 - `python tools/build_apworld.py dist/ootxmm.apworld` packs the world. A new file the world needs must be added to `WORLD_FILES` there (or live under a listed folder such as `test/`).
 - `pwsh tools/apworld-test.ps1` runs Archipelago's generic world tests (`test/general`, `test/benchmark`) and the world's own `test/` inside an Archipelago 0.6.8 source checkout. `tools/prune_worlds.py` first removes every other game from that checkout (keeping `generic` and `apquest`, which the tests need), so another game's random failure can't fail our checks. To restore them: `git -C <checkout> checkout HEAD -- worlds`. The first run clones Archipelago and builds a Python 3.12 virtualenv under `%LOCALAPPDATA%\ootmm-decrypted\archipelago`; extra arguments go to pytest.
 - `.github/workflows/apworld.yml` (World) runs the same on pushes to `dev` and on pull requests, and uploads the packed `ootxmm.apworld`. `gh workflow run apworld.yml --ref <branch>` runs it on any branch.
+
+## OoTMM build
+The ROM patch and the in-game multiworld code come from OoTMM itself, built from source with our changes. `pwsh tools/ootmm-build.ps1` builds it inside WSL (distribution `Ubuntu-24.04`, as root):
+- `tools/ootmm-build.sh` keeps a checkout of the tracked release ([ROADMAP.md](ROADMAP.md#decisions)) in `/root/ootmm`, resets it to the tag on every run and applies `ootmm-patches/*.patch` (our changes, as `git diff` output against the tag), so the patches are the only changes. It copies the ROMs from `roms/`, which OoTMM's build reads.
+- The build runs in OoTMM's own toolchain image (`ghcr.io/ootmm/toolchain:1.4`, the one its CI uses) under Podman. Ubuntu's own MIPS compiler is too old for OoTMM's C code. The checkout is mounted at the same path inside the container, so CMake caches stay valid.
+- Extra arguments run a command in the checkout inside the image instead of the build. A test seed: `pwsh tools/ootmm-build.ps1 "cd packages/generator && NODE_ENV=production pnpm start --seed test"` writes the ROM, the `.ootmm` patch and the spoiler to `/root/ootmm/packages/generator/out` (`\wsl$\Ubuntu-24.04\root\ootmm\...` from Windows).
+- WSL itself is set up once with `wsl --install -d Ubuntu-24.04` (needs admin and a reboot); the script installs Podman and pulls the image on first use.
 
 ## Branches
 - `main`: stable. Only moves to a commit `dev` already tested.
