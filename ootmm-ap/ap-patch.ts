@@ -2,7 +2,7 @@
  * Builds one player's ROM for an Archipelago seed. Run in OoTMM's generator package (tools/ootmm-build.sh copies
  * this folder to packages/generator/lib/ap/); see "ROM patch" in DEVELOPMENT.md.
  *
- * Usage: tsx lib/ap/ap-patch.ts <player file (.json)> <oot rom> <mm rom> <output folder>
+ * Usage: tsx lib/ap/ap-patch.ts <player file (.json) or directory> <oot rom> <mm rom> <output folder>
  * Writes the ROM (.z64) and OoTMM's patch file for it (.ootmm), which OoTMM's patch mode builds the ROM from.
  *
  * Runs OoTMM's logic with the player's settings, so everything settings decide (prices, song events, entrances,
@@ -112,9 +112,7 @@ function hints(state: any): Hints {
   }];
 }
 
-async function main(args: string[]) {
-  if (args.length !== 4) throw new Error('Usage: ap-patch.ts <player file> <oot rom> <mm rom> <output folder>');
-  const [playerPath, ootPath, mmPath, outDir] = args;
+async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, outDir: string) {
   const player: PlayerFile = JSON.parse(await fs.readFile(playerPath, 'utf-8'));
   if (player.version !== 1) throw new Error(`Unsupported player file version ${player.version}`);
 
@@ -173,6 +171,17 @@ async function main(args: string[]) {
   const romOut = path.join(outDir, `${name}.z64`);
   await fs.writeFile(romOut, rom);
   console.log(`Wrote ${patchOut} and ${romOut}`);
+}
+
+async function main(args: string[]) {
+  if (args.length !== 4) throw new Error('Usage: ap-patch.ts <player file or directory> <oot rom> <mm rom> <output folder>');
+  const [input, ootPath, mmPath, outDir] = args;
+  const stat = await fs.stat(input);
+  const players = stat.isDirectory()
+    ? (await fs.readdir(input)).filter((name) => name.endsWith('.ootxmm.json')).sort().map((name) => path.join(input, name))
+    : [input];
+  if (!players.length) throw new Error(`No .ootxmm.json player files in ${input}`);
+  for (const playerPath of players) await buildPlayer(playerPath, ootPath, mmPath, outDir);
 }
 
 main(process.argv.slice(2)).catch((e) => {

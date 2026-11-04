@@ -1,0 +1,5 @@
+title: OoTMM Decrypted
+baseurl: /ootmm-decrypted
+markdown: kramdown
+kramdown:
+  input: GFM

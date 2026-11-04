@@ -181,8 +181,7 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
+# Player hub sources live in site/; generated pages live in dist/.
 
 # mypy
 .mypy_cache/

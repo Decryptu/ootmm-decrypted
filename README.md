@@ -1,5 +1,5 @@
 <p align="center">
-<img src="assets/ap-ootmm.png" alt="logo" width="25%"/>
+<img src="assets/ootmm-decrypted.png" alt="Ocarina of Time and Majora’s Mask joined into one emblem" width="300"/>
 </p>
 
 # OoTMM Decrypted
@@ -10,7 +10,9 @@ It continues Quasky's [AP-OOTMM](https://github.com/Quasky/AP-OOTMM), with its f
 
 ## Status
 
-Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions, locations and items are in, the pool is OoTMM's base pool placed as OoTMM's defaults place it, the logic is OoTMM's, and the settings that only change conditions or the ROM, or which checks exist (pots, grass and the like), are offered as options (time of day is not tracked yet). A player's ROM can be built from the seed, but only with the OoTMM toolchain, and the BizHawk client connects to the game in BizHawk but has not been through a real play session yet. [ROADMAP.md](ROADMAP.md) lists what is left.
+Not playable yet. Archipelago can generate with it: OoTMM v33.0's regions, locations and items are in, the pool is OoTMM's base pool placed as OoTMM's defaults place it, the logic is OoTMM's, and the settings that only change conditions or the ROM, or which checks exist (pots, grass and the like), are offered as options (time of day is not tracked yet). The host builds each player's patch with the OoTMM toolchain; players apply it with OoTMM v33.0's Patch mode. The BizHawk client connects and receives items but has not been through a full play session. [ROADMAP.md](ROADMAP.md) lists what is left.
+
+The [setup guide](docs/setup_en.md) covers players and hosts. The GitHub Pages player hub source is in `site/`, with the same guides and a starter YAML download; its workflow deploys from `main`.
 
 ## What you need
 
