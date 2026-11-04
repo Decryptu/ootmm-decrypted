@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
 
-from . import items, logic, ootxmm_staticdata, rules
+from . import items, logic, ootxmm_staticdata
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -35,7 +35,7 @@ def place(world: OOTxMM, location: OOTxMMLocation, parents: list, kind: str) -> 
     if len(parents) == 1:
         area, age, cond = parents[0]
         region = world.get_region(logic.region_name(area, age))
-        rule = rules.compile_rule(world, cond, world.rule_cache)
+        rule = world.time_logic.rule(area, age, cond)
         if rule:
             location.access_rule = rule
     else:
@@ -43,6 +43,6 @@ def place(world: OOTxMM, location: OOTxMMLocation, parents: list, kind: str) -> 
         world.multiworld.regions.append(region)
         for area, age, cond in parents:
             parent = world.get_region(logic.region_name(area, age))
-            parent.connect(region, f"{parent.name} to {location.name}", rules.compile_rule(world, cond, world.rule_cache))
+            parent.connect(region, f"{parent.name} to {location.name}", world.time_logic.rule(area, age, cond))
     location.parent_region = region
     region.locations.append(location)

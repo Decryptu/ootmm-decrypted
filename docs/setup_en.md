@@ -1,6 +1,6 @@
 # OOTxMM setup
 
-This world is in development. A full multiworld play session has not been validated. Time of day is approximated in logic. For the `both` goal, keep the client running between the bosses: completion is not yet preserved across client restarts.
+This world is in development. A full multiworld play session has not been validated. Logic tracks per-area clock ranges and conditional waiting; clock-sensitive routes still need gameplay verification.
 
 ## What each player needs
 
@@ -34,6 +34,8 @@ The patch contains the seed's placements and communication code. Players need no
 3. Launch **BizHawk Client** from the Archipelago launcher.
 4. Connect to the host's server address and port. Enter your YAML's player name when asked for the slot, and the password if required.
 5. Wait for the client to report finding the mailbox and connecting to the game. Keep both the Lua script and client running.
+
+Boss completion is saved on the Archipelago server, so the client can restart between bosses for the `both` goal. The host must keep the server save.
 
 Use Archipelago's BizHawk Client for item exchange. The standalone OoTMM multiplayer client is not used. If the mailbox is not found, enter gameplay: its counter does not move on the title screen or file select. If server login fails, check the slot name and that your patch matches the seed and player.
 

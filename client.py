@@ -52,14 +52,36 @@ class OOTxMMClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.reset()
+        self.goals: set[str] = set()
+        self.goal_key: str | None = None
 
     def reset(self) -> None:
         self.mailbox: int | None = None
         self.candidates: dict[int, int] = {}  # mailbox address -> alive counter last seen
         self.scan_pos: int | None = 0  # next RAM address to scan, None when the scan is done
         self.seq_net = 0
-        self.goals: set[str] = set()
         self.last_query: int | None = None
+
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
+        if cmd == "Connected":
+            # Re-read on every login, including reconnects to the same slot.
+            self.goal_key = None
+            self.goals.clear()
+        elif self.goal_key is not None:
+            value = None
+            if cmd == "Retrieved":
+                value = args["keys"].get(self.goal_key)
+            elif cmd == "SetReply" and args["key"] == self.goal_key:
+                value = args["value"]
+            if isinstance(value, dict):
+                self.goals.update(event for event in GOAL_GI.values() if value.get(event) is True)
+
+    async def sync_goals(self, ctx: "BizHawkClientContext") -> None:
+        key = f"ootxmm_goals_{ctx.server_seed_name}_{ctx.team}_{ctx.slot}"
+        if key != self.goal_key:
+            self.goals.clear()
+            self.goal_key = key
+            await ctx.send_msgs([{"cmd": "Get", "keys": [key]}])
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -131,6 +153,7 @@ class OOTxMMClient(BizHawkClient):
             pass
 
     async def exchange(self, ctx: "BizHawkClientContext") -> None:
+        await self.sync_goals(ctx)
         mailbox = self.mailbox
         header, ring = await bizhawk.read(ctx.bizhawk_ctx, [(mailbox, HEADER, RDRAM), (mailbox + HEADER, RING, RDRAM)])
         if header[:16] != MAGIC:
@@ -153,6 +176,7 @@ class OOTxMMClient(BizHawkClient):
 
         replies: list[bytes] = []
         checked: set[int] = set()
+        goals: set[str] = set()
         query: int | None = None
         for packet in packets:
             if len(packet) < 5:
@@ -173,7 +197,7 @@ class OOTxMMClient(BizHawkClient):
                     if key in LOCATION_BY_KEY:
                         checked.add(LOCATION_BY_KEY[key])
                     if gi in GOAL_GI and to == OUR_WORLD:
-                        self.goals.add(GOAL_GI[gi])
+                        goals.add(GOAL_GI[gi])
                 replies.append(self.packet(OP_WAL_ACK, struct.pack(">I", token)))
             elif op == OP_WAL_QUERY and len(packet) >= 9:
                 query = struct.unpack_from(">I", packet, 5)[0]
@@ -184,6 +208,13 @@ class OOTxMMClient(BizHawkClient):
             self.last_query = query
         if query is not None and query < len(ctx.items_received):
             replies.append(self.wal_item(ctx, query))
+
+        if goals:
+            # Persist before acknowledging the pickup. Updating individual keys preserves the other boss,
+            # even if its stored result has not arrived yet or another client is connected to this slot.
+            await ctx.send_msgs([{"cmd": "Set", "key": self.goal_key, "default": {}, "want_reply": True,
+                                  "operations": [{"operation": "update", "value": dict.fromkeys(goals, True)}]}])
+            self.goals.update(goals)
 
         writes = [(mailbox + 28, list(struct.pack(">I", tail)), RDRAM)]
         if replies:

@@ -2,13 +2,13 @@
 
 Play Ocarina of Time and Majora's Mask in one ROM, sharing items through an Archipelago multiworld. This world uses OoTMM v33.0's regions, checks, items and logic.
 
-Your checks can contain items for other players, and their checks can send items into your game. Choose Ganon, Majora, either boss, or both as your goal. For `both`, keep the client running between the bosses until completion survives client restarts.
+Your checks can contain items for other players, and their checks can send items into your game. Choose Ganon, Majora, either boss, or both as your goal. Boss completion is kept on the Archipelago server across client restarts.
 
 ## Supported settings
 
-The world offers settings it reproduces in both logic and the ROM: logic and cosmetic settings, tricks, and check shuffles such as pots, grass and rocks. Other settings retain OoTMM's defaults. Dungeon items, songs and rewards follow default placement restrictions; some checks keep their vanilla items.
+The world offers settings it reproduces in both logic and the ROM: logic and cosmetic settings, tricks, and check shuffles such as pots, grass and rocks. Other settings retain OoTMM's defaults. Maps, compasses, regular dungeon small keys and boss keys can stay in their own dungeon, shuffle anywhere across the multiworld, or be removed. Maps and compasses can also start in your inventory. Tingle maps support vanilla purchases, anywhere in the multiworld, starting inventory, or removal. All four modes retain Tingle's checks. Chest and freestanding dungeon stray fairies independently support vanilla, own dungeon, anywhere or starting inventory. Freestanding fairy checks can also be removed, granting those fairies at the start. Songs can stay on song checks or shuffle anywhere across the multiworld. Individual song notes are not offered. Dungeon rewards can stay on blue warps, shuffle into eligible dungeons across OoTMM players, or shuffle anywhere across the multiworld. Dungeon placement also offers a one-reward-per-dungeon limit. A dungeon containing a limited reward cannot contain another reward, even from another player; Stone Tower and its inverted layout count as one dungeon. Ganon’s boss key can be removed, kept in its vanilla chest, shuffled within Ganon’s Castle and Tower, or shuffled anywhere in the multiworld. Its default is removed; custom requirements are unavailable. Other dungeon items keep default restrictions; some checks keep their vanilla items.
 
-Only vanilla dungeons and the US Deku Palace layout are supported. Master Quest and Japanese layouts are not offered. Time and some area flags are approximated, so logic can expect a route at a time the player cannot reach.
+Only vanilla dungeons and the US Deku Palace layout are supported. Master Quest and Japanese layouts are not offered. Logic tracks reachable times per area, including MM's three-day clock and conditional waiting, along with regional flag constraints. Renewable resources and item licenses are approximated by owning the item.
 
 ## Current status
 

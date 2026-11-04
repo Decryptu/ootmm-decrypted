@@ -8,7 +8,7 @@ from BaseClasses import ItemClassification
 from Options import Choice, OptionSet, Toggle
 from worlds.AutoWorld import World
 
-from . import web_world, options, prefill, items, locations, logic, regions, rules
+from . import web_world, options, prefill, items, locations, logic, regions, rules, time_logic
 
 class OOTxMM(World):
     """
@@ -33,8 +33,9 @@ class OOTxMM(World):
         self.logic = logic.build(self.ootmm_settings)
 
     def create_regions(self) -> None:
-        # Compiled access rules, shared by every entrance and location with the same condition.
-        self.rule_cache = {}
+        self.time_logic = time_logic.TimeLogic(self.logic, self.player, {
+            items.ITEM_BY_SYMBOLIC_ID[item].display_name: count
+            for item, count in prefill.starting_fairies(self.ootmm_settings).items()})
         regions.create_and_connect_regions(self)
         locations.create_all_locations(self)
 
@@ -44,11 +45,12 @@ class OOTxMM(World):
     def create_items(self) -> None:
         items.create_all_items(self)
 
-    def pre_fill(self) -> None:
-        prefill.pre_fill(self)
+    @classmethod
+    def stage_pre_fill(cls, multiworld) -> None:
+        prefill.pre_fill_all(multiworld)
 
     def get_pre_fill_items(self) -> list:
-        # The items pre_fill took out of the pool and has not placed yet.
+        # Restricted items kept out of the main pool until coordinated pre-fill places them.
         return getattr(self, "pre_fill_pending", [])
 
     def create_item(self, name: str) -> items.OOTxMMItem:
