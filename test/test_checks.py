@@ -4,14 +4,14 @@ import pkgutil
 import unittest
 
 from .test_options import OOTxMMTestBase
-from .. import logic, rules
+from .. import logic, rules, prefill
 from .. import options as options_module
 from ..options import PORTED_SETTINGS
 
 
 class TestPortedSettings(unittest.TestCase):
     def test_ported_settings_are_handled(self) -> None:
-        self.assertLessEqual(set(PORTED_SETTINGS), set(logic.CHECK_SETTINGS) | set(rules.GOAL_SETTINGS))
+        self.assertLessEqual(set(PORTED_SETTINGS), set(logic.CHECK_SETTINGS) | set(rules.GOAL_SETTINGS) | set(prefill.DUNGEON_SETTINGS) | set(prefill.FAIRY_SETTINGS) | prefill.MAP_SETTINGS | prefill.SONG_SETTINGS | prefill.REWARD_SETTINGS)
 
 
 class TestOoTMMCheckSets(unittest.TestCase):

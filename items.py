@@ -66,7 +66,16 @@ def create_all_items(world: OOTxMM) -> None:
     prefill.place_fixed(world)
     unfilled = world.multiworld.get_unfilled_locations(world.player)
     pool = [ITEM_BY_SYMBOLIC_ID[ootxmm_staticdata.OOTxMMCheckItems[location.name]] for location in unfilled]
+    # Source classes share fairy item IDs; replace only copies from starting sources.
+    starting_sources = set().union(*(names for key, names in prefill.FAIRY_SETTINGS.items()
+                                    if logic._value(world.ootmm_settings, key) == "starting"))
+    pool = [ITEM_BY_NAME[get_random_filler_item(world)] if location.name in starting_sources else item
+            for location, item in zip(unfilled, pool)]
     pool = [ITEM_BY_NAME[get_random_filler_item(world)] if prefill.removed_item(world, item.symbolic_id) else item for item in pool]
+    # Vanilla Fire Temple uses one fewer key unless keys are shuffled anywhere (OoTMM transform.ts).
+    if logic._value(world.ootmm_settings, "smallKeyShuffleOot") == "ownDungeon":
+        index = next(i for i, item in enumerate(pool) if item.symbolic_id == "OOT_SMALL_KEY_FIRE")
+        pool[index] = ITEM_BY_NAME[get_random_filler_item(world)]
     filler = [i for i, item in enumerate(pool) if classification(world, item) == ItemClassification.filler]
     for i, extra in zip(world.random.sample(filler, len(logic.EXTRA_ITEMS)), logic.EXTRA_ITEMS):
         pool[i] = ITEM_BY_SYMBOLIC_ID[extra]

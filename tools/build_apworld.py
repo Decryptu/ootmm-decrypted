@@ -21,6 +21,7 @@ WORLD_FILES = [
     "items.py",
     "locations.py",
     "logic.py",
+    "time_logic.py",
     "ootxmm_staticdata.py",
     "options.py",
     "prefill.py",

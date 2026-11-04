@@ -62,7 +62,10 @@ class TestClientProtocol(unittest.TestCase):
             self.sent += msgs
         self.ctx = SimpleNamespace(
             bizhawk_ctx=None, items_received=[], checked_locations=set(), finished_game=False,
+            server_seed_name="test-seed", team=0, slot=1,
             player_names={2: "Zelda"}, slot_data={"settings": {"goal": "ganon"}}, send_msgs=send_msgs)
+        asyncio.run(self.client.sync_goals(self.ctx))
+        self.sent.clear()
 
     def exchange(self) -> list[bytes]:
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
@@ -106,3 +109,64 @@ class TestClientProtocol(unittest.TestCase):
         self.exchange()
         self.assertTrue(self.ctx.finished_game)
         self.assertEqual(self.sent[-1]["cmd"], "StatusUpdate")
+
+    def defeat(self, event: str) -> None:
+        gi = ootxmm_staticdata.OOTxMMCheckInfo["goalGi"][event]
+        self.game.send(struct.pack(">IBIBBBhhI", 7, client.OP_WAL, 1, client.WAL_ITEM,
+                                   client.OUR_WORLD, 0, gi, 0, 0))
+        self.exchange()
+
+    def test_both_survives_client_restart_in_either_order(self) -> None:
+        for first, second in [("OOT_GANON", "MM_MAJORA"), ("MM_MAJORA", "OOT_GANON")]:
+            with self.subTest(first=first):
+                self.setUp()
+                self.ctx.slot_data["settings"]["goal"] = "both"
+                self.defeat(first)
+                self.assertFalse(self.ctx.finished_game)
+                saved = next(msg for msg in self.sent if msg["cmd"] == "Set")
+                self.assertEqual(saved["operations"], [{"operation": "update", "value": {first: True}}])
+                self.client = client.OOTxMMClient()
+                self.client.mailbox = MAILBOX
+                self.exchange()
+                self.client.on_package(self.ctx, "Retrieved", {"keys": {saved["key"]: {first: True}}})
+                self.defeat(second)
+                self.assertTrue(self.ctx.finished_game)
+
+    def test_game_switch_preserves_goals(self) -> None:
+        self.ctx.slot_data["settings"]["goal"] = "both"
+        self.defeat("OOT_GANON")
+        self.client.reset()
+        self.client.mailbox = MAILBOX
+        self.defeat("MM_MAJORA")
+        self.assertTrue(self.ctx.finished_game)
+
+    def test_other_slot_or_seed_does_not_inherit_goals(self) -> None:
+        self.defeat("OOT_GANON")
+        old_key = self.client.goal_key
+        self.ctx.slot = 2
+        self.exchange()
+        self.client.on_package(self.ctx, "Retrieved", {"keys": {old_key: {"OOT_GANON": True}}})
+        self.assertEqual(self.client.goals, set())
+        self.client.goals.add("MM_MAJORA")
+        self.ctx.server_seed_name = "another-seed"
+        self.exchange()
+        self.assertEqual(self.client.goals, set())
+
+    def test_delayed_restore_merges_with_new_boss(self) -> None:
+        self.ctx.slot_data["settings"]["goal"] = "both"
+        self.defeat("MM_MAJORA")
+        self.client.on_package(self.ctx, "Retrieved", {
+            "keys": {self.client.goal_key: {"OOT_GANON": True}}})
+        self.exchange()
+        self.assertTrue(self.ctx.finished_game)
+
+    def test_reconnect_reloads_and_rejects_other_slot_reply(self) -> None:
+        self.defeat("OOT_GANON")
+        self.client.on_package(self.ctx, "Connected", {})
+        self.exchange()
+        self.assertEqual(self.client.goals, set())
+        self.client.on_package(self.ctx, "SetReply", {"key": "other-slot", "value": {"OOT_GANON": True}})
+        self.assertEqual(self.client.goals, set())
+        self.client.on_package(self.ctx, "SetReply", {
+            "key": self.client.goal_key, "value": {"OOT_GANON": True}})
+        self.assertEqual(self.client.goals, {"OOT_GANON"})

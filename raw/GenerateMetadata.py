@@ -57,13 +57,14 @@ def LoadYAML(Path):
         return yaml.safe_load(file) or {}
 
 def RunTypeScript(Code):
-    # Run from a file, not "tsx --eval": npx is a .cmd script on Windows, which needs the shell to
+    # Run from a file, not "tsx --eval": tsx is a .cmd script on Windows, which needs the shell to
     # launch, and cmd.exe would cut a multi-line argument and read ">" as a redirect.
     ScriptPath = "_generate.mts"
     with open(ScriptPath, 'w', encoding='utf-8') as file:
         file.write(Code)
     try:
-        subprocess.run(["npx", "tsx", ScriptPath], check=True, shell=sys.platform == "win32")
+        tsx = os.path.join("ootmm", "node_modules", ".bin", "tsx.cmd" if sys.platform == "win32" else "tsx")
+        subprocess.run([tsx, ScriptPath], check=True, shell=sys.platform == "win32")
     finally:
         os.remove(ScriptPath)
 
@@ -230,7 +231,7 @@ def GenerateCheckInfoFile():
 
 def GenerateFillFile():
     # What OoTMM's solver (packages/logic/src/solver/solve.ts) does before its main fill, for its default
-    # settings of the item placement settings, none of which the world offers yet (see "Item pool" in
+    # settings of the item placement settings (see "Placement" in
     # DEVELOPMENT.md): the checks that keep their vanilla item (fixedLocations, from its fixer), the songs and
     # dungeon rewards and the checks they go to (placeSemiShuffled), and each dungeon's checks and the items that
     # stay in it (fixDungeon, DUNGEON_ITEMS). Read from a world with every check filter on, so every check is in.
@@ -245,15 +246,27 @@ def GenerateFillFile():
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
     import { Items, ItemHelpers } from './ootmm/packages/logic/src/items/index.ts';
     const checkSettings = JSON.parse(fs.readFileSync('_fill.json', 'utf8'));
+    const { isLocationChestFairy, isLocationOtherFairy, makeLocation } = await import('./ootmm/packages/logic/src/locations.ts');
     const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings } } as any);
     const world = state.worlds[0];
     const items = Object.values(Items) as any[];
     fs.writeFileSync('_fill.json', JSON.stringify({
       fixed: [...state.fixedLocations].map((l: string) => l.split('@')[0]).sort(),
+      fairyLocations: {
+        strayFairyChestShuffle: [...world.locations].filter(l => isLocationChestFairy(world, makeLocation(l, 0))).sort(),
+        strayFairyOtherShuffle: [...world.locations].filter(l => isLocationOtherFairy(world, makeLocation(l, 0))).sort(),
+      },
       songLocations: [...world.songLocations].sort(),
       songItems: items.filter(i => ItemHelpers.isSong(i)).map(i => i.id).sort(),
       warpLocations: [...world.warpLocations].sort(),
       rewardItems: items.filter(i => ItemHelpers.isDungeonReward(i)).map(i => i.id).sort(),
+      dungeonShuffleItems: {
+        smallKeyShuffleOot: items.filter(i => ItemHelpers.isSmallKeyRegularOot(i)).map(i => i.id).sort(),
+        smallKeyShuffleMm: items.filter(i => ItemHelpers.isSmallKeyRegularMm(i)).map(i => i.id).sort(),
+        mapCompassShuffle: items.filter(i => ItemHelpers.isMapCompass(i)).map(i => i.id).sort(),
+        bossKeyShuffleOot: items.filter(i => ItemHelpers.isRegularBossKeyOot(i)).map(i => i.id).sort(),
+        bossKeyShuffleMm: items.filter(i => ItemHelpers.isRegularBossKeyMm(i)).map(i => i.id).sort(),
+      },
       dungeons: Object.fromEntries(Object.entries(world.dungeons).map(([k, v]: [string, any]) => [k, [...v].sort()])),
     }), 'utf8');
     """)
@@ -268,8 +281,15 @@ def GenerateFillFile():
     fill["dungeonItems"] = {dungeon: re.findall(r"Items\.(\w+)", items)
                             for dungeon, items in re.findall(r"(\w+): \[(.*?)\]", match.group(1), re.S)}
     unknown = set(fill["dungeonItems"]) - set(fill["dungeons"])
+    fill["rewardDungeons"] = []
+    for game in ("OOT", "MM"):
+        rewards = re.search(r"const REWARDS_DUNGEONS_" + game + r" = \[(.*?)\];", solve, re.S)
+        if rewards is None:
+            raise ValueError(f"REWARDS_DUNGEONS_{game} not found in solve.ts")
+        fill["rewardDungeons"].extend(re.findall(r"'([^']+)'", rewards.group(1)))
+    unknown |= set(fill["rewardDungeons"]) - set(fill["dungeons"])
     if unknown:
-        raise ValueError(f"DUNGEON_ITEMS names unknown dungeons: {unknown}")
+        raise ValueError(f"Solver placement lists name unknown dungeons: {unknown}")
     with open("GreatFillJSONdump.json", 'w') as file:
         json.dump(fill, file, indent=1)
         file.write("\n")
@@ -314,12 +334,10 @@ def CheckSetHash(names):
 def GenerateLogicFile():
     # OoTMM's own pipeline parses every condition with default settings: macros are inlined and
     # settings, tricks and the vanilla shop prices and song events are already decided. What is left is
-    # written as a node table that logic.py reads. OoTMM tracks time of day per area, which
-    # Archipelago's state can't, so time and flag conditions are written as met.
+    # written as a node table that logic.py and time_logic.py read, including area time and waiting rules.
     print("Exporting the world logic...")
-    # The world builder imports OoTMM's packages, which need their dependencies and the built data package.
+    # The world builder imports OoTMM's built data package.
     Shell = sys.platform == "win32"
-    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--filter", "@ootmm/generator...", "--ignore-scripts"], cwd="ootmm", check=True, shell=Shell)
     subprocess.run(["pnpm", "run", "build"], cwd=os.path.join("ootmm", "packages", "data"), check=True, shell=Shell)
     RunTypeScript("""
     import fs from 'node:fs';
@@ -330,6 +348,7 @@ def GenerateLogicFile():
     import { logicPassEntrances } from './ootmm/packages/logic/src/solver/entrances.ts';
     import { logicPassWorld } from './ootmm/packages/logic/src/world/builder.ts';
     import { ItemGroups } from './ootmm/packages/logic/src/items/index.ts';
+    import { MM_TIME_SLICES, OOT_TIME_ALL } from './ootmm/packages/logic/src/expr/data.ts';
     import { ExprParser, exprEvent, exprAnd, exprOr, exprTrue, exprFalse } from './ootmm/packages/logic/src/expr/index.ts';
 
     // The settings the world offers that conditions read, and every trick, stay symbolic so
@@ -349,8 +368,13 @@ def GenerateLogicFile():
         delete this.expect;
       }
     };
-    P.parseExprSetting = withIdentifiers(P.parseExprSetting, ([key, value]) =>
-      symbolic.has(key) ? exprEvent(`@setting ${key} ${value ?? ''}`) : undefined);
+    const offeredValues: Record<string, string[]> = __OFFERED_VALUES__;
+    P.parseExprSetting = withIdentifiers(P.parseExprSetting, ([key, value]) => {
+      if (!symbolic.has(key)) return undefined;
+      // Excluded enum values cannot occur; discard their branches before exporting expressions.
+      if (value && offeredValues[key] && !offeredValues[key].includes(value)) return exprFalse();
+      return exprEvent(`@setting ${key} ${value ?? ''}`);
+    });
     P.parseExprTrick = withIdentifiers(P.parseExprTrick, ([key]) => exprEvent(`@trick ${key}`));
     // OoTMM only allows "!" and cond() on settings it has already decided. With symbolic settings they
     // apply to markers, so both are parsed here as OoTMM parses them, negating markers (De Morgan on and/or).
@@ -406,7 +430,10 @@ def GenerateLogicFile():
       if (memo.has(e.id)) return memo.get(e.id)!;
       let id: number;
       switch (e.type) {
-      case 'true': case 'time-oot': case 'time-mm': case 'flag-on': case 'flag-off': id = 0; break;
+      case 'true': id = 0; break;
+      case 'time-oot': id = add(['time-oot', e.flag]); break;
+      case 'time-mm': id = add(['time-mm', e.value + e.value2 * 2 ** 32]); break;
+      case 'flag-on': case 'flag-off': id = add([e.type, e.flag]); break;
       case 'false': id = 1; break;
       case 'price': id = world.prices[e.slot] <= e.max ? 0 : 1; break;
       case 'song-event-oot': id = world.songEventsOot[e.songId] === e.cmp ? 0 : 1; break;
@@ -444,13 +471,15 @@ def GenerateLogicFile():
       areas[name] = {
         game: area.game,
         age_change: area.ageChange,
+        time: area.time,
+        stay: area.stay === null ? null : area.stay.map(convert),
         exits: mapExprs(area.exits),
         events: mapExprs(area.events),
         locations: mapExprs(area.locations),
       };
     }
-    fs.writeFileSync('GreatLogicJSONdump.json', JSON.stringify({ nodes, areas }) + '\\n');
-    """)
+    fs.writeFileSync('GreatLogicJSONdump.json', JSON.stringify({ nodes, areas, ootTimeAll: OOT_TIME_ALL, mmTimeSlices: MM_TIME_SLICES }) + '\\n');
+    """.replace("__OFFERED_VALUES__", json.dumps(OfferedValues)))
     # Exits come from the logic (the entrance pass changes some), but regions and checks come from the
     # world dump, so the logic must have every one of them.
     with open("GreatWorldJSONdump.json", 'r') as file:
@@ -723,7 +752,43 @@ def ConvertRawOptions():
         outfile.write("\n".join(lines))
 
 
+def GenerateTimeSamples():
+    # Independent expected area clocks from OoTMM's own pathfinder, without the symbolic parser wrappers.
+    print("Sampling OoTMM's area clocks...")
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
+    import { logicPassWorld } from './ootmm/packages/logic/src/world/builder.ts';
+    import { logicPassPrice } from './ootmm/packages/logic/src/price.ts';
+    import { logicPassSongEvents } from './ootmm/packages/logic/src/misc/index.ts';
+    import { logicPassEntrances } from './ootmm/packages/logic/src/solver/entrances.ts';
+    import { Pathfinder } from './ootmm/packages/logic/src/pathfind/pathfind.ts';
+    import { Items, makePlayerItem } from './ootmm/packages/logic/src/items/index.ts';
+    let state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: DEFAULT_SETTINGS } as any);
+    for (const pass of [logicPassWorld, logicPassPrice, logicPassSongEvents, logicPassEntrances] as any[]) {
+      state = { ...state, ...pass(state) };
+    }
+    const checks = JSON.parse(fs.readFileSync('GreatCheckItemJSONdump.json', 'utf8'));
+    const symbols = [...new Set([...Object.values(checks), 'OOT_MASK_SKULL', 'OOT_MASK_SPOOKY', 'OOT_MASK_GERUDO',
+      'OOT_MASK_KEATON', 'OOT_MASK_TRUTH', 'OOT_MASK_BUNNY', 'OOT_MASK_GORON', 'OOT_MASK_ZORA', 'MM_MASK_DEKU', 'MM_SWORD'])] as string[];
+    const samples = [];
+    for (const removed of [[], ['MM_OCARINA'], ['MM_SONG_TIME'], ['OOT_OCARINA', 'MM_OCARINA']]) {
+      const counts = Object.fromEntries(symbols.filter(s => !removed.includes(s)).map(s => [s, 100]));
+      const items = new Map(Object.entries(counts).map(([s, n]) => [makePlayerItem(Items[s as keyof typeof Items], 0), n]));
+      const result = new Pathfinder(state.worlds, DEFAULT_SETTINGS, items).run(null, { recursive: true });
+      const ws = result.ws[0];
+      samples.push({ removed, counts, events: [...ws.events].sort(), areas: ws.ages.map(age =>
+        Object.fromEntries([...age.areas].map(([name, data]) => [name, [data.ootTime, data.mmTime + data.mmTime2 * 2 ** 32, data.flagsOn, data.flagsOff]]))) });
+    }
+    fs.writeFileSync('../test/time_samples.json', JSON.stringify(samples) + '\\n');
+    """)
+
+
 def main():
+    # Install before the first TypeScript export, including on a fresh OoTMM checkout.
+    subprocess.run(["pnpm", "install", "--filter", "@ootmm/logic...", "--filter", "@ootmm/generator...", "--ignore-scripts"],
+                   cwd="ootmm", check=True, shell=sys.platform == "win32")
     GenerateMetaFiles()
     GenerateRawOptionsFile()
     ClassifySettings()
@@ -733,6 +798,7 @@ def main():
     GenerateCheckInfoFile()
     GenerateFillFile()
     GenerateCheckSamples()
+    GenerateTimeSamples()
     GenerateItemFile()
     UpdateItemIDs()
     IsolateRegionData()

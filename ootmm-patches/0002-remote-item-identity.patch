@@ -1,0 +1,17 @@
+diff --git a/packages/generator/lib/combo/randomizer/checks.ts b/packages/generator/lib/combo/randomizer/checks.ts
+--- a/packages/generator/lib/combo/randomizer/checks.ts
++++ b/packages/generator/lib/combo/randomizer/checks.ts
+@@ -318,9 +318,11 @@
+-      const itemGi = gi(this.ctx.settings, check.game, item.item, true);
++      // Remote dungeon items must keep their identity outside the recipient's dungeon.
++      const generic = item.player === this.ctx.worldId;
++      const itemGi = gi(this.ctx.settings, check.game, item.item, generic);
+       const b = new Uint8Array(16);
+       const cloakItem = this.ctx.logic.itemCloaks.get(loc);
+       let cloakGi = 0;
+       if (cloakItem) {
+-        cloakGi = gi(this.ctx.settings, check.game, cloakItem, true);
++        cloakGi = gi(this.ctx.settings, check.game, cloakItem, generic);
+       }
+       bufWriteU32BE(b, 0, check.key);
+       bufWriteU16BE(b, 4, playerId(item.player));

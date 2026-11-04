@@ -24,7 +24,8 @@ EXTRA_ITEMS = [
 ]
 
 # A condition is True, False, or a tuple: ("item", OoTMM item ID, count), ("event", event),
-# ("unique", item IDs, count), ("and", conditions) or ("or", conditions).
+# ("unique", item IDs, count), ("and", conditions), ("or", conditions),
+# ("time-oot" or "time-mm", allowed mask), or ("flag-on" or "flag-off", flag index).
 Condition = Union[bool, tuple]
 
 # Settings are OoTMM's: {setting key: value, "tricks": [trick keys]}.
@@ -76,6 +77,8 @@ def _set_has(value: Any, member: str) -> bool:
 def removed_checks(settings: Settings) -> set[str]:
     """The checks OoTMM leaves out with these settings, as run() in its world/transform.ts removes them."""
     removed: set[str] = set()
+    if _value(settings, "strayFairyOtherShuffle") == "removed":
+        removed.update(ootxmm_staticdata.OOTxMMFill["fairyLocations"]["strayFairyOtherShuffle"])
     def checks(type_: str, scene: str | None = None) -> list[str]:
         return [name for name, (t, s, _) in _check_info["checks"].items() if t == type_ and scene in (None, s)]
     for key, type_ in CHECK_FILTERS.items():
@@ -134,6 +137,8 @@ class _Specializer:
             return node
         if node[0] == "age":
             return node[1] == age
+        if node[0] in ("time-oot", "time-mm", "flag-on", "flag-off"):
+            return tuple(node)
         if node[0] == "setting":
             # setting(key) for a toggle, setting(key, value) for the others.
             value = self.settings[node[1]]
@@ -241,16 +246,31 @@ class Logic:
             if pool == items:
                 break
             items = pool
+        # Check filters can leave empty terminal areas, including time-limited subareas
+        # reachable at only one age. They cannot contribute checks, events or a return route.
+        occupied = {(area, age) for parents in (*checks.values(), *event_parents.values())
+                    for area, age, _ in parents}
+        while empty := {key for key, targets in exits.items() if not targets and key not in occupied
+                       and key[0] != ORIGIN}:
+            exits = {key: [(target, cond) for target, cond in targets if (target, key[1]) not in empty]
+                     for key, targets in exits.items() if key not in empty}
         self.exits = exits
         self.regions = list(exits)
         self.checks = checks
         self.events = event_parents
+        self.stay = {
+            (area, age): None if _areas[area]["stay"] is None else tuple(specialize(n, age) for n in _areas[area]["stay"])
+            for area, age in self.regions
+        }
         self.items: set[str] = set()
         for targets in exits.values():
             for _, cond in targets:
                 _items(cond, self.items)
         for parents in (*checks.values(), *event_parents.values()):
             for _, _, cond in parents:
+                _items(cond, self.items)
+        for conditions in self.stay.values():
+            for cond in conditions or ():
                 _items(cond, self.items)
 
 # The settings conditions read, and so the ones that change the graph.

@@ -21,6 +21,183 @@ class OOTxMM_goal(Choice):
     default = option_both
 
 
+class OOTxMM_songs(Choice):
+    """
+    Controls where songs can be obtained, in both games.
+    - **songLocations**: Only locations that contain songs in the vanilla games will have songs.
+    - **anywhere**: Songs can be placed anywhere.
+    """
+    display_name = "Song Shuffle"
+    option_songLocations = 0
+    option_anywhere = 1
+    ootmm_values = ['songLocations', 'anywhere']
+    default = option_songLocations
+
+
+class OOTxMM_tingleShuffle(Choice):
+    """
+    Controls where Tingle Maps are
+    - **vanilla**: Tingle Maps can be bought at Tingle, in their original locations
+    - **anywhere**: Tingle Maps will be anywhere
+    - **starting**: Tingle Maps are in Link's pocket
+    - **removed**: Tingle Maps are fully removed and cannot be obtained
+    """
+    display_name = "Tingle Maps Shuffle"
+    option_vanilla = 0
+    option_anywhere = 1
+    option_starting = 2
+    option_removed = 3
+    ootmm_values = ['vanilla', 'anywhere', 'starting', 'removed']
+    default = option_vanilla
+
+
+class OOTxMM_mapCompassShuffle(Choice):
+    """
+    Controls where Maps and Compasses can be
+    - **ownDungeon**: Maps and Compasses will be in their own dungeons
+    - **anywhere**: Maps and Compasses can be on any location
+    - **starting**: Maps and Compasses will be in Link's Pocket
+    - **removed**: Fully removed and cannot be obtained
+    """
+    display_name = "Map / Compass Shuffle"
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_starting = 2
+    option_removed = 3
+    ootmm_values = ['ownDungeon', 'anywhere', 'starting', 'removed']
+    default = option_ownDungeon
+
+
+class OOTxMM_smallKeyShuffleOot(Choice):
+    """
+    Controls where Small Keys (for Dungeons) can be in OoT
+    - **ownDungeon**: Dungeon Small Keys can only be found in their own dungeons
+    - **anywhere**: Dungeon Small Keys can be found anywhere
+    - **removed**: Small Keys are removed and Small Key doors are unlocked
+    """
+    display_name = "Small Key Shuffle (OoT)"
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_removed = 2
+    ootmm_values = ['ownDungeon', 'anywhere', 'removed']
+    default = option_ownDungeon
+
+
+class OOTxMM_smallKeyShuffleMm(Choice):
+    """
+    Controls where Small Keys (for Dungeons) can be in MM
+    - **ownDungeon**: Dungeon Small Keys can only be found in their own dungeons
+    - **anywhere**: Dungeon Small Keys can be found anywhere
+    - **removed**: Small Keys are removed and Small Key doors are unlocked
+    """
+    display_name = "Small Key Shuffle (MM)"
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_removed = 2
+    ootmm_values = ['ownDungeon', 'anywhere', 'removed']
+    default = option_ownDungeon
+
+
+class OOTxMM_bossKeyShuffleOot(Choice):
+    """
+    Controls where Boss Keys can be in OoT
+    - **ownDungeon**: Boss Keys can only be in their own dungeons
+    - **anywhere**: Boss Keys can be found anywhere
+    - **removed**: Boss Keys are removed and boss doors are unlocked
+    """
+    display_name = "Boss Key Shuffle (OoT)"
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_removed = 2
+    ootmm_values = ['ownDungeon', 'anywhere', 'removed']
+    default = option_ownDungeon
+
+
+class OOTxMM_bossKeyShuffleMm(Choice):
+    """
+    Controls where Boss Keys can be in MM
+    - **ownDungeon**: Boss Keys can only be in their own dungeons
+    - **anywhere**: Boss Keys can be found anywhere
+    - **removed**: Boss Keys are removed and boss doors are unlocked
+    """
+    display_name = "Boss Key Shuffle (MM)"
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_removed = 2
+    ootmm_values = ['ownDungeon', 'anywhere', 'removed']
+    default = option_ownDungeon
+
+
+class OOTxMM_strayFairyChestShuffle(Choice):
+    """
+    Controls where the Dungeon Chest Stray Fairies can be
+    - **starting**: Start with the fairies
+    - **vanilla**: The Dungeon Chest Stray Fairies will be at their original locations
+    - **ownDungeon**: All Dungeon Chest Stray Fairies are shuffled within their own dungeon
+    - **anywhere**: All Dungeon Chest Stray Fairies are shuffled anywhere
+    """
+    display_name = "Dungeon Chest Fairy Shuffle"
+    option_starting = 0
+    option_vanilla = 1
+    option_ownDungeon = 2
+    option_anywhere = 3
+    ootmm_values = ['starting', 'vanilla', 'ownDungeon', 'anywhere']
+    default = option_ownDungeon
+
+
+class OOTxMM_strayFairyOtherShuffle(Choice):
+    """
+    Controls where the Dungeon Freestanding Stray Fairies can be
+    - **removed**: Start with the fairies, and the bubbles are removed.
+    - **starting**: Start with the fairies
+    - **vanilla**: The Dungeon Freestanding Stray Fairies will be at their original locations
+    - **ownDungeon**: All Dungeon Freestanding Stray Fairies are shuffled within their own dungeon
+    - **anywhere**: All Dungeon Freestanding Stray Fairies are shuffled anywhere
+    """
+    display_name = "Dungeon Freestanding Fairy Shuffle"
+    option_removed = 0
+    option_starting = 1
+    option_vanilla = 2
+    option_ownDungeon = 3
+    option_anywhere = 4
+    ootmm_values = ['removed', 'starting', 'vanilla', 'ownDungeon', 'anywhere']
+    default = option_vanilla
+
+
+class OOTxMM_ganonBossKey(Choice):
+    """
+    Controls where Ganon Boss Key should be
+    - **removed**: Ganon Boss Key is removed, and so is the lock on the door leading to Ganondorf
+    - **vanilla**: Ganon Boss Key will be in its original chest, within Ganon's Castle
+    - **ganon**: Ganon Boss Key will be anywhere within Ganon's Castle
+    - **anywhere**: Ganon Boss Key can be found anywhere
+    """
+    display_name = "Ganon Boss Key Shuffle"
+    option_removed = 0
+    option_vanilla = 1
+    option_ganon = 2
+    option_anywhere = 3
+    ootmm_values = ['removed', 'vanilla', 'ganon', 'anywhere']
+    default = option_removed
+
+
+class OOTxMM_dungeonRewardShuffle(Choice):
+    """
+    Controls where the dungeons rewards should be
+    - **dungeonBlueWarps**: Only the blue warps will grant the rewards
+    - **dungeonsLimited**: Anywhere in dungeons (one max)
+    - **dungeons**: Anywhere in dungeons
+    - **anywhere**: Can be anywhere
+    """
+    display_name = "Dungeon Reward Shuffle"
+    option_dungeonBlueWarps = 0
+    option_dungeonsLimited = 1
+    option_dungeons = 2
+    option_anywhere = 3
+    ootmm_values = ['dungeonBlueWarps', 'dungeonsLimited', 'dungeons', 'anywhere']
+    default = option_dungeonBlueWarps
+
+
 class OOTxMM_shufflePotsOot(Choice):
     """
     Controls whether or not the pots are shuffled (OoT).
@@ -1439,6 +1616,17 @@ class OOTxMM_tricks(OptionSet):
 @dataclass
 class OOTxMMOptions(PerGameCommonOptions):
     goal: OOTxMM_goal
+    songs: OOTxMM_songs
+    tingleShuffle: OOTxMM_tingleShuffle
+    mapCompassShuffle: OOTxMM_mapCompassShuffle
+    smallKeyShuffleOot: OOTxMM_smallKeyShuffleOot
+    smallKeyShuffleMm: OOTxMM_smallKeyShuffleMm
+    bossKeyShuffleOot: OOTxMM_bossKeyShuffleOot
+    bossKeyShuffleMm: OOTxMM_bossKeyShuffleMm
+    strayFairyChestShuffle: OOTxMM_strayFairyChestShuffle
+    strayFairyOtherShuffle: OOTxMM_strayFairyOtherShuffle
+    ganonBossKey: OOTxMM_ganonBossKey
+    dungeonRewardShuffle: OOTxMM_dungeonRewardShuffle
     shufflePotsOot: OOTxMM_shufflePotsOot
     shufflePotsMm: OOTxMM_shufflePotsMm
     shuffleCratesOot: OOTxMM_shuffleCratesOot
@@ -1573,15 +1761,15 @@ class OOTxMMOptions(PerGameCommonOptions):
 
 
 # The OoTMM setting keys of the options above: the patch takes their values as they are.
-OOTMM_SETTINGS = ['goal', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'moonCrash', 'startingAgeMm', 'doorOfTime', 'dekuTree', 'beneathWell', 'openZdShortcut', 'openMoon', 'bossWarpPads', 'freeScarecrowOot', 'freeScarecrowMm', 'crossGameFw', 'csmc', 'csmcHearts', 'csmcMapCompass', 'csmcSkulltula', 'csmcCow', 'blastMaskCooldown', 'clockSpeed', 'fierceDeityAnywhere', 'hookshotAnywhereOot', 'climbMostSurfacesOot', 'climbMostSurfacesMm', 'restoreBrokenActors', 'alterLostWoodsExits', 'voidWarpMm', 'damageMultiplierOot', 'damageMultiplierMm', 'mmStyleAirMovementOot', 'ootHyperEnemies', 'mmHyperEnemies', 'fillWallets', 'blueFireArrows', 'iceArrowPlatformsOot', 'sunlightArrows', 'rupeeScaling', 'kegStrength3', 'menuNotebook', 'coins', 'songOfDoubleTimeOot', 'agelessSwords', 'agelessShields', 'agelessTunics', 'agelessBoots', 'agelessSticks', 'agelessBoomerang', 'agelessHammer', 'agelessGFS', 'agelessHookshot', 'agelessSlingshot', 'agelessBow', 'agelessChildTrade', 'agelessSoaring', 'mmEasierLightblock', 'shadowFastBoat', 'openMaskShop', 'lenientSpikes', 'fastBunnyHood', 'bowSlingshotBreakHives', 'critWiggleDisable', 'fastMasks', 'keepItemsReset', 'keepBottlesReset', 'mmSongOfDoubleTimeTimeSelector', 'autoInvert', 'cutsceneSkipOoT', 'cutsceneSkipMM', 'cutsceneGlitchOoT', 'cutsceneIntroGohma', 'cutsceneIntroKingDodongo', 'cutsceneIntroBarinade', 'cutsceneIntroPhantomGanon', 'cutsceneIntroVolvagia', 'cutsceneIntroMorpha', 'cutsceneIntroBongoBongo', 'cutsceneIntroTwinrova', 'cutsceneIntroGanondorf', 'cutsceneIntroOdolwa', 'cutsceneIntroGoht', 'cutsceneIntroWart', 'cutsceneIntroGyorg', 'cutsceneIntroIgos', 'cutsceneIntroGomess', 'cutsceneIntroTwinmold', 'cutsceneIntroMajora', 'tricks']
+OOTMM_SETTINGS = ['goal', 'songs', 'tingleShuffle', 'mapCompassShuffle', 'smallKeyShuffleOot', 'smallKeyShuffleMm', 'bossKeyShuffleOot', 'bossKeyShuffleMm', 'strayFairyChestShuffle', 'strayFairyOtherShuffle', 'ganonBossKey', 'dungeonRewardShuffle', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'moonCrash', 'startingAgeMm', 'doorOfTime', 'dekuTree', 'beneathWell', 'openZdShortcut', 'openMoon', 'bossWarpPads', 'freeScarecrowOot', 'freeScarecrowMm', 'crossGameFw', 'csmc', 'csmcHearts', 'csmcMapCompass', 'csmcSkulltula', 'csmcCow', 'blastMaskCooldown', 'clockSpeed', 'fierceDeityAnywhere', 'hookshotAnywhereOot', 'climbMostSurfacesOot', 'climbMostSurfacesMm', 'restoreBrokenActors', 'alterLostWoodsExits', 'voidWarpMm', 'damageMultiplierOot', 'damageMultiplierMm', 'mmStyleAirMovementOot', 'ootHyperEnemies', 'mmHyperEnemies', 'fillWallets', 'blueFireArrows', 'iceArrowPlatformsOot', 'sunlightArrows', 'rupeeScaling', 'kegStrength3', 'menuNotebook', 'coins', 'songOfDoubleTimeOot', 'agelessSwords', 'agelessShields', 'agelessTunics', 'agelessBoots', 'agelessSticks', 'agelessBoomerang', 'agelessHammer', 'agelessGFS', 'agelessHookshot', 'agelessSlingshot', 'agelessBow', 'agelessChildTrade', 'agelessSoaring', 'mmEasierLightblock', 'shadowFastBoat', 'openMaskShop', 'lenientSpikes', 'fastBunnyHood', 'bowSlingshotBreakHives', 'critWiggleDisable', 'fastMasks', 'keepItemsReset', 'keepBottlesReset', 'mmSongOfDoubleTimeTimeSelector', 'autoInvert', 'cutsceneSkipOoT', 'cutsceneSkipMM', 'cutsceneGlitchOoT', 'cutsceneIntroGohma', 'cutsceneIntroKingDodongo', 'cutsceneIntroBarinade', 'cutsceneIntroPhantomGanon', 'cutsceneIntroVolvagia', 'cutsceneIntroMorpha', 'cutsceneIntroBongoBongo', 'cutsceneIntroTwinrova', 'cutsceneIntroGanondorf', 'cutsceneIntroOdolwa', 'cutsceneIntroGoht', 'cutsceneIntroWart', 'cutsceneIntroGyorg', 'cutsceneIntroIgos', 'cutsceneIntroGomess', 'cutsceneIntroTwinmold', 'cutsceneIntroMajora', 'tricks']
 
 # The ones OoTMM's code reads outside conditions, which the world ports (raw/Meta_Options.py).
-PORTED_SETTINGS = ['goal', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'restoreBrokenActors']
+PORTED_SETTINGS = ['goal', 'songs', 'tingleShuffle', 'mapCompassShuffle', 'smallKeyShuffleOot', 'smallKeyShuffleMm', 'bossKeyShuffleOot', 'bossKeyShuffleMm', 'strayFairyChestShuffle', 'strayFairyOtherShuffle', 'ganonBossKey', 'dungeonRewardShuffle', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'restoreBrokenActors']
 
 # By OoTMM's setting category.
 option_groups = [
     OptionGroup("Main", [OOTxMM_goal]),
-    OptionGroup("Main / Shuffle", [OOTxMM_shufflePotsOot, OOTxMM_shufflePotsMm, OOTxMM_shuffleCratesOot, OOTxMM_shuffleCratesMm, OOTxMM_shuffleBarrelsMm, OOTxMM_shuffleHivesOot, OOTxMM_shuffleHivesMm, OOTxMM_shuffleGrassOot, OOTxMM_shuffleRocksOot, OOTxMM_shuffleRocksMm, OOTxMM_shuffleGrassMm, OOTxMM_shuffleTFGrassMm, OOTxMM_shuffleTreesOot, OOTxMM_shuffleTreesMm, OOTxMM_shuffleBushOot, OOTxMM_shuffleBushMm, OOTxMM_shuffleSoilOot, OOTxMM_shuffleSoilMm, OOTxMM_shuffleFreeRupeesOot, OOTxMM_shuffleFreeRupeesMm, OOTxMM_shuffleFreeHeartsOot, OOTxMM_shuffleFreeHeartsMm, OOTxMM_shuffleGossipFairiesOot, OOTxMM_shuffleGossipBigFairiesOot, OOTxMM_shuffleGossipFairiesMm, OOTxMM_shuffleGossipBigFairiesMm, OOTxMM_shuffleWonderItemsOot, OOTxMM_shuffleWonderItemsMm, OOTxMM_shuffleSnowballsMm, OOTxMM_shuffleButterfliesOot, OOTxMM_shuffleButterfliesMm, OOTxMM_shuffleBouldersOot, OOTxMM_shuffleBouldersMm, OOTxMM_shuffleRedBouldersOot, OOTxMM_shuffleRedBouldersMm, OOTxMM_shuffleSilverBouldersOot, OOTxMM_shuffleIciclesOot, OOTxMM_shuffleIciclesMm, OOTxMM_shuffleRedIceOot, OOTxMM_shuffleSkulltulaFinalReward, OOTxMM_shuffleMaskTrades, OOTxMM_divingGameRupeeShuffle, OOTxMM_fairyFountainFairyShuffleOot, OOTxMM_fairyFountainFairyShuffleMm, OOTxMM_fairySpotShuffleOot, OOTxMM_eggShuffle]),
+    OptionGroup("Main / Shuffle", [OOTxMM_songs, OOTxMM_tingleShuffle, OOTxMM_mapCompassShuffle, OOTxMM_smallKeyShuffleOot, OOTxMM_smallKeyShuffleMm, OOTxMM_bossKeyShuffleOot, OOTxMM_bossKeyShuffleMm, OOTxMM_strayFairyChestShuffle, OOTxMM_strayFairyOtherShuffle, OOTxMM_ganonBossKey, OOTxMM_dungeonRewardShuffle, OOTxMM_shufflePotsOot, OOTxMM_shufflePotsMm, OOTxMM_shuffleCratesOot, OOTxMM_shuffleCratesMm, OOTxMM_shuffleBarrelsMm, OOTxMM_shuffleHivesOot, OOTxMM_shuffleHivesMm, OOTxMM_shuffleGrassOot, OOTxMM_shuffleRocksOot, OOTxMM_shuffleRocksMm, OOTxMM_shuffleGrassMm, OOTxMM_shuffleTFGrassMm, OOTxMM_shuffleTreesOot, OOTxMM_shuffleTreesMm, OOTxMM_shuffleBushOot, OOTxMM_shuffleBushMm, OOTxMM_shuffleSoilOot, OOTxMM_shuffleSoilMm, OOTxMM_shuffleFreeRupeesOot, OOTxMM_shuffleFreeRupeesMm, OOTxMM_shuffleFreeHeartsOot, OOTxMM_shuffleFreeHeartsMm, OOTxMM_shuffleGossipFairiesOot, OOTxMM_shuffleGossipBigFairiesOot, OOTxMM_shuffleGossipFairiesMm, OOTxMM_shuffleGossipBigFairiesMm, OOTxMM_shuffleWonderItemsOot, OOTxMM_shuffleWonderItemsMm, OOTxMM_shuffleSnowballsMm, OOTxMM_shuffleButterfliesOot, OOTxMM_shuffleButterfliesMm, OOTxMM_shuffleBouldersOot, OOTxMM_shuffleBouldersMm, OOTxMM_shuffleRedBouldersOot, OOTxMM_shuffleRedBouldersMm, OOTxMM_shuffleSilverBouldersOot, OOTxMM_shuffleIciclesOot, OOTxMM_shuffleIciclesMm, OOTxMM_shuffleRedIceOot, OOTxMM_shuffleSkulltulaFinalReward, OOTxMM_shuffleMaskTrades, OOTxMM_divingGameRupeeShuffle, OOTxMM_fairyFountainFairyShuffleOot, OOTxMM_fairyFountainFairyShuffleMm, OOTxMM_fairySpotShuffleOot, OOTxMM_eggShuffle]),
     OptionGroup("Main / Events", [OOTxMM_moonCrash, OOTxMM_startingAgeMm, OOTxMM_doorOfTime, OOTxMM_dekuTree, OOTxMM_beneathWell, OOTxMM_openZdShortcut, OOTxMM_openMoon, OOTxMM_bossWarpPads, OOTxMM_freeScarecrowOot, OOTxMM_freeScarecrowMm]),
     OptionGroup("Main / Cross", [OOTxMM_crossGameFw]),
     OptionGroup("Main / Camc", [OOTxMM_csmc, OOTxMM_csmcHearts, OOTxMM_csmcMapCompass, OOTxMM_csmcSkulltula, OOTxMM_csmcCow]),

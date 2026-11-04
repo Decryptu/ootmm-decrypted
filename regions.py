@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from BaseClasses import Region
 
-from . import logic, rules
+from . import logic
 
 if TYPE_CHECKING:
     from .world import OOTxMM
@@ -28,4 +28,4 @@ def connect_regions(world: OOTxMM) -> None:
         for target, cond in exits:
             target_name = logic.region_name(target, age)
             region.connect(world.get_region(target_name), f"{region.name} to {target_name}",
-                           rules.compile_rule(world, cond, world.rule_cache))
+                           world.time_logic.rule(area, age, cond))
