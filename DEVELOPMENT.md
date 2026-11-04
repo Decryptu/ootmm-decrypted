@@ -87,6 +87,8 @@ OoTMM's item placement settings (`smallKeyShuffleOot`, `strayFairyChestShuffle`,
 
 `GenerateFillFile` in `raw/GenerateMetadata.py` exports all of this into `raw/GreatFillJSONdump.json` by running OoTMM's pipeline with its defaults and every check filter on: the fixed checks, the song and reward checks and items, each dungeon's checks, and `DUNGEON_ITEMS` (read from `solve.ts`, which doesn't export it). It is fixed data because none of the settings it depends on is offered; porting one of them means computing its part per player. `test/test_prefill.py` checks the placements.
 
+Failed pre-fill attempts clear only occupied candidate locations before retrying; a restrictive fill may leave some candidates empty. `test/test_prefill.py` forces a partial failure to check cleanup and restoration of the pending items.
+
 ## Client
 `client.py` is a client on Archipelago's BizHawk connector (`worlds/_bizhawk`; the player runs Archipelago's BizHawk Client and the connector Lua script in BizHawk). It talks to the game through the RAM mailbox of our OoTMM patch ([Our OoTMM changes](#our-ootmm-changes)) in OoTMM's own multiworld protocol (`src/common/multi/multi.h` and `multi.c` in OoTMM):
 - **Finding the mailbox.** It scans RDRAM for the magic, a few 32 KB reads per poll, as the connector's replies are capped at 64 KB. The magic is also in the game's code as a string constant, and after a game switch the other game's mailbox stays in RAM, so the mailbox is the 16-aligned match whose `alive` counter moves. It moves only in gameplay (OoTMM's `Multi_Update`), not on the title screen or the file select. The client then sets `connected`, and clears it when it loses the server, so the game keeps what it sends until a server is there.

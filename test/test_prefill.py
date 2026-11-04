@@ -1,9 +1,45 @@
+from types import SimpleNamespace
+from unittest import TestCase
+from unittest.mock import patch
+
+from Fill import FillError
+
 from .. import items, ootxmm_staticdata, prefill
 from .test_options import OOTxMMTestBase
 
 
 def symbolic(item) -> str:
     return items.ITEM_BY_NAME[item.name].symbolic_id
+
+
+class TestPreFillRetry(TestCase):
+    def test_partial_placement_is_cleared_before_retry(self) -> None:
+        item = SimpleNamespace(location=None)
+        filled = SimpleNamespace(item=item, locked=True)
+        empty = SimpleNamespace(item=None, locked=False)
+        world = SimpleNamespace(pre_fill_pending=[item])
+        calls = 0
+
+        def place_group(world, items, names, placed):
+            nonlocal calls
+            calls += 1
+            self.assertEqual(world.pre_fill_pending, [item])
+            if calls == 1:
+                world.pre_fill_pending.clear()
+                item.location = filled
+                placed.extend([filled, empty])
+                raise FillError("Partial placement")
+            self.assertIsNone(item.location)
+            self.assertIsNone(filled.item)
+            self.assertFalse(filled.locked)
+            self.assertIsNone(empty.item)
+            world.pre_fill_pending.clear()
+
+        with patch.object(prefill, "_groups", return_value=[(set(), set())]), \
+                patch.object(prefill, "_place_group", side_effect=place_group):
+            prefill.pre_fill(world)
+        self.assertEqual(calls, 2)
+        self.assertEqual(world.pre_fill_pending, [])
 
 
 class TestPreFill(OOTxMMTestBase):
