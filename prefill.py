@@ -84,8 +84,9 @@ def pre_fill(world: OOTxMM) -> None:
             if attempt == ATTEMPTS - 1:
                 raise
             for location in placed:
-                location.item.location = None
-                location.item = None
+                if location.item is not None:
+                    location.item.location = None
+                    location.item = None
                 location.locked = False
 
 def _place_group(world: OOTxMM, items: set[str], names: set[str], placed: list[Location]) -> None:
