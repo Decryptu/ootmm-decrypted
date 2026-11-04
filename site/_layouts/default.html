@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#292b18">
+  <meta name="description" content="Player guides and settings for Ocarina of Time and Majora’s Mask in Archipelago.">
+  <title>{{ page.title | escape }} · OoTMM Decrypted</title>
+  <link rel="preload" href="{{ '/assets/pixelify-sans.ttf' | relative_url }}" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="{{ '/style.css' | relative_url }}">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="game-shell">
+    <header>
+      <div class="hud"><a class="brand" href="{{ '/' | relative_url }}">OoTMM Decrypted</a><span class="hud-hearts" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><br><i></i><i></i><i></i></span><span class="hud-label">ARCHIPELAGO / v33.0</span></div>
+      <nav class="pause-tabs" aria-label="Main">
+        <a href="{{ '/' | relative_url }}" {% if page.title == 'Player hub' %}aria-current="page"{% endif %}><span class="controller b" aria-hidden="true">B</span> Player hub</a>
+        <a href="{{ '/setup.html' | relative_url }}" {% if page.title == 'Setup guide' %}aria-current="page"{% endif %}><span class="controller a" aria-hidden="true">A</span> Setup guide</a>
+        <a href="{{ '/game.html' | relative_url }}" {% if page.title == 'About the game' %}aria-current="page"{% endif %}><span class="controller c" aria-hidden="true">C</span> Game details</a>
+      </nav>
+    </header>
+    <main id="main" {% unless page.title == 'Player hub' %}class="guide pause-screen"{% endunless %}>{{ content }}</main>
+    <footer><a href="https://github.com/Decryptu/ootmm-decrypted">GitHub ↗</a><span>Development build</span><a href="{{ '/' | relative_url }}">Return to player hub</a></footer>
+  </div>
+</body>
+</html>

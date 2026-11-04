@@ -1,0 +1,38 @@
+---
+layout: default
+title: Player hub
+---
+<section class="pause-screen" aria-labelledby="menu-title">
+  <h1 class="screen-title" id="menu-title">SELECT ITEM</h1>
+  <div class="inventory-screen">
+    <nav class="inventory" aria-label="Player tools">
+      <a href="setup.html"><img src="assets/menu-guide.png" width="64" height="64" alt=""><span>Setup guide</span></a>
+      <a href="#settings"><img src="assets/menu-notebook.png" width="64" height="64" alt=""><span>Player YAML</span></a>
+      <a href="https://ootmm.com/gen/v33.0"><img src="assets/menu-ocarina.png" width="64" height="64" alt=""><span>Patch ROM ↗</span></a>
+      <a href="#world-package"><img src="assets/menu-package.png" width="64" height="64" alt=""><span>World package</span></a>
+      <a href="game.html"><img src="assets/menu-mask.png" width="64" height="64" alt=""><span>Game details</span></a>
+      <a href="https://github.com/Decryptu/ootmm-decrypted"><img src="assets/menu-tools.png" width="64" height="64" alt=""><span>Source code ↗</span></a>
+    </nav>
+    <div class="save-info"><img class="game-emblem" src="{{ '/assets/ootmm-decrypted.png' | relative_url }}" alt="Ocarina of Time and Majora’s Mask joined into one emblem" width="913" height="839"><h2>OoTMM <br>Decrypted</h2><p>Ocarina of Time + Majora’s Mask<br> for Archipelago</p><p class="version">v33.0 · Development build</p></div>
+  </div>
+  <div class="menu-caption"><span class="controller a" aria-hidden="true">A</span> Select a guide or tool</div>
+</section>
+<aside class="dialogue"><p><strong class="yellow">Before starting your game...</strong><br>This world is still in development. A full multiworld play session needs validation. Read the <a href="game.html">current limitations</a> before organizing a game.</p></aside>
+<section class="pause-screen player-screen" id="settings" aria-labelledby="settings-title">
+  <h2 class="screen-title" id="settings-title">PLAYER FILE</h2>
+  <div class="player-content"><div class="player-instructions"><img src="assets/menu-notebook.png" width="80" height="80" alt=""><h3>Create your YAML</h3><ol><li>Enter a unique player name.</li><li>Choose your final boss.</li><li>Download the file and send it to your host.</li></ol><p>Other settings use the world’s defaults.</p><details><summary>Need the full settings?</summary><p>Install the world package, then select <strong>Generate Template Options</strong> in the Archipelago launcher.</p></details></div>
+  <form id="yaml-form">
+    <label for="player">Player name</label>
+    <input id="player" name="player" required maxlength="16" placeholder="Link" autocomplete="off" pattern="[^{}]+" aria-describedby="name-help">
+    <small id="name-help">Up to 16 characters, without braces. Use the same name when connecting.</small>
+    <label for="goal">Final boss</label>
+    <select id="goal" name="goal" aria-describedby="goal-help"><option value="both">Ganon + Majora</option><option value="ganon">Ganon</option><option value="majora">Majora</option><option value="any">Either boss</option></select>
+    <small id="goal-help">For both bosses, keep the client running between victories. Completion is not yet preserved across client restarts.</small>
+    <button type="submit"><span class="controller a" aria-hidden="true">A</span> Download YAML</button>
+    <p id="yaml-status" role="status" aria-live="polite"></p>
+  </form></div>
+  <p class="menu-caption">File created in your browser. Give it to your host.</p>
+</section>
+<noscript><p class="dialogue">Enable JavaScript to download a YAML, or use Archipelago’s Generate Template Options.</p></noscript>
+<section class="dialogue package" id="world-package" aria-labelledby="package-title"><img src="assets/menu-package.png" width="80" height="80" alt=""><div><h2 id="package-title">Get the world package</h2><p>Ask your host for the matching <code>ootxmm.apworld</code>. Development builds are also available from successful World workflow runs.</p><p>Sign in to GitHub, download and extract the artifact ZIP, then install the package in Archipelago’s <code>custom_worlds</code> folder.</p><a href="https://github.com/Decryptu/ootmm-decrypted/actions/workflows/apworld.yml">World workflow downloads ↗</a></div></section>
+<script src="{{ '/yaml.js' | relative_url }}" defer></script>

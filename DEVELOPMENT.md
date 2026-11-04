@@ -21,6 +21,7 @@ Everything a new contributor needs, with no other context. Keep it current. [ROA
 | `ootxmm_staticdata.py` | Loads the metadata JSON the world reads at runtime |
 | `ootmm-ap/` | Our scripts that run on OoTMM's generator: the ROM patch ([ROM patch](#rom-patch)) |
 | `web_world.py`, `docs/` | Archipelago website pages: game page (`en_OOTxMM.md`) and setup guide (`setup_en.md`) |
+| `site/`, `tools/build_site.py` | GitHub Pages player hub; staging adds Jekyll front matter to the same `docs/` guides that ship in the world |
 | `raw/` | `GenerateMetadata.py` and its outputs. Only the `GreatWorld`, `GreatLogic`, `GreatCheckItem`, `GreatCheckInfo`, `GreatFill`, `GreatSettings` and `GreatItem` JSON dumps, `LocationIDs.json` and `ItemIDs.json` ship in the apworld (`tools/build_apworld.py`); the YAML, `Isolated*` and `SettingsClasses.json` files are intermediates kept for reading and diffing. The generator also writes `test/check_samples.json` ([Options](#options)) |
 | `test/` | The world's own tests, run with Archipelago's ([Build and test](#build-and-test)) |
 | `assets/` | Logo |
@@ -107,7 +108,7 @@ OoTMM accepts only Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U, checked 
 | OoT 1.0 NTSC-U | `cd16c529` | `c916ab315fbe82a22169bff13d6b866e9fddc907461eb6b0a227b82acdf5b506` |
 | MM NTSC-U | `b428d8a7` | `efb1365b3ae362604514c0f9a1a2d11f5dc8688ba5be660a37debf5e3be43f2b` |
 
-OoTMM also lists a second OoT CRC (`d423e8b0`, SHA-256 `d38fd6ff…`). Keep ROMs in `roms/`; nothing copyrighted is committed.
+OoTMM also lists a second OoT CRC (`d423e8b0`, SHA-256 `d38fd6ff…`). Keep ROMs in `roms/`; ROM files are never committed. The player hub's extracted UI artwork has separate credits in `site/assets/README.md`.
 
 ## Build and test
 - `python tools/build_apworld.py dist/ootxmm.apworld` packs the world. A new file the world needs must be added to `WORLD_FILES` there (or live under a listed folder such as `test/`).
@@ -128,7 +129,17 @@ A player's ROM is built from their Archipelago output with OoTMM's generator:
 3. Hints: OoTMM's hints come from its playthrough analysis, which can't run on one world of a multiworld. Gossip stones get junk hints; the fixed hints (where the dungeon rewards, the Light Arrows, the Oath to Order and Ganon's boss key are, and how important the items at the Skulltula House and similar checks are) are worked out from the placements as OoTMM does.
 4. It writes the ROM and OoTMM's `.ootmm` patch file for it. OoTMM's patch mode (`pnpm start --patch <file>`) rebuilds the same ROM from the patch file and the player's own ROMs, except for 32 random bytes OoTMM picks on every pack.
 
-To run it: `pwsh tools/ootmm-build.ps1 "cd packages/generator && NODE_ENV=production pnpm exec tsx lib/ap/ap-patch.ts <player file> ../../roms/oot.z64 ../../roms/mm.z64 <output folder>"`. Windows drives are mounted in the container, so the files can be `/mnt/c/...` paths.
+To run it: `pwsh tools/ootmm-build.ps1 "cd packages/generator && NODE_ENV=production pnpm exec tsx lib/ap/ap-patch.ts <player file or directory> ../../roms/oot.z64 ../../roms/mm.z64 <output folder>"`. Windows drives are mounted in the container, so the files can be `/mnt/c/...` paths. A directory builds every `.ootxmm.json` file in name order and fails if none exist. A failed player stops the batch with a nonzero exit; outputs already built remain.
+
+The host builds patches and distributes each player's `.ootmm`, not the ROM. Players apply it with OoTMM v33.0's Patch mode and their own ROMs; the patch carries our custom communication code. The standard v33.0 CLI Patch mode rebuilds these patches; browser patching still needs an end-to-end check. See `docs/setup_en.md` for the player and host instructions.
+
+### Player hub
+
+`site/` contains a static hub and a browser-local starter YAML download (name and goal; other settings keep defaults). Full option templates come from Archipelago's **Generate Template Options**, so unsupported settings are not advertised. No ROMs, seed generation or multiplayer server run on GitHub Pages.
+
+The hub uses original OoT/MM inventory icons and OoT pause-screen, HUD, cursor and dialogue textures, with the self-hosted Pixelify Sans font. Native controls, visible keyboard focus, a skip link and mobile layouts keep the menus usable without a controller. `python tools/extract_site_assets.py` re-exports the PNGs from the supported local ROMs (requires Pillow); source offsets, composition details and credits are in `site/assets/`. ROM files are never staged for the site. The builder includes the README emblem from `assets/ootmm-decrypted.png`; its artwork credits are in `assets/README.md`.
+
+Run `python tools/build_site.py` to stage `dist/pages-source`. The builder copies the hub and adds Jekyll front matter to the two shared `docs/` guides; edit those originals, not the staged copies. `.github/workflows/pages.yml` builds with GitHub's Jekyll action on pull requests and deploys only from `main`. In repository Settings → Pages, select **GitHub Actions**. The base path in `site/_config.yml` is `/ootmm-decrypted`; change it if the repository name changes. A manual workflow run on `main` can redeploy. Keep the existing World workflow for downloadable apworld artifacts.
 
 ### Our OoTMM changes
 Each file in `ootmm-patches/` is one change, as a diff against the tracked tag. To change one: run the build once (the checkout then has every patch applied), edit `/root/ootmm`, and write the diff back with `git -C /root/ootmm diff v33.0` (add new files with `git add -N` first) into its patch file. Keep each one small and self-contained, so it can be offered upstream.
