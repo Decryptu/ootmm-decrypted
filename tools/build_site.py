@@ -19,6 +19,7 @@ def main():
         ("playtest_en.md", "playtest.md", "Playtest checklist"),
     ]:
         content = (ROOT / "docs" / source).read_text(encoding="utf-8")
+        content = content.replace("](setup_en.md)", "](setup.html)")
         (DEST / target).write_text(
             f"---\nlayout: default\ntitle: {title}\n---\n\n{content}", encoding="utf-8")
     print(DEST)
