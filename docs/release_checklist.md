@@ -34,8 +34,6 @@ Test shortcuts may prepare inventory, position the player, enter a boss room, en
 
 - [ ] Rehearse the graphical launcher and v33.0 browser patcher steps. A clean isolated installation loads the packaged world without legacy manifest fallback, generates its full template, reapplies both player patches through CLI Patch mode, then verifies own-item inventory and actual bidirectional exchange from fresh files.
 - [ ] Check that a second person needs only the package, their own ROMs and connection details; fix unclear instructions discovered during rehearsal.
-- [ ] Build and check the hub and guide links, including the repository base path and YAML download.
-- [ ] Prepare the tested player-hub workflow for `main`, deploy and verify the published pages. Follow the stable-branch rule: `main` only advances to a tested `dev` commit.
 
 ## 6. Additional options
 
