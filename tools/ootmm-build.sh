@@ -44,4 +44,4 @@ else
   CMD="pnpm install --frozen-lockfile && ./scripts/deps.sh && pnpm nx run @ootmm/generator:build --prod"
 fi
 # Windows drives are mounted too, so a command can read and write files there (/mnt/c/...).
-podman run --rm -v "$SRC:$SRC" -v /mnt:/mnt -w "$SRC" -e CI=1 -e NX_DAEMON=false "$TOOLCHAIN" sh -c "$CMD"
+podman run --rm -v "$SRC:$SRC" -v /mnt:/mnt -w "$SRC" -e CI=1 -e NX_DAEMON=false -e OOTMM_AP_SOURCE_ROOT="$REPO" "$TOOLCHAIN" sh -c "$CMD"

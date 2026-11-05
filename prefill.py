@@ -31,6 +31,13 @@ REWARD_SETTINGS = {"dungeonRewardShuffle"}
 REWARD_ITEMS = set(_fill["rewardItems"])
 DUNGEON_SETTINGS = {key: set(items) for key, items in _fill["dungeonShuffleItems"].items()}
 DUNGEON_SETTINGS["ganonBossKey"] = {"OOT_BOSS_KEY_GANON"}
+SPECIAL_KEY_LOCATIONS = {
+    "smallKeyShuffleHideout": {name for name, item in ootxmm_staticdata.OOTxMMCheckItems.items()
+                              if item == "OOT_SMALL_KEY_GF"},
+    "smallKeyShuffleChestGame": {name for name, (_, scene, _) in logic._check_info["checks"].items()
+                                if scene == "OOT_TREASURE_SHOP"
+                                and ootxmm_staticdata.OOTxMMCheckItems[name] != "OOT_HEART_PIECE"},
+}
 
 def _dungeon_groups() -> list[tuple[set[str], set[str]]]:
     # fixDungeon: Stone Tower's items also go to Inverted Stone Tower, Ganon's Castle's to Ganon's Tower.
@@ -49,7 +56,10 @@ DUNGEON_GROUPS = _dungeon_groups()
 ATTEMPTS = 10
 
 def fixed_checks(world: OOTxMM) -> set[str]:
-    fixed = FIXED - FAIRY_LOCATIONS - TINGLE_LOCATIONS
+    fixed = FIXED - FAIRY_LOCATIONS - TINGLE_LOCATIONS - set().union(*SPECIAL_KEY_LOCATIONS.values())
+    for key, names in SPECIAL_KEY_LOCATIONS.items():
+        if logic._value(world.ootmm_settings, key) == "vanilla":
+            fixed |= names
     if logic._value(world.ootmm_settings, "ganonBossKey") == "vanilla":
         fixed.add("OOT Ganon Castle Boss Key")
     if logic._value(world.ootmm_settings, "tingleShuffle") == "vanilla":
@@ -66,7 +76,7 @@ def place_fixed(world: OOTxMM) -> None:
     fixed = fixed_checks(world)
     for location in world.multiworld.get_unfilled_locations(world.player):
         if location.name in fixed:
-            vanilla = ootxmm_staticdata.OOTxMMCheckItems[location.name]
+            vanilla = logic.shared_item(ootxmm_staticdata.OOTxMMCheckItems[location.name], world.ootmm_settings)
             location.place_locked_item(create_item_with_correct_classification(world, ITEM_BY_SYMBOLIC_ID[vanilla].display_name))
 
 def starting_fairies(settings) -> Counter:

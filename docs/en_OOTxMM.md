@@ -12,6 +12,6 @@ Only vanilla dungeons and the US Deku Palace layout are supported. Master Quest 
 
 ## Current status
 
-This is a development build pending a full multiworld play session. ROM building and client attachment work; receiving an item has been tested in BizHawk 2.11.1. Reporting checks is covered by simulated mailbox tests and still needs real gameplay verification.
+This is a development build pending a full multiworld play session. Assisted candidate tests verify actual OoT/MM checks, bidirectional item exchange, a cross-game entrance, native key/fairy counters and real Majora/Ganon victory reporting. Server progress survives a restart between the two boss victories and the both-boss slot completes. Earlier-seed tests cover native-save recovery and return travel. A complete unmodified route, wider item/ability coverage, the opposite boss order and other goal settings still need gameplay verification.
 
 Follow the setup guide to install the world, choose settings, obtain your player's patch and connect through Archipelago's BizHawk Client.

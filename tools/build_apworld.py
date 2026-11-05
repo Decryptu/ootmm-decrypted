@@ -8,6 +8,7 @@ else stays out, so a new world file must be added here.
     python tools/build_apworld.py --dir <archipelago>/worlds/ootxmm
 """
 import argparse
+import json
 import shutil
 import zipfile
 from pathlib import Path
@@ -80,7 +81,15 @@ def main():
     out.parent.mkdir(parents=True, exist_ok=True)
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
         for src in world_files():
-            zf.write(src, f"{PACKAGE}/{src.relative_to(ROOT).as_posix()}")
+            relative = src.relative_to(ROOT).as_posix()
+            if relative == "archipelago.json":
+                # APWorldContainer.get_manifest in the pinned Archipelago 0.6.8.
+                # Container fields belong only in the archive, not the loose-world metadata.
+                manifest = json.loads(src.read_text(encoding="utf-8"))
+                manifest.update(version=7, compatible_version=7)
+                zf.writestr(f"{PACKAGE}/{relative}", json.dumps(manifest, indent=2) + "\n")
+            else:
+                zf.write(src, f"{PACKAGE}/{relative}")
 
 
 if __name__ == "__main__":

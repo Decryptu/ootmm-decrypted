@@ -10,7 +10,9 @@ This world is in development. A full multiworld play session has not been valida
 - Your own Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U ROMs.
 - Your slot's `.ootmm` patch from the host, plus the server address, port, slot name and password if set.
 
-Ask the host for the world package. Development builds are the `ootxmm.apworld` artifact of successful [World workflow runs](https://github.com/Decryptu/ootmm-decrypted/actions/workflows/apworld.yml). Sign in to GitHub and extract the downloaded artifact ZIP. Everyone should use the same build.
+Download the matching world or prepared `players.zip` from the [first prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.1), also linked from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing; everyone should use the same build.
+
+For the prepared playtest, the host assigns **Tester1** or **Tester2** and provides the server connection details. Use that slot’s patch; the goal is both bosses. Skip Choose settings below. The public ZIP contains no running server: the host must start the matching private server file. A new seed needs newly built matching patches.
 
 ## Choose settings
 
@@ -32,12 +34,14 @@ The patch contains the seed's placements and communication code. Players need no
 1. Open your patched `.z64` in BizHawk and enter gameplay.
 2. Open **Tools → Lua Console**, then load `data/lua/connector_bizhawk_generic.lua` from your Archipelago installation.
 3. Launch **BizHawk Client** from the Archipelago launcher.
-4. Connect to the host's server address and port. Enter your YAML's player name when asked for the slot, and the password if required.
+4. Connect to the host's server address and port. Enter your assigned slot name (or your YAML’s name for a new seed) when asked for the slot, and the password if required.
 5. Wait for the client to report finding the mailbox and connecting to the game. Keep both the Lua script and client running.
 
-Boss completion is saved on the Archipelago server, so the client can restart between bosses for the `both` goal. The host must keep the server save.
+Boss completion is saved on the Archipelago server, so the client can restart between bosses for the `both` goal. The host must keep the server save. Use native in-game saves for restart tests; loading an older savestate can rewind received-item progress.
 
 Use Archipelago's BizHawk Client for item exchange. The standalone OoTMM multiplayer client is not used. If the mailbox is not found, enter gameplay: its counter does not move on the title screen or file select. If server login fails, check the slot name and that your patch matches the seed and player.
+
+Keep the client connected during play. If the server connection drops during a pickup, a following pickup may wait for acknowledgement; reconnect before restarting the emulator. Unrestricted offline play has not been verified.
 
 ## Host preparation
 
@@ -52,6 +56,6 @@ The host needs this repository, the two ROMs, and the WSL toolchain described in
 pwsh tools/ootmm-build.ps1 "cd packages/generator && NODE_ENV=production pnpm exec tsx lib/ap/ap-patch.ts /mnt/c/seeds/my-seed ../../roms/oot.z64 ../../roms/mm.z64 /mnt/c/seeds/my-seed/patches"
 ```
 
-The input can also be one player JSON. The command stops on the first failure; check it succeeds before distributing patches. It writes a `.ootmm` and `.z64` per player. Send each player their patch, the matching world package and connection details. ROMs stay on the machine that built them.
+The input can also be one player JSON. The command stops on the first failure; check it succeeds before distributing patches. It writes a `.ootmm`, `.z64` and private `.build.json` receipt per player. Send each player their patch, the matching world package and connection details. ROMs stay on the machine that built them.
 
 Host the generated `.archipelago` file with Archipelago's server. See the [Archipelago setup guide](https://archipelago.gg/tutorial/Archipelago/setup_en) for hosting and network setup.

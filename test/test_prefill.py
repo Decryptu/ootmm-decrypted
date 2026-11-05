@@ -108,15 +108,16 @@ class TestDungeonAnywhere(TestPreFill):
         shuffled = set().union(*prefill.DUNGEON_SETTINGS.values())
         found = {symbolic(item) for item in self.multiworld.itempool if item.player == self.player}
         # WorldTestBase runs pre-fill, leaving unrestricted items in the main pool.
-        self.assertTrue(shuffled <= found)
+        self.assertTrue({item for item in shuffled if "_KEY_RING_" not in item} <= found)
         self.assertFalse(any(shuffled & group for group, _ in prefill._groups(self.world)))
 
 
 class TestDungeonRemoved(TestPreFill):
-    options = {key: "removed" for key in prefill.DUNGEON_SETTINGS}
+    options = {key: "removed" for key in prefill.DUNGEON_SETTINGS if key not in prefill.SPECIAL_KEY_LOCATIONS}
 
     def test_removed_items_are_absent(self) -> None:
-        removed = set().union(*prefill.DUNGEON_SETTINGS.values())
+        removed = set().union(*(values for key, values in prefill.DUNGEON_SETTINGS.items()
+                                if key not in prefill.SPECIAL_KEY_LOCATIONS))
         placed = {symbolic(item) for item in self.multiworld.get_items() if item.name in items.ITEM_BY_NAME}
         self.assertFalse(placed & removed)
         self.assertIn("OOT_SMALL_KEY_GF", placed)
@@ -491,3 +492,46 @@ class TestGanonKeyCastle(TestGanonKeyRemoved):
 
 class TestGanonKeyAnywhere(TestGanonKeyRemoved):
     options = {"ganonBossKey": "anywhere"}
+
+
+class SpecialKeyTests(TestPreFill):
+    def test_special_key_modes(self) -> None:
+        fixed = prefill.fixed_checks(self.world)
+        pool = {symbolic(item) for item in self.multiworld.itempool if item.player == self.player}
+        for key, names in prefill.SPECIAL_KEY_LOCATIONS.items():
+            mode = self.world.ootmm_settings[key]
+            self.assertEqual(names & fixed, names if mode == "vanilla" else set())
+            keys = prefill.DUNGEON_SETTINGS[key]
+            self.assertEqual(bool(keys & pool), mode == "anywhere")
+            placed = [location for location in self.multiworld.get_locations(self.player)
+                      if location.item and location.item.player == self.player
+                      and location.item.name in items.ITEM_BY_NAME and symbolic(location.item) in keys]
+            self.assertEqual(len(placed) + sum(symbolic(item) in keys for item in self.multiworld.itempool
+                                              if item.player == self.player), 4 if key.endswith("Hideout") else 6)
+            if mode == "vanilla":
+                for name in names:
+                    location = self.multiworld.get_location(name, self.player)
+                    self.assertEqual(symbolic(location.item), ootxmm_staticdata.OOTxMMCheckItems[name])
+            self.assertEqual(self.world.fill_slot_data()["settings"][key], mode)
+        self.assertNotIn("OOT Treasure Chest Game HP", fixed)
+
+
+class TestSpecialKeysVanilla(SpecialKeyTests):
+    options = {"smallKeyShuffleHideout": "vanilla", "smallKeyShuffleChestGame": "vanilla"}
+
+
+class TestSpecialKeysOwn(SpecialKeyTests):
+    options = {"smallKeyShuffleHideout": "ownDungeon", "smallKeyShuffleChestGame": "ownDungeon"}
+
+
+class TestSpecialKeysAnywhere(SpecialKeyTests):
+    options = {"smallKeyShuffleHideout": "anywhere", "smallKeyShuffleChestGame": "anywhere"}
+
+
+class TestSpecialKeysMixed(SpecialKeyTests):
+    options = {"smallKeyShuffleHideout": "vanilla", "smallKeyShuffleChestGame": "anywhere",
+               "songs": "anywhere", "dungeonRewardShuffle": "dungeonsLimited"}
+
+
+class TestSpecialKeysMixedReverse(SpecialKeyTests):
+    options = {"smallKeyShuffleHideout": "anywhere", "smallKeyShuffleChestGame": "ownDungeon"}
