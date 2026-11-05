@@ -60,7 +60,7 @@ PortedChecks = [
 PortedGoal = ["goal"]
 
 # Dungeon placement and removal, ported in prefill.py. Maps can also start in the ROM inventory.
-PortedDungeon = ["mapCompassShuffle", "bossKeyShuffleOot", "bossKeyShuffleMm", "smallKeyShuffleOot", "smallKeyShuffleMm", "ganonBossKey"]
+PortedDungeon = ["mapCompassShuffle", "bossKeyShuffleOot", "bossKeyShuffleMm", "smallKeyShuffleOot", "smallKeyShuffleMm", "ganonBossKey", "smallKeyShuffleHideout", "smallKeyShuffleChestGame"]
 
 PortedFairies = ["strayFairyChestShuffle", "strayFairyOtherShuffle"]
 
@@ -70,7 +70,13 @@ PortedRewards = ["dungeonRewardShuffle"]
 
 PortedMaps = ["tingleShuffle"]
 
-Ported = PortedMaps + PortedChecks + PortedGoal + PortedDungeon + PortedFairies + PortedSongs + PortedRewards
+SharedPoolTransforms = ["sharedBows", "sharedBombBags", "sharedMagic",
+                        "sharedMagicArrowFire", "sharedMagicArrowIce", "sharedMagicArrowLight",
+                        "sharedHookshot", "sharedLens", "sharedSongEpona", "sharedSongStorms", "sharedSongTime"]
+
+PortedPool = SharedPoolTransforms + ["ocarinaButtonsShuffleOot", "ocarinaButtonsShuffleMm", "sharedOcarinaButtons", "sharedSkeletonKey", "sharedSoulsEnemy", "sharedSoulsNpc", "sharedSoulsAnimal", "sharedSoulsMisc", "soulsEnemyOot", "soulsEnemyMm", "soulsBossOot", "soulsBossMm", "soulsNpcOot", "soulsNpcMm", "soulsAnimalOot", "soulsAnimalMm", "soulsMiscOot", "soulsMiscMm", "skeletonKeyOot", "skeletonKeyMm", "smallKeyRingOot", "smallKeyRingMm"]
+
+Ported = PortedPool + PortedMaps + PortedChecks + PortedGoal + PortedDungeon + PortedFairies + PortedSongs + PortedRewards
 
 # Enum settings offered with only some of their values: the others need what the world doesn't port yet.
 # The Triforce goals add Triforce pieces to the pool (makePools in packages/logic/src/world/transform.ts).

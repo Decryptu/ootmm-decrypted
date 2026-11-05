@@ -52,7 +52,8 @@ def classification(world: OOTxMM, item: OOTxMMItemData) -> ItemClassification:
 def get_random_filler_item(world: OOTxMM) -> str:
     if not hasattr(world, "filler_item_names"):
         world.filler_item_names = sorted(
-            item.display_name for item in OOTxMMItemList if classification(world, item) == ItemClassification.filler)
+            item.display_name for item in OOTxMMItemList if classification(world, item) == ItemClassification.filler
+            and logic.shared_item(item.symbolic_id, getattr(world, "ootmm_settings", {})) == item.symbolic_id)
     return world.random.choice(world.filler_item_names)
 
 def create_item_with_correct_classification(world: OOTxMM, item_name: str) -> OOTxMMItem:
@@ -72,12 +73,26 @@ def create_all_items(world: OOTxMM) -> None:
     pool = [ITEM_BY_NAME[get_random_filler_item(world)] if location.name in starting_sources else item
             for location, item in zip(unfilled, pool)]
     pool = [ITEM_BY_NAME[get_random_filler_item(world)] if prefill.removed_item(world, item.symbolic_id) else item for item in pool]
+    if any(logic._value(world.ootmm_settings, key) for key in logic.POOL_TRANSFORMS):
+        transformed = logic.transform_pool((item.symbolic_id for item in pool), world.ootmm_settings)
+        missing = len(pool) - transformed.total()
+        pool = [ITEM_BY_SYMBOLIC_ID[symbolic] for symbolic, count in transformed.items() for _ in range(count)]
+        pool += [ITEM_BY_NAME[get_random_filler_item(world)] for _ in range(missing)]
     # Vanilla Fire Temple uses one fewer key unless keys are shuffled anywhere (OoTMM transform.ts).
     if logic._value(world.ootmm_settings, "smallKeyShuffleOot") == "ownDungeon":
         index = next(i for i, item in enumerate(pool) if item.symbolic_id == "OOT_SMALL_KEY_FIRE")
         pool[index] = ITEM_BY_NAME[get_random_filler_item(world)]
+    for key, ring in logic.key_rings(world.ootmm_settings).items():
+        indices = [i for i, item in enumerate(pool) if item.symbolic_id == key]
+        for i in indices:
+            pool[i] = ITEM_BY_NAME[get_random_filler_item(world)]
+        if indices:
+            pool[indices[0]] = ITEM_BY_SYMBOLIC_ID[ring]
     filler = [i for i, item in enumerate(pool) if classification(world, item) == ItemClassification.filler]
-    for i, extra in zip(world.random.sample(filler, len(logic.EXTRA_ITEMS)), logic.EXTRA_ITEMS):
+    extras = logic.extra_items(world.ootmm_settings)
+    if len(filler) < len(extras):
+        raise ValueError(f"Not enough junk slots for optional items: {len(filler)} slots for {len(extras)} items. Enable more check shuffles.")
+    for i, extra in zip(world.random.sample(filler, len(extras)), extras):
         pool[i] = ITEM_BY_SYMBOLIC_ID[extra]
     created = [create_item_with_correct_classification(world, item.display_name) for item in pool]
     world.multiworld.itempool += prefill.split_pool(world, created)

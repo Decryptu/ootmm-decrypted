@@ -92,7 +92,7 @@ def ootmm_settings(opts: options.OOTxMMOptions) -> logic.Settings:
             settings[key] = sorted(option.value)
         else:
             settings[key] = int(option.value)
-    return settings
+    return logic.normalize_shared_items(settings)
 
 # What the game shows for another player's item: the item itself when it is an OoTMM one, else a stand-in
 # for how much it matters.

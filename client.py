@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import struct
+import time
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
@@ -28,6 +29,7 @@ HEADER = 0x28  # magic (16), connected, alive, outHead, outTail, inHead, inTail 
 HELLO_MAGIC = b"OoTMM\x7f\x01\x00"
 SCAN_CHUNK = 0x8000
 SCAN_READS_PER_POLL = 16
+MAILBOX_STALL_SECONDS = 3.0
 
 OP_HELLO, OP_WAL, OP_WAL_QUERY, OP_WAL_ACK = 0x01, 0x02, 0x03, 0x04
 WAL_ITEM = 0x01
@@ -61,6 +63,8 @@ class OOTxMMClient(BizHawkClient):
         self.scan_pos: int | None = 0  # next RAM address to scan, None when the scan is done
         self.seq_net = 0
         self.last_query: int | None = None
+        self.last_alive: int | None = None
+        self.alive_changed_at = 0.0
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Connected":
@@ -166,14 +170,40 @@ class OOTxMMClient(BizHawkClient):
             self.reset()
             return
 
+        now = time.monotonic()
+        if alive != self.last_alive:
+            self.last_alive = alive
+            self.alive_changed_at = now
+        elif now - self.alive_changed_at >= MAILBOX_STALL_SECONDS:
+            # A game switch can leave the old mailbox intact, including connected=1.
+            # Rescan for a moving counter. Paused emulation reattaches when it resumes.
+            self.reset()
+            return
+
+        if any(offset >= RING for offset in (out_head, out_tail, in_head, in_tail)):
+            logger.warning("Invalid mailbox ring offsets; restarting discovery")
+            self.reset()
+            return
+
         packets = []
         tail = out_tail
-        while tail != out_head:
+        remaining = (out_head - out_tail) % RING
+        while remaining:
+            if remaining < 2:
+                logger.warning("Incomplete mailbox packet header; restarting discovery")
+                self.reset()
+                return
             size = (ring[tail] << 8) | ring[(tail + 1) % RING]
+            if size < 5 or size + 2 > remaining:
+                logger.warning("Invalid mailbox packet length; restarting discovery")
+                self.reset()
+                return
             tail = (tail + 2) % RING
             packets.append(bytes(ring[(tail + i) % RING] for i in range(size)))
             tail = (tail + size) % RING
+            remaining -= size + 2
 
+        seq_before = self.seq_net
         replies: list[bytes] = []
         checked: set[int] = set()
         goals: set[str] = set()
@@ -209,28 +239,43 @@ class OOTxMMClient(BizHawkClient):
         if query is not None and query < len(ctx.items_received):
             replies.append(self.wal_item(ctx, query))
 
-        if goals:
-            # Persist before acknowledging the pickup. Updating individual keys preserves the other boss,
-            # even if its stored result has not arrived yet or another client is connected to this slot.
-            await ctx.send_msgs([{"cmd": "Set", "key": self.goal_key, "default": {}, "want_reply": True,
-                                  "operations": [{"operation": "update", "value": dict.fromkeys(goals, True)}]}])
-            self.goals.update(goals)
+        data = b"".join(struct.pack(">H", len(reply)) + reply for reply in replies)
+        free = (in_tail - in_head - 1) % RING
+        seq_after = self.seq_net
+        self.seq_net = seq_before
+        if len(data) > free:
+            # Retry this batch after the game drains its ring. Consuming it or advancing the
+            # sequence here would lose acknowledgements and disconnect the game's protocol.
+            return
 
-        writes = [(mailbox + 28, list(struct.pack(">I", tail)), RDRAM)]
-        if replies:
-            data = b"".join(struct.pack(">H", len(reply)) + reply for reply in replies)
-            free = (in_tail - in_head - 1) % RING
-            if len(data) <= free:
-                first = min(len(data), RING - in_head)
-                writes.append((mailbox + HEADER + RING + in_head, list(data[:first]), RDRAM))
-                if first < len(data):
-                    writes.append((mailbox + HEADER + RING, list(data[first:]), RDRAM))
-                writes.append((mailbox + 32, list(struct.pack(">I", (in_head + len(data)) % RING)), RDRAM))
-        await bizhawk.write(ctx.bizhawk_ctx, writes)
-
+        # CommonClient resends this local set on login. Retain checks before acknowledging
+        # their WAL packets, including when send_msgs returns during a socket disconnect.
+        ctx.locations_checked.update(checked)
         new = checked - ctx.checked_locations
         if new:
             await ctx.send_msgs([{"cmd": "LocationChecks", "locations": sorted(new)}])
+
+        unsaved_goals = goals - self.goals
+        if unsaved_goals:
+            # Persist before acknowledging the pickup. Updating individual keys preserves the other boss,
+            # even if its stored result has not arrived yet or another client is connected to this slot.
+            await ctx.send_msgs([{"cmd": "Set", "key": self.goal_key, "default": {}, "want_reply": True,
+                                  "operations": [{"operation": "update", "value": dict.fromkeys(unsaved_goals, True)}]}])
+            # A socket can close while send_msgs silently returns. Keep the game's reliable
+            # pickup pending until Retrieved/SetReply confirms the server has stored it.
+            if not goals <= self.goals:
+                return
+
+        writes = [(mailbox + 28, list(struct.pack(">I", tail)), RDRAM)]
+        if replies:
+            first = min(len(data), RING - in_head)
+            writes.append((mailbox + HEADER + RING + in_head, list(data[:first]), RDRAM))
+            if first < len(data):
+                writes.append((mailbox + HEADER + RING, list(data[first:]), RDRAM))
+            writes.append((mailbox + 32, list(struct.pack(">I", (in_head + len(data)) % RING)), RDRAM))
+        await bizhawk.write(ctx.bizhawk_ctx, writes)
+        self.seq_net = seq_after
+
         if not ctx.finished_game and self.goal_reached(ctx):
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True

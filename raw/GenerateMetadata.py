@@ -11,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks
+from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, SharedPoolTransforms
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -244,13 +244,35 @@ def GenerateFillFile():
     import fs from 'node:fs';
     import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
-    import { Items, ItemHelpers } from './ootmm/packages/logic/src/items/index.ts';
+    import { Items, ItemHelpers, ItemGroups, SharedItemGroups } from './ootmm/packages/logic/src/items/index.ts';
     const checkSettings = JSON.parse(fs.readFileSync('_fill.json', 'utf8'));
     const { isLocationChestFairy, isLocationOtherFairy, makeLocation } = await import('./ootmm/packages/logic/src/locations.ts');
     const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings } } as any);
     const world = state.worlds[0];
     const items = Object.values(Items) as any[];
     fs.writeFileSync('_fill.json', JSON.stringify({
+      sharedItems: Object.fromEntries([
+        ['sharedSkeletonKey', SharedItemGroups.SKELETON_KEY],
+        ['sharedOcarinaButtons', SharedItemGroups.OCARINA_BUTTONS],
+        ['sharedSoulsEnemy', SharedItemGroups.SOULS_ENEMY],
+        ['sharedSoulsNpc', SharedItemGroups.SOULS_NPC],
+        ['sharedSoulsAnimal', SharedItemGroups.SOULS_ANIMAL],
+        ['sharedSoulsMisc', SharedItemGroups.SOULS_MISC],
+      ].map(([key, defs]: any) => [key, defs.map(d => ({ shared: d.shared.id, oot: d.oot.id, mm: d.mm.id }))])),
+      optionalItems: {
+        ocarinaButtonsShuffleOot: SharedItemGroups.OCARINA_BUTTONS.map(d => d.oot.id).sort(),
+        ocarinaButtonsShuffleMm: SharedItemGroups.OCARINA_BUTTONS.map(d => d.mm.id).sort(),
+        soulsEnemyOot: [...ItemGroups.OOT_SOULS_ENEMY].map(i => i.id).sort(),
+        soulsEnemyMm: [...ItemGroups.MM_SOULS_ENEMY].map(i => i.id).sort(),
+        soulsBossOot: [...ItemGroups.OOT_SOULS_BOSS].map(i => i.id).sort(),
+        soulsBossMm: [...ItemGroups.MM_SOULS_BOSS].map(i => i.id).sort(),
+        soulsNpcOot: [...ItemGroups.OOT_SOULS_NPC].map(i => i.id).sort(),
+        soulsNpcMm: [...ItemGroups.MM_SOULS_NPC].map(i => i.id).sort(),
+        soulsAnimalOot: [...ItemGroups.OOT_SOULS_ANIMAL].map(i => i.id).sort(),
+        soulsAnimalMm: [...ItemGroups.MM_SOULS_ANIMAL].map(i => i.id).sort(),
+        soulsMiscOot: [...ItemGroups.OOT_SOULS_MISC].map(i => i.id).sort(),
+        soulsMiscMm: [...ItemGroups.MM_SOULS_MISC].map(i => i.id).sort(),
+      },
       fixed: [...state.fixedLocations].map((l: string) => l.split('@')[0]).sort(),
       fairyLocations: {
         strayFairyChestShuffle: [...world.locations].filter(l => isLocationChestFairy(world, makeLocation(l, 0))).sort(),
@@ -261,8 +283,10 @@ def GenerateFillFile():
       warpLocations: [...world.warpLocations].sort(),
       rewardItems: items.filter(i => ItemHelpers.isDungeonReward(i)).map(i => i.id).sort(),
       dungeonShuffleItems: {
-        smallKeyShuffleOot: items.filter(i => ItemHelpers.isSmallKeyRegularOot(i)).map(i => i.id).sort(),
-        smallKeyShuffleMm: items.filter(i => ItemHelpers.isSmallKeyRegularMm(i)).map(i => i.id).sort(),
+        smallKeyShuffleHideout: items.filter(i => (ItemHelpers.isSmallKeyHideout(i) || ItemHelpers.isKeyRingHideout(i))).map(i => i.id).sort(),
+        smallKeyShuffleChestGame: items.filter(i => (ItemHelpers.isSmallKeyTCG(i) || ItemHelpers.isKeyRingTCG(i))).map(i => i.id).sort(),
+        smallKeyShuffleOot: items.filter(i => (ItemHelpers.isSmallKeyRegularOot(i) || ItemHelpers.isKeyRingRegularOot(i))).map(i => i.id).sort(),
+        smallKeyShuffleMm: items.filter(i => (ItemHelpers.isSmallKeyRegularMm(i) || ItemHelpers.isKeyRingRegularMm(i))).map(i => i.id).sort(),
         mapCompassShuffle: items.filter(i => ItemHelpers.isMapCompass(i)).map(i => i.id).sort(),
         bossKeyShuffleOot: items.filter(i => ItemHelpers.isRegularBossKeyOot(i)).map(i => i.id).sort(),
         bossKeyShuffleMm: items.filter(i => ItemHelpers.isRegularBossKeyMm(i)).map(i => i.id).sort(),
@@ -290,9 +314,44 @@ def GenerateFillFile():
     unknown |= set(fill["rewardDungeons"]) - set(fill["dungeons"])
     if unknown:
         raise ValueError(f"Solver placement lists name unknown dungeons: {unknown}")
+    # Preserve the ordered pool operations, including v33.0's repeated arrow replacement.
+    with open(os.path.join("ootmm", "packages", "logic", "src", "world", "transform.ts"), encoding="utf-8") as file:
+        transform = file.read()
+    fill["poolTransforms"] = {}
+    for key in SharedPoolTransforms:
+        block = re.search(r"if \(settings\." + key + r"\) \{(.*?)\n    \}", transform, re.S)
+        if block is None:
+            raise ValueError(f"Missing pool transform: {key}")
+        operations = re.findall(r"this\.(replaceItem|removeItem)\(Items\.(\w+),\s*(?:Items\.(\w+)|(\d+))\);", block.group(1))
+        if not operations:
+            raise ValueError(f"Empty pool transform: {key}")
+        fill["poolTransforms"][key] = [[op, source, target if target else int(count)]
+                                       for op, source, target, count in operations]
     with open("GreatFillJSONdump.json", 'w') as file:
         json.dump(fill, file, indent=1)
         file.write("\n")
+
+def GenerateEquipmentSamples():
+    # Independent pool results from OoTMM's original pipeline, rather than our exported operations.
+    RunTypeScript("""
+    import fs from 'node:fs';
+    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
+    const transforms = JSON.parse(fs.readFileSync('GreatFillJSONdump.json', 'utf8')).poolTransforms;
+    const symbols = new Set(Object.values(transforms).flatMap((ops: any) => ops.flatMap(([op, src, dst]: any) =>
+      typeof dst === 'string' ? [src, dst] : [src])));
+    const samples = [];
+    const keys = Object.keys(transforms);
+    for (const settings of [{}, ...keys.map(key => ({[key]:true})),
+                            Object.fromEntries(keys.map(key => [key,true]))]) {
+      const state: any = await worldState(new Monitor({onLog:()=>{}}),
+        {seed:'ootxmm', settings:{...DEFAULT_SETTINGS,...settings}} as any);
+      samples.push({settings, pool:Object.fromEntries([...state.pool].filter(([i]: any) => symbols.has(i.item.id))
+        .map(([i,n]: any) => [i.item.id,n]))});
+    }
+    fs.writeFileSync('../test/shared_equipment_samples.json', JSON.stringify(samples, null, 1) + '\\n');
+    """)
+
 
 def GenerateCheckSamples():
     # OoTMM's own check set for a few settings of the ported check settings: test/test_checks.py checks that
@@ -719,7 +778,9 @@ def ConvertRawOptions():
             values = [v["value"] for v in setting["values"]]
             doc.append("Values: " + ", ".join(values))
             default = setting["default"]
-            if isinstance(default, dict):
+            if isinstance(default, str):
+                default = values if default == "all" else []
+            elif isinstance(default, dict):
                 # A set default is {type: all, none or specific, values}.
                 default = values if default.get("type") == "all" else default.get("values", [])
             body += [f"    valid_keys = {values!r}", f"    default = frozenset({sorted(default)!r})"]
@@ -797,6 +858,7 @@ def main():
     GenerateCheckItemFile()
     GenerateCheckInfoFile()
     GenerateFillFile()
+    GenerateEquipmentSamples()
     GenerateCheckSamples()
     GenerateTimeSamples()
     GenerateItemFile()

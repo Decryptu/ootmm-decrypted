@@ -14,6 +14,9 @@ import type { Hints, Location, PlayerItem } from '@ootmm/logic';
 
 import { promises as fs } from 'fs';
 import path from 'path';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { Monitor, makeRegion, options, randomInt, resolveMmAgeRequirements, SETTINGS } from '@ootmm/core';
 import { solvedWorldState, logicPassCloak, itemByID, ItemGroups, ItemHelpers, makeLocation, makePlayerItem } from '@ootmm/logic';
 /* Not exported by the package */
@@ -113,7 +116,8 @@ function hints(state: any): Hints {
 }
 
 async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, outDir: string) {
-  const player: PlayerFile = JSON.parse(await fs.readFile(playerPath, 'utf-8'));
+  const playerBytes = await fs.readFile(playerPath);
+  const player: PlayerFile = JSON.parse(playerBytes.toString('utf-8'));
   if (player.version !== 1) throw new Error(`Unsupported player file version ${player.version}`);
 
   const monitor = new Monitor({}, false);
@@ -166,11 +170,37 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   await fs.mkdir(outDir, { recursive: true });
   const name = path.basename(playerPath).replace(/\.json$/, '');
   const patchOut = path.join(outDir, `${name}.ootmm`);
-  await fs.writeFile(patchOut, await built.serialize());
+  const patchBytes = await built.serialize();
+  await fs.writeFile(patchOut, patchBytes);
   const { rom } = await pack({ opts, monitor, roms, patchfile: built, addresses });
   const romOut = path.join(outDir, `${name}.z64`);
   await fs.writeFile(romOut, rom);
-  console.log(`Wrote ${patchOut} and ${romOut}`);
+  const sha256 = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex');
+  const sourceRoot = process.env.OOTMM_AP_SOURCE_ROOT;
+  const patchInputs: Record<string, string> = {};
+  if (sourceRoot) {
+    for (const folder of ['ootmm-ap', 'ootmm-patches']) {
+      for (const entry of (await fs.readdir(path.join(sourceRoot, folder))).sort()) {
+        const relative = `${folder}/${entry}`;
+        if ((await fs.stat(path.join(sourceRoot, relative))).isFile()) {
+          patchInputs[relative] = sha256(await fs.readFile(path.join(sourceRoot, relative)));
+        }
+      }
+    }
+  }
+  const receipt = {
+    schema_version: 1,
+    seed: player.seed,
+    placement: { name: path.basename(playerPath), sha256: sha256(playerBytes) },
+    patch: { name: path.basename(patchOut), sha256: sha256(patchBytes) },
+    rom: { name: path.basename(romOut), sha256: sha256(rom) },
+    builder_sha256: sha256(await fs.readFile(fileURLToPath(import.meta.url))),
+    ootmm_revision: execFileSync('git', ['rev-parse', 'HEAD']).toString().trim(),
+    ootmm_diff_sha256: sha256(execFileSync('git', ['diff', '--binary', 'HEAD'], { maxBuffer: 16 * 1024 * 1024 })),
+    patch_inputs: patchInputs,
+  };
+  await fs.writeFile(path.join(outDir, `${name}.build.json`), JSON.stringify(receipt, null, 2) + '\n');
+  console.log(`Wrote ${patchOut}, ${romOut} and build receipt`);
 }
 
 async function main(args: string[]) {

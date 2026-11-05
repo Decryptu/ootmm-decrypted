@@ -23,6 +23,104 @@ EXTRA_ITEMS = [
     "MM_MASK_DEKU", "MM_SWORD",
 ]
 
+OPTIONAL_ITEM_SETTINGS = ootxmm_staticdata.OOTxMMFill["optionalItems"]
+SOUL_SETTINGS = {key: group for key, group in OPTIONAL_ITEM_SETTINGS.items() if key.startswith("souls")}
+SHARED_ITEM_SETTINGS = ootxmm_staticdata.OOTxMMFill["sharedItems"]
+SHARED_SOUL_SETTINGS = {key: defs for key, defs in SHARED_ITEM_SETTINGS.items() if key.startswith("sharedSouls")}
+
+POOL_TRANSFORMS = ootxmm_staticdata.OOTxMMFill["poolTransforms"]
+
+POOL_SETTINGS = {"skeletonKeyOot": "OOT_SKELETON_KEY", "skeletonKeyMm": "MM_SKELETON_KEY"}
+
+
+def normalize_shared_items(settings: Settings) -> Settings:
+    """OoTMM enables sharing only when both games' corresponding items are enabled."""
+    settings = dict(settings)
+    for key in SHARED_SOUL_SETTINGS:
+        family = key.removeprefix("sharedSouls")
+        settings[key] = bool(_value(settings, key) and _value(settings, f"souls{family}Oot")
+                             and _value(settings, f"souls{family}Mm"))
+    settings["sharedSkeletonKey"] = bool(_value(settings, "sharedSkeletonKey")
+                                         and _value(settings, "skeletonKeyOot")
+                                         and _value(settings, "skeletonKeyMm"))
+    settings["sharedOcarinaButtons"] = bool(_value(settings, "sharedOcarinaButtons")
+                                           and _value(settings, "ocarinaButtonsShuffleOot")
+                                           and _value(settings, "ocarinaButtonsShuffleMm"))
+    return settings
+
+
+def extra_items(settings: Settings) -> list[str]:
+    """Base additions and optional items from OoTMM's world/transform.ts."""
+    settings = normalize_shared_items(settings)
+    additions = (EXTRA_ITEMS + [item for key, item in POOL_SETTINGS.items() if _value(settings, key)]
+            + [item for key, group in OPTIONAL_ITEM_SETTINGS.items() if _value(settings, key) for item in group])
+    # OoTMM shareItems(..., 'max'): these optional items have at most one copy per game.
+    present = set(additions)
+    for key, definitions in SHARED_ITEM_SETTINGS.items():
+        if not _value(settings, key):
+            continue
+        for definition in definitions:
+            originals = {definition["oot"], definition["mm"]}
+            if present & originals:
+                present.difference_update(originals)
+                present.add(definition["shared"])
+    return sorted(present)
+
+
+# OoTMM world/transform.ts keyRing: collapse all copies to one ring, except vanilla special keys.
+KEY_RING_SETTINGS = {
+    "smallKeyRingOot": {name: f"OOT_SMALL_KEY_{suffix}" for name, suffix in (
+        ("Forest", "FOREST"), ("Fire", "FIRE"), ("Water", "WATER"), ("Spirit", "SPIRIT"),
+        ("Shadow", "SHADOW"), ("BotW", "BOTW"), ("GTG", "GTG"), ("Ganon", "GANON"),
+        ("GF", "GF"), ("TCG", "TCG"))},
+    "smallKeyRingMm": {name: f"MM_SMALL_KEY_{name}" for name in ("WF", "SH", "GB", "ST")},
+}
+
+
+def key_rings(settings: Settings) -> dict[str, str]:
+    selected = {item: item.replace("SMALL_KEY", "KEY_RING")
+                for key, members in KEY_RING_SETTINGS.items() for name, item in members.items()
+                if _set_has(_value(settings, key), name)}
+    for suffix, key in (("GF", "smallKeyShuffleHideout"), ("TCG", "smallKeyShuffleChestGame")):
+        if _value(settings, key) == "vanilla":
+            selected.pop(f"OOT_SMALL_KEY_{suffix}", None)
+    return selected
+
+
+def transform_pool(items, settings: Settings):
+    """Apply OoTMM's ordered sharing replacements and copy reductions."""
+    from collections import Counter
+    pool = Counter(items)
+    for key, operations in POOL_TRANSFORMS.items():
+        if not _value(settings, key):
+            continue
+        for op, source, target in operations:
+            if op == "replaceItem":
+                count = pool.pop(source, 0)
+                if count:
+                    pool[target] += count
+            elif op == "removeItem":
+                pool[source] = max(0, pool[source] - target)
+            else:
+                raise ValueError(f"Unknown pool operation: {op}")
+    return +pool
+
+
+def shared_item(item: str, settings: Settings) -> str:
+    # Fixed pickups also use the transformed vanilla item, without pool copy reductions.
+    for key, operations in POOL_TRANSFORMS.items():
+        if _value(settings, key):
+            for op, source, target in operations:
+                if op == "replaceItem" and item == source:
+                    item = target
+    return item
+
+
+def pool_items(items, settings: Settings) -> set[str]:
+    rings = key_rings(settings)
+    return {rings.get(item, item) for item in transform_pool(items, settings)} | set(extra_items(settings))
+
+
 # A condition is True, False, or a tuple: ("item", OoTMM item ID, count), ("event", event),
 # ("unique", item IDs, count), ("and", conditions), ("or", conditions),
 # ("time-oot" or "time-mm", allowed mask), or ("flag-on" or "flag-off", flag index).
@@ -142,7 +240,7 @@ class _Specializer:
         if node[0] == "setting":
             # setting(key) for a toggle, setting(key, value) for the others.
             value = self.settings[node[1]]
-            return bool(value) if node[2] is None else value == node[2]
+            return bool(value) if node[2] is None else (_set_has(value, node[2]) if node[1] in KEY_RING_SETTINGS else value == node[2])
         if node[0] == "trick":
             return node[1] in self.tricks
         if node[0] == "not":
@@ -221,7 +319,7 @@ class Logic:
     """
     def __init__(self, settings: Settings, removed: set[str]):
         # Start from every check's item and drop those whose check turns out unreachable, until it settles.
-        items = {item for name, item in ootxmm_staticdata.OOTxMMCheckItems.items() if name not in removed} | set(EXTRA_ITEMS)
+        items = pool_items((item for name, item in ootxmm_staticdata.OOTxMMCheckItems.items() if name not in removed), settings)
         while True:
             regions, events = _explore(_Specializer(settings, items, None))
             specialize = _Specializer(settings, items, events)
@@ -242,7 +340,7 @@ class Logic:
                         if (cond := specialize(node, age)) is not False:
                             targets.setdefault(name, []).append((area, age, cond))
             # The pool is the vanilla items of the checks that exist, so it depends on which can be reached.
-            pool = {ootxmm_staticdata.OOTxMMCheckItems[name] for name in checks} | set(EXTRA_ITEMS)
+            pool = pool_items((ootxmm_staticdata.OOTxMMCheckItems[name] for name in checks), settings)
             if pool == items:
                 break
             items = pool
@@ -273,15 +371,17 @@ class Logic:
             for cond in conditions or ():
                 _items(cond, self.items)
 
-# The settings conditions read, and so the ones that change the graph.
-LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"})
+# Conditions and optional pool items both change the specialized graph.
+LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"} | set(POOL_TRANSFORMS) | set(POOL_SETTINGS) | set(OPTIONAL_ITEM_SETTINGS) | set(SHARED_ITEM_SETTINGS) | set(KEY_RING_SETTINGS) | {"smallKeyShuffleHideout"})
 
 _cache: dict[tuple, Logic] = {}
 
 def build(settings: Settings) -> Logic:
     """The graph for these settings. Players with the same logic settings, tricks and checks share one."""
+    settings = normalize_shared_items(settings)
     removed = removed_checks(settings)
-    key = (tuple(settings[k] for k in LOGIC_SETTINGS), tuple(sorted(settings["tricks"])), frozenset(removed))
+    key = (tuple(tuple(name for name in KEY_RING_SETTINGS[k] if _set_has(_value(settings, k), name))
+                 if k in KEY_RING_SETTINGS else _value(settings, k) for k in LOGIC_SETTINGS), tuple(sorted(settings["tricks"])), frozenset(removed))
     if key not in _cache:
         _cache[key] = Logic(settings, removed)
     return _cache[key]

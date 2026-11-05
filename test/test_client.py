@@ -60,8 +60,12 @@ class TestClientProtocol(unittest.TestCase):
 
         async def send_msgs(msgs):
             self.sent += msgs
+            for msg in msgs:
+                if msg["cmd"] == "Set":
+                    self.client.on_package(self.ctx, "SetReply", {
+                        "key": msg["key"], "value": msg["operations"][0]["value"]})
         self.ctx = SimpleNamespace(
-            bizhawk_ctx=None, items_received=[], checked_locations=set(), finished_game=False,
+            bizhawk_ctx=None, items_received=[], checked_locations=set(), locations_checked=set(), finished_game=False,
             server_seed_name="test-seed", team=0, slot=1,
             player_names={2: "Zelda"}, slot_data={"settings": {"goal": "ganon"}}, send_msgs=send_msgs)
         asyncio.run(self.client.sync_goals(self.ctx))
@@ -78,6 +82,37 @@ class TestClientProtocol(unittest.TestCase):
         (reply,) = self.exchange()
         self.assertEqual(reply, struct.pack(">IB8sII", 0, client.OP_HELLO, client.HELLO_MAGIC, 0, 1))
         self.assertEqual(self.game.u32(28), self.game.u32(24), "the client consumed the game's packets")
+
+    def test_invalid_ring_offsets_restart_discovery_without_writing(self) -> None:
+        for offset in (24, 28, 32, 36):
+            with self.subTest(offset=offset):
+                self.setUp()
+                self.game.set_u32(offset, client.RING)
+                self.assert_corrupt_mailbox_is_untouched()
+
+    def test_invalid_packet_lengths_restart_discovery_without_writing(self) -> None:
+        # Include a valid check first: an invalid suffix must not acknowledge it.
+        for raw in (b"\x00", b"\x00\x00", b"\x00\x04abcd", b"\x00\x20abc", b"\x07\xfe"):
+            with self.subTest(raw=raw):
+                self.setUp()
+                self.send_check()
+                head = self.game.u32(24)
+                start = MAILBOX + client.HEADER + head
+                self.game.ram[start:start + len(raw)] = raw
+                self.game.set_u32(24, head + len(raw))
+                self.assert_corrupt_mailbox_is_untouched()
+
+    def assert_corrupt_mailbox_is_untouched(self) -> None:
+        self.client.goals.add("OOT_GANON")
+        before = bytes(self.game.ram)
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "write", self.game.write):
+            asyncio.run(self.client.exchange(self.ctx))
+        self.assertEqual(bytes(self.game.ram), before)
+        self.assertIsNone(self.client.mailbox)
+        self.assertEqual(self.client.goals, {"OOT_GANON"})
+        self.assertEqual(self.ctx.locations_checked, set())
+        self.assertEqual(self.sent, [])
 
     def test_check_is_reported_and_acked(self) -> None:
         name = "OOT Kokiri Forest Kokiri Sword Chest"
@@ -97,6 +132,76 @@ class TestClientProtocol(unittest.TestCase):
         gi = client.GI_BY_ITEM_ID[item_id]
         self.assertEqual(item, struct.pack(">IBIBB8sBBhhI", 1, client.OP_WAL, 0, client.WAL_ITEM, client.OTHER_WORLD,
                                            b"Zelda\0\0\0", client.OUR_WORLD, 0, gi, 0, 0))
+
+    def send_check(self) -> int:
+        name = "OOT Kokiri Forest Kokiri Sword Chest"
+        key = ootxmm_staticdata.OOTxMMCheckInfo["keys"][name]
+        self.game.send(struct.pack(">IBIBBBhhI", 7, client.OP_WAL, 42,
+                                   client.WAL_ITEM, 2, 0, 0x12, 0, key))
+        return locations.LOCATION_NAME_TO_ID[name]
+
+    def test_check_is_retained_when_socket_drops_before_send(self) -> None:
+        location = self.send_check()
+
+        async def disconnected_send(_msgs):
+            pass  # CommonClient silently returns when its socket is closed.
+
+        self.ctx.send_msgs = disconnected_send
+        self.exchange()
+        self.assertEqual(self.ctx.locations_checked, {location})
+
+    def test_failed_send_keeps_packet_and_sequence_for_retry(self) -> None:
+        location = self.send_check()
+        self.client.seq_net = 1
+        send_msgs = self.ctx.send_msgs
+
+        async def failed_send(_msgs):
+            raise ConnectionError("socket closed during send")
+
+        self.ctx.send_msgs = failed_send
+        with self.assertRaises(ConnectionError):
+            self.exchange()
+        self.assertEqual(self.game.u32(28), 0)
+        self.assertEqual(self.client.seq_net, 1)
+        self.assertEqual(self.ctx.locations_checked, {location})
+        self.ctx.send_msgs = send_msgs
+        (ack,) = self.exchange()
+        self.assertEqual(ack, struct.pack(">IBI", 1, client.OP_WAL_ACK, 42))
+
+    def test_full_ring_retries_without_losing_ack_or_sequence(self) -> None:
+        self.send_check()
+        self.client.seq_net = 1
+        # Ring has only two free bytes: not enough for the framed WAL acknowledgement.
+        self.game.set_u32(32, client.RING - 3)
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "write", self.game.write):
+            asyncio.run(self.client.exchange(self.ctx))
+        self.assertEqual(self.game.u32(28), 0)
+        self.assertEqual(self.client.seq_net, 1)
+        self.assertEqual(self.sent, [])
+        self.game.set_u32(36, client.RING - 3)
+        (ack,) = self.exchange()  # Also exercises a reply wrapping around the ring boundary.
+        self.assertEqual(ack, struct.pack(">IBI", 1, client.OP_WAL_ACK, 42))
+        self.assertEqual(self.game.u32(28), self.game.u32(24))
+
+    def test_boss_waits_for_server_confirmation_before_ack(self) -> None:
+        async def unconfirmed_send(msgs):
+            self.sent += msgs
+
+        self.ctx.send_msgs = unconfirmed_send
+        self.client.seq_net = 1
+        self.defeat("OOT_GANON")
+        self.assertEqual(self.game.u32(28), 0)
+        self.assertEqual(self.client.seq_net, 1)
+        self.assertFalse(self.ctx.finished_game)
+        saved = next(msg for msg in self.sent if msg["cmd"] == "Set")
+        self.client.on_package(self.ctx, "Connected", {})
+        self.exchange()
+        self.assertEqual(self.game.u32(28), 0, "reconnect still must not acknowledge an unconfirmed boss")
+        self.client.on_package(self.ctx, "SetReply", {"key": saved["key"], "value": {"OOT_GANON": True}})
+        (ack,) = self.exchange()
+        self.assertEqual(ack, struct.pack(">IBI", 1, client.OP_WAL_ACK, 1))
+        self.assertTrue(self.ctx.finished_game)
 
     def test_query_past_the_end_gets_nothing(self) -> None:
         self.game.send(struct.pack(">IBI", 3, client.OP_WAL_QUERY, 0))
@@ -139,6 +244,33 @@ class TestClientProtocol(unittest.TestCase):
         self.client.mailbox = MAILBOX
         self.defeat("MM_MAJORA")
         self.assertTrue(self.ctx.finished_game)
+
+    def test_stale_mailbox_restarts_discovery_and_preserves_goals(self) -> None:
+        self.client.goals.add("OOT_GANON")
+        with mock.patch.object(client.time, "monotonic", return_value=10):
+            self.exchange()
+        with mock.patch.object(client.time, "monotonic", return_value=14):
+            self.exchange()
+        self.assertIsNone(self.client.mailbox)
+        self.assertEqual(self.client.scan_pos, 0)
+        self.assertEqual(self.client.goals, {"OOT_GANON"})
+        self.assertEqual(self.game.u32(16), 1, "the stale mailbox stays intact")
+        other = 0x8000
+        self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
+        self.game.ram[other:other + 16] = client.MAGIC
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "get_memory_size", mock.AsyncMock(return_value=0x10000)):
+            asyncio.run(self.client.find_mailbox(self.ctx))
+            struct.pack_into(">I", self.game.ram, other + 20, 1)
+            asyncio.run(self.client.find_mailbox(self.ctx))
+        self.assertEqual(self.client.mailbox, other, "discovery selects the new game's moving mailbox")
+
+    def test_advancing_mailbox_keeps_connection(self) -> None:
+        for now, alive in [(10, 0), (12, 1), (14, 2), (16, 0)]:
+            self.game.set_u32(20, alive)
+            with mock.patch.object(client.time, "monotonic", return_value=now):
+                self.exchange()
+            self.assertEqual(self.client.mailbox, MAILBOX)
 
     def test_other_slot_or_seed_does_not_inherit_goals(self) -> None:
         self.defeat("OOT_GANON")

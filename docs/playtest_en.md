@@ -35,4 +35,17 @@ Use the same world build for both players, Archipelago 0.6.8, BizHawk 2.11.1 and
 
 ## Report a problem
 
-Send the host the slot name, check or boss name, expected and actual result, whether the game was OoT or MM, and the steps immediately before the problem. Include the client and server logs and a screenshot when useful. Record whether reconnecting, switching games or restarting changes the behavior. Keep ROMs out of reports.
+Send the host this short report, along with the client log and a screenshot when useful. The host should keep the corresponding server log. Include the error text exactly as displayed.
+
+```text
+Build / players.zip SHA-256:
+Slot name / emulator version:
+Game (OoT or MM), area, check or boss:
+Expected result:
+Actual result:
+Steps immediately before the problem:
+Did reconnecting or restarting change it?
+Last native save / any savestate loaded:
+```
+
+For a missing remote item, include the sending slot, source check and approximate time. For a freeze, capture the screen and logs before restarting if possible. Keep the existing native save; avoid loading an older savestate to work around a delivery problem, because it can rewind received-item progress. Keep ROMs, passwords and server connection credentials out of reports.
