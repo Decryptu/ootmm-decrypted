@@ -10,7 +10,7 @@ This world is in development. A full multiworld play session has not been valida
 - Your own Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U ROMs.
 - Your slot's `.ootmm` patch from the host, plus the server address, port, slot name and password if set.
 
-Download the matching world or prepared `players.zip` from the [first prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.1), also linked from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing; everyone should use the same build.
+Download the matching world or prepared `players.zip` from the [latest prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.2), also linked from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing; everyone should use the same build.
 
 For the prepared playtest, the host assigns **Tester1** or **Tester2** and provides the server connection details. Use that slot’s patch; the goal is both bosses. Skip Choose settings below. The public ZIP contains no running server: the host must start the matching private server file. A new seed needs newly built matching patches.
 
@@ -49,7 +49,7 @@ The host needs this repository, the two ROMs, and the WSL toolchain described in
 
 1. Install the matching world in Archipelago 0.6.8.
 2. Put the group's YAMLs in Archipelago's `Players` folder, run **Generate**, and extract the output ZIP into a dedicated seed folder.
-3. Build OoTMM once: `pwsh tools/ootmm-build.ps1`.
+3. Copy your ROMs to `roms/oot.z64` and `roms/mm.z64` in the repository, then build OoTMM once: `pwsh tools/ootmm-build.ps1`.
 4. Build all players with the command below. Substitute your paths using their `/mnt/c/...` WSL equivalents. Unrelated seed files in the input folder are ignored.
 
 ```powershell
