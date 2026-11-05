@@ -43,8 +43,8 @@ def main():
         server_files = [name for name in members if name.endswith(".archipelago")]
         if not player_files or len(server_files) != 1:
             parser.error("seed must contain player JSON files and exactly one .archipelago file")
-        host_members = [name for name in members
-                        if name.endswith((".ootxmm.json", ".archipelago", "_Spoiler.txt"))]
+        # Everything in the seed: other games' players get their patch files from the host.
+        host_members = [name for name in members if not name.endswith("/")]
         flattened = [Path(name).name for name in host_members]
         if len(flattened) != len(set(flattened)):
             parser.error("seed contains duplicate host filenames")
@@ -54,7 +54,7 @@ def main():
         slots = []
         for name in player_files:
             data = json.loads(seed.read(name))
-            patch = args.patches / Path(name).name.replace(".json", ".ootmm")
+            patch = args.patches / (Path(name).name.removesuffix(".json") + ".ootmm")
             if not patch.is_file():
                 parser.error(f"missing patch: {patch}")
             receipt_path = patch.with_suffix(".build.json")
@@ -77,10 +77,9 @@ def main():
         host.mkdir()
         if args.validation_report is not None:
             shutil.copyfile(args.validation_report, host / "VALIDATION.json")
-        # Extract only known host artifacts, flattening names so ZIP paths never escape the output.
-        for name in members:
-            if name.endswith((".ootxmm.json", ".archipelago", "_Spoiler.txt")):
-                (host / Path(name).name).write_bytes(seed.read(name))
+        # Flatten names so ZIP paths never escape the output.
+        for name in host_members:
+            (host / Path(name).name).write_bytes(seed.read(name))
         for slot in slots:
             if slot["receipt"]:
                 shutil.copyfile(slot["receipt"], host / slot["receipt"].name)

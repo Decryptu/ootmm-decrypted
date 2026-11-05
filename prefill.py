@@ -186,6 +186,7 @@ def pre_fill_all(multiworld) -> None:
     worlds = list(multiworld.get_game_worlds("OOTxMM"))
     pending = {world.player: list(world.pre_fill_pending) for world in worlds}
     candidates = list(multiworld.get_unfilled_locations())
+    reserve_limited_dungeons(multiworld)
     for attempt in range(ATTEMPTS):
         try:
             for world in worlds:
@@ -204,37 +205,42 @@ def pre_fill_all(multiworld) -> None:
                 raise
 
 
+def reserve_limited_dungeons(multiworld) -> None:
+    """A limited reward reserves its host dungeon against all other rewards, including main-fill items."""
+    worlds = list(multiworld.get_game_worlds("OOTxMM"))
+    limited = {world.player for world in worlds
+               if logic._value(world.ootmm_settings, "dungeonRewardShuffle") == "dungeonsLimited"}
+    if not limited:
+        return
+    for world in worlds:
+        for dungeon in _fill["rewardDungeons"]:
+            names = set(_fill["dungeons"][dungeon])
+            if dungeon == "ST":
+                names |= set(_fill["dungeons"]["IST"])
+            locations = [location for location in multiworld.get_locations(world.player)
+                         if location.name in names]
+            for location in locations:
+                original = location.item_rule
+
+                def reward_rule(item, original=original, locations=locations, location=location):
+                    if not original(item):
+                        return False
+                    if item.game != "OOTxMM" or _symbolic(item) not in REWARD_ITEMS:
+                        return True
+                    return not any(other is not location and other.item is not None
+                                   and other.item.game == "OOTxMM"
+                                   and _symbolic(other.item) in REWARD_ITEMS
+                                   and (item.player in limited or other.item.player in limited)
+                                   for other in locations)
+
+                location.item_rule = reward_rule
+
+
 def place_dungeon_rewards(multiworld) -> None:
     """Fill dungeon-only rewards across OoTMM players after their local pre-fills."""
     worlds = list(multiworld.get_game_worlds("OOTxMM"))
     owners = [world for world in worlds
               if logic._value(world.ootmm_settings, "dungeonRewardShuffle") in ("dungeons", "dungeonsLimited")]
-    limited = {world.player for world in owners
-               if logic._value(world.ootmm_settings, "dungeonRewardShuffle") == "dungeonsLimited"}
-    if limited:
-        # A limited reward reserves its host dungeon against all other rewards, including main-fill items.
-        for world in worlds:
-            for dungeon in _fill["rewardDungeons"]:
-                names = set(_fill["dungeons"][dungeon])
-                if dungeon == "ST":
-                    names |= set(_fill["dungeons"]["IST"])
-                locations = [location for location in multiworld.get_locations(world.player)
-                             if location.name in names]
-                for location in locations:
-                    original = location.item_rule
-
-                    def reward_rule(item, original=original, locations=locations, location=location):
-                        if not original(item):
-                            return False
-                        if item.game != "OOTxMM" or _symbolic(item) not in REWARD_ITEMS:
-                            return True
-                        return not any(other is not location and other.item is not None
-                                       and other.item.game == "OOTxMM"
-                                       and _symbolic(other.item) in REWARD_ITEMS
-                                       and (item.player in limited or other.item.player in limited)
-                                       for other in locations)
-
-                    location.item_rule = reward_rule
     pending = {world.player: list(world.pre_fill_pending) for world in owners}
     if not any(pending.values()):
         return

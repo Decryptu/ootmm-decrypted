@@ -23,7 +23,7 @@ title: Player hub
   <div class="player-content"><div class="player-instructions"><img src="assets/menu-notebook.png" width="80" height="80" alt=""><h3>Create a new seed’s YAML</h3><ol><li>Enter a unique player name.</li><li>Choose your final boss.</li><li>Download the file and send it to your host.</li></ol><p>Other settings use the world’s defaults.</p><details><summary>Need the full settings?</summary><p>Install the world package, then select <strong>Generate Template Options</strong> in the Archipelago launcher.</p></details></div>
   <form id="yaml-form">
     <label for="player">Player name</label>
-    <input id="player" name="player" required maxlength="16" placeholder="Link" autocomplete="off" pattern="[^{}]+" aria-describedby="name-help">
+    <input id="player" name="player" required maxlength="16" placeholder="Link" autocomplete="off" aria-describedby="name-help">
     <small id="name-help">Up to 16 characters, without braces. Use the same name when connecting.</small>
     <label for="goal">Final boss</label>
     <select id="goal" name="goal" aria-describedby="goal-help"><option value="both">Ganon + Majora</option><option value="ganon">Ganon</option><option value="majora">Majora</option><option value="any">Either boss</option></select>

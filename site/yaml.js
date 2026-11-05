@@ -2,9 +2,11 @@
 
 function playerYaml(name, goal) {
   name = name.trim();
-  if (!name || [...name].length > 16 || /[{}\x00-\x1f\x7f]/u.test(name)) {
+  // The characters YAML files can't hold, and the name Archipelago keeps for itself, fail generation for everyone.
+  if (!name || [...name].length > 16 || /[{}\x00-\x1f\x7f-\x84\x86-\x9f\ufffe\uffff]/u.test(name)) {
     throw new Error("Enter a name of 1–16 characters without braces or control characters.");
   }
+  if (name === "Archipelago") throw new Error("That name is reserved. Choose another.");
   if (!["both", "ganon", "majora", "any"].includes(goal)) throw new Error("Choose a supported goal.");
   return `name: ${JSON.stringify(name)}\ngame: OOTxMM\nOOTxMM:\n  goal: ${goal}\n`;
 }

@@ -49,7 +49,7 @@ The host needs this repository, the two ROMs, and the WSL toolchain described in
 
 1. Install the matching world in Archipelago 0.6.8.
 2. Put the group's YAMLs in Archipelago's `Players` folder, run **Generate**, and extract the output ZIP into a dedicated seed folder.
-3. Build OoTMM once: `pwsh tools/ootmm-build.ps1`.
+3. Copy your ROMs to `roms/oot.z64` and `roms/mm.z64` in the repository, then build OoTMM once: `pwsh tools/ootmm-build.ps1`.
 4. Build all players with the command below. Substitute your paths using their `/mnt/c/...` WSL equivalents. Unrelated seed files in the input folder are ignored.
 
 ```powershell

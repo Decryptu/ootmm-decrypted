@@ -10,6 +10,8 @@ MM_SLICES = len(ootxmm_staticdata.OOTxMMLogic["mmTimeSlices"])
 MM_ALL = (1 << MM_SLICES) - 1
 # Area data: OoT times, MM times, required-on flags, required-off flags.
 INITIAL = (0, 1, 0, 0)
+ANY_TIME = (OOT_ALL, MM_ALL, 0, 0)
+DISPLAY_NAME = {symbolic: item.display_name for symbolic, item in ITEM_BY_SYMBOLIC_ID.items()}
 
 
 def evaluate(cond, data, counts):
@@ -18,28 +20,14 @@ def evaluate(cond, data, counts):
     Like OoTMM, OR merges successful alternatives and AND intersects their time ranges.
     Flags represent constraints on the route, not inventory events.
     """
-    if isinstance(cond, bool):
-        return (OOT_ALL, MM_ALL, 0, 0) if cond else None
+    if cond is True:
+        return ANY_TIME
+    if cond is False:
+        return None
     kind = cond[0]
-    if kind == "time-oot":
-        return (cond[1], MM_ALL, 0, 0) if data[0] & cond[1] else None
-    if kind == "time-mm":
-        return (OOT_ALL, cond[1], 0, 0) if data[1] & cond[1] else None
-    if kind in ("flag-on", "flag-off"):
-        bit = 1 << cond[1]
-        on = kind == "flag-on"
-        if data[3 if on else 2] & bit:
-            return None
-        return (OOT_ALL, MM_ALL, bit if on else 0, 0 if on else bit)
-    if kind == "item":
-        met = counts[ITEM_BY_SYMBOLIC_ID[cond[1]].display_name] >= cond[2]
-    elif kind == "event":
-        met = bool(counts[cond[1]])
-    elif kind == "unique":
-        met = sum(bool(counts[ITEM_BY_SYMBOLIC_ID[i].display_name]) for i in cond[1]) >= cond[2]
-    else:
+    if kind == "and" or kind == "or":
         is_and = kind == "and"
-        result = (OOT_ALL, MM_ALL, 0, 0) if is_and else (0, 0, -1, -1)
+        result = ANY_TIME if is_and else (0, 0, -1, -1)
         found = False
         for child in cond[1]:
             value = evaluate(child, data, counts)
@@ -54,7 +42,22 @@ def evaluate(cond, data, counts):
         if not found or not result[0] or not result[1] or result[2] & result[3]:
             return None
         return result
-    return (OOT_ALL, MM_ALL, 0, 0) if met else None
+    if kind == "item":
+        return ANY_TIME if counts.get(DISPLAY_NAME[cond[1]], 0) >= cond[2] else None
+    if kind == "event":
+        return ANY_TIME if counts.get(cond[1]) else None
+    if kind == "time-oot":
+        return (cond[1], MM_ALL, 0, 0) if data[0] & cond[1] else None
+    if kind == "time-mm":
+        return (OOT_ALL, cond[1], 0, 0) if data[1] & cond[1] else None
+    if kind == "unique":
+        met = sum(bool(counts.get(DISPLAY_NAME[i])) for i in cond[1]) >= cond[2]
+        return ANY_TIME if met else None
+    bit = 1 << cond[1]
+    on = kind == "flag-on"
+    if data[3 if on else 2] & bit:
+        return None
+    return (OOT_ALL, MM_ALL, bit if on else 0, 0 if on else bit)
 
 
 def merge(a, b):
@@ -81,14 +84,19 @@ class TimeLogic:
                 if cond[0] == "event":
                     self.dependencies.setdefault(cond[1], set()).add(key)
                 elif cond[0] == "item":
-                    self.dependencies.setdefault(ITEM_BY_SYMBOLIC_ID[cond[1]].display_name, set()).add(key)
+                    self.dependencies.setdefault(DISPLAY_NAME[cond[1]], set()).add(key)
                 elif cond[0] == "unique":
                     for item in cond[1]:
-                        self.dependencies.setdefault(ITEM_BY_SYMBOLIC_ID[item].display_name, set()).add(key)
+                        self.dependencies.setdefault(DISPLAY_NAME[item], set()).add(key)
                 elif cond[0] in ("and", "or"):
                     for child in cond[1]:
                         track(child, key)
+        # (target key, condition, whether the exit goes from OoT to MM), so traversal needs no area lookups.
+        self.edges = {}
         for key, exits in graph.exits.items():
+            game = logic._areas[key[0]]["game"]
+            self.edges[key] = [((target, key[1]), cond, game == "oot" and logic._areas[target]["game"] == "mm")
+                               for target, cond in exits]
             for _, cond in exits:
                 track(cond, key)
             for _, cond in self.events_by_area.get(key, ()):
@@ -132,10 +140,11 @@ class TimeLogic:
             counts.update({event: count for event, count in previous[1][1].items() if event in self.events})
         prepared = {}
         def prepare(cond):
-            if isinstance(cond, bool):
+            if cond is True or cond is False:
                 return cond
-            if cond in prepared:
-                return prepared[cond]
+            # By identity: hashing a nested condition walks all of it. Only the graph's own objects are keys.
+            if id(cond) in prepared:
+                return prepared[id(cond)]
             kind = cond[0]
             result = cond
             if kind in ("item", "unique"):
@@ -152,16 +161,24 @@ class TimeLogic:
                         children.append(value)
                 else:
                     result = is_and if not children else children[0] if len(children) == 1 else (kind, tuple(children))
-            prepared[cond] = result
+            prepared[id(cond)] = result
             return result
         reached = previous[1][0].copy() if incremental else {}
         queue = deque()
         queued = set()
+        # Areas to look at again because a condition changed; entering an area has already expanded it.
+        changed = set()
 
         def enqueue(key):
             if key not in queued:
                 queued.add(key)
                 queue.append(key)
+
+        def revisit(dependents):
+            for key in dependents:
+                if key in reached:
+                    changed.add(key)
+                    enqueue(key)
 
         def enter(key, data):
             old = reached.get(key)
@@ -173,33 +190,27 @@ class TimeLogic:
         if incremental:
             for name, count in inventory.items():
                 if count != previous[0][name]:
-                    for dependent in self.dependencies.get(name, ()):
-                        if dependent in reached:
-                            enqueue(dependent)
+                    revisit(self.dependencies.get(name, ()))
         else:
             for age in logic.AGES:
                 enter((logic.ORIGIN, age), INITIAL)
         while queue:
             key = queue.popleft()
             queued.remove(key)
-            expanded = self.expand(key, reached[key], counts)
-            reached[key] = expanded
+            if key in changed:
+                changed.remove(key)
+                reached[key] = self.expand(key, reached[key], counts)
             data = reached[key]
             for event, cond in self.events_by_area.get(key, ()):
                 if not counts[event] and evaluate(prepare(cond), data, counts) is not None:
                     counts[event] = 1
-                    for dependent in self.dependencies.get(event, ()):
-                        if dependent in reached:
-                            enqueue(dependent)
-            for target, cond in self.graph.exits[key]:
+                    revisit(self.dependencies.get(event, ()))
+            for target, cond, enters_mm in self.edges[key]:
                 allowed = evaluate(prepare(cond), data, counts)
                 if allowed is None:
                     continue
                 oot, mm, on, off = allowed
-                value = (data[0] & oot, data[1] & mm, data[2] | on, data[3] | off)
-                if logic._areas[key[0]]["game"] == "oot" and logic._areas[target]["game"] == "mm":
-                    value = (value[0], value[1] | 1, value[2], value[3])
-                enter((target, key[1]), value)
+                enter(target, (data[0] & oot, data[1] & mm | enters_mm, data[2] | on, data[3] | off))
         return reached, counts
 
     def rule(self, area, age, cond):
