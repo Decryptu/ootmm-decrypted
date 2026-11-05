@@ -12,7 +12,7 @@ It continues Quasky's [AP-OOTMM](https://github.com/Quasky/AP-OOTMM), with its f
 
 Development build pending a full play session. Archipelago generates with OoTMM v33.0's regions, locations, items and logic, including per-area time ranges. Supported options cover logic, the ROM, check shuffles and dungeon-item, fairy, song and reward placement; other pool changes retain OoTMM's defaults. The host builds each player's patch with the OoTMM toolchain; players apply it with OoTMM v33.0's Patch mode. Assisted BizHawk tests verify real item exchange, cross-game travel, native item counters and both boss goal packets, including server completion across a restart. A complete unmodified play session and wider progression-item coverage remain. [ROADMAP.md](ROADMAP.md) lists what is left.
 
-Start at the [player hub](https://decryptu.github.io/ootmm-decrypted/) for downloads, setup and a starter YAML. The [first prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.1) includes the world package and a prepared two-player playtest. The [setup guide](docs/setup_en.md) covers players and hosts; hub source lives in `site/` and deploys from `main`.
+Start at the [player hub](https://decryptu.github.io/ootmm-decrypted/) for downloads, setup and a starter YAML. The [latest prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.2) includes the world package and a prepared two-player playtest. The [setup guide](docs/setup_en.md) covers players and hosts; hub source lives in `site/` and deploys from `main`.
 
 ## What you need
 

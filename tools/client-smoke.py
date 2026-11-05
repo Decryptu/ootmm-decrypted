@@ -51,7 +51,7 @@ async def run(args):
 
         async def poll(self):
             with mock.patch.object(client.bizhawk, "read", self.mail.read), \
-                    mock.patch.object(client.bizhawk, "write", self.mail.write):
+                    mock.patch.object(client.bizhawk, "guarded_write", self.mail.guarded_write):
                 await self.handler.exchange(self)
             return self.mail.receive()
 
