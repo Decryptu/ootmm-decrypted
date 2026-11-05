@@ -205,10 +205,13 @@ class TimeLogic:
     def rule(self, area, age, cond):
         key = (area, age)
         def access(state):
-            counts = Counter({name: count for name, count in state.prog_items[self.player].items()
-                              if count and name not in self.events})
+            # Fill calls this hundreds of thousands of times, nearly always on an unchanged state. dict.__eq__
+            # compares in C; Counter's own == is a Python loop over the whole inventory.
+            items = state.prog_items[self.player]
             cached = self.cache.get(state)
-            if cached is None or cached[0] != counts:
+            if cached is None or not dict.__eq__(cached[0], items):
+                counts = Counter({name: count for name, count in items.items()
+                                  if count and name not in self.events})
                 inventory = frozenset(counts.items())
                 result = self.inventories.get(inventory)
                 if result is None:
@@ -221,7 +224,7 @@ class TimeLogic:
                     self.inventories.move_to_end(inventory)
                 self.last_inventory, self.last_result = counts, result
                 reached, derived = result
-                cached = (counts, reached, derived)
+                cached = (dict(items), reached, derived)
                 self.cache[state] = cached
             data = cached[1].get(key)
             return data is not None and evaluate(cond, data, cached[2]) is not None
