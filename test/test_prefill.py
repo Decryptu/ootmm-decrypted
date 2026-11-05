@@ -46,7 +46,7 @@ class TestPreFillRetry(TestCase):
                 raise FillError("Local placements blocked rewards")
 
         with patch.object(prefill, "pre_fill", side_effect=local_fill), \
-                patch.object(prefill, "place_dungeon_rewards", side_effect=reward_fill):
+                patch.object(prefill, "reserve_limited_dungeons"),                 patch.object(prefill, "place_dungeon_rewards", side_effect=reward_fill):
             prefill.pre_fill_all(multiworld)
         self.assertEqual(calls, 2)
         self.assertEqual(world.pre_fill_pending, [])
