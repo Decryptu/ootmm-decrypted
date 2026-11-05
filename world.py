@@ -14,7 +14,7 @@ class OOTxMM(World):
     """
     OOTxMM is an Archipelago implementation that hooks into the OOTMM randomizer already
     combining TLoZ: Ocarina of Time and TLoZ: Majora's Mask
-    into a the Archipelago MultiWorld.
+    into the Archipelago MultiWorld.
     """
     
     game = "OOTxMM"

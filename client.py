@@ -59,8 +59,9 @@ class OOTxMMClient(BizHawkClient):
 
     def reset(self) -> None:
         self.mailbox: int | None = None
-        self.candidates: dict[int, int] = {}  # mailbox address -> alive counter last seen
+        self.candidates: dict[int, int | None] = {}  # mailbox address -> alive counter last seen
         self.scan_pos: int | None = 0  # next RAM address to scan, None when the scan is done
+        self.scan_done_at = 0.0
         self.seq_net = 0
         self.last_query: int | None = None
         self.last_alive: int | None = None
@@ -109,18 +110,20 @@ class OOTxMMClient(BizHawkClient):
         # mailbox stays in RAM: the live mailbox is the 16-aligned one whose alive counter moves. It only moves
         # in gameplay, not on the title screen or the file select.
         # The connector's replies are capped at 64 KB, so RAM is scanned a few small reads per poll. The mailbox
-        # is 16-aligned and the reads are too, so the magic is never split between two.
+        # is 16-aligned and the reads are too, so the magic is never split between two, but the alive counter
+        # after it can be in the next read, so candidates get their first value from the polls below.
         if self.scan_pos is not None:
             size = await bizhawk.get_memory_size(ctx.bizhawk_ctx, RDRAM)
             for _ in range(SCAN_READS_PER_POLL):
                 if self.scan_pos >= size:
                     self.scan_pos = None
+                    self.scan_done_at = time.monotonic()
                     break
                 data = (await bizhawk.read(ctx.bizhawk_ctx, [(self.scan_pos, SCAN_CHUNK, RDRAM)]))[0]
                 start = data.find(MAGIC)
                 while start != -1:
                     if start % 16 == 0:
-                        self.candidates[self.scan_pos + start] = struct.unpack_from(">I", data, start + 20)[0]
+                        self.candidates.setdefault(self.scan_pos + start, None)
                     start = data.find(MAGIC, start + 1)
                 self.scan_pos += SCAN_CHUNK
             return
@@ -133,28 +136,41 @@ class OOTxMMClient(BizHawkClient):
                 del self.candidates[address]
                 continue
             alive = struct.unpack_from(">I", raw, 20)[0]
-            if alive != self.candidates[address]:
+            previous = self.candidates[address]
+            if previous is not None and alive != previous:
                 self.mailbox = address
                 self.seq_net = 0
                 logger.info(f"Found the game's mailbox at 0x{address:X}")
                 return
             self.candidates[address] = alive
+        if time.monotonic() - self.scan_done_at >= MAILBOX_STALL_SECONDS:
+            # Every copy found is stale: the live mailbox was written after the scan passed it, as during a
+            # game switch. Scan again, or the client would watch the stale copies forever.
+            self.scan_pos = 0
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        if ctx.server is None or ctx.slot is None:
-            if self.mailbox is not None:
-                # Without a server, the game must keep what it sends: it waits for an ack that never comes.
-                await bizhawk.write(ctx.bizhawk_ctx, [(self.mailbox + 16, [0, 0, 0, 0], RDRAM)])
-            return
+        # An exception out of here ends Archipelago's watcher loop, and the client with it.
         try:
+            if ctx.server is None or ctx.slot is None:
+                if self.mailbox is not None:
+                    # Without a server, the game must keep what it sends: it waits for an ack that never comes.
+                    await self.write_mailbox(ctx, [(self.mailbox + 16, [0, 0, 0, 0], RDRAM)])
+                    self.reset()
+                return
             if self.mailbox is None:
                 await self.find_mailbox(ctx)
                 if self.mailbox is None:
                     return
-                await bizhawk.write(ctx.bizhawk_ctx, [(self.mailbox + 16, [0, 0, 0, 1], RDRAM)])
+                if not await self.write_mailbox(ctx, [(self.mailbox + 16, [0, 0, 0, 1], RDRAM)]):
+                    self.reset()
+                    return
             await self.exchange(ctx)
-        except bizhawk.RequestFailedError:
+        except (bizhawk.RequestFailedError, bizhawk.NotConnectedError):
             pass
+
+    async def write_mailbox(self, ctx: "BizHawkClientContext", writes: list) -> bool:
+        # Only while the mailbox is still there: a game switch can put other data at this address between polls.
+        return await bizhawk.guarded_write(ctx.bizhawk_ctx, writes, [(self.mailbox, MAGIC, RDRAM)])
 
     async def exchange(self, ctx: "BizHawkClientContext") -> None:
         await self.sync_goals(ctx)
@@ -209,8 +225,6 @@ class OOTxMMClient(BizHawkClient):
         goals: set[str] = set()
         query: int | None = None
         for packet in packets:
-            if len(packet) < 5:
-                continue
             op = packet[4]
             if op == OP_HELLO:
                 # The game says hello every 30 frames until it reads an answer; answer the latest only, as a
@@ -273,7 +287,9 @@ class OOTxMMClient(BizHawkClient):
             if first < len(data):
                 writes.append((mailbox + HEADER + RING, list(data[first:]), RDRAM))
             writes.append((mailbox + 32, list(struct.pack(">I", (in_head + len(data)) % RING)), RDRAM))
-        await bizhawk.write(ctx.bizhawk_ctx, writes)
+        if not await self.write_mailbox(ctx, writes):
+            self.reset()
+            return
         self.seq_net = seq_after
 
         if not ctx.finished_game and self.goal_reached(ctx):

@@ -45,9 +45,12 @@ class FakeGame:
     async def read(self, _ctx, read_list):
         return [bytes(self.ram[address:address + size]) for address, size, _ in read_list]
 
-    async def write(self, _ctx, write_list):
+    async def guarded_write(self, _ctx, write_list, guard_list):
+        if any(self.ram[address:address + len(data)] != data for address, data, _ in guard_list):
+            return False
         for address, data, _ in write_list:
             self.ram[address:address + len(data)] = bytes(data)
+        return True
 
 
 class TestClientProtocol(unittest.TestCase):
@@ -73,7 +76,7 @@ class TestClientProtocol(unittest.TestCase):
 
     def exchange(self) -> list[bytes]:
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
-                mock.patch.object(client.bizhawk, "write", self.game.write):
+                mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
             asyncio.run(self.client.exchange(self.ctx))
         return self.game.receive()
 
@@ -106,7 +109,7 @@ class TestClientProtocol(unittest.TestCase):
         self.client.goals.add("OOT_GANON")
         before = bytes(self.game.ram)
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
-                mock.patch.object(client.bizhawk, "write", self.game.write):
+                mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
             asyncio.run(self.client.exchange(self.ctx))
         self.assertEqual(bytes(self.game.ram), before)
         self.assertIsNone(self.client.mailbox)
@@ -174,7 +177,7 @@ class TestClientProtocol(unittest.TestCase):
         # Ring has only two free bytes: not enough for the framed WAL acknowledgement.
         self.game.set_u32(32, client.RING - 3)
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
-                mock.patch.object(client.bizhawk, "write", self.game.write):
+                mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
             asyncio.run(self.client.exchange(self.ctx))
         self.assertEqual(self.game.u32(28), 0)
         self.assertEqual(self.client.seq_net, 1)
@@ -261,9 +264,88 @@ class TestClientProtocol(unittest.TestCase):
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
                 mock.patch.object(client.bizhawk, "get_memory_size", mock.AsyncMock(return_value=0x10000)):
             asyncio.run(self.client.find_mailbox(self.ctx))
+            asyncio.run(self.client.find_mailbox(self.ctx))
             struct.pack_into(">I", self.game.ram, other + 20, 1)
             asyncio.run(self.client.find_mailbox(self.ctx))
         self.assertEqual(self.client.mailbox, other, "discovery selects the new game's moving mailbox")
+
+    def discover(self, polls: int, size: int = 0x10000) -> None:
+        self.game.ram.extend(bytes(size - len(self.game.ram)))
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "get_memory_size", mock.AsyncMock(return_value=size)):
+            for _ in range(polls):
+                asyncio.run(self.client.find_mailbox(self.ctx))
+
+    def test_mailbox_at_the_end_of_a_scan_read_is_found(self) -> None:
+        self.client.reset()
+        address = client.SCAN_CHUNK - 16
+        self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
+        self.game.ram[address:address + 16] = client.MAGIC
+        self.discover(2)
+        struct.pack_into(">I", self.game.ram, address + 20, 1)
+        self.discover(1)
+        self.assertEqual(self.client.mailbox, address)
+
+    def test_scan_repeats_when_every_copy_found_is_stale(self) -> None:
+        self.client.reset()
+        with mock.patch.object(client.time, "monotonic", return_value=10):
+            self.discover(2)
+        self.assertEqual(list(self.client.candidates), [MAILBOX])
+        with mock.patch.object(client.time, "monotonic", return_value=11):
+            self.discover(1)
+        self.assertIsNone(self.client.scan_pos, "still watching the copy it found")
+        with mock.patch.object(client.time, "monotonic", return_value=14):
+            self.discover(1)
+        self.assertEqual(self.client.scan_pos, 0)
+
+        live = 0x8000
+        self.game.ram[live:live + 16] = client.MAGIC
+        with mock.patch.object(client.time, "monotonic", return_value=14):
+            self.discover(2)
+        struct.pack_into(">I", self.game.ram, live + 20, 1)
+        with mock.patch.object(client.time, "monotonic", return_value=15):
+            self.discover(1)
+        self.assertEqual(self.client.mailbox, live)
+
+    def test_mailbox_replaced_between_read_and_write_is_left_alone(self) -> None:
+        self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
+        real_read = self.game.read
+
+        async def read_then_switch(ctx, read_list):
+            result = await real_read(ctx, read_list)
+            self.game.ram[MAILBOX:MAILBOX + 0x40] = bytes(0x40)
+            return result
+
+        self.game.read = read_then_switch
+        self.exchange_without_receive()
+        self.assertEqual(bytes(self.game.ram[MAILBOX:MAILBOX + 0x40]), bytes(0x40))
+        self.assertIsNone(self.client.mailbox)
+
+    def exchange_without_receive(self) -> None:
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
+            asyncio.run(self.client.exchange(self.ctx))
+
+    def test_server_loss_detaches_once_and_only_from_the_mailbox(self) -> None:
+        self.ctx.server = None
+        with mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
+            asyncio.run(self.client.game_watcher(self.ctx))
+        self.assertEqual(self.game.u32(16), 0)
+        self.assertIsNone(self.client.mailbox)
+
+        self.client.mailbox = MAILBOX
+        self.game.set_u32(16, 1)
+        self.game.ram[MAILBOX:MAILBOX + 16] = bytes(16)
+        with mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
+            asyncio.run(self.client.game_watcher(self.ctx))
+        self.assertEqual(self.game.u32(16), 1, "another game's data at the old address stays intact")
+
+    def test_lost_emulator_does_not_end_the_watcher(self) -> None:
+        self.ctx.server = None
+        for error in (client.bizhawk.RequestFailedError("reset"), client.bizhawk.NotConnectedError()):
+            self.client.mailbox = MAILBOX
+            with mock.patch.object(client.bizhawk, "guarded_write", mock.AsyncMock(side_effect=error)):
+                asyncio.run(self.client.game_watcher(self.ctx))
 
     def test_advancing_mailbox_keeps_connection(self) -> None:
         for now, alive in [(10, 0), (12, 1), (14, 2), (16, 0)]:
