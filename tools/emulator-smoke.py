@@ -231,6 +231,7 @@ async def run(args):
                                  for loc in observed], "received_index": peer.handler.last_query,
                       "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
                       "mailbox_timing": timing.report(),
+                      "rom_mailbox_directory": peer.handler.rom_mailboxes,
                       "verified_connector_rom_sha1": verified_rom_sha1,
                       "game_switches": max(0, len(active_mailboxes) - 1), "award_count_verified": True, "passed": wanted <= set(observed)}
             if args.report:
@@ -281,6 +282,7 @@ async def run(args):
                 "server_item_count": len(peer.items_received),
                 "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
                 "mailbox_timing": timing.report(),
+                "rom_mailbox_directory": peer.handler.rom_mailboxes,
                 "verified_connector_rom_sha1": verified_rom_sha1,
                 "server_reloaded": bool(args.server_save_input),
             }

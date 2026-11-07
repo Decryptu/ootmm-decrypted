@@ -301,6 +301,67 @@ class TestClientProtocol(unittest.TestCase):
         self.assertEqual(self.client.mailbox, MAILBOX)
         size.assert_not_called()
 
+    def rom_header(self, addresses=(MAILBOX, 0x8000), marker=client.DIRECTORY_MAGIC):
+        header = bytearray(0x40)
+        header[0x20:0x2c] = b"OOT+MM COMBO"
+        header[0x18:0x20] = marker
+        for offset, address in zip((0x34, 0x37), addresses):
+            header[offset:offset + 3] = address.to_bytes(3, "big")
+        return bytes(header)
+
+    def test_rom_directory_requires_valid_distinct_aligned_complete_mailboxes(self) -> None:
+        for addresses, marker, expected in (
+            ((MAILBOX, 0x8000), client.DIRECTORY_MAGIC, [MAILBOX, 0x8000]),
+            ((MAILBOX, MAILBOX), client.DIRECTORY_MAGIC, []),
+            ((MAILBOX, 0x8001), client.DIRECTORY_MAGIC, []),
+            ((MAILBOX, 0x7ffff0), client.DIRECTORY_MAGIC, []),
+            ((0, 0x8000), client.DIRECTORY_MAGIC, []),
+            ((MAILBOX, 0x8000), b"APIPC002", []),
+            ((MAILBOX, 0x8000), bytes(8), []),
+        ):
+            with self.subTest(addresses=addresses, marker=marker):
+                self.client.known_mailboxes = [0x9000]
+                with mock.patch.object(client.bizhawk, "read", mock.AsyncMock(
+                        return_value=[self.rom_header(addresses, marker)])):
+                    self.assertTrue(asyncio.run(self.client.validate_rom(self.ctx)))
+                self.assertEqual(self.client.rom_mailboxes, expected)
+                self.assertEqual(self.client.known_mailboxes, [], "another ROM's cache must be discarded")
+
+    def test_directory_switch_finds_new_game_without_scanning_or_waiting(self) -> None:
+        self.client.rom_mailboxes = [MAILBOX, 0x8000]
+        self.client.reset()
+        self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
+        self.discover(1)
+        self.assertIsNone(self.client.mailbox, "magic alone cannot authorize a write")
+        self.game.set_u32(20, 1)
+        self.discover(1)
+        self.assertEqual(self.client.mailbox, MAILBOX)
+        self.client.reset()
+        self.discover(1)
+        self.game.ram[0x8000:0x8010] = client.MAGIC
+        self.discover(1)
+        struct.pack_into(">I", self.game.ram, 0x8014, 1)
+        size = mock.AsyncMock()
+        with mock.patch.object(client.bizhawk, "get_memory_size", size), \
+                mock.patch.object(client.bizhawk, "read", self.game.read):
+            asyncio.run(self.client.find_mailbox(self.ctx))
+        size.assert_not_called()
+        self.assertEqual(self.client.mailbox, 0x8000, "the old game's intact magic must not delay the new game")
+
+    def test_directory_removed_magic_drops_old_alive_sample(self) -> None:
+        self.client.rom_mailboxes = [MAILBOX, 0x8000]
+        self.client.reset()
+        self.discover(1)
+        self.game.ram[MAILBOX:MAILBOX + 16] = bytes(16)
+        self.discover(1)
+        self.game.ram[MAILBOX:MAILBOX + 16] = client.MAGIC
+        self.game.set_u32(20, 99)
+        self.discover(1)
+        self.assertIsNone(self.client.mailbox, "a reinitialized copy needs a new moving sample")
+        self.game.set_u32(20, 100)
+        self.discover(1)
+        self.assertEqual(self.client.mailbox, MAILBOX)
+
     def test_waits_at_known_addresses_while_a_game_loads_then_scans(self) -> None:
         self.client.known_mailboxes = [0x8000]
         self.client.reset()
