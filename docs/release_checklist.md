@@ -10,14 +10,15 @@ Test shortcuts may prepare inventory, position the player, enter a boss room, en
 
 ## 2. Actual pickups and delivery
 
-- [ ] Repeat the remote South Clock Town chest on the candidate and include MM source pickups in a two-running-player exchange. The candidate already verifies its native cross-game door, MM opening-song award and bidirectional OoT chest exchange, including stable receipt indices and a native nut upgrade.
+The candidate verifies its native cross-game door, MM opening-song award, bidirectional OoT chest exchange and the remote South Clock Town chest with two running players. Both receipt indices remain stable; the MM chest's recipient has the native Mirror Shield equipped after switching to MM. OoT nut upgrade inventory and refill are covered by the OoT exchange.
+
 - [ ] Verify representative shop, dungeon reward and fixed vanilla checks; candidate song coverage currently uses the MM opening award.
 - [ ] Verify remote key use at the intended doors, Ganon's boss key and temple fairy rewards. Diagnostic candidate grants already verify the native Fire Temple small-key count/boss-key bit and the Woodfall fairy counter; these are item-application coverage, not actual source pickups or door use.
 - [ ] Exercise shared equipment and songs in both games; check upgrades and abilities as well as item messages.
 
 ## 3. Recovery and load
 
-- [ ] Switch OoT to MM and back through the real transition, then collect and receive items after each switch. Capture mailbox rediscovery. The earlier seed verifies both actual entrance directions, mailbox rediscovery, an MM song award persisting in OoT and a subsequent OoT chest. A continuous earlier-seed round trip also passes. Repeat on the final candidate and include remote receipt after each switch.
+- [ ] Collect and receive remote items after each direction of a continuous candidate round trip. The candidate verifies both native entrance directions, both mailbox changes and the MM opening-song award persisting on return to OoT; cached reattachment passes. Include actual source pickups and remote receipt after each switch, and resolve the first-time discovery delay tracked in the roadmap.
 - [ ] Repeat native-save/cold-boot recovery on the final candidate, including pending checks. The earlier seed retains the song and opened chest across fresh emulator/client/server processes, then reports a new own chest and verifies its inventory item. Another native save/cold boot retains received index 3 with no replay after three simulated remote source checks. A separate real own-item pickup while disconnected recovers its pending check after reconnect.
 - [ ] Repeat disconnected real-pickup recovery on the final candidate and interrupt a socket during reporting. The earlier seed grants the own Odd Potion while disconnected and reports its pending Mido chest exactly once after reconnect. A second real Mido chest interaction begun offline also recovers after reconnect, with exactly one award for each chest. The source waits for the first pending acknowledgement before sending the second pickup; unrestricted offline play is not established.
 - [ ] Repeat disconnected-recipient backlog delivery on the final candidate with real source pickups. On the earlier seed, three simulated remote source checks queue while disconnected; the real recipient game reaches received index 3 after reconnect and remains there through 16 further polls, while its actual offline own-item chest reports exactly once.

@@ -1,3 +1,6 @@
+import hashlib
+import json
+import pkgutil
 from types import SimpleNamespace
 from unittest import TestCase
 from unittest.mock import patch
@@ -10,6 +13,18 @@ from .test_options import OOTxMMTestBase
 
 def symbolic(item) -> str:
     return items.ITEM_BY_NAME[item.name].symbolic_id
+
+
+class TestConditionalFixedReference(TestCase):
+    def test_all_toggle_combinations_match_ootmm(self) -> None:
+        samples = json.loads(pkgutil.get_data(__name__, "fixed_samples.json").decode())
+        self.assertEqual(len(samples), 8)
+        for sample in samples:
+            with self.subTest(settings={key: sample["settings"][key] for key in prefill.FIXED_SETTINGS}):
+                settings = {**ootxmm_staticdata.OOTxMMSettingDefaults, **sample["settings"]}
+                names = prefill.fixed_checks(SimpleNamespace(ootmm_settings=settings))
+                self.assertEqual(len(names), sample["count"])
+                self.assertEqual(hashlib.sha256("\n".join(sorted(names)).encode()).hexdigest(), sample["sha256"])
 
 
 class TestPreFillRetry(TestCase):
@@ -99,6 +114,29 @@ class TestPreFill(OOTxMMTestBase):
 
     def test_no_item_left_unplaced(self) -> None:
         self.assertEqual(self.world.get_pre_fill_items(), [])
+
+    def test_equipment_shuffles_default_on(self) -> None:
+        fixed = prefill.fixed_checks(self.world)
+        for key, names in prefill.FIXED_SETTINGS.items():
+            self.assertTrue(self.world.fill_slot_data()["settings"][key])
+            self.assertFalse(names & fixed)
+
+
+class TestVanillaEquipment(OOTxMMTestBase):
+    options = {"shuffleOcarinasOot": False, "shuffleMasterSword": False, "shuffleGerudoCard": False}
+
+    def test_vanilla_equipment_stays_local_and_out_of_the_main_pool(self) -> None:
+        symbols = set()
+        for key, names in prefill.FIXED_SETTINGS.items():
+            self.assertFalse(self.world.fill_slot_data()["settings"][key])
+            for name in names:
+                location = self.multiworld.get_location(name, self.player)
+                vanilla = ootxmm_staticdata.OOTxMMCheckItems[name]
+                symbols.add(vanilla)
+                self.assertTrue(location.locked)
+                self.assertEqual(location.item.player, self.player)
+                self.assertEqual(symbolic(location.item), vanilla)
+        self.assertFalse(symbols & {symbolic(item) for item in self.multiworld.itempool})
 
 
 class TestDungeonAnywhere(TestPreFill):
