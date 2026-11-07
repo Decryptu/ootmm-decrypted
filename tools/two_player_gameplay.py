@@ -10,10 +10,39 @@ import asyncio
 import functools
 import hashlib
 import json
+import logging
 import os
 from pathlib import Path
 import subprocess
 import sys
+import time
+
+from gameplay_connection import wait_for_rom
+
+
+def stage_ready(stage, observations):
+    """Require every explicit condition from the latest successful live queries."""
+    return all(condition["capture"] in observations[condition["slot"]]["captures"]
+               and observations[condition["slot"]]["game"] == condition["game"]
+               and observations[condition["slot"]]["received_index"] == condition["received_index"]
+               and set(condition.get("checks", [])) <= set(observations[condition["slot"]]["checks"])
+               for condition in stage["players"])
+
+
+def completed_captures(path):
+    if not path.exists():
+        return []
+    captures = set()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if '"capture"' not in line:
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue  # The emulator may be flushing the final line concurrently.
+        if event.get("event") == "capture":
+            captures.add(event["name"])
+    return sorted(captures)
 
 
 async def run(args):
@@ -21,12 +50,28 @@ async def run(args):
     import MultiServer
     import websockets
     import worlds._bizhawk as bizhawk
-    from worlds.ootxmm.client import OOTxMMClient
+    from worlds.ootxmm.client import MAGIC, OOTxMMClient
 
     plan = json.loads(args.plan.read_text(encoding="utf-8"))
     players = plan["players"]
     if sorted(p["slot"] for p in players) != [1, 2]:
         raise ValueError("Plan must contain slots 1 and 2 exactly once")
+    stages = plan.get("stages", [])
+    stage_names = set()
+    for stage in stages:
+        name = stage["name"]
+        if not name or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in name) or name in stage_names:
+            raise ValueError("Stages require unique simple names")
+        stage_names.add(name)
+        if sorted(p["slot"] for p in stage["players"]) != [1, 2]:
+            raise ValueError("Each stage requires conditions for both slots")
+        for condition in stage["players"]:
+            if condition["game"] not in ("oot", "mm") or type(condition["received_index"]) is not int or condition["received_index"] < 0:
+                raise ValueError("Stage conditions require a game and nonnegative receipt index")
+            player = next(p for p in players if p["slot"] == condition["slot"])
+            scenario = json.loads(Path(player["scenario"]).read_text(encoding="utf-8"))
+            if not any(s["action"] == "capture" and s["name"] == condition["capture"] for s in scenario["steps"]):
+                raise ValueError("Stage capture is absent from its scenario")
     for p in players:
         if not p["checks"] or type(p["received_index"]) is not int or p["received_index"] < 1:
             raise ValueError("Each slot needs actual source checks and a positive receipt target")
@@ -43,6 +88,14 @@ async def run(args):
         for key in ("state", "save_ram"):
             if player.get(key):
                 Path(player[key]).resolve(strict=True)
+        scenario = json.loads(Path(player["scenario"]).read_text(encoding="utf-8"))
+        if any(s["action"] == "wait_signal" and s["name"] not in stage_names for s in scenario["steps"]):
+            raise ValueError("Scenario waits for an undeclared stage")
+        if stages:
+            with Path(player["rom"]).open("rb") as rom:
+                header = rom.read(0x40)
+            if header[0x18:0x20] != b"APIPC001":
+                raise ValueError("Staged game assertions require the ROM mailbox directory")
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=False)
     (out / "plan.json").write_text(json.dumps(plan, indent=2), encoding="utf-8")
@@ -74,13 +127,15 @@ async def run(args):
                 self.slot_data = data["slot_data"]
             self.handler.on_package(self, cmd, data)
 
-    peers, processes, logs = [], [], []
+    peers, processes, logs, workers = [], [], [], []
     report = {"passed": False, "coverage": "assisted-gameplay", "simulated_remote_checks": [], "players": [],
+              "stages": [],
               "coordinator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "seed_sha256": hashlib.sha256(Path(plan["seed"]).read_bytes()).hexdigest()}
     startup = subprocess.STARTUPINFO()
     startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     startup.wShowWindow = 0
+    started = time.monotonic()
 
     async def connect(peer):
         if peer.bizhawk_ctx.streams is None:
@@ -99,15 +154,74 @@ async def run(args):
 
     async def poll(peer):
         if not await connect(peer):
+            peer.live = False
             return
         try:
             await peer.handler.game_watcher(peer)
         except (bizhawk.NotConnectedError, bizhawk.RequestFailedError):
+            peer.live = False
             return
+        if peer.handler.mailbox is not None and peer.handler.last_query is not None:
+            try:
+                header, = await bizhawk.read(peer.bizhawk_ctx, [(peer.handler.mailbox, 24, "RDRAM")])
+                sample = (peer.handler.mailbox, header[20:24])
+                peer.live = (header[:16] == MAGIC and header[16:20] == b"\x00\x00\x00\x01"
+                             and getattr(peer, "alive_sample", None) is not None
+                             and peer.alive_sample[0] == sample[0] and peer.alive_sample[1] != sample[1])
+                peer.alive_sample = sample
+                peer.sample_at = time.monotonic()
+                ready_file = out / f"slot-{peer.player['slot']}" / "client-ready.json"
+                if peer.live and not ready_file.exists():
+                    ready_file.write_text(
+                        json.dumps({"verified_connector_rom_sha1": peer.player["verified_connector_rom_sha1"]}), encoding="utf-8")
+            except (bizhawk.NotConnectedError, bizhawk.RequestFailedError):
+                peer.live = False
+                return
+        else:
+            peer.live = False
+        peer.poll_count += 1
         value = {"mailbox": peer.handler.mailbox, "received_index": peer.handler.last_query}
         if not peer.history or peer.history[-1] != value:
             peer.history.append(value)
             print(f"Slot {peer.player['slot']}: {value}", flush=True)
+
+    async def watch(peer, process):
+        while process.poll() is None:
+            await poll(peer)
+            await asyncio.sleep(0.125)
+
+    def check_workers():
+        for worker in workers:
+            if worker.done() and not worker.cancelled():
+                worker.result()
+
+    def observations():
+        result = {}
+        for peer in peers:
+            slot = peer.player["slot"]
+            captures = completed_captures(out / f"slot-{slot}" / "events.jsonl")
+            directory = peer.handler.rom_mailboxes
+            game = None
+            if peer.live and time.monotonic() - peer.sample_at <= 1 and len(directory) == 2 and peer.handler.mailbox in directory:
+                game = ("oot", "mm")[directory.index(peer.handler.mailbox)]
+            result[slot] = {"captures": sorted(captures), "game": game,
+                            "mailbox": peer.handler.mailbox, "rom_mailboxes": directory,
+                            "received_index": peer.handler.last_query,
+                            "checks": [context.location_names["OOTxMM"][loc]
+                                       for loc in sorted(context.location_checks[0, slot])]}
+        return result
+
+    def advance_stages():
+        if len(report["stages"]) >= len(stages):
+            return
+        stage = stages[len(report["stages"])]
+        observed = observations()
+        if stage_ready(stage, observed):
+            report["stages"].append({"name": stage["name"], "elapsed_seconds": time.monotonic() - started,
+                                     "observations": observed})
+            for slot in (1, 2):
+                (out / f"slot-{slot}" / f"signal-{stage['name']}").touch()
+            print(f"Stage passed: {stage['name']}", flush=True)
 
     try:
         async with asyncio.timeout(args.timeout):
@@ -140,6 +254,8 @@ async def run(args):
                 logs.append(log)
                 processes.append(subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, startupinfo=startup))
                 peer = Peer(player)
+                peer.poll_count = 0
+                peer.live = False
                 peers.append(peer)
                 while peer.bizhawk_ctx.streams is None:
                     if processes[-1].poll() is not None:
@@ -149,20 +265,12 @@ async def run(args):
                 peer.bizhawk_ctx.connection_status = bizhawk.ConnectionStatus.TENTATIVE
                 peer.bizhawk_ctx._port = port
                 expected_hash = hashlib.sha1(Path(player["rom"]).read_bytes()).hexdigest().upper()
-                for attempt in range(4):
-                    try:
-                        actual_hash = (await bizhawk.get_hash(peer.bizhawk_ctx)).upper()
-                        break
-                    except bizhawk.RequestFailedError:
-                        if attempt == 3:
-                            raise
-                        await asyncio.sleep(0.5)
-                        while not await connect(peer):
-                            await asyncio.sleep(0.25)
-                assert actual_hash == expected_hash, f"Slot {slot} connector ROM hash mismatch: {actual_hash}"
+                actual_hash = await wait_for_rom(peer, bizhawk, expected_hash, connect=lambda: connect(peer))
                 player["verified_connector_rom_sha1"] = actual_hash
-                assert await peer.handler.validate_rom(peer), "Expected patched OoTMM ROM"
+                if stages and len(peer.handler.rom_mailboxes) != 2:
+                    raise ValueError("Staged game assertions require a valid mailbox directory")
                 peer.server_task = asyncio.create_task(CommonClient.server_loop(peer))
+                workers.append(asyncio.create_task(watch(peer, processes[-1])))
                 print(f"Slot {slot}: attached to verified ROM on port {port}", flush=True)
 
             names = context.location_names["OOTxMM"]
@@ -172,16 +280,28 @@ async def run(args):
                 wanted[slot] = {loc for loc in context.locations[slot] if names[loc] in peer.player["checks"]}
                 assert len(wanted[slot]) == len(set(peer.player["checks"])), "Unknown expected source check"
                 assert any(context.locations[slot][loc][1] == 3 - slot for loc in wanted[slot]), "Each source must award the other player"
+            for stage in stages:
+                for condition in stage["players"]:
+                    valid_checks = {names[loc] for loc in context.locations[condition["slot"]]}
+                    if not set(condition.get("checks", [])) <= valid_checks:
+                        raise ValueError("Stage refers to an unknown source check")
             stable = 0
+            last_counts = [0, 0]
             while stable < 16:
+                check_workers()
                 for peer, process in zip(peers, processes):
                     if process.poll() is not None:
                         raise RuntimeError(f"Slot {peer.player['slot']} exited before exchange assertions")
-                await asyncio.gather(*(poll(peer) for peer in peers))
-                ready = all(p.bizhawk_ctx.streams is not None and p.slot is not None
+                advance_stages()
+                ready = all(p.live and p.bizhawk_ctx.streams is not None and p.slot is not None
                             and wanted[p.player["slot"]] <= context.location_checks[0, p.player["slot"]]
                             and p.handler.last_query == p.player["received_index"] for p in peers)
-                stable = stable + 1 if ready else 0
+                counts = [peer.poll_count for peer in peers]
+                if not ready:
+                    stable = 0
+                elif all(current > previous for current, previous in zip(counts, last_counts)):
+                    stable += 1
+                    last_counts = counts
                 await asyncio.sleep(0.125)
             for peer in peers:
                 slot = peer.player["slot"]
@@ -200,12 +320,14 @@ async def run(args):
             assert context._save(), "Disposable server save failed"
             # Continue servicing both games while their inventory assertions and captures finish.
             while any(p.poll() is None for p in processes):
-                await asyncio.gather(*(poll(peer) for peer, process in zip(peers, processes) if process.poll() is None))
+                check_workers()
+                advance_stages()
                 await asyncio.sleep(0.125)
             for peer, process in zip(peers, processes):
                 result = json.loads((out / f"slot-{peer.player['slot']}" / "result.json").read_text(encoding="utf-8"))
                 assert process.returncode == 0 and result["passed"], "Game scenario failed"
                 assert peer.handler.last_query == peer.player["received_index"], "Receipt index changed after stability check"
+            assert len(report["stages"]) == len(stages), "Not all gameplay stages completed"
             report["passed"] = True
     except Exception as exc:
         report["reason"] = f"{type(exc).__name__}: {exc}"
@@ -228,6 +350,9 @@ async def run(args):
                     process.wait()
         for log in logs:
             log.close()
+        for worker in workers:
+            worker.cancel()
+        await asyncio.gather(*workers, return_exceptions=True)
         for peer in peers:
             bizhawk.disconnect(peer.bizhawk_ctx)
             await peer.shutdown()
@@ -248,4 +373,5 @@ if __name__ == "__main__":
         parser.error("Use two valid connector ranges and a timeout between 0 and 3600 seconds")
     sys.path.insert(0, str(args.archipelago.resolve(strict=True)))
     os.environ["SKIP_REQUIREMENTS_UPDATE"] = "1"
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(run(args))
