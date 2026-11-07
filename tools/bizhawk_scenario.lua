@@ -2,6 +2,8 @@
 local dir = assert(userdata.get("out")):gsub("\\", "/")
 local connector = assert(userdata.get("connector")):gsub("\\", "/")
 local json = require("json")
+local wall_time = require("socket").socket.gettime
+local started_at = wall_time()
 local function readfile(path)
     local file = assert(io.open(path, "r"))
     local data = file:read("*a"); file:close(); return data
@@ -11,6 +13,7 @@ local log = assert(io.open(dir .. "/events.jsonl", "w"))
 local frame, index, started, finished = 0, 1, 0, false
 local function record(value)
     value.frame = frame
+    value.elapsed_seconds = wall_time() - started_at
     log:write(json.encode(value) .. "\n"); log:flush()
 end
 local function probe(p)
@@ -399,6 +402,24 @@ local function tick()
         memory.writefloat(player + f.prev_pos + 8, step.z, true, "RDRAM")
         if elapsed == 1 then record({event = "setup_position", game = game, x = step.x, y = step.y, z = step.z, frames = step.frames or 1}) end
         done = elapsed >= (step.frames or 1)
+    elseif step.action == "wait_client" then
+        local ready = io.open(dir .. "/client-ready.json", "r")
+        if ready then
+            ready:close()
+            record({event = "client_ready"})
+            done = true
+        elseif elapsed >= step.timeout_frames then
+            finish(false, "Timed out waiting for the live client query"); return
+        end
+    elseif step.action == "wait_game" then
+        -- During a native game switch gPlay can be null or point at the departing payload.
+        local active = pcall(game_play, step.game, step.scene)
+        done = active
+        if done then
+            record({event = "game_ready", game = step.game, scene = step.scene})
+        elseif elapsed >= step.timeout_frames then
+            finish(false, "Timed out waiting for " .. step.game .. " scene " .. step.scene); return
+        end
     elseif step.action == "expect" then
         local value = probe(step)
         done = value == step.value

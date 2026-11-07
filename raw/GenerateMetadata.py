@@ -11,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, SharedPoolTransforms
+from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, PortedFixed, SharedPoolTransforms
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -250,7 +250,25 @@ def GenerateFillFile():
     const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings } } as any);
     const world = state.worlds[0];
     const items = Object.values(Items) as any[];
+    const fixedKeys = ['shuffleOcarinasOot', 'shuffleMasterSword', 'shuffleGerudoCard'];
+    const conditionalFixed: Record<string, string[]> = {};
+    const fixedSamples = [];
+    for (let mask = 0; mask < (1 << fixedKeys.length); mask++) {
+      const toggles = Object.fromEntries(fixedKeys.map((key, i) => [key, !!(mask & (1 << i))]));
+      const sample: any = await worldState(new Monitor({ onLog: () => {} }),
+        { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings, ...toggles } } as any);
+      fixedSamples.push({ settings: { ...checkSettings, ...toggles },
+        fixed: [...sample.fixedLocations].map((l: string) => l.split('@')[0]).sort() });
+    }
+    const allShuffled = new Set(fixedSamples[fixedSamples.length - 1].fixed);
+    for (let i = 0; i < fixedKeys.length; i++) {
+      conditionalFixed[fixedKeys[i]] = fixedSamples[(fixedSamples.length - 1) ^ (1 << i)].fixed
+        .filter((name: string) => !allShuffled.has(name));
+      if (!conditionalFixed[fixedKeys[i]].length) throw new Error(`No vanilla placements for ${fixedKeys[i]}`);
+    }
+    fs.writeFileSync('_fixed_samples.json', JSON.stringify(fixedSamples));
     fs.writeFileSync('_fill.json', JSON.stringify({
+      conditionalFixed,
       sharedItems: Object.fromEntries([
         ['sharedSkeletonKey', SharedItemGroups.SKELETON_KEY],
         ['sharedOcarinaButtons', SharedItemGroups.OCARINA_BUTTONS],
@@ -297,6 +315,17 @@ def GenerateFillFile():
     with open("_fill.json", 'r') as file:
         fill = json.load(file)
     os.remove("_fill.json")
+    if set(fill["conditionalFixed"]) != set(PortedFixed):
+        raise ValueError("Conditional vanilla placements do not match PortedFixed")
+    with open("_fixed_samples.json") as file:
+        fixed_samples = json.load(file)
+    os.remove("_fixed_samples.json")
+    for sample in fixed_samples:
+        fixed = sample.pop("fixed")
+        sample.update(count=len(fixed), sha256=hashlib.sha256("\n".join(fixed).encode()).hexdigest())
+    with open("../test/fixed_samples.json", "w") as file:
+        json.dump(fixed_samples, file, indent=1)
+        file.write("\n")
     with open(os.path.join("ootmm", "packages", "logic", "src", "solver", "solve.ts"), 'r', encoding='utf-8') as file:
         solve = file.read()
     match = re.search(r"const DUNGEON_ITEMS = \{(.*?)\n\};", solve, re.S)

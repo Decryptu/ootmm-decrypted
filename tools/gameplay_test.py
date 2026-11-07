@@ -48,7 +48,14 @@ def validate(scenario):
         probe(value)
     for step in scenario["steps"]:
         action = step["action"]
-        if action == "boot_file":
+        if action == "wait_client":
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "wait_game":
+            if step.get("game") not in ("oot", "mm") or f"{step['game']}_layout" not in scenario:
+                raise ValueError("Waiting for gameplay requires a sourced game layout")
+            integer(step["scene"], 0, 0xffff)
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "boot_file":
             if "oot_layout" not in scenario:
                 raise ValueError("Automated file boot requires a sourced OoT layout")
             integer(step["scene"], 0, 0xffff)
@@ -113,6 +120,8 @@ def run(args):
     observe = bool(args.expect_check or args.expect_boss or args.grant_item)
     if observe and not (args.ap_python and args.archipelago):
         raise ValueError("Server assertions require --ap-python and --archipelago")
+    if not observe and any(step["action"] == "wait_client" for step in scenario["steps"]):
+        raise ValueError("wait_client requires the standalone server observer")
     if args.min_game_switches < 0 or (args.min_game_switches and not args.expect_check):
         raise ValueError("--min-game-switches requires nonnegative count and pickup assertions")
     if args.inject_remote_count < 0 or (args.expect_received_index is not None and args.expect_received_index < 0):
@@ -191,6 +200,8 @@ def run(args):
                                     str(Path(__file__).with_name("emulator-smoke.py").resolve()),
                                     "--archipelago", str(args.archipelago.resolve(strict=True)),
                                     "--seed", str(paths["seed"]), "--report", str(out / "server-result.json"),
+                                    "--expected-rom-sha1", hashlib.sha1(paths["rom"].read_bytes()).hexdigest(),
+                                    "--ready-file", str(out / "client-ready.json"),
                                     "--timeout", str(args.timeout), "--min-game-switches", str(args.min_game_switches)]
                 if args.connector_port is not None:
                     observer_command.extend(["--connector-port", str(args.connector_port)])

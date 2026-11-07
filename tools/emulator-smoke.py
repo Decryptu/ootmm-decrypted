@@ -13,6 +13,28 @@ from pathlib import Path
 import sys
 import zlib
 
+from mailbox_timing import MailboxTiming
+
+
+async def wait_for_rom(peer, bizhawk, expected_sha1=None, timeout=30):
+    """The Lua socket can be ready before the N64 core exposes its ROM domain."""
+    async with asyncio.timeout(timeout):
+        while True:
+            try:
+                if peer.bizhawk_ctx.streams is None and not await bizhawk.connect(peer.bizhawk_ctx):
+                    await asyncio.sleep(0.25)
+                    continue
+                if await peer.handler.validate_rom(peer):
+                    if expected_sha1 is not None:
+                        actual = (await bizhawk.get_hash(peer.bizhawk_ctx)).upper()
+                        if actual != expected_sha1.upper():
+                            raise ValueError(f"Connector ROM hash mismatch: {actual}")
+                        return actual
+                    return
+            except (bizhawk.RequestFailedError, bizhawk.NotConnectedError):
+                pass
+            await asyncio.sleep(0.25)
+
 
 async def run(args):
     import CommonClient
@@ -59,8 +81,10 @@ async def run(args):
     initial_checks = set(context.location_checks[0, 1])
     setup_grants = []
     last_goal_snapshot = None
-    mailbox_history = []
+    timing = MailboxTiming()
+    mailbox_history = timing.history
     active_mailboxes = []
+    verified_rom_sha1 = None
 
     async def poll_game():
         nonlocal last_goal_snapshot
@@ -68,9 +92,13 @@ async def run(args):
             if not await bizhawk.connect(peer.bizhawk_ctx):
                 return
             print("Reconnected to BizHawk connector", flush=True)
+        poll_started = timing.clock()
         try:
             await peer.handler.game_watcher(peer)
         except bizhawk.NotConnectedError:
+            event = timing.observe(None, peer.handler.last_query, poll_started)
+            if event is not None:
+                print("Mailbox discovery:", event, flush=True)
             return
         if args.expect_boss:
             snapshot = {"key": peer.handler.goal_key, "client_goals": sorted(peer.handler.goals),
@@ -80,17 +108,22 @@ async def run(args):
                 print("Goal observation:", snapshot, flush=True)
                 last_goal_snapshot = snapshot
         mailbox = peer.handler.mailbox
-        if not mailbox_history or mailbox_history[-1]["mailbox"] != mailbox:
-            mailbox_history.append({"mailbox": mailbox, "received_index": peer.handler.last_query})
-            print("Mailbox discovery:", mailbox_history[-1], flush=True)
+        event = timing.observe(mailbox, peer.handler.last_query, poll_started)
+        if event is not None:
+            print("Mailbox discovery:", event, flush=True)
         if mailbox is not None and (not active_mailboxes or active_mailboxes[-1] != mailbox):
             active_mailboxes.append(mailbox)
+        if (args.ready_file and not args.ready_file.exists()
+                and mailbox is not None and peer.handler.last_query is not None):
+            args.ready_file.write_text(json.dumps({"mailbox": mailbox,
+                                                  "received_index": peer.handler.last_query,
+                                                  "verified_connector_rom_sha1": verified_rom_sha1}), encoding="utf-8")
 
     try:
         async with asyncio.timeout(args.timeout):
             while not await bizhawk.connect(peer.bizhawk_ctx):
                 await asyncio.sleep(0.25)
-        assert await peer.handler.validate_rom(peer), "Expected the patched OoTMM ROM"
+        verified_rom_sha1 = await wait_for_rom(peer, bizhawk, args.expected_rom_sha1)
         print("Connected to BizHawk N64 core:", (await bizhawk.get_cores(peer.bizhawk_ctx)).get("N64"), flush=True)
         peer.server_task = asyncio.create_task(CommonClient.server_loop(peer))
         async with asyncio.timeout(60):
@@ -197,6 +230,8 @@ async def run(args):
                                   "item": context.item_names["OOTxMM"][context.locations[1][loc][0]]}
                                  for loc in observed], "received_index": peer.handler.last_query,
                       "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
+                      "mailbox_timing": timing.report(),
+                      "verified_connector_rom_sha1": verified_rom_sha1,
                       "game_switches": max(0, len(active_mailboxes) - 1), "award_count_verified": True, "passed": wanted <= set(observed)}
             if args.report:
                 args.report.write_text(json.dumps(report, indent=2), encoding="utf-8")
@@ -245,6 +280,8 @@ async def run(args):
                 "received_index": peer.handler.last_query,
                 "server_item_count": len(peer.items_received),
                 "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
+                "mailbox_timing": timing.report(),
+                "verified_connector_rom_sha1": verified_rom_sha1,
                 "server_reloaded": bool(args.server_save_input),
             }
             args.report.write_text(json.dumps(report, indent=2), encoding="utf-8")
@@ -278,6 +315,8 @@ if __name__ == "__main__":
     parser.add_argument("--report", type=Path)
     parser.add_argument("--connector-port", type=int)
     parser.add_argument("--timeout", type=float, default=90)
+    parser.add_argument("--expected-rom-sha1", help="Require the connector to expose this exact ROM")
+    parser.add_argument("--ready-file", type=Path, help="Signal the first live mailbox query to the scenario")
     args = parser.parse_args()
     if args.min_game_switches < 0 or (args.min_game_switches and not args.expect_check):
         parser.error("--min-game-switches requires nonnegative count and pickup assertions")
