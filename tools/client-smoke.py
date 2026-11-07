@@ -97,6 +97,7 @@ async def run(args):
             peer.server_task = asyncio.create_task(CommonClient.server_loop(peer))
             await until(lambda: peer.slot == slot, f"slot {slot} login")
             assert peer.slot_data["settings"]["goal"] == "both", "Use goal: both for both slots"
+            peer.mail.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
             await peer.poll()
             return peer
 
@@ -152,6 +153,8 @@ async def run(args):
                 assert second not in peer.handler.goals, "Boss progress leaked between slots"
                 peer.handler.reset()
                 peer.handler.mailbox = MAILBOX
+                peer.mail.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
+                await peer.poll()
                 await peer.pickup(boss=second)
                 await until(lambda: context.client_game_state[0, peer.slot] == ClientStatus.CLIENT_GOAL,
                             "both-boss goal completed after restart and mailbox reset")

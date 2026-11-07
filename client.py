@@ -83,6 +83,8 @@ class OOTxMMClient(BizHawkClient):
         self.last_query: int | None = None
         self.last_alive: int | None = None
         self.alive_changed_at = 0.0
+        self.attach_alive: int | None = None
+        self.attach_started = 0.0
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Connected":
@@ -227,9 +229,32 @@ class OOTxMMClient(BizHawkClient):
                 await self.find_mailbox(ctx)
                 if self.mailbox is None:
                     return
+                # A restored game or an unclean client exit can retain another session's
+                # connected flag and packet sequence. Let the game observe a disconnect
+                # before starting a new handshake; a paused counter is not acknowledgement.
+                if not await self.write_mailbox(ctx, [(self.mailbox + 16, [0, 0, 0, 0], RDRAM)]):
+                    self.reset()
+                    return
+                header, = await bizhawk.read(ctx.bizhawk_ctx, [(self.mailbox, 24, RDRAM)])
+                if header[:16] != MAGIC:
+                    self.reset()
+                    return
+                self.attach_alive = struct.unpack_from(">I", header, 20)[0]
+                self.attach_started = time.monotonic()
+                return
+            if self.attach_alive is not None:
+                header, = await bizhawk.read(ctx.bizhawk_ctx, [(self.mailbox, 24, RDRAM)])
+                if header[:16] != MAGIC:
+                    self.reset()
+                    return
+                if struct.unpack_from(">I", header, 20)[0] == self.attach_alive:
+                    if time.monotonic() - self.attach_started >= MAILBOX_STALL_SECONDS:
+                        self.reset()
+                    return
                 if not await self.write_mailbox(ctx, [(self.mailbox + 16, [0, 0, 0, 1], RDRAM)]):
                     self.reset()
                     return
+                self.attach_alive = None
             await self.exchange(ctx)
         except (bizhawk.RequestFailedError, bizhawk.NotConnectedError):
             pass
@@ -300,6 +325,10 @@ class OOTxMMClient(BizHawkClient):
                 replies = [struct.pack(">IB8sII", 0, OP_HELLO, HELLO_MAGIC, 0, 1)]
                 logger.info("Connected to the game")
                 query = None
+            elif self.seq_net == 0:
+                # The old session's queued queries cannot establish a new connection.
+                # Reliable checks will be resent after the game completes its hello.
+                continue
             elif op == OP_WAL and len(packet) >= 10:
                 token, kind = struct.unpack_from(">IB", packet, 5)
                 if kind == WAL_ITEM and len(packet) >= 20:
