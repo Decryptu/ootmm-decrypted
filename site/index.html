@@ -20,7 +20,7 @@ title: Player hub
 <aside class="dialogue"><p><strong class="yellow">Before starting your game...</strong><br>This world is still in development. A full multiworld play session needs validation. Read the <a href="game.html">current limitations</a> before organizing a game.</p></aside>
 <section class="pause-screen player-screen" id="settings" aria-labelledby="settings-title">
   <h2 class="screen-title" id="settings-title">PLAYER FILE</h2>
-  <div class="player-content"><div class="player-instructions"><img src="assets/menu-notebook.png" width="80" height="80" alt=""><h3>Create a new seed’s YAML</h3><ol><li>Enter a unique player name.</li><li>Choose your final boss.</li><li>Download the file and send it to your host.</li></ol><p>Other settings use the world’s defaults.</p><details><summary>Need the full settings?</summary><p>Install the world package, then select <strong>Generate Template Options</strong> in the Archipelago launcher.</p></details></div>
+  <div class="player-content"><div class="player-instructions"><img src="assets/menu-notebook.png" width="80" height="80" alt=""><h3>Create a new seed’s YAML</h3><ol><li>Enter a unique player name.</li><li>Choose your final boss, or import your settings from ootmm.com.</li><li>Download the file and send it to your host.</li></ol><p>Other settings use the world’s defaults.</p><details><summary>Need the full settings?</summary><p>Install the world package, then select <strong>Generate Template Options</strong> in the Archipelago launcher.</p></details></div>
   <form id="yaml-form">
     <label for="player">Player name</label>
     <input id="player" name="player" required maxlength="16" placeholder="Link" autocomplete="off" aria-describedby="name-help">
@@ -28,8 +28,12 @@ title: Player hub
     <label for="goal">Final boss</label>
     <select id="goal" name="goal" aria-describedby="goal-help"><option value="both">Ganon + Majora</option><option value="ganon">Ganon</option><option value="majora">Majora</option><option value="any">Either boss</option></select>
     <small id="goal-help">Boss completion is saved on the Archipelago server across client restarts.</small>
+    <label for="ootmm-settings">OoTMM settings (optional)</label>
+    <input id="ootmm-settings" name="ootmm-settings" type="file" accept=".json,application/json" aria-describedby="import-help">
+    <small id="import-help">A settings export from ootmm.com. Its supported gameplay settings go into the YAML; the final boss above is replaced by the file's goal. Cosmetics stay on the website.</small>
     <button type="submit"><span class="controller a" aria-hidden="true">A</span> Download YAML</button>
     <p id="yaml-status" role="status" aria-live="polite"></p>
+    <details id="import-report" hidden><summary>Settings not imported</summary><p>This world does not offer these settings yet, so they keep the world’s defaults:</p><ul id="import-skipped"></ul></details>
   </form></div>
   <p class="menu-caption">File created in your browser. Give it to your host.</p>
 </section>

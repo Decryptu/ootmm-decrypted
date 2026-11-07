@@ -10,6 +10,8 @@ The world offers settings it reproduces in both logic and the ROM: logic and cos
 
 Only vanilla dungeons and the US Deku Palace layout are supported. Master Quest and Japanese layouts are not offered. Logic tracks reachable times per area, including MM's three-day clock and conditional waiting, along with regional flag constraints. Renewable resources and item licenses are approximated by owning the item.
 
+Gossip stones do not give useful hints yet: they show OoTMM's joke messages. OoTMM builds its hints from a playthrough of the whole seed, which a single world in a multiworld cannot run. Fixed hints still work, such as where dungeon rewards, the Light Arrows, the Oath to Order and Ganon's boss key are. Use Archipelago's `!hint` command instead.
+
 ## Current status
 
 This is a development build pending a full multiworld play session. Assisted candidate tests verify actual OoT/MM checks, bidirectional item exchange, a cross-game entrance, native key/fairy counters and real Majora/Ganon victory reporting. Server progress survives a restart between the two boss victories and the both-boss slot completes. Earlier-seed tests cover native-save recovery and return travel. A complete unmodified route, wider item/ability coverage, the opposite boss order and other goal settings still need gameplay verification.
