@@ -46,8 +46,8 @@ index 0000000..18a3023
 +
 +/*
 + * IPC through a mailbox in RDRAM, for emulators that can read and write memory from a script but can't
-+ * emulate the Project64 cartridge registers (BizHawk). The client finds the mailbox by its magic, which is
-+ * written at init, so no copy of it exists in RAM before.
++ * emulate the Project64 cartridge registers (BizHawk). The client finds the mailbox by its magic, written last
++ * at init. The magic is also a string constant in the code, so a copy alone proves nothing.
 + *
 + * Two byte rings of length-prefixed packets (u16 length, then the packet), one per direction. Each side
 + * only moves its own index: the game writes gameToClient and outHead and reads clientToGame up to inHead;

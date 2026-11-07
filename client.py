@@ -28,8 +28,20 @@ RING = 0x800
 HEADER = 0x28  # magic (16), connected, alive, outHead, outTail, inHead, inTail (u32 each)
 HELLO_MAGIC = b"OoTMM\x7f\x01\x00"
 SCAN_CHUNK = 0x8000
-SCAN_READS_PER_POLL = 16
+# Each read stalls the emulator while the connector copies it, so a full scan is spread over many polls: a game
+# switch was 30 seconds slower with 16 reads per poll.
+SCAN_READS_PER_POLL = 4
+# How long the client only rechecks the addresses where it found a mailbox before, while a game switch loads,
+# before it scans all of RAM. Each game's mailbox is at the same address every time it loads.
+KNOWN_MAILBOX_WAIT_SECONDS = 20.0
 MAILBOX_STALL_SECONDS = 3.0
+# Full RAM scans without any copy of the magic before the client warns that the ROM has no mailbox. The magic
+# is a string constant in our patch's code, so a patched game has a copy as soon as its code is loaded.
+EMPTY_SCANS_BEFORE_WARNING = 3
+NO_MAILBOX_WARNING = (
+    "This game has no Archipelago mailbox: the ROM was not built from an OOTxMM .ootmm patch, so no item can "
+    "be sent or received. A seed generated directly on ootmm.com, or a patch from another seed, does not work. "
+    "Apply your slot's .ootmm patch in the OoTMM website's Patch mode and open that ROM.")
 
 OP_HELLO, OP_WAL, OP_WAL_QUERY, OP_WAL_ACK = 0x01, 0x02, 0x03, 0x04
 WAL_ITEM = 0x01
@@ -53,6 +65,7 @@ class OOTxMMClient(BizHawkClient):
 
     def __init__(self) -> None:
         super().__init__()
+        self.known_mailboxes: list[int] = []  # where mailboxes were found, kept across resets
         self.reset()
         self.goals: set[str] = set()
         self.goal_key: str | None = None
@@ -62,6 +75,8 @@ class OOTxMMClient(BizHawkClient):
         self.candidates: dict[int, int | None] = {}  # mailbox address -> alive counter last seen
         self.scan_pos: int | None = 0  # next RAM address to scan, None when the scan is done
         self.scan_done_at = 0.0
+        self.empty_scans = 0
+        self.known_since: float | None = None  # when the client started waiting at the known addresses
         self.seq_net = 0
         self.last_query: int | None = None
         self.last_alive: int | None = None
@@ -112,12 +127,20 @@ class OOTxMMClient(BizHawkClient):
         # The connector's replies are capped at 64 KB, so RAM is scanned a few small reads per poll. The mailbox
         # is 16-aligned and the reads are too, so the magic is never split between two, but the alive counter
         # after it can be in the next read, so candidates get their first value from the polls below.
+        if self.scan_pos == 0 and await self.check_known_mailboxes(ctx):
+            return
         if self.scan_pos is not None:
             size = await bizhawk.get_memory_size(ctx.bizhawk_ctx, RDRAM)
             for _ in range(SCAN_READS_PER_POLL):
                 if self.scan_pos >= size:
                     self.scan_pos = None
                     self.scan_done_at = time.monotonic()
+                    if self.candidates:
+                        self.empty_scans = 0
+                    else:
+                        self.empty_scans += 1
+                        if self.empty_scans == EMPTY_SCANS_BEFORE_WARNING:
+                            logger.warning(NO_MAILBOX_WARNING)
                     break
                 data = (await bizhawk.read(ctx.bizhawk_ctx, [(self.scan_pos, SCAN_CHUNK, RDRAM)]))[0]
                 start = data.find(MAGIC)
@@ -140,6 +163,8 @@ class OOTxMMClient(BizHawkClient):
             if previous is not None and alive != previous:
                 self.mailbox = address
                 self.seq_net = 0
+                if address not in self.known_mailboxes:
+                    self.known_mailboxes.append(address)
                 logger.info(f"Found the game's mailbox at 0x{address:X}")
                 return
             self.candidates[address] = alive
@@ -147,6 +172,26 @@ class OOTxMMClient(BizHawkClient):
             # Every copy found is stale: the live mailbox was written after the scan passed it, as during a
             # game switch. Scan again, or the client would watch the stale copies forever.
             self.scan_pos = 0
+
+    async def check_known_mailboxes(self, ctx: "BizHawkClientContext") -> bool:
+        """Before a full scan, wait at the addresses where mailboxes were found: one small read per poll instead
+        of hundreds while the other game loads. Returns False when the full scan should run."""
+        if not self.known_mailboxes:
+            return False
+        now = time.monotonic()
+        if self.known_since is None:
+            self.known_since = now
+        elif now - self.known_since >= KNOWN_MAILBOX_WAIT_SECONDS:
+            return False
+        reads = await bizhawk.read(ctx.bizhawk_ctx, [(address, 16, RDRAM) for address in self.known_mailboxes])
+        found = [address for address, raw in zip(self.known_mailboxes, reads) if raw == MAGIC]
+        if found:
+            # Watch them as a scan's candidates; if none comes alive, this runs again until the wait ends.
+            for address in found:
+                self.candidates.setdefault(address, None)
+            self.scan_pos = None
+            self.scan_done_at = now
+        return True
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         # An exception out of here ends Archipelago's watcher loop, and the client with it.

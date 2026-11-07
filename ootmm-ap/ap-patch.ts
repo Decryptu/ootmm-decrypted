@@ -196,11 +196,21 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
     rom: { name: path.basename(romOut), sha256: sha256(rom) },
     builder_sha256: sha256(await fs.readFile(fileURLToPath(import.meta.url))),
     ootmm_revision: execFileSync('git', ['rev-parse', 'HEAD']).toString().trim(),
-    ootmm_diff_sha256: sha256(execFileSync('git', ['diff', '--binary', 'HEAD'], { maxBuffer: 16 * 1024 * 1024 })),
+    ootmm_diff_sha256: await ootmmDiffSha256(),
     patch_inputs: patchInputs,
   };
   await fs.writeFile(path.join(outDir, `${name}.build.json`), JSON.stringify(receipt, null, 2) + '\n');
   console.log(`Wrote ${patchOut}, ${romOut} and build receipt`);
+}
+
+// git diff leaves out untracked files, and git apply leaves the files our patches add untracked.
+async function ootmmDiffSha256() {
+  const git = (...args: string[]) => execFileSync('git', args, { maxBuffer: 64 * 1024 * 1024 });
+  const root = git('rev-parse', '--show-toplevel').toString().trim();
+  const untracked = git('ls-files', '--others', '--exclude-standard', '--full-name', '--', root).toString().split('\n').filter(Boolean).sort();
+  const contents = await Promise.all(untracked.map((file) => fs.readFile(path.join(root, file))));
+  const diff = Buffer.concat([git('diff', '--binary', 'HEAD'), ...untracked.flatMap((file, i) => [Buffer.from(`${file}\0`), contents[i]])]);
+  return createHash('sha256').update(diff).digest('hex');
 }
 
 async function main(args: string[]) {

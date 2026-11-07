@@ -286,6 +286,63 @@ class TestClientProtocol(unittest.TestCase):
         self.discover(1)
         self.assertEqual(self.client.mailbox, address)
 
+    def test_known_mailbox_is_found_again_without_a_scan(self) -> None:
+        self.client.known_mailboxes = [0x8000, MAILBOX]
+        self.client.reset()
+        size = mock.AsyncMock(return_value=0x10000)
+        self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "get_memory_size", size), \
+                mock.patch.object(client.time, "monotonic", return_value=10):
+            for _ in range(2):  # finds the copy, then reads its alive counter
+                asyncio.run(self.client.find_mailbox(self.ctx))
+            self.game.set_u32(20, 7)
+            asyncio.run(self.client.find_mailbox(self.ctx))
+        self.assertEqual(self.client.mailbox, MAILBOX)
+        size.assert_not_called()
+
+    def test_waits_at_known_addresses_while_a_game_loads_then_scans(self) -> None:
+        self.client.known_mailboxes = [0x8000]
+        self.client.reset()
+        size = mock.AsyncMock(return_value=0x10000)
+        self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
+        with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "get_memory_size", size):
+            for now in (0, 5, 19):
+                with mock.patch.object(client.time, "monotonic", return_value=now):
+                    asyncio.run(self.client.find_mailbox(self.ctx))
+            size.assert_not_called()
+            self.assertEqual(self.client.scan_pos, 0)
+            with mock.patch.object(client.time, "monotonic", return_value=client.KNOWN_MAILBOX_WAIT_SECONDS):
+                asyncio.run(self.client.find_mailbox(self.ctx))
+        size.assert_called()
+        self.assertIn(MAILBOX, self.client.candidates, "the full scan found the mailbox elsewhere")
+
+    def test_found_mailbox_is_remembered(self) -> None:
+        self.client.reset()
+        self.discover(2)
+        self.game.set_u32(20, 3)
+        self.discover(1)
+        self.assertEqual(self.client.mailbox, MAILBOX)
+        self.client.reset()
+        self.assertEqual(self.client.known_mailboxes, [MAILBOX])
+
+    def test_rom_without_mailbox_warns_once(self) -> None:
+        self.client.reset()
+        self.game.ram[MAILBOX:MAILBOX + 16] = bytes(16)
+        polls_per_scan = 0x10000 // (client.SCAN_CHUNK * client.SCAN_READS_PER_POLL) + 2  # scan, then restart
+        with self.assertLogs(client.logger, "WARNING") as logs:
+            self.discover(polls_per_scan * (client.EMPTY_SCANS_BEFORE_WARNING + 2))
+        self.assertEqual(logs.output, [f"WARNING:Client:{client.NO_MAILBOX_WARNING}"])
+
+    def test_patched_rom_does_not_warn(self) -> None:
+        self.client.reset()
+        polls_per_scan = 0x10000 // (client.SCAN_CHUNK * client.SCAN_READS_PER_POLL) + 2
+        with mock.patch.object(client.logger, "warning") as warning, \
+                mock.patch.object(client.time, "monotonic", side_effect=range(0, 1000, 10)):
+            self.discover(polls_per_scan * (client.EMPTY_SCANS_BEFORE_WARNING + 2))
+        warning.assert_not_called()
+
     def test_scan_repeats_when_every_copy_found_is_stale(self) -> None:
         self.client.reset()
         with mock.patch.object(client.time, "monotonic", return_value=10):
