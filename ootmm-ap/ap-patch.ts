@@ -167,6 +167,21 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   built.addSymbolPatch('MULTI_SESSION_ID', sessionId);
   built.addSymbolPatch('MULTI_SESSION_SECRET', sessionSecret);
 
+  /* Reserved N64 header bytes, preserved by OoTMM's browser patch mode. The versioned marker is separate
+   * from the two 24-bit RDRAM offsets so the ROM title and cartridge ID remain intact. Exported addresses
+   * come from the exact compiled payloads, never from another build's memory layout. */
+  const mailboxOffsets = Buffer.alloc(6);
+  for (const [index, game] of (['oot', 'mm'] as const).entries()) {
+    const symbols = built.symbols[game].get('AP_IPC_MAILBOX');
+    if (!symbols || symbols.length !== 1) throw new Error(`Missing unique ${game} mailbox symbol`);
+    const address = symbols[0];
+    if (address < 0x80000000 || address > 0x807fefd0 || address % 16 !== 0)
+      throw new Error(`Invalid ${game} mailbox address: ${address.toString(16)}`);
+    mailboxOffsets.writeUIntBE(address - 0x80000000, index * 3, 3);
+  }
+  built.addPatch('oot/makerom', 0x18, new TextEncoder().encode('APIPC001'));
+  built.addPatch('oot/makerom', 0x34, mailboxOffsets);
+
   await fs.mkdir(outDir, { recursive: true });
   const name = path.basename(playerPath).replace(/\.json$/, '');
   const patchOut = path.join(outDir, `${name}.ootmm`);
