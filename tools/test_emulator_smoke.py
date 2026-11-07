@@ -31,6 +31,20 @@ class TestObserverAttachment(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "ROM hash mismatch"):
             asyncio.run(smoke.wait_for_rom(peer, api, "cd" * 20))
 
+    def test_coordinator_reconnects_with_its_own_port_range(self):
+        peer, api = self.setup_peer([True])
+        peer.bizhawk_ctx.streams = None
+
+        async def connect():
+            peer.bizhawk_ctx.streams = True
+            return True
+
+        connector = AsyncMock(side_effect=connect)
+        actual = asyncio.run(smoke.wait_for_rom(peer, api, "ab" * 20, connect=connector))
+        self.assertEqual(actual, "AB" * 20)
+        connector.assert_awaited_once()
+        api.connect.assert_not_awaited()
+
     def test_startup_has_a_wall_clock_bound(self):
         peer, api = self.setup_peer([False])
         with self.assertRaises(TimeoutError):

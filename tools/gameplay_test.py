@@ -48,8 +48,30 @@ def validate(scenario):
         probe(value)
     for step in scenario["steps"]:
         action = step["action"]
-        if action == "wait_client":
+        if action == "wait_signal":
+            if not step.get("name") or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in step["name"]):
+                raise ValueError("Signal names must be simple filenames")
             integer(step["timeout_frames"], 1, scenario["max_frames"])
+            if step.get("keep_health"):
+                if step.get("game") not in ("oot", "mm") or f"{step['game']}_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
+                    raise ValueError("Health support requires a sourced game layout and assisted gameplay")
+                integer(step["scene"], 0, 0xffff)
+        elif action == "wait_client":
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "native_exit":
+            if scenario["coverage"] != "assisted-gameplay":
+                raise ValueError("Native exit positioning requires assisted gameplay")
+            for key in ("game", "target_game"):
+                if step.get(key) not in ("oot", "mm") or f"{step[key]}_layout" not in scenario:
+                    raise ValueError("Native exits require both sourced layouts")
+            if step["game"] == step["target_game"]:
+                raise ValueError("Native exit must change games")
+            for key in ("scene", "target_scene"):
+                integer(step[key], 0, 0xffff)
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+            for axis in ("x", "y", "z"):
+                if not isinstance(step[axis], (int, float)) or not -100000 <= step[axis] <= 100000:
+                    raise ValueError("Invalid player coordinate")
         elif action == "wait_game":
             if step.get("game") not in ("oot", "mm") or f"{step['game']}_layout" not in scenario:
                 raise ValueError("Waiting for gameplay requires a sourced game layout")
@@ -120,8 +142,8 @@ def run(args):
     observe = bool(args.expect_check or args.expect_boss or args.grant_item)
     if observe and not (args.ap_python and args.archipelago):
         raise ValueError("Server assertions require --ap-python and --archipelago")
-    if not observe and any(step["action"] == "wait_client" for step in scenario["steps"]):
-        raise ValueError("wait_client requires the standalone server observer")
+    if not observe and not args.stop_file and any(step["action"] == "wait_client" for step in scenario["steps"]):
+        raise ValueError("wait_client requires a server observer or external coordinator")
     if args.min_game_switches < 0 or (args.min_game_switches and not args.expect_check):
         raise ValueError("--min-game-switches requires nonnegative count and pickup assertions")
     if args.inject_remote_count < 0 or (args.expect_received_index is not None and args.expect_received_index < 0):

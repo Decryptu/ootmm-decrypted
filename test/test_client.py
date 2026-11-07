@@ -59,6 +59,7 @@ class TestClientProtocol(unittest.TestCase):
         self.game.set_u32(16, 1)
         self.client = client.OOTxMMClient()
         self.client.mailbox = MAILBOX
+        self.client.seq_net = 1
         self.sent: list[dict] = []
 
         async def send_msgs(msgs):
@@ -85,6 +86,50 @@ class TestClientProtocol(unittest.TestCase):
         (reply,) = self.exchange()
         self.assertEqual(reply, struct.pack(">IB8sII", 0, client.OP_HELLO, client.HELLO_MAGIC, 0, 1))
         self.assertEqual(self.game.u32(28), self.game.u32(24), "the client consumed the game's packets")
+
+    def test_old_query_cannot_complete_a_new_session(self) -> None:
+        self.client.seq_net = 0
+        item_id = ootxmm_staticdata.OOTxMMItemIDs["OOT_HOOKSHOT"]
+        self.ctx.items_received = [NetworkItem(item_id, 1, 2, 0)]
+        self.game.send(struct.pack(">IBI", 3, client.OP_WAL_QUERY, 0))
+        self.assertEqual(self.exchange(), [])
+        self.assertIsNone(self.client.last_query)
+
+    def test_new_attachment_waits_for_game_to_observe_disconnect(self) -> None:
+        self.client.reset()
+        self.ctx.server = object()
+
+        async def find(_ctx):
+            self.client.mailbox = MAILBOX
+
+        with mock.patch.object(self.client, "find_mailbox", find), \
+                mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
+            asyncio.run(self.client.game_watcher(self.ctx))
+            self.assertEqual(self.game.u32(16), 0)
+            asyncio.run(self.client.game_watcher(self.ctx))
+            self.assertEqual(self.game.u32(16), 0, "Paused game must not retain its old session")
+            self.assertIsNone(self.client.last_query)
+            self.game.set_u32(20, 1)
+            self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
+            asyncio.run(self.client.game_watcher(self.ctx))
+        self.assertEqual(self.game.u32(16), 1)
+        self.assertIsNone(self.client.attach_alive)
+        self.assertEqual(self.game.receive(), [struct.pack(">IB8sII", 0, client.OP_HELLO, client.HELLO_MAGIC, 0, 1)])
+
+    def test_attachment_rescans_if_mailbox_disappears_or_stalls(self) -> None:
+        self.ctx.server = object()
+        for missing in (False, True):
+            with self.subTest(missing=missing):
+                self.client.mailbox = MAILBOX
+                self.client.attach_alive = self.game.u32(20)
+                self.client.attach_started = 0
+                if missing:
+                    self.game.ram[MAILBOX] = 0
+                with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                        mock.patch.object(client, "time", SimpleNamespace(monotonic=lambda: client.MAILBOX_STALL_SECONDS)):
+                    asyncio.run(self.client.game_watcher(self.ctx))
+                self.assertIsNone(self.client.mailbox)
 
     def test_invalid_ring_offsets_restart_discovery_without_writing(self) -> None:
         for offset in (24, 28, 32, 36):
@@ -235,6 +280,7 @@ class TestClientProtocol(unittest.TestCase):
                 self.assertEqual(saved["operations"], [{"operation": "update", "value": {first: True}}])
                 self.client = client.OOTxMMClient()
                 self.client.mailbox = MAILBOX
+                self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
                 self.exchange()
                 self.client.on_package(self.ctx, "Retrieved", {"keys": {saved["key"]: {first: True}}})
                 self.defeat(second)
@@ -245,6 +291,8 @@ class TestClientProtocol(unittest.TestCase):
         self.defeat("OOT_GANON")
         self.client.reset()
         self.client.mailbox = MAILBOX
+        self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
+        self.exchange()
         self.defeat("MM_MAJORA")
         self.assertTrue(self.ctx.finished_game)
 
