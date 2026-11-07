@@ -16,6 +16,7 @@ if TYPE_CHECKING:
 # that dungeon, whichever key was placed there, and shops, scrubs and cows keep their vanilla items.
 _fill = ootxmm_staticdata.OOTxMMFill
 FIXED = set(_fill["fixed"])
+FIXED_SETTINGS = {key: set(names) for key, names in _fill["conditionalFixed"].items()}
 FAIRY_SETTINGS = {key: set(names) for key, names in _fill["fairyLocations"].items()}
 FAIRY_LOCATIONS = set().union(*FAIRY_SETTINGS.values())
 FAIRY_ITEMS = {ootxmm_staticdata.OOTxMMCheckItems[name] for name in FAIRY_LOCATIONS}
@@ -57,6 +58,10 @@ ATTEMPTS = 10
 
 def fixed_checks(world: OOTxMM) -> set[str]:
     fixed = FIXED - FAIRY_LOCATIONS - TINGLE_LOCATIONS - set().union(*SPECIAL_KEY_LOCATIONS.values())
+    fixed -= set().union(*FIXED_SETTINGS.values())
+    for key, names in FIXED_SETTINGS.items():
+        if not logic._value(world.ootmm_settings, key):
+            fixed |= names
     for key, names in SPECIAL_KEY_LOCATIONS.items():
         if logic._value(world.ootmm_settings, key) == "vanilla":
             fixed |= names
