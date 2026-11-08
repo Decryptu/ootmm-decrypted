@@ -140,6 +140,9 @@ def run(args):
         raise ValueError("Connector range start must be between 1024 and 65530")
     placements = json.loads(paths["placements"].read_text(encoding="utf-8"))
     observe = bool(args.expect_check or args.expect_boss or args.grant_item)
+    if args.interrupt_pickup and (not args.expect_check or args.save_offline or args.disconnect_seconds
+                                  or args.inject_remote_count or args.grant_item or args.expect_boss):
+        raise ValueError("Pickup interruption requires real pickup assertions and no other stimuli")
     if args.save_offline and (not args.expect_check or args.disconnect_seconds or args.inject_remote_count
                              or args.grant_item or args.expect_boss):
         raise ValueError("Offline save requires pickup assertions and no other stimuli")
@@ -205,6 +208,7 @@ def run(args):
                                "received_index": args.expect_received_index,
                                "disconnect_seconds": args.disconnect_seconds,
                                "save_offline": args.save_offline,
+                               "interrupt_pickup": args.interrupt_pickup,
                                "simulated_remote_count": args.inject_remote_count, "setup_grants": args.grant_item}}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     command = [str(paths["emulator"]), "--gdi", f"--config={out / 'config.ini'}",
@@ -235,6 +239,8 @@ def run(args):
                     observer_command.extend(["--disconnect-seconds", str(args.disconnect_seconds)])
                 if args.save_offline:
                     observer_command.append("--save-offline")
+                if args.interrupt_pickup:
+                    observer_command.extend(["--interrupt-pickup", args.interrupt_pickup])
                 if args.inject_remote_count:
                     observer_command.extend(["--inject-remote-count", str(args.inject_remote_count)])
                 if args.expect_received_index is not None:
@@ -315,6 +321,7 @@ if __name__ == "__main__":
     parser.add_argument("--connector-port", type=int, help="Set the disposable connector's six-port loopback range start")
     parser.add_argument("--stop-file", type=Path, help="Stop and clean up this runner when the coordinator creates this file")
     parser.add_argument("--disconnect-seconds", type=float, default=0)
+    parser.add_argument("--interrupt-pickup", choices=("before-send", "after-accept"))
     parser.add_argument("--save-offline", action="store_true", help="Save a real pending pickup while disconnected; pair with a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[])
     parser.add_argument("--inject-remote-count", type=int, default=0)

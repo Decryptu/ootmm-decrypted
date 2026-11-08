@@ -11,6 +11,45 @@ spec.loader.exec_module(smoke)
 
 
 class TestObserverAttachment(unittest.TestCase):
+    def test_pickup_abort_boundaries_retain_and_retry_only_once(self):
+        for boundary in ("before-send", "after-accept"):
+            with self.subTest(boundary=boundary):
+                accepted = set()
+                socket = SimpleNamespace(transport=SimpleNamespace(abort=Mock()), wait_closed=AsyncMock())
+                peer = SimpleNamespace(locations_checked={12}, server=SimpleNamespace(socket=socket),
+                                       disconnect=AsyncMock())
+
+                async def send(messages):
+                    if not socket.transport.abort.called:
+                        accepted.add(12)
+
+                peer.send_msgs = AsyncMock(side_effect=send)
+                fault = smoke.PickupInterruption(peer, {12}, lambda: accepted, boundary)
+                message = [{"cmd": "LocationChecks", "locations": [12]}]
+                asyncio.run(fault.send_msgs(message))
+                self.assertEqual(fault.evidence["server_accepted_at_abort"], boundary == "after-accept")
+                self.assertEqual(peer.locations_checked, {12})
+                asyncio.run(fault.send_msgs(message))
+                socket.transport.abort.assert_called_once()
+                peer.disconnect.assert_awaited_once()
+                self.assertEqual(peer.send_msgs.await_count, 2)
+
+    def test_pickup_abort_requires_retention_and_new_check(self):
+        for retained, accepted in ((set(), set()), ({12}, {12})):
+            peer = SimpleNamespace(locations_checked=retained, send_msgs=AsyncMock())
+            fault = smoke.PickupInterruption(peer, {12}, lambda: accepted, "before-send")
+            with self.assertRaises(AssertionError):
+                asyncio.run(fault.send_msgs([{"cmd": "LocationChecks", "locations": [12]}]))
+            peer.send_msgs.assert_not_awaited()
+
+    def test_pickup_abort_ignores_login_and_other_checks(self):
+        peer = SimpleNamespace(send_msgs=AsyncMock())
+        fault = smoke.PickupInterruption(peer, {12}, lambda: set(), "before-send")
+        for messages in ([{"cmd": "Connect"}], [{"cmd": "LocationChecks", "locations": [13]}]):
+            asyncio.run(fault.send_msgs(messages))
+        self.assertIsNone(fault.evidence)
+        self.assertEqual(peer.send_msgs.await_count, 2)
+
     def test_disconnect_checks_original_mailbox_after_watcher_clears_cache(self):
         peer = SimpleNamespace(handler=SimpleNamespace(mailbox=0x1000, last_query=2),
                                disconnect=AsyncMock(), bizhawk_ctx=object())

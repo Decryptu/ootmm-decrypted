@@ -42,6 +42,43 @@ async def disconnect_game(peer, poll_game, bizhawk):
     return received_index
 
 
+class PickupInterruption:
+    """Abort the real socket at one selected check's send boundary, once."""
+
+    def __init__(self, peer, locations, accepted, boundary):
+        self.peer, self.locations = peer, locations
+        self.accepted, self.boundary = accepted, boundary
+        self.evidence = None
+        self.send = peer.send_msgs
+
+    async def send_msgs(self, messages):
+        checks = {loc for message in messages if message.get("cmd") == "LocationChecks"
+                  for loc in message["locations"]} & self.locations
+        if self.evidence is not None or not checks:
+            return await self.send(messages)
+        assert checks <= self.peer.locations_checked, "Pickup must be retained before its send"
+        assert not checks & self.accepted(), "Interruption requires a new pickup"
+        self.evidence = {"boundary": self.boundary, "locations": sorted(checks),
+                         "retained_before_send": True}
+        if self.boundary == "after-accept":
+            await self.send(messages)
+            async with asyncio.timeout(10):
+                while not checks <= self.accepted():
+                    await asyncio.sleep(0.01)
+        socket = self.peer.server.socket
+        # Suppress automatic retries until the observer has notified the game.
+        self.peer.disconnected_intentionally = True
+        socket.transport.abort()
+        async with asyncio.timeout(10):
+            await socket.wait_closed()
+            await self.peer.disconnect()
+        self.evidence["server_accepted_at_abort"] = checks <= self.accepted()
+        assert self.evidence["server_accepted_at_abort"] == (self.boundary == "after-accept")
+        if self.boundary == "before-send":
+            # Exercise CommonClient's silent return when its socket has disappeared.
+            await self.send(messages)
+
+
 async def run(args):
     import CommonClient
     import MultiServer
@@ -91,9 +128,11 @@ async def run(args):
     mailbox_history = timing.history
     active_mailboxes = []
     verified_rom_sha1 = None
+    pickup_interruption = None
+    interruption_reconnected = False
 
     async def poll_game():
-        nonlocal last_goal_snapshot
+        nonlocal last_goal_snapshot, interruption_reconnected
         if peer.bizhawk_ctx.streams is None:
             if not await bizhawk.connect(peer.bizhawk_ctx):
                 return
@@ -106,6 +145,17 @@ async def run(args):
             if event is not None:
                 print("Mailbox discovery:", event, flush=True)
             return
+        if pickup_interruption and pickup_interruption.evidence and not interruption_reconnected:
+            # The interrupted watcher may acknowledge its retained local check. Notify
+            # the game of the closed socket before letting normal login resend it.
+            mailbox = peer.handler.mailbox
+            assert mailbox is not None
+            await peer.handler.game_watcher(peer)
+            flag = await bizhawk.read(peer.bizhawk_ctx, [(mailbox + 16, 4, "RDRAM")])
+            assert flag[0] == bytes(4), "Game must observe the interrupted socket"
+            pickup_interruption.evidence["connected_flag_cleared"] = True
+            interruption_reconnected = True
+            peer.server_task = asyncio.create_task(CommonClient.server_loop(peer))
         if args.expect_boss:
             snapshot = {"key": peer.handler.goal_key, "client_goals": sorted(peer.handler.goals),
                         "stored_goals": context.stored_data.get(peer.handler.goal_key, {}),
@@ -161,6 +211,11 @@ async def run(args):
                 return checks
 
             interruption = None
+            if args.interrupt_pickup:
+                assert not wanted & initial_checks, "Interrupted checks must be new"
+                pickup_interruption = PickupInterruption(
+                    peer, wanted, lambda: set(context.location_checks[0, 1]), args.interrupt_pickup)
+                peer.send_msgs = pickup_interruption.send_msgs
             if args.save_offline:
                 assert not wanted & initial_checks, "Pending checks must be absent from the restored server"
                 if args.expect_received_index is not None:
@@ -223,8 +278,18 @@ async def run(args):
                     await asyncio.sleep(0.125)
                 for _ in range(16):
                     await poll_game()
+                    if args.interrupt_pickup:
+                        assert set(context.location_checks[0, 1]) == initial_checks | wanted, "Unexpected check during recovery"
+                        if args.expect_received_index is not None:
+                            assert peer.handler.last_query == args.expect_received_index, "Receipt index changed after recovery"
                     await asyncio.sleep(0.125)
             assert goals_verified(), "Boss progress was not confirmed by server storage"
+            if args.interrupt_pickup:
+                assert pickup_interruption.evidence and interruption_reconnected, "Pickup interruption did not run"
+                assert peer.slot == 1 and peer.handler.last_query is not None, "Client did not recover"
+                interruption = pickup_interruption.evidence
+                interruption["reconnected"] = True
+                interruption["stable_polls"] = 16
             if args.expect_boss:
                 expected_finished = peer.handler.goal_reached(peer)
                 assert (context.client_game_state[0, 1] == ClientStatus.CLIENT_GOAL) == expected_finished, "Server completion disagrees with configured goal"
@@ -296,6 +361,7 @@ async def run(args):
             report = {
                 "coverage": "assisted-gameplay" if args.expect_check or args.expect_boss or args.grant_item else "protocol",
                 "passed": False,
+                "interruption": pickup_interruption.evidence if pickup_interruption else None,
                 "setup_grants": setup_grants,
                 "error": {"type": type(error).__name__, "message": str(error)},
                 "seed": str(args.seed), "slot": 1,
@@ -334,6 +400,7 @@ if __name__ == "__main__":
     parser.add_argument("--expect-boss", action="append", default=[], choices=("OOT_GANON", "MM_MAJORA"), help="Observe real boss packets and confirmed server storage")
     parser.add_argument("--min-game-switches", type=int, default=0)
     parser.add_argument("--disconnect-seconds", type=float, default=0)
+    parser.add_argument("--interrupt-pickup", choices=("before-send", "after-accept"))
     parser.add_argument("--save-offline", action="store_true", help="Disconnect after attachment until the scenario exits; verify pending checks in a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[], help="Explicit diagnostic item grant through the temporary server; no source pickup coverage")
     parser.add_argument("--inject-remote-count", type=int, default=0)
@@ -346,6 +413,9 @@ if __name__ == "__main__":
     parser.add_argument("--expected-rom-sha1", help="Require the connector to expose this exact ROM")
     parser.add_argument("--ready-file", type=Path, help="Signal the first live mailbox query to the scenario")
     args = parser.parse_args()
+    if args.interrupt_pickup and (not args.expect_check or args.save_offline or args.disconnect_seconds
+                                  or args.inject_remote_count or args.grant_item or args.expect_boss):
+        parser.error("Pickup interruption requires real pickup assertions and no other stimuli")
     if args.save_offline and (not args.expect_check or not args.ready_file or not args.report
                              or args.disconnect_seconds or args.inject_remote_count or args.grant_item or args.expect_boss):
         parser.error("Offline save requires pickup assertions, ready/report files and no other stimuli")
