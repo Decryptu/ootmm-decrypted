@@ -11,6 +11,18 @@ spec.loader.exec_module(smoke)
 
 
 class TestObserverAttachment(unittest.TestCase):
+    def test_stability_requires_successful_polls_and_rejects_changed_receipts(self):
+        poll = AsyncMock(side_effect=[False, None, True, False, *([True] * 15)])
+        verify = Mock()
+        with patch.object(smoke.asyncio, "sleep", new_callable=AsyncMock):
+            asyncio.run(smoke.verify_stable_polls(poll, verify))
+        self.assertEqual(poll.await_count, 19)
+        self.assertEqual(verify.call_count, 16)
+        with patch.object(smoke.asyncio, "sleep", new_callable=AsyncMock):
+            with self.assertRaisesRegex(AssertionError, "changed"):
+                asyncio.run(smoke.verify_stable_polls(
+                    AsyncMock(return_value=True), Mock(side_effect=AssertionError("changed"))))
+
     def test_pickup_abort_boundaries_retain_and_retry_only_once(self):
         for boundary in ("before-send", "after-accept"):
             with self.subTest(boundary=boundary):
