@@ -51,12 +51,12 @@ jobs:
           python world/tools/build_apworld.py --dir archipelago/worlds/ootxmm
           python world/tools/prune_worlds.py archipelago
           python world/tools/build_apworld.py ootxmm.apworld
-      - name: Test release packaging
+      - name: Test release and gameplay tools
         if: matrix.shard == 1
         env:
           PYTHONPATH: ${{ github.workspace }}/archipelago
           SKIP_REQUIREMENTS_UPDATE: "1"
-        run: python -m unittest discover -s world/tools -p test_package_playtest.py
+        run: python -m unittest discover -s world/tools -p 'test_*.py'
       - name: Test
         working-directory: archipelago
         env:

@@ -2,6 +2,8 @@
 
 This world is in development. A full multiworld play session has not been validated. Logic tracks per-area clock ranges and conditional waiting; clock-sensitive routes still need gameplay verification.
 
+The [interactive setup guide](https://decryptu.github.io/ootmm-decrypted/setup.html) shows a checklist for joining, organizing a group or playing solo, with progress saved in your browser. The full instructions are below.
+
 ## How a game is made
 
 Each step depends on the one before it. Doing them out of order is the most common source of problems.
@@ -25,7 +27,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 - Your own Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U ROMs.
 - Your slot's `.ootmm` patch from the host, plus the server address, port, slot name and password if set.
 
-Download the matching world or prepared `players.zip` from the [latest prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.3), also linked from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing; everyone should use the same build.
+Download the matching world or prepared `players.zip` from the [latest prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.4), also linked from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing; everyone should use the same build.
 
 For the prepared playtest, the host assigns **Tester1** or **Tester2** and provides the server connection details. Use that slot's patch; the goal is both bosses. Skip Choose settings below. The public ZIP contains no running server: the host must start the matching private server file. A new seed needs newly built matching patches.
 
@@ -112,7 +114,19 @@ The input can also be one player JSON. The command stops on the first failure; c
 
 ### Start the server
 
-Host the seed on your computer with the launcher:
+The server passes items between players and saves the group's progress. Both hosting methods use the same locally generated seed and patches: archipelago.gg cannot generate this custom world for you.
+
+#### On archipelago.gg
+
+1. Open [Host Game](https://archipelago.gg/uploads) and upload the generated seed ZIP, not ROMs or the repository.
+2. On the seed page, select **Create Room**. Give players the room link, server address and port, slot name and any password.
+3. Keep the room link to resume later. Open it to wake an idle room and check its current port. Distribute each player's locally built `.ootmm` patch separately.
+
+See [Archipelago's hosting instructions](https://archipelago.gg/tutorial/Archipelago/setup_en#hosting-on-the-website) for room management.
+
+#### On your computer
+
+Host the seed with the launcher:
 
 1. In the Archipelago launcher, select **Host**, then the seed's output ZIP or the `.archipelago` file extracted from it.
 2. Keep the server window open while anyone plays. It shows `Hosting game at <address>:38281`.

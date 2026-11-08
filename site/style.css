@@ -31,3 +31,34 @@ body{background-size:320px 128px}
 .inventory{background:transparent}
 body{background-size:320px 64px}
 .pause-screen:before,.pause-screen:after{background-size:160px 32px}
+
+/* Guided setup uses the same palette with quieter, readable step cards. */
+[hidden]{display:none!important}
+.setup-eyebrow{color:#c4d39c;letter-spacing:2px;font-size:15px;margin-bottom:10px}
+#setup-wizard>h1{margin-bottom:16px}
+.setup-notice{background:#35402a;border-left:4px solid var(--yellow);padding:14px 18px}
+#setup-wizard fieldset{border:0;padding:0;margin:28px 0}
+#setup-wizard legend{font-size:24px;color:var(--yellow);margin-bottom:12px}
+.setup-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.setup-choices label{display:flex;align-items:flex-start;gap:12px;padding:16px;background:#111f17;border:2px solid #73845d;cursor:pointer;line-height:1.4}
+.setup-choices label:has(input:checked){border-color:var(--yellow);background:#34452a}
+.setup-choices input,.setup-step-title input{width:22px;height:22px;min-height:22px;flex:0 0 22px;margin:4px 0 0;padding:0;accent-color:#e5d55a}
+.setup-choices small{font-size:16px;margin-top:6px}
+.setup-checklist-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-top:32px}
+.setup-checklist-heading h2{border:0;margin:0;padding:0}
+.setup-checklist-heading button{width:auto;font-size:16px;margin:0;padding:7px 12px;border-width:2px}
+#setup-progress{width:100%;height:14px;accent-color:#dccc60;display:block}
+#setup-count{margin:8px 0 0;color:var(--yellow)}
+#setup-storage{font-size:15px;color:#d4ddc7;margin:6px 0 20px}
+.guide .setup-steps{padding:0;list-style:none}
+.setup-steps>li{background:#122018;border:2px solid #647750;margin-bottom:14px;padding:18px}
+.setup-step-title{display:flex;gap:14px;cursor:pointer;line-height:1.3}
+.setup-step-title small{margin:0 0 4px;color:#c2cfaa;font-size:13px;letter-spacing:1px}
+.setup-step-title strong{font-size:23px;color:#fff4ac}
+.setup-step-body{padding-left:36px;margin-top:12px}
+.setup-step-body p{margin:0}
+.setup-steps>.is-complete{border-color:#9bb77c}
+.is-complete .setup-step-title strong{color:#b8d3a3}
+.setup-reference{border-top:2px solid #73845d;margin-top:30px;padding-top:20px}
+.setup-reference>summary{cursor:pointer;color:#b5ebff;padding:8px 0;font-size:22px}
+@media(max-width:540px){.setup-choices{grid-template-columns:1fr}.setup-checklist-heading{align-items:flex-start}.setup-checklist-heading h2{font-size:24px}.setup-step-body{padding-left:0}.setup-steps>li{padding:14px}.setup-step-title strong{font-size:22px}}

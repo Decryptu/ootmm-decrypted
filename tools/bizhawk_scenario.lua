@@ -2,6 +2,8 @@
 local dir = assert(userdata.get("out")):gsub("\\", "/")
 local connector = assert(userdata.get("connector")):gsub("\\", "/")
 local json = require("json")
+local wall_time = require("socket").socket.gettime
+local started_at = wall_time()
 local function readfile(path)
     local file = assert(io.open(path, "r"))
     local data = file:read("*a"); file:close(); return data
@@ -11,6 +13,7 @@ local log = assert(io.open(dir .. "/events.jsonl", "w"))
 local frame, index, started, finished = 0, 1, 0, false
 local function record(value)
     value.frame = frame
+    value.elapsed_seconds = wall_time() - started_at
     log:write(json.encode(value) .. "\n"); log:flush()
 end
 local function probe(p)
@@ -41,6 +44,22 @@ local function game_play(game, expected_scene)
     assert(memory.read_u32_be(play + 4, "RDRAM") == layout.main, "Active game does not match " .. game .. " payload")
     assert(memory.read_u16_be(play + 0xa4, "RDRAM") == expected_scene, "Unexpected " .. game .. " scene")
     return play, f
+end
+local function position_player(game, play, f, step)
+    local player = memory.read_u32_be(play + f.lists + 2 * f.stride + 4, "RDRAM") - 0x80000000
+    assert(player >= 0 and player + f.actor_size <= memory.getmemorydomainsize("RDRAM"), "Invalid player pointer")
+    assert(memory.read_u16_be(player, "RDRAM") == 0 and memory.read_u8(player + 2, "RDRAM") == 2, "Player actor guard failed")
+    memory.writefloat(player + 0x24, step.x, true, "RDRAM")
+    memory.writefloat(player + 0x28, step.y, true, "RDRAM")
+    memory.writefloat(player + 0x2c, step.z, true, "RDRAM")
+    if step.yaw then
+        memory.write_u16_be(player + 0x32, step.yaw, "RDRAM")
+        memory.write_u16_be(player + (game == "oot" and 0xb6 or 0xbe), step.yaw, "RDRAM")
+    end
+    -- Keep collision sweeps local to the destination instead of crossing intervening walls.
+    memory.writefloat(player + f.prev_pos, step.x, true, "RDRAM")
+    memory.writefloat(player + f.prev_pos + 4, step.y, true, "RDRAM")
+    memory.writefloat(player + f.prev_pos + 8, step.z, true, "RDRAM")
 end
 local function capture(name)
     client.screenshot(dir .. "/" .. name .. ".png")
@@ -196,6 +215,10 @@ local function tick()
         joypad.set(step.buttons or {})
         joypad.setanalog(step.analog or {})
         done = elapsed >= step.frames
+    elseif step.action == "speed" then
+        client.speedmode(step.percent)
+        record({event = "speed", percent = step.percent})
+        done = true
     elseif step.action == "wait" then
         done = elapsed >= step.frames
     elseif step.action == "capture" then
@@ -383,22 +406,71 @@ local function tick()
     elseif step.action == "oot_position" or step.action == "mm_position" then
         local game = step.action:sub(1, -10)
         local play, f = game_play(game, step.scene)
-        local player = memory.read_u32_be(play + f.lists + 2 * f.stride + 4, "RDRAM") - 0x80000000
-        assert(player >= 0 and player + f.actor_size <= memory.getmemorydomainsize("RDRAM"), "Invalid player pointer")
-        assert(memory.read_u16_be(player, "RDRAM") == 0 and memory.read_u8(player + 2, "RDRAM") == 2, "Player actor guard failed")
-        memory.writefloat(player + 0x24, step.x, true, "RDRAM")
-        memory.writefloat(player + 0x28, step.y, true, "RDRAM")
-        memory.writefloat(player + 0x2c, step.z, true, "RDRAM")
-        if step.yaw then
-            memory.write_u16_be(player + 0x32, step.yaw, "RDRAM")
-            memory.write_u16_be(player + (game == "oot" and 0xb6 or 0xbe), step.yaw, "RDRAM")
-        end
-        -- Keep collision sweeps local to the destination instead of crossing intervening walls.
-        memory.writefloat(player + f.prev_pos, step.x, true, "RDRAM")
-        memory.writefloat(player + f.prev_pos + 4, step.y, true, "RDRAM")
-        memory.writefloat(player + f.prev_pos + 8, step.z, true, "RDRAM")
+        position_player(game, play, f, step)
         if elapsed == 1 then record({event = "setup_position", game = game, x = step.x, y = step.y, z = step.z, frames = step.frames or 1}) end
         done = elapsed >= (step.frames or 1)
+    elseif step.action == "native_exit" then
+        if elapsed == 1 then game_play(step.game, step.scene) end
+        done = pcall(game_play, step.target_game, step.target_scene)
+        if done then
+            record({event = "game_ready", game = step.target_game, scene = step.target_scene})
+        else
+            local active, play, f = pcall(game_play, step.game, step.scene)
+            if active and memory.read_u8(play + f.trigger, "RDRAM") == 0 then
+                local directions = {{0,-80},{80,0},{0,80},{-80,0},{80,80},{80,-80},{-80,80},{-80,-80}}
+                local phase = (elapsed - 1) % 120
+                local attempt = math.floor((elapsed - 1) / 120) % #directions + 1
+                if phase < 30 then
+                    position_player(step.game, play, f, step)
+                    if phase == 0 then record({event = "setup_exit_approach", game = step.game,
+                        x = step.x, y = step.y, z = step.z, direction = directions[attempt]}) end
+                else
+                    joypad.setanalog({["P1 X Axis"] = directions[attempt][1], ["P1 Y Axis"] = directions[attempt][2]})
+                    if phase % 38 < 8 then joypad.set({["P1 A"] = true}) end
+                end
+            end
+            if elapsed >= step.timeout_frames then finish(false, "Native exit timed out"); return end
+        end
+    elseif step.action == "wait_signal" then
+        if step.dismiss_messages then
+            if elapsed == 1 then record({event = "controller_message_dismissal"}) end
+            if (elapsed - 1) % 60 < 8 then joypad.set({["P1 B"] = true}) end
+        end
+        if step.keep_health then
+            game_play(step.game, step.scene)
+            local save = step.game == "oot" and 0x11a5d0 or 0x1ef670
+            local offset = step.game == "oot" and 0x2e or 0x34
+            local capacity = memory.read_u16_be(save + offset, "RDRAM")
+            assert(capacity >= 0x30 and capacity <= 0x140, "Invalid health capacity")
+            memory.write_u16_be(save + offset + 2, capacity, "RDRAM")
+            if elapsed == 1 then record({event = "setup_health_support", game = step.game, scene = step.scene}) end
+        end
+        local signal = io.open(dir .. "/signal-" .. step.name, "r")
+        if signal then
+            signal:close()
+            record({event = "signal", name = step.name})
+            done = true
+        elseif elapsed >= step.timeout_frames then
+            finish(false, "Timed out waiting for signal " .. step.name); return
+        end
+    elseif step.action == "wait_client" then
+        local ready = io.open(dir .. "/client-ready.json", "r")
+        if ready then
+            ready:close()
+            record({event = "client_ready"})
+            done = true
+        elseif elapsed >= step.timeout_frames then
+            finish(false, "Timed out waiting for the live client query"); return
+        end
+    elseif step.action == "wait_game" then
+        -- During a native game switch gPlay can be null or point at the departing payload.
+        local active = pcall(game_play, step.game, step.scene)
+        done = active
+        if done then
+            record({event = "game_ready", game = step.game, scene = step.scene})
+        elseif elapsed >= step.timeout_frames then
+            finish(false, "Timed out waiting for " .. step.game .. " scene " .. step.scene); return
+        end
     elseif step.action == "expect" then
         local value = probe(step)
         done = value == step.value
