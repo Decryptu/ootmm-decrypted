@@ -20,7 +20,11 @@
         <a href="{{ '/game.html' | relative_url }}" {% if page.title == 'About the game' %}aria-current="page"{% endif %}><span class="controller c" aria-hidden="true">C</span> Game details</a>
       </nav>
     </header>
-    <main id="main" {% unless page.title == 'Player hub' %}class="guide pause-screen"{% endunless %}>{{ content }}</main>
+    <main id="main" {% unless page.title == 'Player hub' %}class="guide pause-screen"{% endunless %}>{% if page.title == 'Setup guide' %}
+      {% include setup-wizard.html %}
+      <details id="setup-reference" class="setup-reference"><summary>Full written guide &amp; troubleshooting</summary>{{ content }}</details>
+      <script src="{{ '/setup.js' | relative_url }}" defer></script>
+      {% else %}{{ content }}{% endif %}</main>
     <footer><a href="https://github.com/Decryptu/ootmm-decrypted">GitHub ↗</a><span>Development build</span><a href="{{ '/' | relative_url }}">Return to player hub</a></footer>
   </div>
 </body>

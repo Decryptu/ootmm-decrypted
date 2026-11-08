@@ -1,0 +1,35 @@
+<section id="setup-wizard" hidden aria-labelledby="setup-title">
+  <p class="setup-eyebrow">YOUR ADVENTURE STARTS HERE</p>
+  <h1 id="setup-title">Let’s get you playing</h1>
+  <p>OoTMM joins Ocarina of Time and Majora’s Mask into one game. Archipelago connects everyone’s games: an item you find might help a friend, and theirs might help you.</p>
+  <p class="setup-notice">Development build: a full multiworld play session still needs validation. <a href="game.html">Read the current limitations.</a></p>
+  <fieldset><legend>1. What are you doing?</legend>
+    <div class="setup-choices">
+      <label><input type="radio" name="role" value="join" checked><span><strong>Joining a game</strong><small>Someone else is organizing. I just want to play.</small></span></label>
+      <label><input type="radio" name="role" value="host"><span><strong>Organizing a group</strong><small>I’ll prepare the game for everyone.</small></span></label>
+      <label><input type="radio" name="role" value="solo"><span><strong>Playing solo</strong><small>I’ll prepare and play my own game.</small></span></label>
+    </div>
+  </fieldset>
+  <fieldset id="setup-seed"><legend>2. Which game are you joining?</legend>
+    <div class="setup-choices">
+      <label><input type="radio" name="seed" value="new" checked><span><strong>A new game</strong><small>I’ll choose settings and send them to the organizer.</small></span></label>
+      <label><input type="radio" name="seed" value="prepared"><span><strong>The prepared playtest</strong><small>My organizer assigned me Tester1 or Tester2.</small></span></label>
+    </div>
+  </fieldset>
+  <fieldset id="setup-hosting" hidden><legend>2. Where should the server run?</legend>
+    <p>The server passes items between players and saves the group’s progress. Both choices still need a game and patches prepared on your computer first.</p>
+    <div class="setup-choices">
+      <label><input type="radio" name="hosting" value="web" checked><span><strong>On archipelago.gg</strong><small>Easier for a group: no router setup. Upload your generated game.</small></span></label>
+      <label><input type="radio" name="hosting" value="local"><span><strong>On my computer</strong><small>Keep the server open. Remote friends need router port forwarding.</small></span></label>
+    </div>
+  </fieldset>
+  <div class="setup-checklist-heading"><h2>Your checklist</h2><button type="button" id="setup-reset">Reset checkmarks</button></div>
+  <p id="setup-path"></p>
+  <progress id="setup-progress" value="0" max="1" aria-label="Setup progress"></progress>
+  <p id="setup-count" role="status" aria-live="polite"></p>
+  <p id="setup-storage">Checkmarks are saved only in this browser. You can leave and come back.</p>
+  <ol id="setup-steps" class="setup-steps"></ol>
+  <p id="setup-done" hidden class="setup-notice">You’re ready! Keep the client and Lua script running while you play. To return later, use the same ROM and in-game save, then reconnect to the same game.</p>
+  <p>Stuck? Open the <a href="#troubleshooting" data-reference>troubleshooting table</a> or the full guide below.</p>
+</section>
+<noscript><p>Follow the full written guide below. The interactive checklist needs JavaScript.</p></noscript>
