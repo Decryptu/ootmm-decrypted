@@ -84,6 +84,8 @@ def validate(scenario):
                 raise ValueError("Automated file boot requires a sourced OoT layout")
             integer(step["scene"], 0, 0xffff)
             integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "speed":
+            integer(step["percent"], 100, 400)
         elif action in ("input", "wait"):
             integer(step["frames"], 1, scenario["max_frames"])
             if action == "input":
@@ -189,6 +191,9 @@ def run(args):
             entry["Path"] = "./" + entry["Type"]
     config["RecentRoms"] = {"recentlist": []}
     config["StartPaused"] = False
+    if any(step["action"] == "speed" for step in scenario["steps"]):
+        config["ClockThrottle"] = True
+        config["Unthrottled"] = False
     (out / "config.ini").write_text(json.dumps(config, indent=2), encoding="utf-8")
     shutil.copy2(paths["rom"], out / paths["rom"].name)
     if args.save_ram:

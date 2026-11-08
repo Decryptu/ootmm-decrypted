@@ -4,6 +4,16 @@ from gameplay_test import validate, validate_grant_capture
 
 
 class TestGameplayValidation(unittest.TestCase):
+    def test_speed_is_bounded_integer_percentage(self):
+        scenario = self.scenario()
+        for percent in (100, 200, 400):
+            scenario["steps"] = [{"action": "speed", "percent": percent}]
+            validate(scenario)
+        for percent in (0, 99, 401, True, 100.0, "100"):
+            scenario["steps"] = [{"action": "speed", "percent": percent}]
+            with self.subTest(percent=percent), self.assertRaises(ValueError):
+                validate(scenario)
+
     def test_grant_capture_requires_existing_local_marker_and_grants(self):
         scenario = {"steps": [{"action": "capture", "name": "paused"}]}
         validate_grant_capture(scenario, None, [])
