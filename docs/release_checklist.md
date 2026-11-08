@@ -29,7 +29,7 @@ A diagnostic hundred-item server burst queues while the native OoT pause menu is
 
 A corresponding MM run queues six progression grants during native pause for 600 frames. Before grants all six native slots are empty; while still paused the Bomb Bag is stored and the remaining five stay absent. After resuming, its message blocks the bow; normal B input and measured 100%/400% speed changes drain all six into their expected native slots. Receipt index 2 reaches 8 and stays there through 16 polls, without new source checks. Sampled ring occupancy peaks at 234 outgoing and 31 incoming bytes of 2047 usable, with no invalid headers. Both progression runs are diagnostic delivery/storage coverage, not real source pickups or ability use.
 
-- [ ] Exercise rapid real pickups. Measure ring occupancy and recovery; investigate any repeated handshake, freeze or missing item.
+Three consecutive real OoT Mido chests at requested 400% speed start 2.66 seconds apart with native item dialogue and controller dismissal. The disposable server records exactly three new checks and one award each: local Odd Potion and arrows, plus an MM bow queued for the absent other slot. Native Odd Potion storage is asserted; receipt index 2 remains stable through 16 successful polls. The run has 137 valid header samples, no invalid headers or mailbox rediscovery, and sampled peaks of 1274 outgoing/23 incoming bytes of 2047 usable. Guarded positioning skips movement between chests; this is dialogue-limited chest cadence, not simultaneous non-dialogue pickups or remote bow receipt. The exact-ROM checkpoint inherits the assisted round trip above.
 
 ## 4. Boss completion
 
