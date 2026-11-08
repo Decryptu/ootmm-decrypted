@@ -1,6 +1,6 @@
 # Release readiness
 
-Work through these gates before handing out the next playtest build. Keep unfinished work here; remove completed tasks after recording reproducible validation with the frozen build. The player-facing scenarios are in [the playtest checklist](playtest_en.md).
+Work through these gates before declaring the world ready for a full playthrough; alpha builds can be shared with their current limitations. Keep unfinished work here; remove completed tasks after recording reproducible validation with the frozen build. The player-facing scenarios are in [the playtest checklist](playtest_en.md).
 
 ## 1. Reproducible gameplay setup
 
@@ -50,7 +50,7 @@ Three consecutive real OoT Mido chests at requested 400% speed start 2.66 second
 
 - [ ] Port the remaining shared equipment and songs in small coherent groups. For each group compare source and shared pool counts with OoTMM, test logic gates and prefill, generate a two-player seed and build both ROM patches.
 - [ ] Prioritize options intended for the group's YAML; verify their gameplay effects before including them in the candidate settings.
-- [ ] Assess `itemPool`, `pondFishShuffle` and Triforce goals separately. Each needs its own pool, logic and ROM validation; keep them unavailable until complete. Do not delay core gameplay gates to fit these into the first release.
+- [ ] Assess `itemPool`, `pondFishShuffle` and Triforce goals separately. Each needs its own pool, logic and ROM validation; keep them unavailable until complete. Do not delay core gameplay gates to fit these into an alpha release.
 
 ## 7. Candidate validation and freeze
 
