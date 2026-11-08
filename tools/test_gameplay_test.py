@@ -4,6 +4,17 @@ from gameplay_test import validate
 
 
 class TestGameplayValidation(unittest.TestCase):
+    def test_signal_message_dismissal_requires_boolean(self):
+        scenario = self.scenario()
+        for value in (False, True):
+            scenario["steps"] = [{"action": "wait_signal", "name": "ready", "timeout_frames": 100,
+                                  "dismiss_messages": value}]
+            validate(scenario)
+        for value in (1, "true", None):
+            scenario["steps"][0]["dismiss_messages"] = value
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                validate(scenario)
+
     def test_native_exit_requires_both_layouts_and_assisted_coverage(self):
         scenario = self.scenario()
         scenario["mm_layout"] = dict(scenario["oot_layout"])

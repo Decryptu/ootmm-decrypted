@@ -20,6 +20,20 @@ import time
 from gameplay_connection import wait_for_rom
 
 
+def validate_backlog(backlog, players, stage_names):
+    if backlog is None:
+        return
+    if (type(backlog.get("slot")) is not int or backlog["slot"] not in (1, 2)
+            or backlog.get("disconnect_stage") not in stage_names
+            or not isinstance(backlog.get("checks"), list) or not backlog["checks"]
+            or any(not isinstance(check, str) for check in backlog["checks"])
+            or len(set(backlog["checks"])) != len(backlog["checks"])):
+        raise ValueError("Backlog requires a recipient, disconnect stage and unique source checks")
+    source = next(p for p in players if p["slot"] == 3 - backlog["slot"])
+    if not set(backlog["checks"]) <= set(source["checks"]):
+        raise ValueError("Backlog sources must be expected checks from the other slot")
+
+
 def stage_ready(stage, observations):
     """Require every explicit condition from the latest successful live queries."""
     return all(condition["capture"] in observations[condition["slot"]]["captures"]
@@ -57,6 +71,7 @@ async def run(args):
     if sorted(p["slot"] for p in players) != [1, 2]:
         raise ValueError("Plan must contain slots 1 and 2 exactly once")
     stages = plan.get("stages", [])
+    backlog = plan.get("backlog")
     stage_names = set()
     for stage in stages:
         name = stage["name"]
@@ -72,6 +87,7 @@ async def run(args):
             scenario = json.loads(Path(player["scenario"]).read_text(encoding="utf-8"))
             if not any(s["action"] == "capture" and s["name"] == condition["capture"] for s in scenario["steps"]):
                 raise ValueError("Stage capture is absent from its scenario")
+    validate_backlog(backlog, players, stage_names)
     for p in players:
         if not p["checks"] or type(p["received_index"]) is not int or p["received_index"] < 1:
             raise ValueError("Each slot needs actual source checks and a positive receipt target")
@@ -130,6 +146,7 @@ async def run(args):
     peers, processes, logs, workers = [], [], [], []
     report = {"passed": False, "coverage": "assisted-gameplay", "simulated_remote_checks": [], "players": [],
               "stages": [],
+              "backlog": None,
               "coordinator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "seed_sha256": hashlib.sha256(Path(plan["seed"]).read_bytes()).hexdigest()}
     startup = subprocess.STARTUPINFO()
@@ -187,7 +204,9 @@ async def run(args):
 
     async def watch(peer, process):
         while process.poll() is None:
-            await poll(peer)
+            async with peer.poll_lock:
+                if not peer.offline:
+                    await poll(peer)
             await asyncio.sleep(0.125)
 
     def check_workers():
@@ -211,17 +230,54 @@ async def run(args):
                                        for loc in sorted(context.location_checks[0, slot])]}
         return result
 
-    def advance_stages():
+    async def advance_stages():
         if len(report["stages"]) >= len(stages):
             return
         stage = stages[len(report["stages"])]
         observed = observations()
         if stage_ready(stage, observed):
+            if backlog and stage["name"] == backlog["disconnect_stage"]:
+                peer = next(p for p in peers if p.player["slot"] == backlog["slot"])
+                async with peer.poll_lock:
+                    mailbox = peer.handler.mailbox
+                    index = peer.handler.last_query
+                    await peer.disconnect()
+                    await poll(peer)
+                    flag, = await bizhawk.read(peer.bizhawk_ctx, [(mailbox + 16, 4, "RDRAM")])
+                    assert flag == bytes(4), "Recipient game must see the disconnect"
+                    peer.offline = True
+                    peer.live = False
+                    peer.offline_mailbox = mailbox
+                    report["backlog"] = {"slot": backlog["slot"], "received_index_before": index,
+                                         "queued_before": len(MultiServer.get_received_items(context, 0, backlog["slot"], False)),
+                                         "game_flag_cleared": True, "offline_samples": 0,
+                                         "reconnected": False}
             report["stages"].append({"name": stage["name"], "elapsed_seconds": time.monotonic() - started,
                                      "observations": observed})
             for slot in (1, 2):
                 (out / f"slot-{slot}" / f"signal-{stage['name']}").touch()
             print(f"Stage passed: {stage['name']}", flush=True)
+
+    async def recover_backlog():
+        evidence = report["backlog"]
+        if not evidence or evidence["reconnected"]:
+            return
+        peer = next(p for p in peers if p.player["slot"] == backlog["slot"])
+        assert peer.server is None and peer.slot is None, "Offline recipient unexpectedly reconnected"
+        flag, = await bizhawk.read(peer.bizhawk_ctx, [(peer.offline_mailbox + 16, 4, "RDRAM")])
+        assert flag == bytes(4), "Recipient must stay disconnected while sources queue"
+        evidence["offline_samples"] += 1
+        source = 3 - backlog["slot"]
+        checks = {context.location_names["OOTxMM"][loc] for loc in context.location_checks[0, source]}
+        if not set(backlog["checks"]) <= checks:
+            return
+        queued = MultiServer.get_received_items(context, 0, backlog["slot"], False)
+        assert len(queued) == evidence["queued_before"] + len(backlog["checks"]), "Unexpected backlog size"
+        evidence.update(queued_while_offline=len(queued), source_checks=sorted(checks),
+                        elapsed_seconds=time.monotonic() - started)
+        peer.server_task = asyncio.create_task(CommonClient.server_loop(peer))
+        peer.offline = False
+        evidence["reconnected"] = True
 
     try:
         async with asyncio.timeout(args.timeout):
@@ -256,6 +312,8 @@ async def run(args):
                 peer = Peer(player)
                 peer.poll_count = 0
                 peer.live = False
+                peer.offline = False
+                peer.poll_lock = asyncio.Lock()
                 peers.append(peer)
                 while peer.bizhawk_ctx.streams is None:
                     if processes[-1].poll() is not None:
@@ -285,6 +343,13 @@ async def run(args):
                     valid_checks = {names[loc] for loc in context.locations[condition["slot"]]}
                     if not set(condition.get("checks", [])) <= valid_checks:
                         raise ValueError("Stage refers to an unknown source check")
+            if backlog:
+                source = 3 - backlog["slot"]
+                source_peer = next(p for p in peers if p.player["slot"] == source)
+                assert set(backlog["checks"]) <= set(source_peer.player["checks"]), "Backlog sources must be expected real checks"
+                for loc in wanted[source]:
+                    if names[loc] in backlog["checks"]:
+                        assert context.locations[source][loc][1] == backlog["slot"], "Backlog source must award recipient"
             stable = 0
             last_counts = [0, 0]
             while stable < 16:
@@ -292,7 +357,8 @@ async def run(args):
                 for peer, process in zip(peers, processes):
                     if process.poll() is not None:
                         raise RuntimeError(f"Slot {peer.player['slot']} exited before exchange assertions")
-                advance_stages()
+                await advance_stages()
+                await recover_backlog()
                 ready = all(p.live and p.bizhawk_ctx.streams is not None and p.slot is not None
                             and wanted[p.player["slot"]] <= context.location_checks[0, p.player["slot"]]
                             and p.handler.last_query == p.player["received_index"] for p in peers)
@@ -321,13 +387,15 @@ async def run(args):
             # Continue servicing both games while their inventory assertions and captures finish.
             while any(p.poll() is None for p in processes):
                 check_workers()
-                advance_stages()
+                await advance_stages()
                 await asyncio.sleep(0.125)
             for peer, process in zip(peers, processes):
                 result = json.loads((out / f"slot-{peer.player['slot']}" / "result.json").read_text(encoding="utf-8"))
                 assert process.returncode == 0 and result["passed"], "Game scenario failed"
                 assert peer.handler.last_query == peer.player["received_index"], "Receipt index changed after stability check"
             assert len(report["stages"]) == len(stages), "Not all gameplay stages completed"
+            if backlog:
+                assert report["backlog"] and report["backlog"]["reconnected"], "Backlog recovery did not run"
             report["passed"] = True
     except Exception as exc:
         report["reason"] = f"{type(exc).__name__}: {exc}"
