@@ -215,6 +215,10 @@ local function tick()
         joypad.set(step.buttons or {})
         joypad.setanalog(step.analog or {})
         done = elapsed >= step.frames
+    elseif step.action == "speed" then
+        client.speedmode(step.percent)
+        record({event = "speed", percent = step.percent})
+        done = true
     elseif step.action == "wait" then
         done = elapsed >= step.frames
     elseif step.action == "capture" then
