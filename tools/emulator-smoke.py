@@ -17,6 +17,31 @@ from mailbox_timing import MailboxTiming
 from gameplay_connection import wait_for_rom
 
 
+async def wait_for_scenario_result(path, timeout):
+    """Wait for the scenario's complete result, without polling a closing core."""
+    async with asyncio.timeout(timeout):
+        while True:
+            try:
+                result = json.loads(path.read_text(encoding="utf-8"))
+            except (FileNotFoundError, json.JSONDecodeError):
+                await asyncio.sleep(0.125)
+                continue
+            if result.get("passed") is not True:
+                raise AssertionError("Offline save scenario failed")
+            return result
+
+
+async def disconnect_game(peer, poll_game, bizhawk):
+    mailbox, received_index = peer.handler.mailbox, peer.handler.last_query
+    assert mailbox is not None, "Disconnect requires a live game mailbox"
+    await peer.disconnect()
+    await poll_game()
+    # The disconnected watcher clears its cached address after notifying the game.
+    header = await bizhawk.read(peer.bizhawk_ctx, [(mailbox + 16, 4, "RDRAM")])
+    assert header[0] == bytes(4), "Game must see disconnected server"
+    return received_index
+
+
 async def run(args):
     import CommonClient
     import MultiServer
@@ -136,12 +161,31 @@ async def run(args):
                 return checks
 
             interruption = None
+            if args.save_offline:
+                assert not wanted & initial_checks, "Pending checks must be absent from the restored server"
+                if args.expect_received_index is not None:
+                    assert peer.handler.last_query == args.expect_received_index, "Unexpected pre-disconnect receipt index"
+                received_index_before = await disconnect_game(peer, poll_game, bizhawk)
+                received_before = len(peer.items_received)
+                await wait_for_scenario_result(args.ready_file.parent / "result.json", args.timeout)
+                assert set(context.location_checks[0, 1]) == initial_checks, "Offline checks reached the server"
+                assert len(peer.items_received) == received_before, "Offline client received items"
+                if args.server_save_output:
+                    assert context._save(), "Disposable server save failed"
+                report = {"coverage": "assisted-gameplay", "passed": True,
+                          "phase": "offline-save", "server_reloaded": bool(args.server_save_input),
+                          "pending_checks_to_verify_after_cold_boot": args.expect_check,
+                          "no_checks_reported_while_offline": True, "connected_flag_cleared": True,
+                          "restored_checks": [names[loc] for loc in sorted(initial_checks)],
+                          "new_checks": [], "setup_grants": [], "simulated_remote_checks": [],
+                          "received_index_before_disconnect": received_index_before,
+                          "verified_connector_rom_sha1": verified_rom_sha1}
+                args.report.write_text(json.dumps(report, indent=2), encoding="utf-8")
+                print("PASS: offline save phase; pending recovery requires a separate cold boot", flush=True)
+                return
             if args.disconnect_seconds:
                 before_disconnect = set(context.location_checks[0, 1])
-                await peer.disconnect()
-                await poll_game()
-                offline_header = await bizhawk.read(peer.bizhawk_ctx, [(peer.handler.mailbox + 16, 4, "RDRAM")])
-                assert offline_header[0] == bytes(4), "Game must see disconnected server"
+                await disconnect_game(peer, poll_game, bizhawk)
                 received_before = len(peer.items_received)
                 if args.inject_remote_count:
                     injected_checks = inject_remote_checks()
@@ -290,6 +334,7 @@ if __name__ == "__main__":
     parser.add_argument("--expect-boss", action="append", default=[], choices=("OOT_GANON", "MM_MAJORA"), help="Observe real boss packets and confirmed server storage")
     parser.add_argument("--min-game-switches", type=int, default=0)
     parser.add_argument("--disconnect-seconds", type=float, default=0)
+    parser.add_argument("--save-offline", action="store_true", help="Disconnect after attachment until the scenario exits; verify pending checks in a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[], help="Explicit diagnostic item grant through the temporary server; no source pickup coverage")
     parser.add_argument("--inject-remote-count", type=int, default=0)
     parser.add_argument("--expect-received-index", type=int)
@@ -301,6 +346,9 @@ if __name__ == "__main__":
     parser.add_argument("--expected-rom-sha1", help="Require the connector to expose this exact ROM")
     parser.add_argument("--ready-file", type=Path, help="Signal the first live mailbox query to the scenario")
     args = parser.parse_args()
+    if args.save_offline and (not args.expect_check or not args.ready_file or not args.report
+                             or args.disconnect_seconds or args.inject_remote_count or args.grant_item or args.expect_boss):
+        parser.error("Offline save requires pickup assertions, ready/report files and no other stimuli")
     if args.min_game_switches < 0 or (args.min_game_switches and not args.expect_check):
         parser.error("--min-game-switches requires nonnegative count and pickup assertions")
     if args.inject_remote_count < 0 or (args.expect_received_index is not None and args.expect_received_index < 0):
