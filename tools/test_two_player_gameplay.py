@@ -3,10 +3,23 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from two_player_gameplay import completed_captures, stage_ready
+from two_player_gameplay import completed_captures, stage_ready, validate_backlog
 
 
 class TestGameplayStages(unittest.TestCase):
+    def test_backlog_requires_other_players_real_expected_sources(self):
+        players = [{"slot": 1, "checks": ["Own source"]},
+                   {"slot": 2, "checks": ["First", "Second"]}]
+        valid = {"slot": 1, "disconnect_stage": "ready", "checks": ["First", "Second"]}
+        validate_backlog(None, players, {"ready"})
+        validate_backlog(valid, players, {"ready"})
+        for field, value in (("slot", 0), ("slot", True), ("disconnect_stage", "missing"),
+                             ("checks", []), ("checks", ["First", "First"]),
+                             ("checks", ["Own source"]), ("checks", "First"), ("checks", [1])):
+            changed = dict(valid, **{field: value})
+            with self.subTest(field=field, value=value), self.assertRaises(ValueError):
+                validate_backlog(changed, players, {"ready"})
+
     def test_only_completed_capture_events_release_a_stage(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "events.jsonl"
