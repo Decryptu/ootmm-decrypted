@@ -12,7 +12,9 @@ Test shortcuts may prepare inventory, position the player, enter a boss room, en
 
 The candidate verifies its native cross-game door, MM opening-song award, bidirectional OoT chest exchange and the remote South Clock Town chest with two running players. Both receipt indices remain stable; the MM chest's recipient has the native Mirror Shield equipped after switching to MM. OoT nut upgrade inventory and refill are covered by the OoT exchange.
 
-- [ ] Verify representative shop, dungeon reward and fixed vanilla checks; candidate song coverage currently uses the MM opening award.
+The native Kokiri Shop Deku Shield purchase verifies a representative shop and fixed vanilla check. Diagnostic funding supplies 50 rupees; controller input selects the shelf item and confirms its 40-rupee offer. Native inventory changes from shield absent to present and the balance becomes 10. The server records only `OOT Kokiri Shop Item 8` as new, with exactly one local Deku Shield award; receipt index 3 remains stable through 16 successful polls. The exact-ROM checkpoint inherits assisted travel, and a guarded shop transition bypasses the route. This covers vanilla local stock and payment, not remote shop awards, shuffled prices or shield ability use.
+
+- [ ] Verify a representative dungeon reward pickup; candidate song coverage currently uses the MM opening award.
 - [ ] Verify remote key use at the intended doors, Ganon's boss key and temple fairy rewards. Diagnostic candidate grants already verify the native Fire Temple small-key count/boss-key bit and the Woodfall fairy counter; these are item-application coverage, not actual source pickups or door use.
 - [ ] Exercise shared equipment and songs in both games; check upgrades and abilities as well as item messages.
 
