@@ -52,6 +52,8 @@ def validate(scenario):
             if not step.get("name") or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in step["name"]):
                 raise ValueError("Signal names must be simple filenames")
             integer(step["timeout_frames"], 1, scenario["max_frames"])
+            if "dismiss_messages" in step and type(step["dismiss_messages"]) is not bool:
+                raise ValueError("Message dismissal must be a boolean")
             if step.get("keep_health"):
                 if step.get("game") not in ("oot", "mm") or f"{step['game']}_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
                     raise ValueError("Health support requires a sourced game layout and assisted gameplay")

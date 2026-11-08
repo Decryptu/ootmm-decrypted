@@ -428,6 +428,10 @@ local function tick()
             if elapsed >= step.timeout_frames then finish(false, "Native exit timed out"); return end
         end
     elseif step.action == "wait_signal" then
+        if step.dismiss_messages then
+            if elapsed == 1 then record({event = "controller_message_dismissal"}) end
+            if (elapsed - 1) % 60 < 8 then joypad.set({["P1 B"] = true}) end
+        end
         if step.keep_health then
             game_play(step.game, step.scene)
             local save = step.game == "oot" and 0x11a5d0 or 0x1ef670
