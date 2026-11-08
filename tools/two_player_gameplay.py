@@ -19,6 +19,7 @@ import time
 import zlib
 
 from gameplay_connection import wait_for_rom
+from mailbox_load import MailboxLoad
 
 
 def validate_backlog(backlog, players, stage_names):
@@ -141,6 +142,7 @@ async def run(args):
             self.bizhawk_ctx = bizhawk.BizHawkContext()
             self.handler = OOTxMMClient()
             self.history = []
+            self.load = MailboxLoad()
             self.slot_data = None
 
         async def server_auth(self, password_requested=False):
@@ -184,7 +186,9 @@ async def run(args):
             peer.live = False
             return
         try:
+            await peer.load.sample(peer, bizhawk)
             await peer.handler.game_watcher(peer)
+            await peer.load.sample(peer, bizhawk)
         except (bizhawk.NotConnectedError, bizhawk.RequestFailedError):
             peer.live = False
             return
@@ -464,6 +468,7 @@ async def run(args):
         raise
     finally:
         report["final_observations"] = [{"slot": peer.player["slot"], "received_index": peer.handler.last_query,
+                                         "mailbox_load": peer.load.report(),
                                          "history": peer.history,
                                          "checks": [context.location_names["OOTxMM"][loc]
                                                     for loc in sorted(context.location_checks[0, peer.player["slot"]])]}

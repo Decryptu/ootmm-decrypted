@@ -25,6 +25,8 @@ An exact-ROM native OoT save and cold boot retain the two real remote receipts a
 Two real remote chests, one in OoT and one in MM, queue while the recipient idles in MM with its socket closed and game connection flag clear. Normal reconnect and controller dismissal of item messages drain both awards; the native Don Gero mask is asserted before continuing, and the OoT nut upgrade/refill is asserted after returning through the native door. The recipient then reports two real source checks to the other game, whose native Mirror Shield is asserted. All four checks award exactly once and both receipt indices remain at 2 through 16 fresh polls. Fresh exact-ROM files, guarded travel/position setup and bounded idle health support retain the route/access limits above; the server stays running during this outage.
 
 An orderly disposable server restart after the first two real awards reloads existing checks and remote queues into a new listener/context. Both clients reconnect at receipt index 1, then switch games and collect a new real remote chest each. Both indices reach 2 and remain stable for 16 fresh polls; every source awards exactly once and native inventory assertions pass. The coordinator process stays running, so abrupt server-process loss remains outside this coverage.
+A diagnostic twenty-item server burst drains from receipt index 2 to 22 with 16 stable polls and no new source checks. Ring header samples accompany the run; these grants cover recipient load rather than real source pickups or pause/fast-forward behavior.
+
 - [ ] Exercise rapid pickups and larger delivery queues through dialogue, pause and fast-forward. Measure ring occupancy and recovery; investigate any repeated handshake, freeze or missing item.
 
 ## 4. Boss completion

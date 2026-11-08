@@ -14,6 +14,7 @@ import sys
 import zlib
 
 from mailbox_timing import MailboxTiming
+from mailbox_load import MailboxLoad
 from gameplay_connection import wait_for_rom
 
 
@@ -125,6 +126,7 @@ async def run(args):
     setup_grants = []
     last_goal_snapshot = None
     timing = MailboxTiming()
+    load = MailboxLoad()
     mailbox_history = timing.history
     active_mailboxes = []
     verified_rom_sha1 = None
@@ -139,7 +141,9 @@ async def run(args):
             print("Reconnected to BizHawk connector", flush=True)
         poll_started = timing.clock()
         try:
+            await load.sample(peer, bizhawk)
             await peer.handler.game_watcher(peer)
+            await load.sample(peer, bizhawk)
         except bizhawk.NotConnectedError:
             event = timing.observe(None, peer.handler.last_query, poll_started)
             if event is not None:
@@ -320,7 +324,7 @@ async def run(args):
                                   "item": context.item_names["OOTxMM"][context.locations[1][loc][0]]}
                                  for loc in observed], "received_index": peer.handler.last_query,
                       "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
-                      "mailbox_timing": timing.report(),
+                      "mailbox_timing": timing.report(), "mailbox_load": load.report(),
                       "rom_mailbox_directory": peer.handler.rom_mailboxes,
                       "verified_connector_rom_sha1": verified_rom_sha1,
                       "game_switches": max(0, len(active_mailboxes) - 1), "award_count_verified": True, "passed": wanted <= set(observed)}
@@ -372,7 +376,7 @@ async def run(args):
                 "received_index": peer.handler.last_query,
                 "server_item_count": len(peer.items_received),
                 "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
-                "mailbox_timing": timing.report(),
+                "mailbox_timing": timing.report(), "mailbox_load": load.report(),
                 "rom_mailbox_directory": peer.handler.rom_mailboxes,
                 "verified_connector_rom_sha1": verified_rom_sha1,
                 "server_reloaded": bool(args.server_save_input),
