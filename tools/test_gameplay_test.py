@@ -1,9 +1,18 @@
 import unittest
 
-from gameplay_test import validate
+from gameplay_test import validate, validate_grant_capture
 
 
 class TestGameplayValidation(unittest.TestCase):
+    def test_grant_capture_requires_existing_local_marker_and_grants(self):
+        scenario = {"steps": [{"action": "capture", "name": "paused"}]}
+        validate_grant_capture(scenario, None, [])
+        validate_grant_capture(scenario, "paused", ["Red Rupee (OoT)"])
+        for name, grants in (("paused", []), ("missing", ["item"]),
+                             ("../paused", ["item"]), ("", ["item"])):
+            with self.subTest(name=name, grants=grants), self.assertRaises(ValueError):
+                validate_grant_capture(scenario, name, grants)
+
     def test_signal_message_dismissal_requires_boolean(self):
         scenario = self.scenario()
         for value in (False, True):
