@@ -59,6 +59,7 @@ class TestClientProtocol(unittest.TestCase):
         self.game.set_u32(16, 1)
         self.client = client.OOTxMMClient()
         self.client.mailbox = MAILBOX
+        self.client.seq_net = 1
         self.sent: list[dict] = []
 
         async def send_msgs(msgs):
@@ -85,6 +86,50 @@ class TestClientProtocol(unittest.TestCase):
         (reply,) = self.exchange()
         self.assertEqual(reply, struct.pack(">IB8sII", 0, client.OP_HELLO, client.HELLO_MAGIC, 0, 1))
         self.assertEqual(self.game.u32(28), self.game.u32(24), "the client consumed the game's packets")
+
+    def test_old_query_cannot_complete_a_new_session(self) -> None:
+        self.client.seq_net = 0
+        item_id = ootxmm_staticdata.OOTxMMItemIDs["OOT_HOOKSHOT"]
+        self.ctx.items_received = [NetworkItem(item_id, 1, 2, 0)]
+        self.game.send(struct.pack(">IBI", 3, client.OP_WAL_QUERY, 0))
+        self.assertEqual(self.exchange(), [])
+        self.assertIsNone(self.client.last_query)
+
+    def test_new_attachment_waits_for_game_to_observe_disconnect(self) -> None:
+        self.client.reset()
+        self.ctx.server = object()
+
+        async def find(_ctx):
+            self.client.mailbox = MAILBOX
+
+        with mock.patch.object(self.client, "find_mailbox", find), \
+                mock.patch.object(client.bizhawk, "read", self.game.read), \
+                mock.patch.object(client.bizhawk, "guarded_write", self.game.guarded_write):
+            asyncio.run(self.client.game_watcher(self.ctx))
+            self.assertEqual(self.game.u32(16), 0)
+            asyncio.run(self.client.game_watcher(self.ctx))
+            self.assertEqual(self.game.u32(16), 0, "Paused game must not retain its old session")
+            self.assertIsNone(self.client.last_query)
+            self.game.set_u32(20, 1)
+            self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
+            asyncio.run(self.client.game_watcher(self.ctx))
+        self.assertEqual(self.game.u32(16), 1)
+        self.assertIsNone(self.client.attach_alive)
+        self.assertEqual(self.game.receive(), [struct.pack(">IB8sII", 0, client.OP_HELLO, client.HELLO_MAGIC, 0, 1)])
+
+    def test_attachment_rescans_if_mailbox_disappears_or_stalls(self) -> None:
+        self.ctx.server = object()
+        for missing in (False, True):
+            with self.subTest(missing=missing):
+                self.client.mailbox = MAILBOX
+                self.client.attach_alive = self.game.u32(20)
+                self.client.attach_started = 0
+                if missing:
+                    self.game.ram[MAILBOX] = 0
+                with mock.patch.object(client.bizhawk, "read", self.game.read), \
+                        mock.patch.object(client, "time", SimpleNamespace(monotonic=lambda: client.MAILBOX_STALL_SECONDS)):
+                    asyncio.run(self.client.game_watcher(self.ctx))
+                self.assertIsNone(self.client.mailbox)
 
     def test_invalid_ring_offsets_restart_discovery_without_writing(self) -> None:
         for offset in (24, 28, 32, 36):
@@ -235,6 +280,7 @@ class TestClientProtocol(unittest.TestCase):
                 self.assertEqual(saved["operations"], [{"operation": "update", "value": {first: True}}])
                 self.client = client.OOTxMMClient()
                 self.client.mailbox = MAILBOX
+                self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
                 self.exchange()
                 self.client.on_package(self.ctx, "Retrieved", {"keys": {saved["key"]: {first: True}}})
                 self.defeat(second)
@@ -245,14 +291,16 @@ class TestClientProtocol(unittest.TestCase):
         self.defeat("OOT_GANON")
         self.client.reset()
         self.client.mailbox = MAILBOX
+        self.game.send(struct.pack(">IB", 0, client.OP_HELLO) + client.HELLO_MAGIC + bytes(49))
+        self.exchange()
         self.defeat("MM_MAJORA")
         self.assertTrue(self.ctx.finished_game)
 
     def test_stale_mailbox_restarts_discovery_and_preserves_goals(self) -> None:
         self.client.goals.add("OOT_GANON")
-        with mock.patch.object(client.time, "monotonic", return_value=10):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=10))):
             self.exchange()
-        with mock.patch.object(client.time, "monotonic", return_value=14):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=14))):
             self.exchange()
         self.assertIsNone(self.client.mailbox)
         self.assertEqual(self.client.scan_pos, 0)
@@ -293,13 +341,74 @@ class TestClientProtocol(unittest.TestCase):
         self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
                 mock.patch.object(client.bizhawk, "get_memory_size", size), \
-                mock.patch.object(client.time, "monotonic", return_value=10):
+                mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=10))):
             for _ in range(2):  # finds the copy, then reads its alive counter
                 asyncio.run(self.client.find_mailbox(self.ctx))
             self.game.set_u32(20, 7)
             asyncio.run(self.client.find_mailbox(self.ctx))
         self.assertEqual(self.client.mailbox, MAILBOX)
         size.assert_not_called()
+
+    def rom_header(self, addresses=(MAILBOX, 0x8000), marker=client.DIRECTORY_MAGIC):
+        header = bytearray(0x40)
+        header[0x20:0x2c] = b"OOT+MM COMBO"
+        header[0x18:0x20] = marker
+        for offset, address in zip((0x34, 0x37), addresses):
+            header[offset:offset + 3] = address.to_bytes(3, "big")
+        return bytes(header)
+
+    def test_rom_directory_requires_valid_distinct_aligned_complete_mailboxes(self) -> None:
+        for addresses, marker, expected in (
+            ((MAILBOX, 0x8000), client.DIRECTORY_MAGIC, [MAILBOX, 0x8000]),
+            ((MAILBOX, MAILBOX), client.DIRECTORY_MAGIC, []),
+            ((MAILBOX, 0x8001), client.DIRECTORY_MAGIC, []),
+            ((MAILBOX, 0x7ffff0), client.DIRECTORY_MAGIC, []),
+            ((0, 0x8000), client.DIRECTORY_MAGIC, []),
+            ((MAILBOX, 0x8000), b"APIPC002", []),
+            ((MAILBOX, 0x8000), bytes(8), []),
+        ):
+            with self.subTest(addresses=addresses, marker=marker):
+                self.client.known_mailboxes = [0x9000]
+                with mock.patch.object(client.bizhawk, "read", mock.AsyncMock(
+                        return_value=[self.rom_header(addresses, marker)])):
+                    self.assertTrue(asyncio.run(self.client.validate_rom(self.ctx)))
+                self.assertEqual(self.client.rom_mailboxes, expected)
+                self.assertEqual(self.client.known_mailboxes, [], "another ROM's cache must be discarded")
+
+    def test_directory_switch_finds_new_game_without_scanning_or_waiting(self) -> None:
+        self.client.rom_mailboxes = [MAILBOX, 0x8000]
+        self.client.reset()
+        self.game.ram.extend(bytes(0x10000 - len(self.game.ram)))
+        self.discover(1)
+        self.assertIsNone(self.client.mailbox, "magic alone cannot authorize a write")
+        self.game.set_u32(20, 1)
+        self.discover(1)
+        self.assertEqual(self.client.mailbox, MAILBOX)
+        self.client.reset()
+        self.discover(1)
+        self.game.ram[0x8000:0x8010] = client.MAGIC
+        self.discover(1)
+        struct.pack_into(">I", self.game.ram, 0x8014, 1)
+        size = mock.AsyncMock()
+        with mock.patch.object(client.bizhawk, "get_memory_size", size), \
+                mock.patch.object(client.bizhawk, "read", self.game.read):
+            asyncio.run(self.client.find_mailbox(self.ctx))
+        size.assert_not_called()
+        self.assertEqual(self.client.mailbox, 0x8000, "the old game's intact magic must not delay the new game")
+
+    def test_directory_removed_magic_drops_old_alive_sample(self) -> None:
+        self.client.rom_mailboxes = [MAILBOX, 0x8000]
+        self.client.reset()
+        self.discover(1)
+        self.game.ram[MAILBOX:MAILBOX + 16] = bytes(16)
+        self.discover(1)
+        self.game.ram[MAILBOX:MAILBOX + 16] = client.MAGIC
+        self.game.set_u32(20, 99)
+        self.discover(1)
+        self.assertIsNone(self.client.mailbox, "a reinitialized copy needs a new moving sample")
+        self.game.set_u32(20, 100)
+        self.discover(1)
+        self.assertEqual(self.client.mailbox, MAILBOX)
 
     def test_waits_at_known_addresses_while_a_game_loads_then_scans(self) -> None:
         self.client.known_mailboxes = [0x8000]
@@ -309,11 +418,11 @@ class TestClientProtocol(unittest.TestCase):
         with mock.patch.object(client.bizhawk, "read", self.game.read), \
                 mock.patch.object(client.bizhawk, "get_memory_size", size):
             for now in (0, 5, 19):
-                with mock.patch.object(client.time, "monotonic", return_value=now):
+                with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=now))):
                     asyncio.run(self.client.find_mailbox(self.ctx))
             size.assert_not_called()
             self.assertEqual(self.client.scan_pos, 0)
-            with mock.patch.object(client.time, "monotonic", return_value=client.KNOWN_MAILBOX_WAIT_SECONDS):
+            with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=client.KNOWN_MAILBOX_WAIT_SECONDS))):
                 asyncio.run(self.client.find_mailbox(self.ctx))
         size.assert_called()
         self.assertIn(MAILBOX, self.client.candidates, "the full scan found the mailbox elsewhere")
@@ -339,28 +448,28 @@ class TestClientProtocol(unittest.TestCase):
         self.client.reset()
         polls_per_scan = 0x10000 // (client.SCAN_CHUNK * client.SCAN_READS_PER_POLL) + 2
         with mock.patch.object(client.logger, "warning") as warning, \
-                mock.patch.object(client.time, "monotonic", side_effect=range(0, 1000, 10)):
+                mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(side_effect=range(0, 1000, 10)))):
             self.discover(polls_per_scan * (client.EMPTY_SCANS_BEFORE_WARNING + 2))
         warning.assert_not_called()
 
     def test_scan_repeats_when_every_copy_found_is_stale(self) -> None:
         self.client.reset()
-        with mock.patch.object(client.time, "monotonic", return_value=10):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=10))):
             self.discover(2)
         self.assertEqual(list(self.client.candidates), [MAILBOX])
-        with mock.patch.object(client.time, "monotonic", return_value=11):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=11))):
             self.discover(1)
         self.assertIsNone(self.client.scan_pos, "still watching the copy it found")
-        with mock.patch.object(client.time, "monotonic", return_value=14):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=14))):
             self.discover(1)
         self.assertEqual(self.client.scan_pos, 0)
 
         live = 0x8000
         self.game.ram[live:live + 16] = client.MAGIC
-        with mock.patch.object(client.time, "monotonic", return_value=14):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=14))):
             self.discover(2)
         struct.pack_into(">I", self.game.ram, live + 20, 1)
-        with mock.patch.object(client.time, "monotonic", return_value=15):
+        with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=15))):
             self.discover(1)
         self.assertEqual(self.client.mailbox, live)
 
@@ -407,7 +516,7 @@ class TestClientProtocol(unittest.TestCase):
     def test_advancing_mailbox_keeps_connection(self) -> None:
         for now, alive in [(10, 0), (12, 1), (14, 2), (16, 0)]:
             self.game.set_u32(20, alive)
-            with mock.patch.object(client.time, "monotonic", return_value=now):
+            with mock.patch.object(client, "time", SimpleNamespace(monotonic=mock.Mock(return_value=now))):
                 self.exchange()
             self.assertEqual(self.client.mailbox, MAILBOX)
 

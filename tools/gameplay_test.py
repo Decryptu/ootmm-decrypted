@@ -48,11 +48,44 @@ def validate(scenario):
         probe(value)
     for step in scenario["steps"]:
         action = step["action"]
-        if action == "boot_file":
+        if action == "wait_signal":
+            if not step.get("name") or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in step["name"]):
+                raise ValueError("Signal names must be simple filenames")
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+            if "dismiss_messages" in step and type(step["dismiss_messages"]) is not bool:
+                raise ValueError("Message dismissal must be a boolean")
+            if step.get("keep_health"):
+                if step.get("game") not in ("oot", "mm") or f"{step['game']}_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
+                    raise ValueError("Health support requires a sourced game layout and assisted gameplay")
+                integer(step["scene"], 0, 0xffff)
+        elif action == "wait_client":
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "native_exit":
+            if scenario["coverage"] != "assisted-gameplay":
+                raise ValueError("Native exit positioning requires assisted gameplay")
+            for key in ("game", "target_game"):
+                if step.get(key) not in ("oot", "mm") or f"{step[key]}_layout" not in scenario:
+                    raise ValueError("Native exits require both sourced layouts")
+            if step["game"] == step["target_game"]:
+                raise ValueError("Native exit must change games")
+            for key in ("scene", "target_scene"):
+                integer(step[key], 0, 0xffff)
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+            for axis in ("x", "y", "z"):
+                if not isinstance(step[axis], (int, float)) or not -100000 <= step[axis] <= 100000:
+                    raise ValueError("Invalid player coordinate")
+        elif action == "wait_game":
+            if step.get("game") not in ("oot", "mm") or f"{step['game']}_layout" not in scenario:
+                raise ValueError("Waiting for gameplay requires a sourced game layout")
+            integer(step["scene"], 0, 0xffff)
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "boot_file":
             if "oot_layout" not in scenario:
                 raise ValueError("Automated file boot requires a sourced OoT layout")
             integer(step["scene"], 0, 0xffff)
             integer(step["timeout_frames"], 1, scenario["max_frames"])
+        elif action == "speed":
+            integer(step["percent"], 100, 400)
         elif action in ("input", "wait"):
             integer(step["frames"], 1, scenario["max_frames"])
             if action == "input":
@@ -97,9 +130,19 @@ def validate(scenario):
             raise ValueError(f"Unsupported action: {action}")
 
 
+def validate_grant_capture(scenario, name, grants):
+    if name is None:
+        return
+    if not grants or not name or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in name):
+        raise ValueError("Grant capture requires diagnostic grants and a simple capture name")
+    if not any(step["action"] == "capture" and step["name"] == name for step in scenario["steps"]):
+        raise ValueError("Grant capture is absent from the scenario")
+
+
 def run(args):
     scenario = json.loads(args.scenario.read_text(encoding="utf-8"))
     validate(scenario)
+    validate_grant_capture(scenario, args.grant_after_capture, args.grant_item)
     paths = {name: getattr(args, name).resolve(strict=True)
              for name in ("rom", "seed", "placements", "config", "connector", "emulator", "scenario")}
     for name in ("state", "save_ram", "server_save_input"):
@@ -111,8 +154,16 @@ def run(args):
         raise ValueError("Connector range start must be between 1024 and 65530")
     placements = json.loads(paths["placements"].read_text(encoding="utf-8"))
     observe = bool(args.expect_check or args.expect_boss or args.grant_item)
+    if args.interrupt_pickup and (not args.expect_check or args.save_offline or args.disconnect_seconds
+                                  or args.inject_remote_count or args.grant_item or args.expect_boss):
+        raise ValueError("Pickup interruption requires real pickup assertions and no other stimuli")
+    if args.save_offline and (not args.expect_check or args.disconnect_seconds or args.inject_remote_count
+                             or args.grant_item or args.expect_boss):
+        raise ValueError("Offline save requires pickup assertions and no other stimuli")
     if observe and not (args.ap_python and args.archipelago):
         raise ValueError("Server assertions require --ap-python and --archipelago")
+    if not observe and not args.stop_file and any(step["action"] == "wait_client" for step in scenario["steps"]):
+        raise ValueError("wait_client requires a server observer or external coordinator")
     if args.min_game_switches < 0 or (args.min_game_switches and not args.expect_check):
         raise ValueError("--min-game-switches requires nonnegative count and pickup assertions")
     if args.inject_remote_count < 0 or (args.expect_received_index is not None and args.expect_received_index < 0):
@@ -140,6 +191,9 @@ def run(args):
             entry["Path"] = "./" + entry["Type"]
     config["RecentRoms"] = {"recentlist": []}
     config["StartPaused"] = False
+    if any(step["action"] == "speed" for step in scenario["steps"]):
+        config["ClockThrottle"] = True
+        config["Unthrottled"] = False
     (out / "config.ini").write_text(json.dumps(config, indent=2), encoding="utf-8")
     shutil.copy2(paths["rom"], out / paths["rom"].name)
     if args.save_ram:
@@ -170,7 +224,10 @@ def run(args):
                 "assertions": {"checks": args.expect_check, "bosses": args.expect_boss, "min_game_switches": args.min_game_switches,
                                "received_index": args.expect_received_index,
                                "disconnect_seconds": args.disconnect_seconds,
-                               "simulated_remote_count": args.inject_remote_count, "setup_grants": args.grant_item}}
+                               "save_offline": args.save_offline,
+                               "interrupt_pickup": args.interrupt_pickup,
+                               "simulated_remote_count": args.inject_remote_count, "setup_grants": args.grant_item,
+                               "grant_after_capture": args.grant_after_capture}}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     command = [str(paths["emulator"]), "--gdi", f"--config={out / 'config.ini'}",
                *([f"--load-state={paths['state']}"] if args.state else []), f"--lua={out / 'lua' / 'scenario.lua'}",
@@ -191,11 +248,17 @@ def run(args):
                                     str(Path(__file__).with_name("emulator-smoke.py").resolve()),
                                     "--archipelago", str(args.archipelago.resolve(strict=True)),
                                     "--seed", str(paths["seed"]), "--report", str(out / "server-result.json"),
+                                    "--expected-rom-sha1", hashlib.sha1(paths["rom"].read_bytes()).hexdigest(),
+                                    "--ready-file", str(out / "client-ready.json"),
                                     "--timeout", str(args.timeout), "--min-game-switches", str(args.min_game_switches)]
                 if args.connector_port is not None:
                     observer_command.extend(["--connector-port", str(args.connector_port)])
                 if args.disconnect_seconds:
                     observer_command.extend(["--disconnect-seconds", str(args.disconnect_seconds)])
+                if args.save_offline:
+                    observer_command.append("--save-offline")
+                if args.interrupt_pickup:
+                    observer_command.extend(["--interrupt-pickup", args.interrupt_pickup])
                 if args.inject_remote_count:
                     observer_command.extend(["--inject-remote-count", str(args.inject_remote_count)])
                 if args.expect_received_index is not None:
@@ -206,6 +269,8 @@ def run(args):
                     observer_command.extend(["--server-save-output", str(out / "server.apsave")])
                 for item in args.grant_item:
                     observer_command.extend(["--grant-item", item])
+                if args.grant_after_capture:
+                    observer_command.extend(["--grant-ready-file", str(out / (args.grant_after_capture + ".png"))])
                 for boss in args.expect_boss:
                     observer_command.extend(["--expect-boss", boss])
                 for name in args.expect_check:
@@ -236,6 +301,9 @@ def run(args):
             if not result_path.exists():
                 raise RuntimeError(f"Emulator exited {process.returncode} without a scenario result; inspect logs")
             result = json.loads(result_path.read_text())
+            if args.save_offline and not any(path.stat().st_size for path in (out / "N64" / "SaveRAM").glob("*.SaveRAM")):
+                result["passed"] = False
+                result["reason"] = "Offline save produced no native SaveRAM"
             if observer is not None:
                 try:
                     observer.wait(timeout=max(1, min(10, deadline - time.monotonic())))
@@ -273,7 +341,10 @@ if __name__ == "__main__":
     parser.add_argument("--connector-port", type=int, help="Set the disposable connector's six-port loopback range start")
     parser.add_argument("--stop-file", type=Path, help="Stop and clean up this runner when the coordinator creates this file")
     parser.add_argument("--disconnect-seconds", type=float, default=0)
+    parser.add_argument("--interrupt-pickup", choices=("before-send", "after-accept"))
+    parser.add_argument("--save-offline", action="store_true", help="Save a real pending pickup while disconnected; pair with a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[])
+    parser.add_argument("--grant-after-capture", help="Delay diagnostic grants until this scenario capture completes")
     parser.add_argument("--inject-remote-count", type=int, default=0)
     parser.add_argument("--expect-received-index", type=int)
     parser.add_argument("--server-save-input", type=Path)
@@ -286,4 +357,5 @@ if __name__ == "__main__":
     parser.add_argument("--min-game-switches", type=int, default=0)
     parser.add_argument("--expect-boss", action="append", default=[], choices=("OOT_GANON", "MM_MAJORA"))
     parser.add_argument("--expect-check", action="append", default=[])
-    raise SystemExit(run(parser.parse_args()))
+    args = parser.parse_args()
+    raise SystemExit(run(args))

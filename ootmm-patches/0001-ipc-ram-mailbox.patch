@@ -41,7 +41,7 @@ new file mode 100755
 index 0000000..18a3023
 --- /dev/null
 +++ b/packages/generator/src/common/ipc/ram.c
-@@ -0,0 +1,133 @@
+@@ -0,0 +1,134 @@
 +#include "ipc.h"
 +
 +/*
@@ -77,6 +77,7 @@ index 0000000..18a3023
 +IPCRamMailbox;
 +
 +ALIGNED(16) static IPCRamMailbox sMailbox;
++EXPORT_SYMBOL(AP_IPC_MAILBOX, sMailbox);
 +
 +static volatile IPCRamMailbox* Mailbox(void)
 +{

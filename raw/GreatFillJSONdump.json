@@ -1,4 +1,16 @@
 {
+ "conditionalFixed": {
+  "shuffleOcarinasOot": [
+   "OOT Hyrule Field Ocarina of Time",
+   "OOT Lost Woods Gift from Saria"
+  ],
+  "shuffleMasterSword": [
+   "OOT Temple of Time Master Sword"
+  ],
+  "shuffleGerudoCard": [
+   "OOT Gerudo Member Card"
+  ]
+ },
  "sharedItems": {
   "sharedSkeletonKey": [
    {

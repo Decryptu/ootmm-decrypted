@@ -27,6 +27,7 @@ MAGIC = b"OoTMM-IPC-RAM-1\x00"
 RING = 0x800
 HEADER = 0x28  # magic (16), connected, alive, outHead, outTail, inHead, inTail (u32 each)
 HELLO_MAGIC = b"OoTMM\x7f\x01\x00"
+DIRECTORY_MAGIC = b"APIPC001"
 SCAN_CHUNK = 0x8000
 # Each read stalls the emulator while the connector copies it, so a full scan is spread over many polls: a game
 # switch was 30 seconds slower with 16 reads per poll.
@@ -66,6 +67,7 @@ class OOTxMMClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.known_mailboxes: list[int] = []  # where mailboxes were found, kept across resets
+        self.rom_mailboxes: list[int] = []  # exact payload addresses from this ROM's versioned header
         self.reset()
         self.goals: set[str] = set()
         self.goal_key: str | None = None
@@ -81,6 +83,8 @@ class OOTxMMClient(BizHawkClient):
         self.last_query: int | None = None
         self.last_alive: int | None = None
         self.alive_changed_at = 0.0
+        self.attach_alive: int | None = None
+        self.attach_started = 0.0
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Connected":
@@ -105,11 +109,20 @@ class OOTxMMClient(BizHawkClient):
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
-            name = (await bizhawk.read(ctx.bizhawk_ctx, [(0x20, 20, "ROM")]))[0]
+            header = (await bizhawk.read(ctx.bizhawk_ctx, [(0, 0x40, "ROM")]))[0]
         except bizhawk.RequestFailedError:
             return False
-        if not name.startswith(b"OOT+MM COMBO"):
+        if not header[0x20:0x34].startswith(b"OOT+MM COMBO"):
             return False
+        self.known_mailboxes.clear()
+        self.rom_mailboxes = []
+        if header[0x18:0x20] == DIRECTORY_MAGIC:
+            addresses = [int.from_bytes(header[offset:offset + 3], "big") for offset in (0x34, 0x37)]
+            if all(0 < address <= 0x800000 - HEADER - 2 * RING and address % 16 == 0
+                   for address in addresses) and len(set(addresses)) == 2:
+                self.rom_mailboxes = addresses
+            else:
+                logger.warning("Invalid ROM mailbox directory; using RAM discovery")
         ctx.game = self.game
         # Items from other worlds and the starting inventory: the game gives the player's own pickups itself.
         ctx.items_handling = 0b101
@@ -127,6 +140,11 @@ class OOTxMMClient(BizHawkClient):
         # The connector's replies are capped at 64 KB, so RAM is scanned a few small reads per poll. The mailbox
         # is 16-aligned and the reads are too, so the magic is never split between two, but the alive counter
         # after it can be in the next read, so candidates get their first value from the polls below.
+        if self.rom_mailboxes:
+            # A directory is only a hint: still require the magic and a moving alive counter before writing.
+            # Read both games together, so a stale old-game copy never delays first arrival in the other game.
+            await self.check_candidates(ctx, self.rom_mailboxes)
+            return
         if self.scan_pos == 0 and await self.check_known_mailboxes(ctx):
             return
         if self.scan_pos is not None:
@@ -153,13 +171,22 @@ class OOTxMMClient(BizHawkClient):
         if not self.candidates:
             self.scan_pos = 0
             return
-        reads = await bizhawk.read(ctx.bizhawk_ctx, [(address, 24, RDRAM) for address in self.candidates])
-        for address, raw in zip(list(self.candidates), reads):
+        await self.check_candidates(ctx, list(self.candidates))
+        if self.mailbox is not None:
+            return
+        if time.monotonic() - self.scan_done_at >= MAILBOX_STALL_SECONDS:
+            # Every copy found is stale: the live mailbox was written after the scan passed it, as during a
+            # game switch. Scan again, or the client would watch the stale copies forever.
+            self.scan_pos = 0
+
+    async def check_candidates(self, ctx: "BizHawkClientContext", addresses: list[int]) -> None:
+        reads = await bizhawk.read(ctx.bizhawk_ctx, [(address, 24, RDRAM) for address in addresses])
+        for address, raw in zip(addresses, reads):
             if raw[:16] != MAGIC:
-                del self.candidates[address]
+                self.candidates.pop(address, None)
                 continue
             alive = struct.unpack_from(">I", raw, 20)[0]
-            previous = self.candidates[address]
+            previous = self.candidates.get(address)
             if previous is not None and alive != previous:
                 self.mailbox = address
                 self.seq_net = 0
@@ -168,10 +195,6 @@ class OOTxMMClient(BizHawkClient):
                 logger.info(f"Found the game's mailbox at 0x{address:X}")
                 return
             self.candidates[address] = alive
-        if time.monotonic() - self.scan_done_at >= MAILBOX_STALL_SECONDS:
-            # Every copy found is stale: the live mailbox was written after the scan passed it, as during a
-            # game switch. Scan again, or the client would watch the stale copies forever.
-            self.scan_pos = 0
 
     async def check_known_mailboxes(self, ctx: "BizHawkClientContext") -> bool:
         """Before a full scan, wait at the addresses where mailboxes were found: one small read per poll instead
@@ -206,9 +229,32 @@ class OOTxMMClient(BizHawkClient):
                 await self.find_mailbox(ctx)
                 if self.mailbox is None:
                     return
+                # A restored game or an unclean client exit can retain another session's
+                # connected flag and packet sequence. Let the game observe a disconnect
+                # before starting a new handshake; a paused counter is not acknowledgement.
+                if not await self.write_mailbox(ctx, [(self.mailbox + 16, [0, 0, 0, 0], RDRAM)]):
+                    self.reset()
+                    return
+                header, = await bizhawk.read(ctx.bizhawk_ctx, [(self.mailbox, 24, RDRAM)])
+                if header[:16] != MAGIC:
+                    self.reset()
+                    return
+                self.attach_alive = struct.unpack_from(">I", header, 20)[0]
+                self.attach_started = time.monotonic()
+                return
+            if self.attach_alive is not None:
+                header, = await bizhawk.read(ctx.bizhawk_ctx, [(self.mailbox, 24, RDRAM)])
+                if header[:16] != MAGIC:
+                    self.reset()
+                    return
+                if struct.unpack_from(">I", header, 20)[0] == self.attach_alive:
+                    if time.monotonic() - self.attach_started >= MAILBOX_STALL_SECONDS:
+                        self.reset()
+                    return
                 if not await self.write_mailbox(ctx, [(self.mailbox + 16, [0, 0, 0, 1], RDRAM)]):
                     self.reset()
                     return
+                self.attach_alive = None
             await self.exchange(ctx)
         except (bizhawk.RequestFailedError, bizhawk.NotConnectedError):
             pass
@@ -279,6 +325,10 @@ class OOTxMMClient(BizHawkClient):
                 replies = [struct.pack(">IB8sII", 0, OP_HELLO, HELLO_MAGIC, 0, 1)]
                 logger.info("Connected to the game")
                 query = None
+            elif self.seq_net == 0:
+                # The old session's queued queries cannot establish a new connection.
+                # Reliable checks will be resent after the game completes its hello.
+                continue
             elif op == OP_WAL and len(packet) >= 10:
                 token, kind = struct.unpack_from(">IB", packet, 5)
                 if kind == WAL_ITEM and len(packet) >= 20:
