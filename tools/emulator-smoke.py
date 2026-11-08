@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import sys
+import time
 import zlib
 
 from mailbox_timing import MailboxTiming
@@ -124,6 +125,7 @@ async def run(args):
     peer = Peer(f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}", context.player_names[0, 1])
     initial_checks = set(context.location_checks[0, 1])
     setup_grants = []
+    grant_barrier = None
     last_goal_snapshot = None
     timing = MailboxTiming()
     load = MailboxLoad()
@@ -193,6 +195,12 @@ async def run(args):
                 await poll_game()
                 await asyncio.sleep(0.125)
         if args.grant_item:
+            if args.grant_ready_file:
+                async with asyncio.timeout(args.timeout):
+                    while not args.grant_ready_file.is_file():
+                        await poll_game()
+                        await asyncio.sleep(0.125)
+                print("Diagnostic grant barrier reached:", args.grant_ready_file, flush=True)
             item_ids = context.item_names_for_game("OOTxMM")
             for name in args.grant_item:
                 if name not in item_ids:
@@ -201,6 +209,10 @@ async def run(args):
                 MultiServer.send_items_to(context, 0, 1, NetworkItem(item_ids[name], -1, 0))
                 setup_grants.append(name)
             MultiServer.send_new_items(context)
+            if args.grant_ready_file:
+                grant_barrier = {"marker": str(args.grant_ready_file),
+                                 "queued_unix_seconds": time.time(),
+                                 "received_index_at_queue": peer.handler.last_query}
         if args.expect_check or args.expect_boss or args.grant_item:
             names = context.location_names["OOTxMM"]
             wanted = {loc for loc in context.locations[1] if names[loc] in args.expect_check}
@@ -282,6 +294,8 @@ async def run(args):
                     await asyncio.sleep(0.125)
                 for _ in range(16):
                     await poll_game()
+                    if args.expect_received_index is not None:
+                        assert peer.handler.last_query == args.expect_received_index, "Receipt index changed during stability checks"
                     if args.interrupt_pickup:
                         assert set(context.location_checks[0, 1]) == initial_checks | wanted, "Unexpected check during recovery"
                         if args.expect_received_index is not None:
@@ -310,7 +324,9 @@ async def run(args):
             report = {"coverage": "assisted-gameplay", "seed": str(args.seed), "slot": 1,
                       "server_reloaded": bool(args.server_save_input),
                       "interruption": interruption,
+                      "stable_polls": 16,
                       "setup_grants": setup_grants,
+                      "grant_barrier": grant_barrier,
                       "simulated_remote_checks": [{"location": context.location_names["OOTxMM"][loc],
                                                    "item": context.item_names["OOTxMM"][context.locations[2][loc][0]]}
                                                   for loc in injected_checks],
@@ -407,6 +423,7 @@ if __name__ == "__main__":
     parser.add_argument("--interrupt-pickup", choices=("before-send", "after-accept"))
     parser.add_argument("--save-offline", action="store_true", help="Disconnect after attachment until the scenario exits; verify pending checks in a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[], help="Explicit diagnostic item grant through the temporary server; no source pickup coverage")
+    parser.add_argument("--grant-ready-file", type=Path, help="Keep polling but delay diagnostic grants until this scenario marker exists")
     parser.add_argument("--inject-remote-count", type=int, default=0)
     parser.add_argument("--expect-received-index", type=int)
     parser.add_argument("--server-save-input", type=Path)
@@ -417,6 +434,8 @@ if __name__ == "__main__":
     parser.add_argument("--expected-rom-sha1", help="Require the connector to expose this exact ROM")
     parser.add_argument("--ready-file", type=Path, help="Signal the first live mailbox query to the scenario")
     args = parser.parse_args()
+    if args.grant_ready_file and not args.grant_item:
+        parser.error("Grant barrier requires diagnostic grants")
     if args.interrupt_pickup and (not args.expect_check or args.save_offline or args.disconnect_seconds
                                   or args.inject_remote_count or args.grant_item or args.expect_boss):
         parser.error("Pickup interruption requires real pickup assertions and no other stimuli")

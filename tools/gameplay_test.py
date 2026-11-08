@@ -128,9 +128,19 @@ def validate(scenario):
             raise ValueError(f"Unsupported action: {action}")
 
 
+def validate_grant_capture(scenario, name, grants):
+    if name is None:
+        return
+    if not grants or not name or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in name):
+        raise ValueError("Grant capture requires diagnostic grants and a simple capture name")
+    if not any(step["action"] == "capture" and step["name"] == name for step in scenario["steps"]):
+        raise ValueError("Grant capture is absent from the scenario")
+
+
 def run(args):
     scenario = json.loads(args.scenario.read_text(encoding="utf-8"))
     validate(scenario)
+    validate_grant_capture(scenario, args.grant_after_capture, args.grant_item)
     paths = {name: getattr(args, name).resolve(strict=True)
              for name in ("rom", "seed", "placements", "config", "connector", "emulator", "scenario")}
     for name in ("state", "save_ram", "server_save_input"):
@@ -211,7 +221,8 @@ def run(args):
                                "disconnect_seconds": args.disconnect_seconds,
                                "save_offline": args.save_offline,
                                "interrupt_pickup": args.interrupt_pickup,
-                               "simulated_remote_count": args.inject_remote_count, "setup_grants": args.grant_item}}
+                               "simulated_remote_count": args.inject_remote_count, "setup_grants": args.grant_item,
+                               "grant_after_capture": args.grant_after_capture}}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     command = [str(paths["emulator"]), "--gdi", f"--config={out / 'config.ini'}",
                *([f"--load-state={paths['state']}"] if args.state else []), f"--lua={out / 'lua' / 'scenario.lua'}",
@@ -253,6 +264,8 @@ def run(args):
                     observer_command.extend(["--server-save-output", str(out / "server.apsave")])
                 for item in args.grant_item:
                     observer_command.extend(["--grant-item", item])
+                if args.grant_after_capture:
+                    observer_command.extend(["--grant-ready-file", str(out / (args.grant_after_capture + ".png"))])
                 for boss in args.expect_boss:
                     observer_command.extend(["--expect-boss", boss])
                 for name in args.expect_check:
@@ -326,6 +339,7 @@ if __name__ == "__main__":
     parser.add_argument("--interrupt-pickup", choices=("before-send", "after-accept"))
     parser.add_argument("--save-offline", action="store_true", help="Save a real pending pickup while disconnected; pair with a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[])
+    parser.add_argument("--grant-after-capture", help="Delay diagnostic grants until this scenario capture completes")
     parser.add_argument("--inject-remote-count", type=int, default=0)
     parser.add_argument("--expect-received-index", type=int)
     parser.add_argument("--server-save-input", type=Path)
@@ -338,4 +352,5 @@ if __name__ == "__main__":
     parser.add_argument("--min-game-switches", type=int, default=0)
     parser.add_argument("--expect-boss", action="append", default=[], choices=("OOT_GANON", "MM_MAJORA"))
     parser.add_argument("--expect-check", action="append", default=[])
-    raise SystemExit(run(parser.parse_args()))
+    args = parser.parse_args()
+    raise SystemExit(run(args))
