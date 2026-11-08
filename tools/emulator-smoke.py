@@ -19,6 +19,15 @@ from mailbox_load import MailboxLoad
 from gameplay_connection import wait_for_rom
 
 
+async def verify_stable_polls(poll, verify, count=16):
+    completed = 0
+    while completed < count:
+        if await poll():
+            verify()
+            completed += 1
+        await asyncio.sleep(0.125)
+
+
 async def wait_for_scenario_result(path, timeout):
     """Wait for the scenario's complete result, without polling a closing core."""
     async with asyncio.timeout(timeout):
@@ -146,7 +155,7 @@ async def run(args):
             await load.sample(peer, bizhawk)
             await peer.handler.game_watcher(peer)
             await load.sample(peer, bizhawk)
-        except bizhawk.NotConnectedError:
+        except (bizhawk.NotConnectedError, bizhawk.RequestFailedError):
             event = timing.observe(None, peer.handler.last_query, poll_started)
             if event is not None:
                 print("Mailbox discovery:", event, flush=True)
@@ -180,6 +189,8 @@ async def run(args):
             args.ready_file.write_text(json.dumps({"mailbox": mailbox,
                                                   "received_index": peer.handler.last_query,
                                                   "verified_connector_rom_sha1": verified_rom_sha1}), encoding="utf-8")
+        return (peer.bizhawk_ctx.streams is not None
+                and mailbox is not None and peer.handler.last_query is not None)
 
     try:
         async with asyncio.timeout(args.timeout):
@@ -292,15 +303,14 @@ async def run(args):
                         print("Observed game checks:", [names[loc] for loc in sorted(current)], flush=True)
                         previous = current
                     await asyncio.sleep(0.125)
-                for _ in range(16):
-                    await poll_game()
+                def verify_receipt():
                     if args.expect_received_index is not None:
                         assert peer.handler.last_query == args.expect_received_index, "Receipt index changed during stability checks"
                     if args.interrupt_pickup:
                         assert set(context.location_checks[0, 1]) == initial_checks | wanted, "Unexpected check during recovery"
                         if args.expect_received_index is not None:
                             assert peer.handler.last_query == args.expect_received_index, "Receipt index changed after recovery"
-                    await asyncio.sleep(0.125)
+                await verify_stable_polls(poll_game, verify_receipt)
             assert goals_verified(), "Boss progress was not confirmed by server storage"
             if args.interrupt_pickup:
                 assert pickup_interruption.evidence and interruption_reconnected, "Pickup interruption did not run"
