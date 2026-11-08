@@ -3,10 +3,18 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from two_player_gameplay import completed_captures, stage_ready, validate_backlog
+from two_player_gameplay import completed_captures, stage_ready, validate_backlog, validate_restart
 
 
 class TestGameplayStages(unittest.TestCase):
+    def test_restart_requires_a_stage_and_excludes_overlapping_outages(self):
+        validate_restart(None, {"ready"}, None)
+        validate_restart("ready", {"ready"}, None)
+        for stage, backlog in (("absent", None), ([], None), (True, None),
+                               ("ready", {"slot": 1})):
+            with self.subTest(stage=stage, backlog=backlog), self.assertRaises(ValueError):
+                validate_restart(stage, {"ready"}, backlog)
+
     def test_backlog_requires_other_players_real_expected_sources(self):
         players = [{"slot": 1, "checks": ["Own source"]},
                    {"slot": 2, "checks": ["First", "Second"]}]

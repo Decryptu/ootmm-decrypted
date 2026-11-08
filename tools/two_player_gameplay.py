@@ -16,6 +16,7 @@ from pathlib import Path
 import subprocess
 import sys
 import time
+import zlib
 
 from gameplay_connection import wait_for_rom
 
@@ -43,6 +44,11 @@ def stage_ready(stage, observations):
                for condition in stage["players"])
 
 
+def validate_restart(stage, stage_names, backlog):
+    if stage is not None and (not isinstance(stage, str) or stage not in stage_names or backlog):
+        raise ValueError("Server restart requires a declared stage and no backlog outage")
+
+
 def completed_captures(path):
     if not path.exists():
         return []
@@ -63,6 +69,7 @@ async def run(args):
     import CommonClient
     import MultiServer
     import websockets
+    import Utils
     import worlds._bizhawk as bizhawk
     from worlds.ootxmm.client import MAGIC, OOTxMMClient
 
@@ -88,6 +95,8 @@ async def run(args):
             if not any(s["action"] == "capture" and s["name"] == condition["capture"] for s in scenario["steps"]):
                 raise ValueError("Stage capture is absent from its scenario")
     validate_backlog(backlog, players, stage_names)
+    restart_stage = plan.get("restart_stage")
+    validate_restart(restart_stage, stage_names, backlog)
     for p in players:
         if not p["checks"] or type(p["received_index"]) is not int or p["received_index"] < 1:
             raise ValueError("Each slot needs actual source checks and a positive receipt target")
@@ -147,6 +156,7 @@ async def run(args):
     report = {"passed": False, "coverage": "assisted-gameplay", "simulated_remote_checks": [], "players": [],
               "stages": [],
               "backlog": None,
+              "server_restart": None,
               "coordinator_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
               "seed_sha256": hashlib.sha256(Path(plan["seed"]).read_bytes()).hexdigest()}
     startup = subprocess.STARTUPINFO()
@@ -231,11 +241,57 @@ async def run(args):
         return result
 
     async def advance_stages():
+        nonlocal context, server
         if len(report["stages"]) >= len(stages):
             return
         stage = stages[len(report["stages"])]
         observed = observations()
         if stage_ready(stage, observed):
+            if stage["name"] == restart_stage:
+                before = {str(p.player["slot"]): {
+                    "checks": sorted(context.location_checks[0, p.player["slot"]]),
+                    "received_index": p.handler.last_query,
+                    "queued": len(MultiServer.get_received_items(context, 0, p.player["slot"], False))}
+                    for p in peers}
+                for peer in peers:
+                    async with peer.poll_lock:
+                        mailbox = peer.handler.mailbox
+                        await peer.disconnect()
+                        await poll(peer)
+                        flag, = await bizhawk.read(peer.bizhawk_ctx, [(mailbox + 16, 4, "RDRAM")])
+                        assert flag == bytes(4), "Game must observe server outage"
+                        peer.offline = True
+                        peer.live = False
+                server_port = server.sockets[0].getsockname()[1]
+                server.close()
+                await server.wait_closed()
+                assert context._save(), "Pre-restart server save failed"
+                saved = (out / "server.apsave").read_bytes()
+                (out / "before-restart.apsave").write_bytes(saved)
+                replacement = MultiServer.Context("127.0.0.1", 0, "", "", 1, 10, False)
+                replacement.load(str(Path(plan["seed"]).resolve(strict=True)))
+                replacement.save_filename = str(out / "server.apsave")
+                replacement.set_save(Utils.restricted_loads(zlib.decompress(saved)))
+                assert replacement is not context
+                context = replacement
+                for peer in peers:
+                    baseline = before[str(peer.player["slot"])]
+                    assert sorted(context.location_checks[0, peer.player["slot"]]) == baseline["checks"]
+                    assert len(MultiServer.get_received_items(context, 0, peer.player["slot"], False)) == baseline["queued"]
+                server = await websockets.serve(functools.partial(MultiServer.server, ctx=context), "127.0.0.1", server_port)
+                for peer in peers:
+                    peer.server_task = asyncio.create_task(CommonClient.server_loop(peer))
+                    peer.offline = False
+                async with asyncio.timeout(30):
+                    while not all(p.live and p.slot == p.player["slot"] for p in peers):
+                        check_workers()
+                        await asyncio.sleep(0.125)
+                for peer in peers:
+                    assert peer.handler.last_query == before[str(peer.player["slot"])]["received_index"], "Restart replayed receipts"
+                report["server_restart"] = {"stage": restart_stage, "before": before,
+                    "save_sha256": hashlib.sha256(saved).hexdigest(), "restored": True,
+                    "elapsed_seconds": time.monotonic() - started,
+                    "limits": "Orderly listener/context replacement in the coordinator; not a server process crash"}
             if backlog and stage["name"] == backlog["disconnect_stage"]:
                 peer = next(p for p in peers if p.player["slot"] == backlog["slot"])
                 async with peer.poll_lock:
@@ -396,6 +452,12 @@ async def run(args):
             assert len(report["stages"]) == len(stages), "Not all gameplay stages completed"
             if backlog:
                 assert report["backlog"] and report["backlog"]["reconnected"], "Backlog recovery did not run"
+            if restart_stage:
+                assert report["server_restart"] and report["server_restart"]["restored"], "Server restart did not run"
+                for peer in peers:
+                    baseline = report["server_restart"]["before"][str(peer.player["slot"]) ]
+                    assert wanted[peer.player["slot"]] - set(baseline["checks"]), "No new source pickup after restart"
+                    assert peer.handler.last_query > baseline["received_index"], "No new remote delivery after restart"
             report["passed"] = True
     except Exception as exc:
         report["reason"] = f"{type(exc).__name__}: {exc}"
