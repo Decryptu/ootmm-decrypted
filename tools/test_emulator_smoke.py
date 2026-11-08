@@ -3,7 +3,7 @@ import importlib.util
 from pathlib import Path
 from types import SimpleNamespace
 import unittest
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, Mock, patch
 
 spec = importlib.util.spec_from_file_location("emulator_smoke", Path(__file__).with_name("emulator-smoke.py"))
 smoke = importlib.util.module_from_spec(spec)
@@ -11,6 +11,35 @@ spec.loader.exec_module(smoke)
 
 
 class TestObserverAttachment(unittest.TestCase):
+    def test_disconnect_checks_original_mailbox_after_watcher_clears_cache(self):
+        peer = SimpleNamespace(handler=SimpleNamespace(mailbox=0x1000, last_query=2),
+                               disconnect=AsyncMock(), bizhawk_ctx=object())
+
+        async def poll():
+            peer.handler.mailbox = peer.handler.last_query = None
+
+        api = SimpleNamespace(read=AsyncMock(return_value=[bytes(4)]))
+        self.assertEqual(asyncio.run(smoke.disconnect_game(peer, poll, api)), 2)
+        api.read.assert_awaited_once_with(peer.bizhawk_ctx, [(0x1010, 4, "RDRAM")])
+        api.read.return_value = [b'\0\0\0\1']
+        peer.handler.mailbox = 0x1000
+        with self.assertRaisesRegex(AssertionError, "disconnected server"):
+            asyncio.run(smoke.disconnect_game(peer, poll, api))
+
+    def test_offline_save_waits_for_complete_successful_result(self):
+        path = Mock()
+        path.read_text.side_effect = [FileNotFoundError(), '{"passed":', '{"passed": true}']
+        with patch.object(smoke.asyncio, "sleep", new_callable=AsyncMock) as sleep:
+            self.assertEqual(asyncio.run(smoke.wait_for_scenario_result(path, 1)), {"passed": True})
+        self.assertEqual(sleep.await_count, 2)
+
+    def test_offline_save_rejects_failed_or_missing_result(self):
+        for value in ('{"passed": false}', '{}'):
+            with self.subTest(value=value), self.assertRaisesRegex(AssertionError, "scenario failed"):
+                asyncio.run(smoke.wait_for_scenario_result(Mock(read_text=Mock(return_value=value)), 1))
+        with self.assertRaises(TimeoutError):
+            asyncio.run(smoke.wait_for_scenario_result(Mock(read_text=Mock(side_effect=FileNotFoundError())), 0))
+
     def setup_peer(self, validation):
         peer = SimpleNamespace(bizhawk_ctx=SimpleNamespace(streams=True),
                                handler=SimpleNamespace(validate_rom=AsyncMock(side_effect=validation)))
