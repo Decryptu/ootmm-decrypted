@@ -66,6 +66,7 @@ A JSON scenario declares `coverage` (`unmodified-gameplay`, `assisted-gameplay` 
 Actions:
 
 - `wait`: advance `frames` with neutral controls.
+- `speed`: set BizHawk's speed percentage with integer `percent` from 100 to 400 through `client.speedmode`. Scenarios containing this action enable clock throttling and clear unthrottled mode in their isolated configuration. Record frame and elapsed-time intervals to verify the achieved speed; demanding cores may run below the requested rate. Hold controller inputs across multiple video frames so they reach the game's update tick at either speed.
 - `input`: hold digital `buttons`, such as `{"P1 A": true}`, and/or `analog`, such as `{"P1 X Axis": 80}`, for `frames`. Controls return to neutral between steps; analog values range from -128 to 127.
 - `expect`: wait at most `timeout_frames` for a big-endian RDRAM value at `address` of `size` 1–4 to equal `value`. A `name` identifies failures. Optional `pointer` reads a KSEG0 pointer from RDRAM and treats `address` as its offset; invalid pointers fail the run.
 - `wait_client`: wait at most `timeout_frames` for the observer's or coordinator's `client-ready.json`, written after a live mailbox query and ROM identity verification. Use it before leaving a restored checkpoint: its connected flag can still be 1 from the previous client. Requires the runner's server-observation arguments or an external coordinator. A fresh output directory prevents reusing an earlier ready file.
