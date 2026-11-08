@@ -9,7 +9,7 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 
 Remaining gameplay checks use [the playtest checklist](docs/playtest_en.md) and [disposable gameplay tests](docs/gameplay_testing.md). No group playtest is planned.
 The ordered developer tasks and validation gates are in [release readiness](docs/release_checklist.md), starting with isolated, repeatable gameplay setups and source-verified test shortcuts. The standalone gameplay observer records mailbox recovery and client-poll timings for game-switch validation ([measurement limits](docs/gameplay_testing.md)).
-Release hardening still needs a full playthrough and the remaining gameplay checks below. Additional options can follow the first prerelease.
+Release hardening still needs a full playthrough and the remaining gameplay checks below. Additional options can follow the current alpha releases.
 | Item | Notes |
 |---|---|
 | Client | Implemented ([DEVELOPMENT.md](DEVELOPMENT.md#client)); remaining gameplay gates include dungeon boss blue-warp rewards, remote key and fairy reward use, shared equipment abilities, continuous native completion/credits and other goal settings. Current source, exchange, native inventory and recovery/load coverage is recorded in [release readiness](docs/release_checklist.md). [Disposable gameplay tests](docs/gameplay_testing.md) defines the isolated setup, assistance and assertion limits |
