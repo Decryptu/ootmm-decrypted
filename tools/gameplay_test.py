@@ -140,6 +140,9 @@ def run(args):
         raise ValueError("Connector range start must be between 1024 and 65530")
     placements = json.loads(paths["placements"].read_text(encoding="utf-8"))
     observe = bool(args.expect_check or args.expect_boss or args.grant_item)
+    if args.save_offline and (not args.expect_check or args.disconnect_seconds or args.inject_remote_count
+                             or args.grant_item or args.expect_boss):
+        raise ValueError("Offline save requires pickup assertions and no other stimuli")
     if observe and not (args.ap_python and args.archipelago):
         raise ValueError("Server assertions require --ap-python and --archipelago")
     if not observe and not args.stop_file and any(step["action"] == "wait_client" for step in scenario["steps"]):
@@ -201,6 +204,7 @@ def run(args):
                 "assertions": {"checks": args.expect_check, "bosses": args.expect_boss, "min_game_switches": args.min_game_switches,
                                "received_index": args.expect_received_index,
                                "disconnect_seconds": args.disconnect_seconds,
+                               "save_offline": args.save_offline,
                                "simulated_remote_count": args.inject_remote_count, "setup_grants": args.grant_item}}
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     command = [str(paths["emulator"]), "--gdi", f"--config={out / 'config.ini'}",
@@ -229,6 +233,8 @@ def run(args):
                     observer_command.extend(["--connector-port", str(args.connector_port)])
                 if args.disconnect_seconds:
                     observer_command.extend(["--disconnect-seconds", str(args.disconnect_seconds)])
+                if args.save_offline:
+                    observer_command.append("--save-offline")
                 if args.inject_remote_count:
                     observer_command.extend(["--inject-remote-count", str(args.inject_remote_count)])
                 if args.expect_received_index is not None:
@@ -269,6 +275,9 @@ def run(args):
             if not result_path.exists():
                 raise RuntimeError(f"Emulator exited {process.returncode} without a scenario result; inspect logs")
             result = json.loads(result_path.read_text())
+            if args.save_offline and not any(path.stat().st_size for path in (out / "N64" / "SaveRAM").glob("*.SaveRAM")):
+                result["passed"] = False
+                result["reason"] = "Offline save produced no native SaveRAM"
             if observer is not None:
                 try:
                     observer.wait(timeout=max(1, min(10, deadline - time.monotonic())))
@@ -306,6 +315,7 @@ if __name__ == "__main__":
     parser.add_argument("--connector-port", type=int, help="Set the disposable connector's six-port loopback range start")
     parser.add_argument("--stop-file", type=Path, help="Stop and clean up this runner when the coordinator creates this file")
     parser.add_argument("--disconnect-seconds", type=float, default=0)
+    parser.add_argument("--save-offline", action="store_true", help="Save a real pending pickup while disconnected; pair with a separate cold boot")
     parser.add_argument("--grant-item", action="append", default=[])
     parser.add_argument("--inject-remote-count", type=int, default=0)
     parser.add_argument("--expect-received-index", type=int)
