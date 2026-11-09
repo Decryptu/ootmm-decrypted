@@ -8,7 +8,7 @@ from BaseClasses import ItemClassification
 from Options import Choice, OptionSet, Toggle
 from worlds.AutoWorld import World
 
-from . import web_world, options, prefill, items, locations, logic, regions, rules, time_logic
+from . import web_world, options, prefill, items, locations, logic, regions, rules, time_logic, prices
 
 class OOTxMM(World):
     """
@@ -30,7 +30,8 @@ class OOTxMM(World):
 
     def generate_early(self) -> None:
         self.ootmm_settings = ootmm_settings(self.options)
-        self.logic = logic.build(self.ootmm_settings)
+        self.prices = prices.generate(self.ootmm_settings, self.random)
+        self.logic = logic.build({**self.ootmm_settings, "_prices": self.prices})
 
     def create_regions(self) -> None:
         self.time_logic = time_logic.TimeLogic(self.logic, self.player, {
@@ -65,6 +66,7 @@ class OOTxMM(World):
             "version": 1,
             "seed": f"{self.multiworld.seed_name}-{self.player}",
             "settings": self.ootmm_settings,
+            "prices": self.prices,
             "locations": {
                 location.name: display_item(self, location.item)
                 for location in self.multiworld.get_locations(self.player)

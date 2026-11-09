@@ -22,7 +22,7 @@ function sameValue(a, b) {
 
 // An OoTMM value as the YAML value of the world's option, or undefined when the option can't take it.
 function convert(spec, value) {
-  if (spec.type === "choice") return spec.values.includes(value) ? value : undefined;
+  if (spec.type === "choice") return spec.values.includes(value) ? (spec.aliases?.[value] ?? value) : undefined;
   if (spec.type === "toggle") return typeof value === "boolean" ? value : undefined;
   // Sets: OoTMM's {type: none | all | specific, values} for key rings, a plain list for tricks.
   let list;

@@ -4,6 +4,30 @@ from gameplay_test import validate, validate_grant_capture
 
 
 class TestGameplayValidation(unittest.TestCase):
+    def test_flag_assertion_mask_fits_probe_and_expected_bits(self):
+        scenario = self.scenario()
+        step = dict(action="expect", name="lock", address=0x100, size=4,
+                    value=0x80000000, mask=0x80000000, timeout_frames=100)
+        scenario["steps"] = [step]
+        validate(scenario)
+        for changes in ({"mask": 0}, {"mask": True}, {"mask": 0x100000000},
+                        {"size": 1}, {"value": 1}):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                validate({**scenario, "steps": [{**step, **changes}]})
+
+    def test_gohma_helpers_require_sourced_assisted_coverage(self):
+        for action in ("oot_gohma_prepare", "oot_gohma_approach"):
+            scenario = self.scenario()
+            scenario["steps"] = [{"action": action}]
+            validate(scenario)
+            scenario["coverage"] = "unmodified-gameplay"
+            with self.assertRaises(ValueError):
+                validate(scenario)
+            scenario["coverage"] = "assisted-gameplay"
+            del scenario["oot_layout"]
+            with self.assertRaises(ValueError):
+                validate(scenario)
+
     def test_speed_is_bounded_integer_percentage(self):
         scenario = self.scenario()
         for percent in (100, 200, 400):

@@ -29,6 +29,12 @@ def option_specs() -> dict:
             index = 0 if default is None else ast.literal_eval(fields[default.id]) if isinstance(
                 default, ast.Name) else ast.literal_eval(default)
             specs[key] = {"type": "choice", "values": values, "default": values[index]}
+            aliases = {value: name.removeprefix("option_").lower()
+                       for name, expr in fields.items() if name.startswith("option_")
+                       for value in [values[ast.literal_eval(expr)]]
+                       if value.lower() != name.removeprefix("option_").lower()}
+            if aliases:
+                specs[key]["aliases"] = aliases
         elif kind in ("Toggle", "DefaultOnToggle"):
             specs[key] = {"type": "toggle", "default": kind == "DefaultOnToggle"}
         elif kind == "OptionSet":
