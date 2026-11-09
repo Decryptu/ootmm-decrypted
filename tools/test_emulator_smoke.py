@@ -11,6 +11,15 @@ spec.loader.exec_module(smoke)
 
 
 class TestObserverAttachment(unittest.TestCase):
+    def test_observer_selects_player_and_opposite_source_slot(self):
+        names = {(0, 1): "FairyReceiver", (0, 2): "FairySource"}
+        self.assertEqual(smoke.observer_slots(names, 1), (1, 2))
+        self.assertEqual(smoke.observer_slots(names, 2), (2, 1))
+        for players, slot in ((names, 0), (names, 3), ({(0, 1): "Solo"}, 2),
+                              ({(0, 1): "Solo"}, 1)):
+            with self.subTest(players=players, slot=slot), self.assertRaises(ValueError):
+                smoke.observer_slots(players, slot)
+
     def test_stability_requires_successful_polls_and_rejects_changed_receipts(self):
         poll = AsyncMock(side_effect=[False, None, True, False, *([True] * 15)])
         verify = Mock()

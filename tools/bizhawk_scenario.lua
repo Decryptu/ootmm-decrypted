@@ -357,6 +357,37 @@ local function tick()
         end
       end
         done = true
+    elseif step.action == "mm_fairy_approach" then
+        local play, f = game_play("mm", step.scene)
+        assert(memory.read_u8(play + f.trigger, "RDRAM") == 0, "Transition already active")
+        local actor = memory.read_u32_be(play + f.lists + 7 * f.stride + 4, "RDRAM") - 0x80000000
+        local visited, target = {}, nil
+        while actor >= 0 do
+            assert(actor + f.actor_size <= memory.getmemorydomainsize("RDRAM") and not visited[actor], "Invalid fairy actor list")
+            visited[actor] = true
+            -- v33.0 En_Elforg.c: the temple fairy's check ID is params bits 9..15.
+            if memory.read_u16_be(actor, "RDRAM") == 0x1b0
+                and bit.rshift(memory.read_u16_be(actor + 0x1c, "RDRAM"), 9) == step.flag then
+                assert(memory.read_u8(actor + 2, "RDRAM") == 7, "Fairy actor category guard failed")
+                assert(not target, "Ambiguous fairy check")
+                target = actor
+            end
+            actor = memory.read_u32_be(actor + f.next, "RDRAM") - 0x80000000
+        end
+        assert(target or elapsed > 1, "Requested temple fairy is not present")
+        if target then
+            local x = memory.readfloat(target + 0x24, true, "RDRAM")
+            -- Native En_Elforg pickup tests include shape.yOffset * scale.y.
+            local height = memory.readfloat(target + 0xc4, true, "RDRAM") * memory.readfloat(target + 0x5c, true, "RDRAM")
+            local y = memory.readfloat(target + 0x28, true, "RDRAM") + height + 1
+            local z = memory.readfloat(target + 0x2c, true, "RDRAM")
+            assert(math.abs(x) <= 100000 and math.abs(y) <= 100000 and math.abs(z) <= 100000, "Invalid fairy position")
+            position_player("mm", play, f, {x = x, y = y, z = z})
+            if elapsed == 1 then
+                record({event = "fairy_approach", actor = target, flag = step.flag, x = x, y = y, z = z, frames = step.frames})
+            end
+        end
+        done = not target or elapsed >= step.frames
     elseif step.action == "oot_gohma_prepare" or step.action == "oot_gohma_approach" then
         local play, f = game_play("oot", 17)
         assert(memory.read_u32_be(0x11a5d4, "RDRAM") == 1, "Gohma setup requires child Link")
@@ -520,6 +551,20 @@ local function tick()
         elseif elapsed >= step.timeout_frames then
             finish(false, "Timed out waiting for " .. step.game .. " scene " .. step.scene); return
         end
+    elseif step.action == "expect_player_item" then
+        local play, f = game_play(step.game, step.scene)
+        local player = memory.read_u32_be(play + f.lists + 2 * f.stride + 4, "RDRAM") - 0x80000000
+        local offset = step.game == "oot" and 0x144 or 0x147
+        assert(player >= 0 and player + offset + 1 <= memory.getmemorydomainsize("RDRAM"), "Invalid player pointer")
+        assert(memory.read_u16_be(player, "RDRAM") == 0 and memory.read_u8(player + 2, "RDRAM") == 2, "Player actor guard failed")
+        -- Held-item action offsets and values follow v33.0 combo/{oot,mm}/player.h.
+        local value = memory.read_u8(player + offset, "RDRAM")
+        done = value == step.value
+        if elapsed == 1 or done or elapsed >= step.timeout_frames then
+            record({event = "player_item", game = step.game, player = player,
+                value = value, expected = step.value, matched = done})
+        end
+        if not done and elapsed >= step.timeout_frames then finish(false, "Native player item action did not match"); return end
     elseif step.action == "expect" then
         local value = probe(step)
         if step.mask then value = bit.band(value, step.mask) % 0x100000000 end
