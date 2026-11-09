@@ -263,6 +263,8 @@ class TestSongsOnSongLocations(TestPreFill):
         available = {location.name for location in self.multiworld.get_locations(self.player)}
         expected = Counter(item for name, item in ootxmm_staticdata.OOTxMMCheckItems.items()
                            if name in available and item in prefill.SONG_ITEMS)
+        # Default progressive Lullaby uses two Intros instead of the vanilla full/Intro pair.
+        expected["MM_SONG_GORON_HALF"] += expected.pop("MM_SONG_GORON", 0)
         found = Counter()
         for location in self.multiworld.get_locations(self.player):
             if location.item and location.item.name in items.ITEM_BY_NAME and symbolic(location.item) in prefill.SONG_ITEMS:
@@ -284,6 +286,8 @@ class TestSongsAnywhere(TestPreFill):
         available = {location.name for location in self.multiworld.get_locations(self.player)}
         expected = Counter(item for name, item in ootxmm_staticdata.OOTxMMCheckItems.items()
                            if name in available and item in prefill.SONG_ITEMS)
+        # Default progressive Lullaby uses two Intros instead of the vanilla full/Intro pair.
+        expected["MM_SONG_GORON_HALF"] += expected.pop("MM_SONG_GORON", 0)
         found = Counter(symbolic(item) for item in self.multiworld.itempool
                         if item.player == self.player and symbolic(item) in prefill.SONG_ITEMS)
         self.assertEqual(found, expected)
