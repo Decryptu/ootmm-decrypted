@@ -103,6 +103,11 @@ class TimeLogic:
                 track(cond, key)
             for cond in graph.stay[key] or ():
                 track(cond, key)
+        for key in getattr(graph, "age_changes", ()):
+            target = (key[0], "adult" if key[1] == "child" else "child")
+            cond = ("event", logic.AGE_CHANGE_EVENT)
+            self.edges[key].append((target, cond, False))
+            track(cond, key)
 
     def expand(self, key, data, counts):
         area = logic._areas[key[0]]

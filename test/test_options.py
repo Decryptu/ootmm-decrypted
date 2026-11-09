@@ -14,6 +14,11 @@ def door_of_time_conditions(test: WorldTestBase) -> list:
 
 
 class TestDefaults(OOTxMMTestBase):
+    def test_song_age_change_disabled(self) -> None:
+        from .. import logic
+        self.assertFalse(self.world.logic.age_changes)
+        self.assertNotIn(logic.AGE_CHANGE_EVENT, self.world.logic.events)
+
     def test_door_of_time_needs_song(self) -> None:
         self.assertNotIn(True, door_of_time_conditions(self))
 
@@ -43,6 +48,39 @@ class TestOpenWithEveryTrick(OOTxMMTestBase):
         self.assertEqual(settings["doorOfTime"], "open")
         self.assertTrue(settings["openMaskShop"])
         self.assertEqual(settings["tricks"], sorted(OOTxMM_tricks.valid_keys))
+
+
+class TestAgeChangeAlways(OOTxMMTestBase):
+    options = {"ageChange": "always"}
+
+    def test_song_age_change_prerequisites(self) -> None:
+        from collections import Counter
+        from .. import items, logic, time_logic
+        self.assertEqual(self.world.fill_slot_data()["settings"]["ageChange"], self.options["ageChange"])
+        parents = self.world.logic.events[logic.AGE_CHANGE_EVENT]
+        self.assertTrue(self.world.logic.age_changes)
+        self.assertTrue(all(logic.can_change_age(area) for area, _ in self.world.logic.age_changes))
+        data = time_logic.ANY_TIME
+        ocarina = items.ITEM_BY_SYMBOLIC_ID["OOT_OCARINA"].display_name
+        song = items.ITEM_BY_SYMBOLIC_ID["OOT_SONG_TIME"].display_name
+        def unlocked(counts):
+            return any(time_logic.evaluate(cond, data, counts) is not None for _, _, cond in parents)
+        counts = Counter({ocarina: 1, song: 1, "OOT_TIME_TRAVEL": 1})
+        self.assertEqual(unlocked(counts), self.options["ageChange"] == "always")
+        counts[ocarina] = 2
+        self.assertTrue(unlocked(counts))
+        for missing in (song, "OOT_TIME_TRAVEL", ocarina):
+            incomplete = counts.copy()
+            del incomplete[missing]
+            self.assertFalse(unlocked(incomplete), missing)
+        for area, age in self.world.logic.age_changes:
+            region = self.world.get_region(logic.region_name(area, age))
+            self.assertTrue(any(e.connected_region.name == logic.region_name(area, "adult" if age == "child" else "child")
+                                for e in region.exits))
+
+
+class TestAgeChangeOcarinaOfTime(TestAgeChangeAlways):
+    options = {"ageChange": "oot"}
 
 
 class TestGoalBoth(OOTxMMTestBase):
@@ -504,6 +542,11 @@ SHARED_EQUIPMENT = (
     ("sharedSongEpona", "SONG_EPONA", 1, 1, 1),
     ("sharedSongStorms", "SONG_STORMS", 1, 1, 1),
     ("sharedSongTime", "SONG_TIME", 1, 1, 1),
+    ("sharedMaskGoron", "MASK_GORON", 1, 1, 1),
+    ("sharedMaskZora", "MASK_ZORA", 1, 1, 1),
+    ("sharedMaskTruth", "MASK_TRUTH", 1, 1, 1),
+    ("sharedMaskBunny", "MASK_BUNNY", 1, 1, 1),
+    ("sharedMaskKeaton", "MASK_KEATON", 1, 1, 1),
 )
 
 
@@ -533,6 +576,8 @@ class SharedEquipmentTests(OOTxMMTestBase):
         from .. import items, time_logic
         inventory = Counter({items.ITEM_BY_SYMBOLIC_ID[symbol].display_name: 99
                              for symbol in self.world.logic.items})
+        # Isolate mask requirements from the dog-race funding and guard-gate prerequisites.
+        inventory.update({"MM_RUPEES": 1, "OOT_KAKARIKO_GATE_OPEN": 1})
         data = (time_logic.OOT_ALL, time_logic.MM_ALL, 0, 0)
         for key, suffix, *_ in SHARED_EQUIPMENT:
             if not self.options.get(key):
@@ -554,6 +599,9 @@ class SharedEquipmentTests(OOTxMMTestBase):
             for game in ("OOT", "MM"):
                 if game == "OOT" and suffix == "ARROW_ICE":
                     # Ice Arrows are optional in OoT's default rules.
+                    continue
+                if game == "OOT" and suffix in ("MASK_GORON", "MASK_ZORA"):
+                    # These are cosmetic masks in OoT; their transformation gates are in MM.
                     continue
                 conditions = [cond for parents in (*self.world.logic.checks.values(), *self.world.logic.events.values())
                               for area, _, cond in parents if area.startswith(game + " ")]
@@ -609,7 +657,7 @@ class TestSharedMagic(SharedEquipmentTests):
 
 class TestSharedEquipment(SharedEquipmentTests):
     __test__ = True
-    options = {key: True for key, *_ in SHARED_EQUIPMENT}
+    options = {**{key: True for key, *_ in SHARED_EQUIPMENT}, "shuffleMaskTrades": True}
 
 
 class TestSharedArrows(SharedEquipmentTests):
@@ -620,6 +668,12 @@ class TestSharedArrows(SharedEquipmentTests):
 class TestSharedTools(SharedEquipmentTests):
     __test__ = True
     options = {"sharedHookshot": True, "sharedLens": True}
+
+
+class TestSharedMasks(SharedEquipmentTests):
+    __test__ = True
+    options = {**{key: True for key, suffix, *_ in SHARED_EQUIPMENT if suffix.startswith("MASK_")},
+               "shuffleMaskTrades": True}
 
 
 class TestSharedSongs(SharedEquipmentTests):
@@ -639,6 +693,19 @@ class TestSharedEquipmentReference(unittest.TestCase):
         from .. import logic
         samples = json.loads(pkgutil.get_data(__name__, "shared_equipment_samples.json"))
         base = Counter(samples[0]["pool"])
+        # Reconstruct the two vanilla Lullaby sources before the default progressive transform.
+        for game in ("OOT", "MM", "SHARED"):
+            for suffix in ("GORON", "GORON_HALF"):
+                base.pop(game + "_SONG_" + suffix, None)
+        base.update(item for item in logic.ootxmm_staticdata.OOTxMMCheckItems.values()
+                    if item in ("MM_SONG_GORON", "MM_SONG_GORON_HALF"))
+        additions = {item for _, item in logic.CROSS_GAME_SONGS.values()}
+        additions.update(("OOT_SONG_GORON", "OOT_SONG_GORON_HALF"))
         for sample in samples:
             with self.subTest(settings=sample["settings"]):
-                self.assertEqual(logic.transform_pool(base.elements(), sample["settings"]), Counter(sample["pool"]))
+                settings = logic.normalize_shared_items(sample["settings"])
+                pool = base.copy()
+                pool.update(item for item in logic.extra_items(settings) if item in additions)
+                self.assertEqual(logic.transform_pool(pool.elements(), settings), Counter(sample["pool"]))
+                from .. import prefill
+                self.assertEqual(prefill.song_locations(settings), set(sample["songLocations"]))

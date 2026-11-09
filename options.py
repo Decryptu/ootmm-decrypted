@@ -248,6 +248,32 @@ class OOTxMM_dungeonRewardShuffle(Choice):
     default = option_dungeonBlueWarps
 
 
+class OOTxMM_shopShuffleOot(Choice):
+    """
+    Controls whether or not shops in OoT should have their items shuffled
+    - **none**: All the items are vanilla
+    - **full**: All 8 items are shuffled
+    """
+    display_name = "Shop Shuffle (OoT)"
+    option_none = 0
+    option_full = 1
+    ootmm_values = ['none', 'full']
+    default = option_none
+
+
+class OOTxMM_shopShuffleMm(Choice):
+    """
+    Controls whether or not shops in MM should have their items shuffled.<br>If "None" is selected, the Bomb Bag purchases will still be shuffled
+    - **none**: All the items are vanilla
+    - **full**: All 8 items are shuffled
+    """
+    display_name = "Shop Shuffle (MM)"
+    option_none = 0
+    option_full = 1
+    ootmm_values = ['none', 'full']
+    default = option_none
+
+
 class OOTxMM_shufflePotsOot(Choice):
     """
     Controls whether or not the pots are shuffled (OoT).
@@ -811,6 +837,40 @@ class OOTxMM_eggShuffle(Toggle):
     display_name = "Weird / Pocket Egg Content Shuffle"
 
 
+class OOTxMM_priceOotShops(Choice):
+    """
+    Sets the price of items inside OoT shops
+    - **affordable**: All prices are set to 10 rupees.
+    - **vanilla**: All prices are set to their vanilla values.
+    - **weighted**: All prices are randomized, but lower prices are favored.
+    - **uniform**: All prices are randomized.
+    """
+    display_name = "OoT Shop Prices"
+    option_affordable = 0
+    option_vanilla = 1
+    option_weighted = 2
+    option_uniform = 3
+    ootmm_values = ['affordable', 'vanilla', 'weighted', 'random']
+    default = option_vanilla
+
+
+class OOTxMM_priceMmShops(Choice):
+    """
+    Sets the price of items sold inside MM shops
+    - **affordable**: All prices are set to 10 rupees.
+    - **vanilla**: All prices are set to their vanilla values.
+    - **weighted**: All prices are randomized, but lower prices are favored.
+    - **uniform**: All prices are randomized.
+    """
+    display_name = "MM Shop Prices"
+    option_affordable = 0
+    option_vanilla = 1
+    option_weighted = 2
+    option_uniform = 3
+    ootmm_values = ['affordable', 'vanilla', 'weighted', 'random']
+    default = option_vanilla
+
+
 class OOTxMM_moonCrash(Choice):
     """
     Changes the behavior of moon crashing
@@ -848,6 +908,21 @@ class OOTxMM_doorOfTime(Choice):
     option_open = 1
     ootmm_values = ['closed', 'open']
     default = option_closed
+
+
+class OOTxMM_ageChange(Choice):
+    """
+    Allows you to switch ages by playing Song of Time in OoT after you've switched ages once in Temple of Time.<br>Preserves your current position on the scene, which logic can expect you to take advantage of.
+    - **none**: Cannot change age by playing Song of Time.
+    - **oot**: Can change age by playing Song of Time with the Ocarina of Time specifically.
+    - **always**: Can change age by playing Song of Time using any means.
+    """
+    display_name = "Age Change upon Song of Time"
+    option_none = 0
+    option_oot = 1
+    option_always = 2
+    ootmm_values = ['none', 'oot', 'always']
+    default = option_none
 
 
 class OOTxMM_dekuTree(Choice):
@@ -1137,6 +1212,32 @@ class OOTxMM_mmHyperEnemies(Toggle):
     display_name = "Hyper Enemies (MM)"
 
 
+class OOTxMM_progressiveGoronLullabyMm(Choice):
+    """
+    Alters the behavior of the MM Goron Lullaby
+    - **single**: Only the Goron Lullaby can be found, and when playing with Songs on Song Locations, Baby Goron in MM is no longer a Song Location
+    - **progressive**: The Lullaby Intro will be received first before getting the full song
+    """
+    display_name = "MM Goron Lullaby"
+    option_single = 0
+    option_progressive = 1
+    ootmm_values = ['single', 'progressive']
+    default = option_progressive
+
+
+class OOTxMM_progressiveGoronLullabyOot(Choice):
+    """
+    Alters the behavior of the OoT Goron Lullaby
+    - **single**: Only the Goron Lullaby can be found
+    - **progressive**: The Lullaby Intro will be received first before getting the full song
+    """
+    display_name = "OoT Goron Lullaby"
+    option_single = 0
+    option_progressive = 1
+    ootmm_values = ['single', 'progressive']
+    default = option_progressive
+
+
 class OOTxMM_fillWallets(Toggle):
     """
     Fills the wallet upon finding a new one
@@ -1191,6 +1292,62 @@ class OOTxMM_kegStrength3(Toggle):
     If you have the Golden Gauntlets in Majora's Mask, this allows you to purchase and use Powder Kegs, and attempt the Keg Trial.
     """
     display_name = "Use Keg With Golden Gauntlets"
+
+
+class OOTxMM_elegyOot(Toggle):
+    """
+    Add the Elegy of Emptiness in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Elegy of Emptiness (OoT)"
+
+
+class OOTxMM_songSoaringOot(Toggle):
+    """
+    Add the Song of Soaring in Ocarina of Time. Usable only as child. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Song of Soaring (OoT)"
+
+
+class OOTxMM_songHealingOot(Toggle):
+    """
+    Add the Song of Healing in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Song of Healing (OoT)"
+
+
+class OOTxMM_songAwakeningOot(Toggle):
+    """
+    Add the Sonata of Awakening in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Sonata of Awakening (OoT)"
+
+
+class OOTxMM_songGoronOot(Toggle):
+    """
+    Add the Goron Lullaby in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Goron Lullaby (OoT)"
+
+
+class OOTxMM_songZoraOot(Toggle):
+    """
+    Add the New Wave Bossa Nova in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "New Wave Bossa Nova (OoT)"
+
+
+class OOTxMM_songOrderOot(Toggle):
+    """
+    Add the Oath to Order in Ocarina of Time. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Oath to Order (OoT)"
+
+
+class OOTxMM_songSunMm(Toggle):
+    """
+    Add Sun's Song in Majora's Mask. If Songs are on Song Locations, you must share or start with at least one song
+    """
+    display_name = "Sun's Song (MM)"
 
 
 class OOTxMM_ocarinaButtonsShuffleOot(Toggle):
@@ -1361,6 +1518,13 @@ class OOTxMM_sharedSongTime(Toggle):
     display_name = "Shared Song of Time"
 
 
+class OOTxMM_sharedSongSun(Toggle):
+    """
+    Combines Sun's Song from OoT and MM into one item for both games
+    """
+    display_name = "Shared Sun's Song"
+
+
 class OOTxMM_sharedHookshot(Toggle):
     """
     Combines the Hookshots from OoT and MM into two progressive items for both games.<br>If "Short Hookshot in MM" is disabled, the MM Hookshot will be given along with the first progressive item.
@@ -1373,6 +1537,90 @@ class OOTxMM_sharedLens(Toggle):
     Combines the Lenses of Truth from OoT and MM into one item for both games
     """
     display_name = "Shared Lens of Truth"
+
+
+class OOTxMM_sharedMaskGoron(Toggle):
+    """
+    Combines the Goron Masks from OoT and MM into one item for both games
+    """
+    display_name = "Shared Goron Mask"
+
+
+class OOTxMM_sharedMaskZora(Toggle):
+    """
+    Combines the Zora Masks from OoT and MM into one item for both games
+    """
+    display_name = "Shared Zora Mask"
+
+
+class OOTxMM_sharedMaskBunny(Toggle):
+    """
+    Combines the Bunny Hoods from OoT and MM into one item for both games
+    """
+    display_name = "Shared Bunny Hood"
+
+
+class OOTxMM_sharedMaskKeaton(Toggle):
+    """
+    Combines the Keaton Masks from OoT and MM into one item for both games
+    """
+    display_name = "Shared Keaton Mask"
+
+
+class OOTxMM_sharedMaskTruth(Toggle):
+    """
+    Combines the Masks of Truth from OoT and MM into one item for both games
+    """
+    display_name = "Shared Mask of Truth"
+
+
+class OOTxMM_sharedSongElegy(Toggle):
+    """
+    Combines the Elegies of Emptiness from OoT and MM into one item for both games
+    """
+    display_name = "Shared Elegy of Emptiness"
+
+
+class OOTxMM_sharedSongHealing(Toggle):
+    """
+    Combines the Songs of Healing from OoT and MM into one item for both games
+    """
+    display_name = "Shared Song of Healing"
+
+
+class OOTxMM_sharedSongSoaring(Toggle):
+    """
+    Combines the Songs of Song from OoT and MM into one item for both games
+    """
+    display_name = "Shared Song of Soaring"
+
+
+class OOTxMM_sharedSongAwakening(Toggle):
+    """
+    Combines the Sonata of Awakening from OoT and MM into one item for both games
+    """
+    display_name = "Shared Sonata of Awakening"
+
+
+class OOTxMM_sharedSongGoron(Toggle):
+    """
+    Combines the Goron Lullaby from OoT and MM into one item for both games
+    """
+    display_name = "Shared Goron Lullaby"
+
+
+class OOTxMM_sharedSongZora(Toggle):
+    """
+    Combines the New Wave Bossa Nova from OoT and MM into one item for both games
+    """
+    display_name = "Shared New Wave Bossa Nova"
+
+
+class OOTxMM_sharedSongOrder(Toggle):
+    """
+    Combines the Oath to Order from OoT and MM into one item for both games
+    """
+    display_name = "Shared Oath to Order"
 
 
 class OOTxMM_sharedSoulsEnemy(Toggle):
@@ -1919,6 +2167,8 @@ class OOTxMMOptions(PerGameCommonOptions):
     strayFairyOtherShuffle: OOTxMM_strayFairyOtherShuffle
     ganonBossKey: OOTxMM_ganonBossKey
     dungeonRewardShuffle: OOTxMM_dungeonRewardShuffle
+    shopShuffleOot: OOTxMM_shopShuffleOot
+    shopShuffleMm: OOTxMM_shopShuffleMm
     shufflePotsOot: OOTxMM_shufflePotsOot
     shufflePotsMm: OOTxMM_shufflePotsMm
     shuffleCratesOot: OOTxMM_shuffleCratesOot
@@ -1968,9 +2218,12 @@ class OOTxMMOptions(PerGameCommonOptions):
     fairyFountainFairyShuffleMm: OOTxMM_fairyFountainFairyShuffleMm
     fairySpotShuffleOot: OOTxMM_fairySpotShuffleOot
     eggShuffle: OOTxMM_eggShuffle
+    priceOotShops: OOTxMM_priceOotShops
+    priceMmShops: OOTxMM_priceMmShops
     moonCrash: OOTxMM_moonCrash
     startingAgeMm: OOTxMM_startingAgeMm
     doorOfTime: OOTxMM_doorOfTime
+    ageChange: OOTxMM_ageChange
     dekuTree: OOTxMM_dekuTree
     beneathWell: OOTxMM_beneathWell
     openZdShortcut: OOTxMM_openZdShortcut
@@ -1998,6 +2251,8 @@ class OOTxMMOptions(PerGameCommonOptions):
     mmStyleAirMovementOot: OOTxMM_mmStyleAirMovementOot
     ootHyperEnemies: OOTxMM_ootHyperEnemies
     mmHyperEnemies: OOTxMM_mmHyperEnemies
+    progressiveGoronLullabyMm: OOTxMM_progressiveGoronLullabyMm
+    progressiveGoronLullabyOot: OOTxMM_progressiveGoronLullabyOot
     fillWallets: OOTxMM_fillWallets
     blueFireArrows: OOTxMM_blueFireArrows
     iceArrowPlatformsOot: OOTxMM_iceArrowPlatformsOot
@@ -2006,6 +2261,14 @@ class OOTxMMOptions(PerGameCommonOptions):
     skeletonKeyOot: OOTxMM_skeletonKeyOot
     skeletonKeyMm: OOTxMM_skeletonKeyMm
     kegStrength3: OOTxMM_kegStrength3
+    elegyOot: OOTxMM_elegyOot
+    songSoaringOot: OOTxMM_songSoaringOot
+    songHealingOot: OOTxMM_songHealingOot
+    songAwakeningOot: OOTxMM_songAwakeningOot
+    songGoronOot: OOTxMM_songGoronOot
+    songZoraOot: OOTxMM_songZoraOot
+    songOrderOot: OOTxMM_songOrderOot
+    songSunMm: OOTxMM_songSunMm
     ocarinaButtonsShuffleOot: OOTxMM_ocarinaButtonsShuffleOot
     ocarinaButtonsShuffleMm: OOTxMM_ocarinaButtonsShuffleMm
     soulsEnemyOot: OOTxMM_soulsEnemyOot
@@ -2030,8 +2293,21 @@ class OOTxMMOptions(PerGameCommonOptions):
     sharedSongEpona: OOTxMM_sharedSongEpona
     sharedSongStorms: OOTxMM_sharedSongStorms
     sharedSongTime: OOTxMM_sharedSongTime
+    sharedSongSun: OOTxMM_sharedSongSun
     sharedHookshot: OOTxMM_sharedHookshot
     sharedLens: OOTxMM_sharedLens
+    sharedMaskGoron: OOTxMM_sharedMaskGoron
+    sharedMaskZora: OOTxMM_sharedMaskZora
+    sharedMaskBunny: OOTxMM_sharedMaskBunny
+    sharedMaskKeaton: OOTxMM_sharedMaskKeaton
+    sharedMaskTruth: OOTxMM_sharedMaskTruth
+    sharedSongElegy: OOTxMM_sharedSongElegy
+    sharedSongHealing: OOTxMM_sharedSongHealing
+    sharedSongSoaring: OOTxMM_sharedSongSoaring
+    sharedSongAwakening: OOTxMM_sharedSongAwakening
+    sharedSongGoron: OOTxMM_sharedSongGoron
+    sharedSongZora: OOTxMM_sharedSongZora
+    sharedSongOrder: OOTxMM_sharedSongOrder
     sharedSoulsEnemy: OOTxMM_sharedSoulsEnemy
     sharedSoulsNpc: OOTxMM_sharedSoulsNpc
     sharedSoulsAnimal: OOTxMM_sharedSoulsAnimal
@@ -2087,26 +2363,29 @@ class OOTxMMOptions(PerGameCommonOptions):
 
 
 # The OoTMM setting keys of the options above: the patch takes their values as they are.
-OOTMM_SETTINGS = ['goal', 'songs', 'tingleShuffle', 'mapCompassShuffle', 'smallKeyShuffleOot', 'smallKeyShuffleMm', 'smallKeyShuffleHideout', 'smallKeyShuffleChestGame', 'bossKeyShuffleOot', 'bossKeyShuffleMm', 'smallKeyRingOot', 'smallKeyRingMm', 'strayFairyChestShuffle', 'strayFairyOtherShuffle', 'ganonBossKey', 'dungeonRewardShuffle', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleOcarinasOot', 'shuffleMasterSword', 'shuffleGerudoCard', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'moonCrash', 'startingAgeMm', 'doorOfTime', 'dekuTree', 'beneathWell', 'openZdShortcut', 'openMoon', 'bossWarpPads', 'freeScarecrowOot', 'freeScarecrowMm', 'crossGameFw', 'csmc', 'csmcHearts', 'csmcMapCompass', 'csmcSkulltula', 'csmcCow', 'blastMaskCooldown', 'clockSpeed', 'fierceDeityAnywhere', 'hookshotAnywhereOot', 'climbMostSurfacesOot', 'climbMostSurfacesMm', 'restoreBrokenActors', 'alterLostWoodsExits', 'voidWarpMm', 'damageMultiplierOot', 'damageMultiplierMm', 'mmStyleAirMovementOot', 'ootHyperEnemies', 'mmHyperEnemies', 'fillWallets', 'blueFireArrows', 'iceArrowPlatformsOot', 'sunlightArrows', 'rupeeScaling', 'skeletonKeyOot', 'skeletonKeyMm', 'kegStrength3', 'ocarinaButtonsShuffleOot', 'ocarinaButtonsShuffleMm', 'soulsEnemyOot', 'soulsEnemyMm', 'soulsBossOot', 'soulsBossMm', 'soulsNpcOot', 'soulsNpcMm', 'soulsAnimalOot', 'soulsAnimalMm', 'soulsMiscOot', 'soulsMiscMm', 'menuNotebook', 'coins', 'songOfDoubleTimeOot', 'sharedBows', 'sharedBombBags', 'sharedMagic', 'sharedMagicArrowFire', 'sharedMagicArrowIce', 'sharedMagicArrowLight', 'sharedSongEpona', 'sharedSongStorms', 'sharedSongTime', 'sharedHookshot', 'sharedLens', 'sharedSoulsEnemy', 'sharedSoulsNpc', 'sharedSoulsAnimal', 'sharedSoulsMisc', 'sharedOcarinaButtons', 'sharedSkeletonKey', 'agelessSwords', 'agelessShields', 'agelessTunics', 'agelessBoots', 'agelessSticks', 'agelessBoomerang', 'agelessHammer', 'agelessGFS', 'agelessHookshot', 'agelessSlingshot', 'agelessBow', 'agelessChildTrade', 'agelessSoaring', 'mmEasierLightblock', 'shadowFastBoat', 'openMaskShop', 'lenientSpikes', 'fastBunnyHood', 'bowSlingshotBreakHives', 'critWiggleDisable', 'fastMasks', 'keepItemsReset', 'keepBottlesReset', 'mmSongOfDoubleTimeTimeSelector', 'autoInvert', 'cutsceneSkipOoT', 'cutsceneSkipMM', 'cutsceneGlitchOoT', 'cutsceneIntroGohma', 'cutsceneIntroKingDodongo', 'cutsceneIntroBarinade', 'cutsceneIntroPhantomGanon', 'cutsceneIntroVolvagia', 'cutsceneIntroMorpha', 'cutsceneIntroBongoBongo', 'cutsceneIntroTwinrova', 'cutsceneIntroGanondorf', 'cutsceneIntroOdolwa', 'cutsceneIntroGoht', 'cutsceneIntroWart', 'cutsceneIntroGyorg', 'cutsceneIntroIgos', 'cutsceneIntroGomess', 'cutsceneIntroTwinmold', 'cutsceneIntroMajora', 'tricks']
+OOTMM_SETTINGS = ['goal', 'songs', 'tingleShuffle', 'mapCompassShuffle', 'smallKeyShuffleOot', 'smallKeyShuffleMm', 'smallKeyShuffleHideout', 'smallKeyShuffleChestGame', 'bossKeyShuffleOot', 'bossKeyShuffleMm', 'smallKeyRingOot', 'smallKeyRingMm', 'strayFairyChestShuffle', 'strayFairyOtherShuffle', 'ganonBossKey', 'dungeonRewardShuffle', 'shopShuffleOot', 'shopShuffleMm', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleOcarinasOot', 'shuffleMasterSword', 'shuffleGerudoCard', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'priceOotShops', 'priceMmShops', 'moonCrash', 'startingAgeMm', 'doorOfTime', 'ageChange', 'dekuTree', 'beneathWell', 'openZdShortcut', 'openMoon', 'bossWarpPads', 'freeScarecrowOot', 'freeScarecrowMm', 'crossGameFw', 'csmc', 'csmcHearts', 'csmcMapCompass', 'csmcSkulltula', 'csmcCow', 'blastMaskCooldown', 'clockSpeed', 'fierceDeityAnywhere', 'hookshotAnywhereOot', 'climbMostSurfacesOot', 'climbMostSurfacesMm', 'restoreBrokenActors', 'alterLostWoodsExits', 'voidWarpMm', 'damageMultiplierOot', 'damageMultiplierMm', 'mmStyleAirMovementOot', 'ootHyperEnemies', 'mmHyperEnemies', 'progressiveGoronLullabyMm', 'progressiveGoronLullabyOot', 'fillWallets', 'blueFireArrows', 'iceArrowPlatformsOot', 'sunlightArrows', 'rupeeScaling', 'skeletonKeyOot', 'skeletonKeyMm', 'kegStrength3', 'elegyOot', 'songSoaringOot', 'songHealingOot', 'songAwakeningOot', 'songGoronOot', 'songZoraOot', 'songOrderOot', 'songSunMm', 'ocarinaButtonsShuffleOot', 'ocarinaButtonsShuffleMm', 'soulsEnemyOot', 'soulsEnemyMm', 'soulsBossOot', 'soulsBossMm', 'soulsNpcOot', 'soulsNpcMm', 'soulsAnimalOot', 'soulsAnimalMm', 'soulsMiscOot', 'soulsMiscMm', 'menuNotebook', 'coins', 'songOfDoubleTimeOot', 'sharedBows', 'sharedBombBags', 'sharedMagic', 'sharedMagicArrowFire', 'sharedMagicArrowIce', 'sharedMagicArrowLight', 'sharedSongEpona', 'sharedSongStorms', 'sharedSongTime', 'sharedSongSun', 'sharedHookshot', 'sharedLens', 'sharedMaskGoron', 'sharedMaskZora', 'sharedMaskBunny', 'sharedMaskKeaton', 'sharedMaskTruth', 'sharedSongElegy', 'sharedSongHealing', 'sharedSongSoaring', 'sharedSongAwakening', 'sharedSongGoron', 'sharedSongZora', 'sharedSongOrder', 'sharedSoulsEnemy', 'sharedSoulsNpc', 'sharedSoulsAnimal', 'sharedSoulsMisc', 'sharedOcarinaButtons', 'sharedSkeletonKey', 'agelessSwords', 'agelessShields', 'agelessTunics', 'agelessBoots', 'agelessSticks', 'agelessBoomerang', 'agelessHammer', 'agelessGFS', 'agelessHookshot', 'agelessSlingshot', 'agelessBow', 'agelessChildTrade', 'agelessSoaring', 'mmEasierLightblock', 'shadowFastBoat', 'openMaskShop', 'lenientSpikes', 'fastBunnyHood', 'bowSlingshotBreakHives', 'critWiggleDisable', 'fastMasks', 'keepItemsReset', 'keepBottlesReset', 'mmSongOfDoubleTimeTimeSelector', 'autoInvert', 'cutsceneSkipOoT', 'cutsceneSkipMM', 'cutsceneGlitchOoT', 'cutsceneIntroGohma', 'cutsceneIntroKingDodongo', 'cutsceneIntroBarinade', 'cutsceneIntroPhantomGanon', 'cutsceneIntroVolvagia', 'cutsceneIntroMorpha', 'cutsceneIntroBongoBongo', 'cutsceneIntroTwinrova', 'cutsceneIntroGanondorf', 'cutsceneIntroOdolwa', 'cutsceneIntroGoht', 'cutsceneIntroWart', 'cutsceneIntroGyorg', 'cutsceneIntroIgos', 'cutsceneIntroGomess', 'cutsceneIntroTwinmold', 'cutsceneIntroMajora', 'tricks']
 
 # The ones OoTMM's code reads outside conditions, which the world ports (raw/Meta_Options.py).
-PORTED_SETTINGS = ['goal', 'songs', 'tingleShuffle', 'mapCompassShuffle', 'smallKeyShuffleOot', 'smallKeyShuffleMm', 'smallKeyShuffleHideout', 'smallKeyShuffleChestGame', 'bossKeyShuffleOot', 'bossKeyShuffleMm', 'smallKeyRingOot', 'smallKeyRingMm', 'strayFairyChestShuffle', 'strayFairyOtherShuffle', 'ganonBossKey', 'dungeonRewardShuffle', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleOcarinasOot', 'shuffleMasterSword', 'shuffleGerudoCard', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'restoreBrokenActors', 'skeletonKeyOot', 'skeletonKeyMm', 'ocarinaButtonsShuffleOot', 'ocarinaButtonsShuffleMm', 'soulsEnemyOot', 'soulsEnemyMm', 'soulsBossOot', 'soulsBossMm', 'soulsNpcOot', 'soulsNpcMm', 'soulsAnimalOot', 'soulsAnimalMm', 'soulsMiscOot', 'soulsMiscMm', 'sharedBows', 'sharedBombBags', 'sharedMagic', 'sharedMagicArrowFire', 'sharedMagicArrowIce', 'sharedMagicArrowLight', 'sharedSongEpona', 'sharedSongStorms', 'sharedSongTime', 'sharedHookshot', 'sharedLens', 'sharedSoulsEnemy', 'sharedSoulsNpc', 'sharedSoulsAnimal', 'sharedSoulsMisc', 'sharedOcarinaButtons', 'sharedSkeletonKey']
+PORTED_SETTINGS = ['goal', 'songs', 'tingleShuffle', 'mapCompassShuffle', 'smallKeyShuffleOot', 'smallKeyShuffleMm', 'smallKeyShuffleHideout', 'smallKeyShuffleChestGame', 'bossKeyShuffleOot', 'bossKeyShuffleMm', 'smallKeyRingOot', 'smallKeyRingMm', 'strayFairyChestShuffle', 'strayFairyOtherShuffle', 'ganonBossKey', 'dungeonRewardShuffle', 'shopShuffleOot', 'shopShuffleMm', 'shufflePotsOot', 'shufflePotsMm', 'shuffleCratesOot', 'shuffleCratesMm', 'shuffleBarrelsMm', 'shuffleHivesOot', 'shuffleHivesMm', 'shuffleGrassOot', 'shuffleRocksOot', 'shuffleRocksMm', 'shuffleGrassMm', 'shuffleTFGrassMm', 'shuffleTreesOot', 'shuffleTreesMm', 'shuffleBushOot', 'shuffleBushMm', 'shuffleSoilOot', 'shuffleSoilMm', 'shuffleFreeRupeesOot', 'shuffleFreeRupeesMm', 'shuffleFreeHeartsOot', 'shuffleFreeHeartsMm', 'shuffleGossipFairiesOot', 'shuffleGossipBigFairiesOot', 'shuffleGossipFairiesMm', 'shuffleGossipBigFairiesMm', 'shuffleWonderItemsOot', 'shuffleWonderItemsMm', 'shuffleSnowballsMm', 'shuffleButterfliesOot', 'shuffleButterfliesMm', 'shuffleBouldersOot', 'shuffleBouldersMm', 'shuffleRedBouldersOot', 'shuffleRedBouldersMm', 'shuffleSilverBouldersOot', 'shuffleIciclesOot', 'shuffleIciclesMm', 'shuffleRedIceOot', 'shuffleOcarinasOot', 'shuffleMasterSword', 'shuffleGerudoCard', 'shuffleSkulltulaFinalReward', 'shuffleMaskTrades', 'divingGameRupeeShuffle', 'fairyFountainFairyShuffleOot', 'fairyFountainFairyShuffleMm', 'fairySpotShuffleOot', 'eggShuffle', 'priceOotShops', 'priceMmShops', 'ageChange', 'restoreBrokenActors', 'progressiveGoronLullabyMm', 'progressiveGoronLullabyOot', 'skeletonKeyOot', 'skeletonKeyMm', 'elegyOot', 'songSoaringOot', 'songHealingOot', 'songAwakeningOot', 'songGoronOot', 'songZoraOot', 'songOrderOot', 'songSunMm', 'ocarinaButtonsShuffleOot', 'ocarinaButtonsShuffleMm', 'soulsEnemyOot', 'soulsEnemyMm', 'soulsBossOot', 'soulsBossMm', 'soulsNpcOot', 'soulsNpcMm', 'soulsAnimalOot', 'soulsAnimalMm', 'soulsMiscOot', 'soulsMiscMm', 'sharedBows', 'sharedBombBags', 'sharedMagic', 'sharedMagicArrowFire', 'sharedMagicArrowIce', 'sharedMagicArrowLight', 'sharedSongEpona', 'sharedSongStorms', 'sharedSongTime', 'sharedSongSun', 'sharedHookshot', 'sharedLens', 'sharedMaskGoron', 'sharedMaskZora', 'sharedMaskBunny', 'sharedMaskKeaton', 'sharedMaskTruth', 'sharedSongElegy', 'sharedSongHealing', 'sharedSongSoaring', 'sharedSongAwakening', 'sharedSongGoron', 'sharedSongZora', 'sharedSongOrder', 'sharedSoulsEnemy', 'sharedSoulsNpc', 'sharedSoulsAnimal', 'sharedSoulsMisc', 'sharedOcarinaButtons', 'sharedSkeletonKey']
 
 # By OoTMM's setting category.
 option_groups = [
     OptionGroup("Main", [OOTxMM_goal]),
-    OptionGroup("Main / Shuffle", [OOTxMM_songs, OOTxMM_tingleShuffle, OOTxMM_mapCompassShuffle, OOTxMM_smallKeyShuffleOot, OOTxMM_smallKeyShuffleMm, OOTxMM_smallKeyShuffleHideout, OOTxMM_smallKeyShuffleChestGame, OOTxMM_bossKeyShuffleOot, OOTxMM_bossKeyShuffleMm, OOTxMM_smallKeyRingOot, OOTxMM_smallKeyRingMm, OOTxMM_strayFairyChestShuffle, OOTxMM_strayFairyOtherShuffle, OOTxMM_ganonBossKey, OOTxMM_dungeonRewardShuffle, OOTxMM_shufflePotsOot, OOTxMM_shufflePotsMm, OOTxMM_shuffleCratesOot, OOTxMM_shuffleCratesMm, OOTxMM_shuffleBarrelsMm, OOTxMM_shuffleHivesOot, OOTxMM_shuffleHivesMm, OOTxMM_shuffleGrassOot, OOTxMM_shuffleRocksOot, OOTxMM_shuffleRocksMm, OOTxMM_shuffleGrassMm, OOTxMM_shuffleTFGrassMm, OOTxMM_shuffleTreesOot, OOTxMM_shuffleTreesMm, OOTxMM_shuffleBushOot, OOTxMM_shuffleBushMm, OOTxMM_shuffleSoilOot, OOTxMM_shuffleSoilMm, OOTxMM_shuffleFreeRupeesOot, OOTxMM_shuffleFreeRupeesMm, OOTxMM_shuffleFreeHeartsOot, OOTxMM_shuffleFreeHeartsMm, OOTxMM_shuffleGossipFairiesOot, OOTxMM_shuffleGossipBigFairiesOot, OOTxMM_shuffleGossipFairiesMm, OOTxMM_shuffleGossipBigFairiesMm, OOTxMM_shuffleWonderItemsOot, OOTxMM_shuffleWonderItemsMm, OOTxMM_shuffleSnowballsMm, OOTxMM_shuffleButterfliesOot, OOTxMM_shuffleButterfliesMm, OOTxMM_shuffleBouldersOot, OOTxMM_shuffleBouldersMm, OOTxMM_shuffleRedBouldersOot, OOTxMM_shuffleRedBouldersMm, OOTxMM_shuffleSilverBouldersOot, OOTxMM_shuffleIciclesOot, OOTxMM_shuffleIciclesMm, OOTxMM_shuffleRedIceOot, OOTxMM_shuffleOcarinasOot, OOTxMM_shuffleMasterSword, OOTxMM_shuffleGerudoCard, OOTxMM_shuffleSkulltulaFinalReward, OOTxMM_shuffleMaskTrades, OOTxMM_divingGameRupeeShuffle, OOTxMM_fairyFountainFairyShuffleOot, OOTxMM_fairyFountainFairyShuffleMm, OOTxMM_fairySpotShuffleOot, OOTxMM_eggShuffle]),
-    OptionGroup("Main / Events", [OOTxMM_moonCrash, OOTxMM_startingAgeMm, OOTxMM_doorOfTime, OOTxMM_dekuTree, OOTxMM_beneathWell, OOTxMM_openZdShortcut, OOTxMM_openMoon, OOTxMM_bossWarpPads, OOTxMM_freeScarecrowOot, OOTxMM_freeScarecrowMm]),
+    OptionGroup("Main / Shuffle", [OOTxMM_songs, OOTxMM_tingleShuffle, OOTxMM_mapCompassShuffle, OOTxMM_smallKeyShuffleOot, OOTxMM_smallKeyShuffleMm, OOTxMM_smallKeyShuffleHideout, OOTxMM_smallKeyShuffleChestGame, OOTxMM_bossKeyShuffleOot, OOTxMM_bossKeyShuffleMm, OOTxMM_smallKeyRingOot, OOTxMM_smallKeyRingMm, OOTxMM_strayFairyChestShuffle, OOTxMM_strayFairyOtherShuffle, OOTxMM_ganonBossKey, OOTxMM_dungeonRewardShuffle, OOTxMM_shopShuffleOot, OOTxMM_shopShuffleMm, OOTxMM_shufflePotsOot, OOTxMM_shufflePotsMm, OOTxMM_shuffleCratesOot, OOTxMM_shuffleCratesMm, OOTxMM_shuffleBarrelsMm, OOTxMM_shuffleHivesOot, OOTxMM_shuffleHivesMm, OOTxMM_shuffleGrassOot, OOTxMM_shuffleRocksOot, OOTxMM_shuffleRocksMm, OOTxMM_shuffleGrassMm, OOTxMM_shuffleTFGrassMm, OOTxMM_shuffleTreesOot, OOTxMM_shuffleTreesMm, OOTxMM_shuffleBushOot, OOTxMM_shuffleBushMm, OOTxMM_shuffleSoilOot, OOTxMM_shuffleSoilMm, OOTxMM_shuffleFreeRupeesOot, OOTxMM_shuffleFreeRupeesMm, OOTxMM_shuffleFreeHeartsOot, OOTxMM_shuffleFreeHeartsMm, OOTxMM_shuffleGossipFairiesOot, OOTxMM_shuffleGossipBigFairiesOot, OOTxMM_shuffleGossipFairiesMm, OOTxMM_shuffleGossipBigFairiesMm, OOTxMM_shuffleWonderItemsOot, OOTxMM_shuffleWonderItemsMm, OOTxMM_shuffleSnowballsMm, OOTxMM_shuffleButterfliesOot, OOTxMM_shuffleButterfliesMm, OOTxMM_shuffleBouldersOot, OOTxMM_shuffleBouldersMm, OOTxMM_shuffleRedBouldersOot, OOTxMM_shuffleRedBouldersMm, OOTxMM_shuffleSilverBouldersOot, OOTxMM_shuffleIciclesOot, OOTxMM_shuffleIciclesMm, OOTxMM_shuffleRedIceOot, OOTxMM_shuffleOcarinasOot, OOTxMM_shuffleMasterSword, OOTxMM_shuffleGerudoCard, OOTxMM_shuffleSkulltulaFinalReward, OOTxMM_shuffleMaskTrades, OOTxMM_divingGameRupeeShuffle, OOTxMM_fairyFountainFairyShuffleOot, OOTxMM_fairyFountainFairyShuffleMm, OOTxMM_fairySpotShuffleOot, OOTxMM_eggShuffle]),
+    OptionGroup("Main / Prices", [OOTxMM_priceOotShops, OOTxMM_priceMmShops]),
+    OptionGroup("Main / Events", [OOTxMM_moonCrash, OOTxMM_startingAgeMm, OOTxMM_doorOfTime, OOTxMM_ageChange, OOTxMM_dekuTree, OOTxMM_beneathWell, OOTxMM_openZdShortcut, OOTxMM_openMoon, OOTxMM_bossWarpPads, OOTxMM_freeScarecrowOot, OOTxMM_freeScarecrowMm]),
     OptionGroup("Main / Cross", [OOTxMM_crossGameFw]),
     OptionGroup("Main / Camc", [OOTxMM_csmc, OOTxMM_csmcHearts, OOTxMM_csmcMapCompass, OOTxMM_csmcSkulltula, OOTxMM_csmcCow]),
     OptionGroup("Main / Misc", [OOTxMM_blastMaskCooldown, OOTxMM_hookshotAnywhereOot, OOTxMM_climbMostSurfacesOot, OOTxMM_restoreBrokenActors, OOTxMM_alterLostWoodsExits, OOTxMM_voidWarpMm]),
     OptionGroup("Main / Nologic", [OOTxMM_clockSpeed, OOTxMM_fierceDeityAnywhere, OOTxMM_climbMostSurfacesMm, OOTxMM_damageMultiplierOot, OOTxMM_damageMultiplierMm, OOTxMM_mmStyleAirMovementOot, OOTxMM_ootHyperEnemies, OOTxMM_mmHyperEnemies]),
+    OptionGroup("Items / Progressive", [OOTxMM_progressiveGoronLullabyMm, OOTxMM_progressiveGoronLullabyOot]),
     OptionGroup("Items / Extensions / General", [OOTxMM_fillWallets, OOTxMM_rupeeScaling]),
     OptionGroup("Items / Extensions / Oot", [OOTxMM_blueFireArrows, OOTxMM_iceArrowPlatformsOot, OOTxMM_sunlightArrows, OOTxMM_songOfDoubleTimeOot]),
     OptionGroup("Items / Extensions / Systems", [OOTxMM_skeletonKeyOot, OOTxMM_skeletonKeyMm, OOTxMM_ocarinaButtonsShuffleOot, OOTxMM_ocarinaButtonsShuffleMm, OOTxMM_soulsEnemyOot, OOTxMM_soulsEnemyMm, OOTxMM_soulsBossOot, OOTxMM_soulsBossMm, OOTxMM_soulsNpcOot, OOTxMM_soulsNpcMm, OOTxMM_soulsAnimalOot, OOTxMM_soulsAnimalMm, OOTxMM_soulsMiscOot, OOTxMM_soulsMiscMm, OOTxMM_sharedSoulsEnemy, OOTxMM_sharedSoulsNpc, OOTxMM_sharedSoulsAnimal, OOTxMM_sharedSoulsMisc, OOTxMM_sharedOcarinaButtons, OOTxMM_sharedSkeletonKey]),
     OptionGroup("Items / Extensions / Mm", [OOTxMM_kegStrength3, OOTxMM_menuNotebook]),
+    OptionGroup("Items / Extensions / CrossGame / Songs", [OOTxMM_elegyOot, OOTxMM_songSoaringOot, OOTxMM_songHealingOot, OOTxMM_songAwakeningOot, OOTxMM_songGoronOot, OOTxMM_songZoraOot, OOTxMM_songOrderOot, OOTxMM_songSunMm, OOTxMM_sharedSongSun, OOTxMM_sharedSongElegy, OOTxMM_sharedSongHealing, OOTxMM_sharedSongSoaring, OOTxMM_sharedSongAwakening, OOTxMM_sharedSongGoron, OOTxMM_sharedSongZora, OOTxMM_sharedSongOrder]),
     OptionGroup("Items / Extensions / Coins", [OOTxMM_coins]),
-    OptionGroup("Items / Extensions / Shared", [OOTxMM_sharedBows, OOTxMM_sharedBombBags, OOTxMM_sharedMagic, OOTxMM_sharedMagicArrowFire, OOTxMM_sharedMagicArrowIce, OOTxMM_sharedMagicArrowLight, OOTxMM_sharedSongEpona, OOTxMM_sharedSongStorms, OOTxMM_sharedSongTime, OOTxMM_sharedLens]),
+    OptionGroup("Items / Extensions / Shared", [OOTxMM_sharedBows, OOTxMM_sharedBombBags, OOTxMM_sharedMagic, OOTxMM_sharedMagicArrowFire, OOTxMM_sharedMagicArrowIce, OOTxMM_sharedMagicArrowLight, OOTxMM_sharedSongEpona, OOTxMM_sharedSongStorms, OOTxMM_sharedSongTime, OOTxMM_sharedLens, OOTxMM_sharedMaskGoron, OOTxMM_sharedMaskZora, OOTxMM_sharedMaskBunny, OOTxMM_sharedMaskKeaton, OOTxMM_sharedMaskTruth]),
     OptionGroup("Items / Extensions / CrossGame / Items", [OOTxMM_sharedHookshot]),
     OptionGroup("Items / Ageless", [OOTxMM_agelessSwords, OOTxMM_agelessShields, OOTxMM_agelessTunics, OOTxMM_agelessBoots, OOTxMM_agelessSticks, OOTxMM_agelessBoomerang, OOTxMM_agelessHammer, OOTxMM_agelessGFS, OOTxMM_agelessHookshot, OOTxMM_agelessSlingshot, OOTxMM_agelessBow, OOTxMM_agelessChildTrade, OOTxMM_agelessSoaring]),
     OptionGroup("Main / Qol", [OOTxMM_mmEasierLightblock, OOTxMM_shadowFastBoat, OOTxMM_openMaskShop, OOTxMM_lenientSpikes, OOTxMM_fastBunnyHood, OOTxMM_bowSlingshotBreakHives, OOTxMM_critWiggleDisable, OOTxMM_fastMasks, OOTxMM_keepItemsReset, OOTxMM_keepBottlesReset, OOTxMM_mmSongOfDoubleTimeTimeSelector, OOTxMM_autoInvert]),

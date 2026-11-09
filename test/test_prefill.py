@@ -18,9 +18,9 @@ def symbolic(item) -> str:
 class TestConditionalFixedReference(TestCase):
     def test_all_toggle_combinations_match_ootmm(self) -> None:
         samples = json.loads(pkgutil.get_data(__name__, "fixed_samples.json").decode())
-        self.assertEqual(len(samples), 8)
+        self.assertEqual(len(samples), 12)
         for sample in samples:
-            with self.subTest(settings={key: sample["settings"][key] for key in prefill.FIXED_SETTINGS}):
+            with self.subTest(settings=sample["settings"]):
                 settings = {**ootxmm_staticdata.OOTxMMSettingDefaults, **sample["settings"]}
                 names = prefill.fixed_checks(SimpleNamespace(ootmm_settings=settings))
                 self.assertEqual(len(names), sample["count"])

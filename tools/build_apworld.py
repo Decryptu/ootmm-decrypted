@@ -26,6 +26,7 @@ WORLD_FILES = [
     "ootxmm_staticdata.py",
     "options.py",
     "prefill.py",
+    "prices.py",
     "regions.py",
     "rules.py",
     "web_world.py",
