@@ -79,6 +79,11 @@ def completed_captures(path):
     return sorted(captures)
 
 
+def verify_receipt_count(starting_items, received_items, expected_index):
+    """Match the client's starting-inventory prefix plus remote delivery queue."""
+    assert len(starting_items) + len(received_items) == expected_index, "Unexpected starting/remote item total"
+
+
 async def run(args):
     import CommonClient
     import MultiServer
@@ -442,7 +447,8 @@ async def run(args):
             for peer in peers:
                 slot = peer.player["slot"]
                 received = MultiServer.get_received_items(context, 0, slot, False)
-                assert len(received) == peer.player["received_index"], "Unexpected extra remote awards"
+                starting = MultiServer.get_start_inventory(context, slot, True)
+                verify_receipt_count(starting, received, peer.player["received_index"])
                 awards = []
                 for loc in sorted(wanted[slot]):
                     item, recipient, _flags = context.locations[slot][loc]
@@ -451,6 +457,8 @@ async def run(args):
                     awards.append({"location": names[loc], "recipient": recipient,
                                    "item": context.item_names["OOTxMM"][item]})
                 report["players"].append({"slot": slot, "awards": awards, "received_index": peer.handler.last_query,
+                                          "starting_items": [context.item_names["OOTxMM"][item.item] for item in starting],
+                                          "remote_item_count": len(received),
                                           "history": peer.history, "stable_polls": stable,
                                           "verified_connector_rom_sha1": peer.player["verified_connector_rom_sha1"]})
             assert context._save(), "Disposable server save failed"
