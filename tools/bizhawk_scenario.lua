@@ -81,9 +81,16 @@ local function capture(name)
                 for _ = 1, math.min(count, 128) do
                     if actor < 0 or actor + f.actor_size > memory.getmemorydomainsize("RDRAM") then break end
                     table.insert(actors, {address = actor, id = memory.read_u16_be(actor, "RDRAM"), category = category,
-                        params = memory.read_u16_be(actor + 0x1c, "RDRAM"), yaw = memory.read_u16_be(actor + 0x32, "RDRAM"),
+                        params = memory.read_u16_be(actor + 0x1c, "RDRAM"), room = memory.read_s8(actor + 3, "RDRAM"), yaw = memory.read_u16_be(actor + 0x32, "RDRAM"),
+                        shape_yaw = memory.read_u16_be(actor + (game == "oot" and 0xb6 or 0xbe), "RDRAM"),
                         collision_health = memory.read_u8(actor + f.health, "RDRAM"),
                         x = memory.readfloat(actor + 0x24, true, "RDRAM"), y = memory.readfloat(actor + 0x28, true, "RDRAM"), z = memory.readfloat(actor + 0x2c, true, "RDRAM")})
+                    -- Retail En_Door layout: Actor (0x13c), SkelAnime (0x44).
+                    if game == "oot" and category == 10 and actors[#actors].id == 9
+                        and actor + 0x1c8 <= memory.getmemorydomainsize("RDRAM") then
+                        actors[#actors].door_type = bit.band(bit.rshift(actors[#actors].params, 7), 7)
+                        actors[#actors].lock_timer = memory.read_s16_be(actor + 0x186, "RDRAM")
+                    end
                     actor = memory.read_u32_be(actor + f.next, "RDRAM") - 0x80000000
                 end
             end
@@ -350,6 +357,48 @@ local function tick()
         end
       end
         done = true
+    elseif step.action == "oot_gohma_prepare" or step.action == "oot_gohma_approach" then
+        local play, f = game_play("oot", 17)
+        assert(memory.read_u32_be(0x11a5d4, "RDRAM") == 1, "Gohma setup requires child Link")
+        local save = 0x11a5d0
+        -- v33.0 combo/oot/save.h and combo/data/items.h: diagnostic sword/nut loadout.
+        memory.write_u16_be(save + 0x30, memory.read_u16_be(save + 0x2e, "RDRAM"), "RDRAM")
+        if step.action == "oot_gohma_prepare" then
+            local equipment = memory.read_u16_be(save + 0x9c, "RDRAM")
+            if equipment % 2 == 0 then equipment = equipment + 1 end
+            memory.write_u16_be(save + 0x9c, equipment, "RDRAM")
+            memory.write_u8(save + 0x68, 0x3b, "RDRAM")
+            memory.write_u8(save + 0x69, 1, "RDRAM")
+            memory.write_u8(save + 0x6c, 1, "RDRAM")
+            local equips = memory.read_u16_be(save + 0x70, "RDRAM")
+            memory.write_u16_be(save + 0x70, equips - equips % 16 + 1, "RDRAM")
+            -- eventsMisc[29] stores the native swordless equipment state.
+            memory.write_u16_be(save + 0xef8 + 29 * 2, 0, "RDRAM")
+            memory.write_u8(save + 0x75, 1, "RDRAM")
+            record({event = "gohma_setup", assistance = "Kokiri Sword equipped on B, nuts on C-left; health refill"})
+        end
+        memory.write_u8(save + 0x8d, 20, "RDRAM")
+        local actor = memory.read_u32_be(play + f.lists + 9 * f.stride + 4, "RDRAM") - 0x80000000
+        local visited = {}
+        while actor >= 0 do
+            assert(actor + f.actor_size <= memory.getmemorydomainsize("RDRAM") and not visited[actor], "Invalid Gohma actor list")
+            visited[actor] = true
+            if memory.read_u16_be(actor, "RDRAM") == 0x28 then
+                local health = memory.read_u8(actor + f.health, "RDRAM")
+                if health > 1 and health <= 10 then
+                    memory.write_u8(actor + f.health, 1, "RDRAM")
+                    record({event = "gohma_health", before = health, after = 1})
+                end
+                if step.action == "oot_gohma_approach" and health > 0 and health <= 10
+                    and memory.readfloat(actor + 0x28, true, "RDRAM") < -600 then
+                    position_player("oot", play, f, {x = memory.readfloat(actor + 0x24, true, "RDRAM"),
+                        y = -640, z = memory.readfloat(actor + 0x2c, true, "RDRAM") + 65, yaw = 0x8000})
+                end
+                break
+            end
+            actor = memory.read_u32_be(actor + f.next, "RDRAM") - 0x80000000
+        end
+        done = true
     elseif step.action == "oot_boss_loadout" then
         local play, f = game_play("oot", step.scene)
         assert(memory.read_u8(play + f.trigger, "RDRAM") == 0, "Transition already active")
@@ -473,6 +522,7 @@ local function tick()
         end
     elseif step.action == "expect" then
         local value = probe(step)
+        if step.mask then value = bit.band(value, step.mask) % 0x100000000 end
         done = value == step.value
         if done then record({event = "expect", name = step.name, value = value})
         elseif elapsed >= step.timeout_frames then

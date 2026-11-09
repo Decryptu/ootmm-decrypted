@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 _fill = ootxmm_staticdata.OOTxMMFill
 FIXED = set(_fill["fixed"])
 FIXED_SETTINGS = {key: set(names) for key, names in _fill["conditionalFixed"].items()}
+SHOP_SETTINGS = {key: set(names) for key, names in _fill["shopFixed"].items()}
 FAIRY_SETTINGS = {key: set(names) for key, names in _fill["fairyLocations"].items()}
 FAIRY_LOCATIONS = set().union(*FAIRY_SETTINGS.values())
 FAIRY_ITEMS = {ootxmm_staticdata.OOTxMMCheckItems[name] for name in FAIRY_LOCATIONS}
@@ -24,7 +25,7 @@ TINGLE_LOCATIONS = {name for name, item in ootxmm_staticdata.OOTxMMCheckItems.it
                     if item.startswith("MM_WORLD_MAP_")}
 TINGLE_ITEMS = {ootxmm_staticdata.OOTxMMCheckItems[name] for name in TINGLE_LOCATIONS}
 MAP_SETTINGS = {"tingleShuffle"}
-SONG_SETTINGS = {"songs"}
+SONG_SETTINGS = {"songs", "songGoronOot", "sharedSongGoron", "progressiveGoronLullabyOot", "progressiveGoronLullabyMm"}
 SONG_LOCATIONS = set(_fill["songLocations"])
 SONG_ITEMS = set(_fill["songItems"])
 WARP_LOCATIONS = set(_fill["warpLocations"])
@@ -39,6 +40,13 @@ SPECIAL_KEY_LOCATIONS = {
                                 if scene == "OOT_TREASURE_SHOP"
                                 and ootxmm_staticdata.OOTxMMCheckItems[name] != "OOT_HEART_PIECE"},
 }
+
+def song_locations(settings) -> set[str]:
+    names = SONG_LOCATIONS.copy()
+    if logic._value(settings, "progressiveGoronLullabyMm") == "single":
+        names.discard("MM Goron Baby")
+    return names
+
 
 def _dungeon_groups() -> list[tuple[set[str], set[str]]]:
     # fixDungeon: Stone Tower's items also go to Inverted Stone Tower, Ganon's Castle's to Ganon's Tower.
@@ -59,6 +67,9 @@ ATTEMPTS = 10
 def fixed_checks(world: OOTxMM) -> set[str]:
     fixed = FIXED - FAIRY_LOCATIONS - TINGLE_LOCATIONS - set().union(*SPECIAL_KEY_LOCATIONS.values())
     fixed -= set().union(*FIXED_SETTINGS.values())
+    for key, names in SHOP_SETTINGS.items():
+        if logic._value(world.ootmm_settings, key) == "full":
+            fixed -= names
     for key, names in FIXED_SETTINGS.items():
         if not logic._value(world.ootmm_settings, key):
             fixed |= names
@@ -108,7 +119,7 @@ def _groups(world: OOTxMM) -> list[tuple[set[str], set[str]]]:
     if logic._value(world.ootmm_settings, "dungeonRewardShuffle") == "dungeonBlueWarps":
         groups.append((REWARD_ITEMS, WARP_LOCATIONS))
     if logic._value(world.ootmm_settings, "songs") == "songLocations":
-        groups.append((SONG_ITEMS, SONG_LOCATIONS))
+        groups.append((SONG_ITEMS, song_locations(world.ootmm_settings)))
     unrestricted = set().union(*(items for key, items in DUNGEON_SETTINGS.items()
                                  if logic._value(world.ootmm_settings, key) != ("ganon" if key == "ganonBossKey" else "ownDungeon")))
     return groups + [(items - unrestricted, locations) for items, locations in DUNGEON_GROUPS]
@@ -119,6 +130,13 @@ def _symbolic(item: Item) -> str:
 
 def split_pool(world: OOTxMM, pool: list[Item]) -> list[Item]:
     """Keeps the items pre_fill places out of the pool (in world.pre_fill_pending), returns the rest."""
+    if logic._value(world.ootmm_settings, "songs") == "songLocations":
+        song_count = sum(_symbolic(item) in SONG_ITEMS for item in pool)
+        song_slots = sum(location.name in song_locations(world.ootmm_settings)
+                         for location in world.multiworld.get_unfilled_locations(world.player))
+        if song_count > song_slots:
+            raise FillError(f"OOTxMM player {world.player}: {song_count} songs for {song_slots} song locations. "
+                            "Use songs: anywhere or share more songs.")
     restricted = set().union(*(items for items, _ in _groups(world)))
     if logic._value(world.ootmm_settings, "dungeonRewardShuffle") in ("dungeons", "dungeonsLimited"):
         restricted |= REWARD_ITEMS
@@ -182,7 +200,7 @@ def reward_locations(world: OOTxMM) -> set[str]:
     names = set().union(*(set(_fill["dungeons"][dungeon]) for dungeon in _fill["rewardDungeons"]))
     names |= set(_fill["dungeons"]["IST"])
     if logic._value(world.ootmm_settings, "songs") == "songLocations":
-        names -= SONG_LOCATIONS
+        names -= song_locations(world.ootmm_settings)
     return names
 
 

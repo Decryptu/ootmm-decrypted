@@ -12,6 +12,29 @@ from .test_options import OOTxMMTestBase
 
 
 class TestTimeConditions(TestCase):
+    def test_age_change_preserves_route_and_revisits_after_unlock(self):
+        areas = {"OOT SPAWN": {"game": "oot", "time": "still"},
+                 "OOT Room": {"game": "oot", "time": "still"},
+                 "MM Room": {"game": "mm"}}
+        exits = {(logic.ORIGIN, age): [] for age in logic.AGES}
+        exits[(logic.ORIGIN, "child")] = [("OOT Room", ("and", (("time-mm", 4), ("flag-on", 0))))]
+        exits[("OOT Room", "child")] = []
+        exits[("OOT Room", "adult")] = [("MM Room", True)]
+        exits[("MM Room", "adult")] = []
+        base = self.graph(areas, exits)
+        base.graph.age_changes = {("OOT Room", age) for age in logic.AGES}
+        engine = TimeLogic(base.graph, 1)
+        # Start with late MM time carried into OoT; no implicit time reset on the age swap.
+        with patch(__package__.rsplit(".", 1)[0] + ".time_logic.INITIAL", (0, 4, 0, 0)):
+            before = engine.solve(Counter())
+            self.assertNotIn(("OOT Room", "adult"), before[0])
+            counts = Counter({logic.AGE_CHANGE_EVENT: 1})
+            after = engine.solve(counts, (Counter(), before))
+            self.assertEqual(after, engine.solve(counts))
+            self.assertEqual(after[0][("OOT Room", "adult")], (0, 4, 1, 0))
+            # Only the actual OoT-to-MM exit adds day-one time.
+            self.assertTrue(after[0][("MM Room", "adult")][1] & 1)
+
     def test_contradictory_times_are_false(self):
         data = (OOT_ALL, MM_ALL, 0, 0)
         for kind in ("time-oot", "time-mm"):
@@ -132,9 +155,9 @@ class TestOoTMMClocks(TestCase):
 
     def test_matches_upstream_area_clocks(self):
         samples = json.loads(pkgutil.get_data(__name__, "time_samples.json").decode())
-        graph = logic.build(logic.ootxmm_staticdata.OOTxMMSettingDefaults)
-        engine = TimeLogic(graph, 1)
         for sample in samples:
+            graph = logic.build({**logic.ootxmm_staticdata.OOTxMMSettingDefaults, **sample["settings"]})
+            engine = TimeLogic(graph, 1)
             counts = Counter({ITEM_BY_SYMBOLIC_ID[s].display_name: n for s, n in sample["counts"].items()})
             # Supply upstream's events to isolate clock propagation from other logic approximations.
             counts.update(sample["events"])

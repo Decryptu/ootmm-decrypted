@@ -25,6 +25,10 @@ def connect_regions(world: OOTxMM) -> None:
         origin.connect(world.get_region(logic.region_name(logic.ORIGIN, age)))
     for (area, age), exits in world.logic.exits.items():
         region = world.get_region(logic.region_name(area, age))
+        if (area, age) in world.logic.age_changes:
+            target_name = logic.region_name(area, "adult" if age == "child" else "child")
+            region.connect(world.get_region(target_name), f"{region.name} age change",
+                           world.time_logic.rule(area, age, ("event", logic.AGE_CHANGE_EVENT)))
         for target, cond in exits:
             target_name = logic.region_name(target, age)
             region.connect(world.get_region(target_name), f"{region.name} to {target_name}",
