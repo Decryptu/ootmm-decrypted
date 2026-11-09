@@ -1,7 +1,7 @@
 """Deliver remote items through the real BizHawk connector into a disposable gameplay state.
 
 Run with AP's Python, --archipelago <checkout> --seed <two-player .archipelago>.
-Open slot 1's matching ROM and connector first. Use a fresh test save, never a player's live save.
+Open the selected slot's matching ROM and connector first. Use a fresh test save, never a player's live save.
 The other player's pickups are simulated on a temporary loopback server. Server persistence is opt-in and uses disposable files.
 """
 import argparse
@@ -17,6 +17,15 @@ import zlib
 from mailbox_timing import MailboxTiming
 from mailbox_load import MailboxLoad
 from gameplay_connection import wait_for_rom
+
+
+def observer_slots(player_names, slot):
+    if slot not in (1, 2) or (0, slot) not in player_names:
+        raise ValueError("Observer requires an active player slot 1 or 2")
+    remote_slot = 3 - slot
+    if (0, remote_slot) not in player_names:
+        raise ValueError("Observer requires a two-player seed")
+    return slot, remote_slot
 
 
 async def verify_stable_polls(poll, verify, count=16):
@@ -124,6 +133,7 @@ async def run(args):
 
     context = MultiServer.Context("127.0.0.1", 0, "", "", 1, 10, False)
     context.load(str(args.seed))
+    slot, remote_slot = observer_slots(context.player_names, args.slot)
     if args.server_save_input:
         context.set_save(Utils.restricted_loads(zlib.decompress(args.server_save_input.read_bytes())))
     if args.server_save_output:
@@ -131,8 +141,8 @@ async def run(args):
             raise ValueError("Refusing to overwrite a server save")
         context.save_filename = str(args.server_save_output)
     server = await websockets.serve(functools.partial(MultiServer.server, ctx=context), "127.0.0.1", 0)
-    peer = Peer(f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}", context.player_names[0, 1])
-    initial_checks = set(context.location_checks[0, 1])
+    peer = Peer(f"ws://127.0.0.1:{server.sockets[0].getsockname()[1]}", context.player_names[0, slot])
+    initial_checks = set(context.location_checks[0, slot])
     setup_grants = []
     grant_barrier = None
     last_goal_snapshot = None
@@ -174,7 +184,7 @@ async def run(args):
         if args.expect_boss:
             snapshot = {"key": peer.handler.goal_key, "client_goals": sorted(peer.handler.goals),
                         "stored_goals": context.stored_data.get(peer.handler.goal_key, {}),
-                        "server_finished": context.client_game_state[0, 1] == ClientStatus.CLIENT_GOAL}
+                        "server_finished": context.client_game_state[0, slot] == ClientStatus.CLIENT_GOAL}
             if snapshot != last_goal_snapshot:
                 print("Goal observation:", snapshot, flush=True)
                 last_goal_snapshot = snapshot
@@ -217,7 +227,7 @@ async def run(args):
                 if name not in item_ids:
                     raise ValueError(f"Unknown setup item: {name}")
             for name in args.grant_item:
-                MultiServer.send_items_to(context, 0, 1, NetworkItem(item_ids[name], -1, 0))
+                MultiServer.send_items_to(context, 0, slot, NetworkItem(item_ids[name], -1, 0))
                 setup_grants.append(name)
             MultiServer.send_new_items(context)
             if args.grant_ready_file:
@@ -226,22 +236,22 @@ async def run(args):
                                  "received_index_at_queue": peer.handler.last_query}
         if args.expect_check or args.expect_boss or args.grant_item:
             names = context.location_names["OOTxMM"]
-            wanted = {loc for loc in context.locations[1] if names[loc] in args.expect_check}
+            wanted = {loc for loc in context.locations[slot] if names[loc] in args.expect_check}
             assert len(wanted) == len(set(args.expect_check)), "Unknown or inactive expected check"
             injected_checks = []
 
             def inject_remote_checks():
-                checks = [loc for loc, item in context.locations[2].items()
-                          if item[1] == 1 and loc not in context.location_checks[0, 2]][:args.inject_remote_count]
+                checks = [loc for loc, item in context.locations[remote_slot].items()
+                          if item[1] == slot and loc not in context.location_checks[0, remote_slot]][:args.inject_remote_count]
                 assert len(checks) == args.inject_remote_count, "Not enough unused remote checks"
-                MultiServer.register_location_checks(context, 0, 2, checks)
+                MultiServer.register_location_checks(context, 0, remote_slot, checks)
                 return checks
 
             interruption = None
             if args.interrupt_pickup:
                 assert not wanted & initial_checks, "Interrupted checks must be new"
                 pickup_interruption = PickupInterruption(
-                    peer, wanted, lambda: set(context.location_checks[0, 1]), args.interrupt_pickup)
+                    peer, wanted, lambda: set(context.location_checks[0, slot]), args.interrupt_pickup)
                 peer.send_msgs = pickup_interruption.send_msgs
             if args.save_offline:
                 assert not wanted & initial_checks, "Pending checks must be absent from the restored server"
@@ -250,7 +260,7 @@ async def run(args):
                 received_index_before = await disconnect_game(peer, poll_game, bizhawk)
                 received_before = len(peer.items_received)
                 await wait_for_scenario_result(args.ready_file.parent / "result.json", args.timeout)
-                assert set(context.location_checks[0, 1]) == initial_checks, "Offline checks reached the server"
+                assert set(context.location_checks[0, slot]) == initial_checks, "Offline checks reached the server"
                 assert len(peer.items_received) == received_before, "Offline client received items"
                 if args.server_save_output:
                     assert context._save(), "Disposable server save failed"
@@ -266,17 +276,17 @@ async def run(args):
                 print("PASS: offline save phase; pending recovery requires a separate cold boot", flush=True)
                 return
             if args.disconnect_seconds:
-                before_disconnect = set(context.location_checks[0, 1])
+                before_disconnect = set(context.location_checks[0, slot])
                 await disconnect_game(peer, poll_game, bizhawk)
                 received_before = len(peer.items_received)
                 if args.inject_remote_count:
                     injected_checks = inject_remote_checks()
-                    assert len(MultiServer.get_received_items(context, 0, 1, False)) >= args.inject_remote_count, "Remote backlog was not queued"
+                    assert len(MultiServer.get_received_items(context, 0, slot, False)) >= args.inject_remote_count, "Remote backlog was not queued"
                 started = asyncio.get_running_loop().time()
                 while asyncio.get_running_loop().time() - started < args.disconnect_seconds:
                     await poll_game()
                     await asyncio.sleep(0.125)
-                assert set(context.location_checks[0, 1]) == before_disconnect, "Offline checks reached the server"
+                assert set(context.location_checks[0, slot]) == before_disconnect, "Offline checks reached the server"
                 assert len(peer.items_received) == received_before, "Disconnected client received server items"
                 interruption = {"queued_remote_items": len(injected_checks),
                                 "client_received_nothing_while_offline": True, "seconds": args.disconnect_seconds, "connected_flag_cleared": True,
@@ -293,12 +303,12 @@ async def run(args):
 
             async with asyncio.timeout(args.timeout):
                 previous = set()
-                while (not wanted <= context.location_checks[0, 1]
+                while (not wanted <= context.location_checks[0, slot]
                        or not goals_verified()
                        or len(active_mailboxes) - 1 < args.min_game_switches
                        or (args.expect_received_index is not None and peer.handler.last_query != args.expect_received_index)):
                     await poll_game()
-                    current = set(context.location_checks[0, 1])
+                    current = set(context.location_checks[0, slot])
                     if current != previous:
                         print("Observed game checks:", [names[loc] for loc in sorted(current)], flush=True)
                         previous = current
@@ -307,47 +317,47 @@ async def run(args):
                     if args.expect_received_index is not None:
                         assert peer.handler.last_query == args.expect_received_index, "Receipt index changed during stability checks"
                     if args.interrupt_pickup:
-                        assert set(context.location_checks[0, 1]) == initial_checks | wanted, "Unexpected check during recovery"
+                        assert set(context.location_checks[0, slot]) == initial_checks | wanted, "Unexpected check during recovery"
                         if args.expect_received_index is not None:
                             assert peer.handler.last_query == args.expect_received_index, "Receipt index changed after recovery"
                 await verify_stable_polls(poll_game, verify_receipt)
             assert goals_verified(), "Boss progress was not confirmed by server storage"
             if args.interrupt_pickup:
                 assert pickup_interruption.evidence and interruption_reconnected, "Pickup interruption did not run"
-                assert peer.slot == 1 and peer.handler.last_query is not None, "Client did not recover"
+                assert peer.slot == slot and peer.handler.last_query is not None, "Client did not recover"
                 interruption = pickup_interruption.evidence
                 interruption["reconnected"] = True
                 interruption["stable_polls"] = 16
             if args.expect_boss:
                 expected_finished = peer.handler.goal_reached(peer)
-                assert (context.client_game_state[0, 1] == ClientStatus.CLIENT_GOAL) == expected_finished, "Server completion disagrees with configured goal"
+                assert (context.client_game_state[0, slot] == ClientStatus.CLIENT_GOAL) == expected_finished, "Server completion disagrees with configured goal"
             if args.expect_received_index is not None:
                 assert peer.handler.last_query == args.expect_received_index, "Unexpected received index"
             if args.server_save_output:
                 assert context._save(), "Disposable server save failed"
-            observed = sorted(context.location_checks[0, 1])
+            observed = sorted(context.location_checks[0, slot])
             for loc in wanted:
-                item, recipient, _flags = context.locations[1][loc]
+                item, recipient, _flags = context.locations[slot][loc]
                 queued = MultiServer.get_received_items(context, 0, recipient, True)
-                assert sum(entry.location == loc and entry.player == 1 and entry.item == item
+                assert sum(entry.location == loc and entry.player == slot and entry.item == item
                            for entry in queued) == 1, "Pickup must queue exactly one award"
-            report = {"coverage": "assisted-gameplay", "seed": str(args.seed), "slot": 1,
+            report = {"coverage": "assisted-gameplay", "seed": str(args.seed), "slot": slot,
                       "server_reloaded": bool(args.server_save_input),
                       "interruption": interruption,
                       "stable_polls": 16,
                       "setup_grants": setup_grants,
                       "grant_barrier": grant_barrier,
                       "simulated_remote_checks": [{"location": context.location_names["OOTxMM"][loc],
-                                                   "item": context.item_names["OOTxMM"][context.locations[2][loc][0]]}
+                                                   "item": context.item_names["OOTxMM"][context.locations[remote_slot][loc][0]]}
                                                   for loc in injected_checks],
                       "restored_checks": [names[loc] for loc in sorted(initial_checks)],
                       "new_checks": [names[loc] for loc in observed if loc not in initial_checks],
                       "expected_bosses": args.expect_boss,
                       "stored_goals": context.stored_data.get(peer.handler.goal_key, {}),
-                      "server_finished": context.client_game_state[0, 1] == ClientStatus.CLIENT_GOAL,
+                      "server_finished": context.client_game_state[0, slot] == ClientStatus.CLIENT_GOAL,
                       "expected": args.expect_check, "observed": [names[loc] for loc in observed],
-                      "awards": [{"location": names[loc], "recipient": context.locations[1][loc][1],
-                                  "item": context.item_names["OOTxMM"][context.locations[1][loc][0]]}
+                      "awards": [{"location": names[loc], "recipient": context.locations[slot][loc][1],
+                                  "item": context.item_names["OOTxMM"][context.locations[slot][loc][0]]}
                                  for loc in observed], "received_index": peer.handler.last_query,
                       "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
                       "mailbox_timing": timing.report(), "mailbox_load": load.report(),
@@ -359,9 +369,9 @@ async def run(args):
             print("PASS: server checks and game assertions verified:", report, flush=True)
             return
         assert peer.handler.last_query == 0, "Use a fresh disposable save with no received items"
-        checks = [loc for loc, item in context.locations[2].items() if item[1] == 1][:3]
-        assert len(checks) == 3, "Seed must have at least three remote items for slot 1 in slot 2"
-        MultiServer.register_location_checks(context, 0, 2, checks)
+        checks = [loc for loc, item in context.locations[remote_slot].items() if item[1] == slot][:3]
+        assert len(checks) == 3, "Seed must have at least three items for the selected slot in the other slot"
+        MultiServer.register_location_checks(context, 0, remote_slot, checks)
         async with asyncio.timeout(90):
             while peer.handler.last_query < len(checks):
                 await poll_game()
@@ -394,11 +404,11 @@ async def run(args):
                 "interruption": pickup_interruption.evidence if pickup_interruption else None,
                 "setup_grants": setup_grants,
                 "error": {"type": type(error).__name__, "message": str(error)},
-                "seed": str(args.seed), "slot": 1,
+                "seed": str(args.seed), "slot": slot,
                 "expected": args.expect_check, "expected_bosses": args.expect_boss,
-                "observed": [names[loc] for loc in sorted(context.location_checks[0, 1])],
+                "observed": [names[loc] for loc in sorted(context.location_checks[0, slot])],
                 "stored_goals": context.stored_data.get(peer.handler.goal_key, {}),
-                "server_finished": context.client_game_state[0, 1] == ClientStatus.CLIENT_GOAL,
+                "server_finished": context.client_game_state[0, slot] == ClientStatus.CLIENT_GOAL,
                 "received_index": peer.handler.last_query,
                 "server_item_count": len(peer.items_received),
                 "mailbox_history": mailbox_history, "active_mailboxes": active_mailboxes,
@@ -426,6 +436,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archipelago", type=Path, required=True)
     parser.add_argument("--seed", type=Path, required=True)
+    parser.add_argument("--slot", type=int, choices=(1, 2), default=1)
     parser.add_argument("--expect-check", action="append", default=[], help="Observe actual pickups; do not inject remote checks")
     parser.add_argument("--expect-boss", action="append", default=[], choices=("OOT_GANON", "MM_MAJORA"), help="Observe real boss packets and confirmed server storage")
     parser.add_argument("--min-game-switches", type=int, default=0)

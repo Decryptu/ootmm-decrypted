@@ -93,6 +93,12 @@ def validate(scenario):
                     raise ValueError("Digital buttons must be booleans")
                 for value in step.get("analog", {}).values():
                     integer(value, -128, 127)
+        elif action == "expect_player_item":
+            if step["game"] not in ("oot", "mm") or step["game"] + "_layout" not in scenario:
+                raise ValueError("Player item assertion requires a sourced game layout")
+            integer(step["scene"], 0, 0xffff)
+            integer(step["value"], 0, 255)
+            integer(step["timeout_frames"], 1, scenario["max_frames"])
         elif action == "expect":
             probe(step)
             integer(step["value"], 0, 256 ** step["size"] - 1)
@@ -111,6 +117,14 @@ def validate(scenario):
                 raise ValueError("Choose an acquired master or biggoron sword")
             if action.endswith("_support"):
                 integer(step["frames"], 1, scenario["max_frames"])
+        elif action == "mm_fairy_approach":
+            if "mm_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
+                raise ValueError("Fairy positioning requires a sourced MM layout and assisted gameplay")
+            integer(step["scene"], 0, 0xffff)
+            if step["scene"] not in (0x16, 0x18, 0x1b, 0x21, 0x49):
+                raise ValueError("Fairy positioning requires a temple scene")
+            integer(step["flag"], 0, 0x7f)
+            integer(step["frames"], 1, min(60, scenario["max_frames"]))
         elif action in ("oot_gohma_prepare", "oot_gohma_approach"):
             if "oot_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
                 raise ValueError("Gohma setup requires a sourced OoT layout and assisted gameplay")
@@ -181,8 +195,6 @@ def run(args):
         raise ValueError("Simulated remote checks require an expected received index")
     if args.grant_item and args.expect_received_index is None:
         raise ValueError("Diagnostic grants require an expected received index")
-    if observe and args.slot != 1:
-        raise ValueError("The server observer currently supports slot 1 only")
     if not 0 <= args.disconnect_seconds <= 60 or (args.disconnect_seconds and not args.expect_check):
         raise ValueError("Disconnect duration must be 0-60 seconds and requires pickup assertions")
     expected_seed = paths["seed"].stem.removeprefix("AP_") + f"-{args.slot}"
@@ -254,7 +266,7 @@ def run(args):
                 observer_command = [str(args.ap_python.resolve(strict=True)),
                                     str(Path(__file__).with_name("emulator-smoke.py").resolve()),
                                     "--archipelago", str(args.archipelago.resolve(strict=True)),
-                                    "--seed", str(paths["seed"]), "--report", str(out / "server-result.json"),
+                                    "--seed", str(paths["seed"]), "--slot", str(args.slot), "--report", str(out / "server-result.json"),
                                     "--expected-rom-sha1", hashlib.sha1(paths["rom"].read_bytes()).hexdigest(),
                                     "--ready-file", str(out / "client-ready.json"),
                                     "--timeout", str(args.timeout), "--min-game-switches", str(args.min_game_switches)]

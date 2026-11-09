@@ -4,6 +4,39 @@ from gameplay_test import validate, validate_grant_capture
 
 
 class TestGameplayValidation(unittest.TestCase):
+    def test_player_item_assertion_requires_layout_and_bounded_values(self):
+        scenario = self.scenario()
+        step = dict(action="expect_player_item", game="oot", scene=85, value=6, timeout_frames=100)
+        scenario["steps"] = [step]
+        validate(scenario)
+        scenario["mm_layout"] = dict(scenario["oot_layout"])
+        validate({**scenario, "steps": [{**step, "game": "mm"}]})
+        for changes in ({"game": "other"}, {"scene": -1}, {"scene": True},
+                        {"value": -1}, {"value": 256}, {"value": True}, {"timeout_frames": 0}):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                validate({**scenario, "steps": [{**step, **changes}]})
+        del scenario["oot_layout"]
+        with self.assertRaises(ValueError):
+            validate(scenario)
+
+    def test_fairy_approach_requires_assisted_temple_and_check_identity(self):
+        scenario = self.scenario()
+        scenario["mm_layout"] = dict(scenario["oot_layout"])
+        step = dict(action="mm_fairy_approach", scene=0x1b, flag=0x2b, frames=60)
+        scenario["steps"] = [step]
+        validate(scenario)
+        for changes in ({"scene": 38}, {"scene": 27.0}, {"flag": -1}, {"flag": 128}, {"flag": True},
+                        {"frames": 0}, {"frames": 61}, {"frames": True}):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                validate({**scenario, "steps": [{**step, **changes}]})
+        scenario["coverage"] = "unmodified-gameplay"
+        with self.assertRaises(ValueError):
+            validate(scenario)
+        scenario["coverage"] = "assisted-gameplay"
+        del scenario["mm_layout"]
+        with self.assertRaises(ValueError):
+            validate(scenario)
+
     def test_flag_assertion_mask_fits_probe_and_expected_bits(self):
         scenario = self.scenario()
         step = dict(action="expect", name="lock", address=0x100, size=4,
