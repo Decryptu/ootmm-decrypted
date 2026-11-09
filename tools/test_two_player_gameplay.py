@@ -3,10 +3,20 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from two_player_gameplay import completed_captures, expected_sources, stage_ready, validate_backlog, validate_restart
+from two_player_gameplay import completed_captures, expected_sources, stage_ready, validate_backlog, validate_restart, verify_receipt_count
 
 
 class TestGameplayStages(unittest.TestCase):
+    def test_starting_inventory_prefix_does_not_hide_missing_or_extra_remote_awards(self):
+        verify_receipt_count([2370] * 14, [2370], 15)
+        verify_receipt_count([], [2370], 1)
+        verify_receipt_count([2370] * 14, [], 14)
+        for starting, received, expected in (([2370] * 14, [], 15),
+                                             ([2370] * 14, [2370, 2370], 15),
+                                             ([], [2370, 2370], 1)):
+            with self.subTest(starting=len(starting), received=len(received)), self.assertRaises(AssertionError):
+                verify_receipt_count(starting, received, expected)
+
     def test_one_way_delivery_requires_the_expected_remote_source(self):
         players = [{"slot": 1, "checks": ["Local chest"], "received_index": 1},
                    {"slot": 2, "checks": ["Key chest"], "received_index": 0}]
