@@ -5,8 +5,8 @@
  * Usage: tsx lib/ap/ap-patch.ts <player file (.json) or directory> <oot rom> <mm rom> <output folder>
  * Writes the ROM (.z64) and OoTMM's patch file for it (.ootmm), which OoTMM's patch mode builds the ROM from.
  *
- * Runs OoTMM's logic with the player's settings, so everything settings decide (prices, song events, entrances,
- * starting items) is OoTMM's own, then replaces the item at every location with the Archipelago seed's: the
+ * Runs OoTMM's logic with the player's settings for song events, entrances and starting items, then applies
+ * Archipelago's price table and replaces the item at every location with the Archipelago seed's: the
  * player's own items for world 1, other players' items for world 2, a world that doesn't exist, so the game hands
  * them to its multiworld code and the client reports the check.
  */
@@ -34,6 +34,7 @@ type PlayerFile = {
   seed: string;
   /* OoTMM settings, keyed and valued as OoTMM's, sets as lists */
   settings: { [k: string]: unknown };
+  prices?: number[];
   /* Location to [OoTMM item, true if the item is the player's own] */
   locations: { [k: string]: [string, boolean] };
 };
@@ -135,6 +136,14 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   /* OoTMM's logic up to its fill, then our placements, then the passes that read them (hints) */
   const state = await solvedWorldState(monitor, opts);
   const world = state.worlds[OUR_WORLD];
+  if (player.prices !== undefined) {
+    if (!Array.isArray(player.prices) || player.prices.length !== world.prices.length ||
+        player.prices.some(p => !Number.isInteger(p) || p < 0 || p > 9999))
+      throw new Error('Invalid Archipelago price table');
+    world.prices = [...player.prices];
+  } else if (['priceOotShops', 'priceMmShops'].some(k => !['vanilla', undefined].includes(player.settings[k] as any))) {
+    throw new Error('Non-vanilla shop prices require an Archipelago price table');
+  }
   for (const locId of world.locations) {
     const placed = player.locations[locId];
     if (!placed) throw new Error(`No item for location ${locId}: the world and OoTMM disagree on the checks`);

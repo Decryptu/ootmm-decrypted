@@ -11,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, PortedFixed, SharedPoolTransforms
+from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, PortedFixed, SharedPoolTransforms, CrossGameSongs
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -266,9 +266,24 @@ def GenerateFillFile():
         .filter((name: string) => !allShuffled.has(name));
       if (!conditionalFixed[fixedKeys[i]].length) throw new Error(`No vanilla placements for ${fixedKeys[i]}`);
     }
+    const shopFixed: Record<string, string[]> = {};
+    for (const game of ['Oot', 'Mm']) {
+      const key = `shopShuffle${game}`;
+      const sample: any = await worldState(new Monitor({ onLog: () => {} }),
+        { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings, [key]: 'full' } } as any);
+      const shuffled = new Set([...sample.fixedLocations].map((l: any) => l.split('@')[0]));
+      shopFixed[key] = [...state.fixedLocations].map((l: any) => l.split('@')[0]).filter(l => !shuffled.has(l)).sort();
+    }
+    for (const oot of ['none', 'full']) for (const mm of ['none', 'full']) {
+      const settings = { ...checkSettings, shopShuffleOot: oot, shopShuffleMm: mm };
+      const sample: any = await worldState(new Monitor({ onLog: () => {} }),
+        { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...settings } } as any);
+      fixedSamples.push({ settings, fixed: [...sample.fixedLocations].map((l: any) => l.split('@')[0]).sort() });
+    }
     fs.writeFileSync('_fixed_samples.json', JSON.stringify(fixedSamples));
     fs.writeFileSync('_fill.json', JSON.stringify({
       conditionalFixed,
+      shopFixed,
       sharedItems: Object.fromEntries([
         ['sharedSkeletonKey', SharedItemGroups.SKELETON_KEY],
         ['sharedOcarinaButtons', SharedItemGroups.OCARINA_BUTTONS],
@@ -346,9 +361,12 @@ def GenerateFillFile():
     # Preserve the ordered pool operations, including v33.0's repeated arrow replacement.
     with open(os.path.join("ootmm", "packages", "logic", "src", "world", "transform.ts"), encoding="utf-8") as file:
         transform = file.read()
+    fill["crossGameSongs"] = CrossGameSongs
+    fill["optionalItems"].update({enable: [item] for enable, item in CrossGameSongs.values()})
     fill["poolTransforms"] = {}
     for key in SharedPoolTransforms:
-        block = re.search(r"if \(settings\." + key + r"\) \{(.*?)\n    \}", transform, re.S)
+        dependency = " && settings." + CrossGameSongs[key][0] if key == "sharedSongSun" else ""
+        block = re.search(r"if \(settings\." + key + re.escape(dependency) + r"\) \{(.*?)\n    \}", transform, re.S)
         if block is None:
             raise ValueError(f"Missing pool transform: {key}")
         operations = re.findall(r"this\.(replaceItem|removeItem)\(Items\.(\w+),\s*(?:Items\.(\w+)|(\d+))\);", block.group(1))
@@ -364,18 +382,33 @@ def GenerateEquipmentSamples():
     # Independent pool results from OoTMM's original pipeline, rather than our exported operations.
     RunTypeScript("""
     import fs from 'node:fs';
-    import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
+    import { Monitor, DEFAULT_SETTINGS, makeSettings } from './ootmm/packages/core/src/index.ts';
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
-    const transforms = JSON.parse(fs.readFileSync('GreatFillJSONdump.json', 'utf8')).poolTransforms;
+    const fill = JSON.parse(fs.readFileSync('GreatFillJSONdump.json', 'utf8'));
+    const transforms = fill.poolTransforms;
+    const songKeys = Object.entries(fill.crossGameSongs);
+    const enabledSongs = Object.fromEntries(songKeys.map(([key, [enable]]: any) => [enable, true]));
     const symbols = new Set(Object.values(transforms).flatMap((ops: any) => ops.flatMap(([op, src, dst]: any) =>
       typeof dst === 'string' ? [src, dst] : [src])));
+    for (const [, item] of Object.values(fill.crossGameSongs) as any) symbols.add(item);
+    for (const game of ['OOT', 'MM', 'SHARED'])
+      for (const suffix of ['GORON', 'GORON_HALF']) symbols.add(game + '_SONG_' + suffix);
+    const lullabies = [];
+    for (const songGoronOot of [false, true])
+      for (const sharedSongGoron of [false, true])
+        for (const progressiveGoronLullabyOot of ['single', 'progressive'])
+          for (const progressiveGoronLullabyMm of ['single', 'progressive'])
+            lullabies.push({songGoronOot, sharedSongGoron, progressiveGoronLullabyOot, progressiveGoronLullabyMm});
     const samples = [];
     const keys = Object.keys(transforms);
-    for (const settings of [{}, ...keys.map(key => ({[key]:true})),
-                            Object.fromEntries(keys.map(key => [key,true]))]) {
+    for (const settings of [{}, ...lullabies, ...keys.map(key => ({[key]:true})),
+                            Object.fromEntries(keys.map(key => [key,true])),
+                            ...songKeys.flatMap(([key, [enable]]: any) => [
+                              {[enable]:true}, {[enable]:true,[key]:true}]),
+                            {...enabledSongs, ...Object.fromEntries(keys.map(key => [key,true]))}]) {
       const state: any = await worldState(new Monitor({onLog:()=>{}}),
-        {seed:'ootxmm', settings:{...DEFAULT_SETTINGS,...settings}} as any);
-      samples.push({settings, pool:Object.fromEntries([...state.pool].filter(([i]: any) => symbols.has(i.item.id))
+        {seed:'ootxmm', settings:makeSettings(settings)} as any);
+      samples.push({settings, songLocations:[...state.worlds[0].songLocations].sort(), pool:Object.fromEntries([...state.pool].filter(([i]: any) => symbols.has(i.item.id))
         .map(([i,n]: any) => [i.item.id,n]))});
     }
     fs.writeFileSync('../test/shared_equipment_samples.json', JSON.stringify(samples, null, 1) + '\\n');
@@ -421,7 +454,7 @@ def CheckSetHash(names):
 
 def GenerateLogicFile():
     # OoTMM's own pipeline parses every condition with default settings: macros are inlined and
-    # settings, tricks and the vanilla shop prices and song events are already decided. What is left is
+    # settings, tricks and price predicates remain symbolic; song events are decided. What is left is
     # written as a node table that logic.py and time_logic.py read, including area time and waiting rules.
     print("Exporting the world logic...")
     # The world builder imports OoTMM's built data package.
@@ -431,7 +464,7 @@ def GenerateLogicFile():
     import fs from 'node:fs';
     import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
-    import { logicPassPrice } from './ootmm/packages/logic/src/price.ts';
+    import { logicPassPrice, PRICE_RANGES, PRICE_COUNTS } from './ootmm/packages/logic/src/price.ts';
     import { logicPassSongEvents } from './ootmm/packages/logic/src/misc/index.ts';
     import { logicPassEntrances } from './ootmm/packages/logic/src/solver/entrances.ts';
     import { logicPassWorld } from './ootmm/packages/logic/src/world/builder.ts';
@@ -523,7 +556,7 @@ def GenerateLogicFile():
       case 'time-mm': id = add(['time-mm', e.value + e.value2 * 2 ** 32]); break;
       case 'flag-on': case 'flag-off': id = add([e.type, e.flag]); break;
       case 'false': id = 1; break;
-      case 'price': id = world.prices[e.slot] <= e.max ? 0 : 1; break;
+      case 'price': id = add(['price', e.slot, e.max]); break;
       case 'song-event-oot': id = world.songEventsOot[e.songId] === e.cmp ? 0 : 1; break;
       case 'song-event-mm': id = world.songEventsMm[e.songId] === e.cmp ? 0 : 1; break;
       case 'age': id = add(['age', e.age === 0 ? 'child' : 'adult']); break;
@@ -566,7 +599,7 @@ def GenerateLogicFile():
         locations: mapExprs(area.locations),
       };
     }
-    fs.writeFileSync('GreatLogicJSONdump.json', JSON.stringify({ nodes, areas, ootTimeAll: OOT_TIME_ALL, mmTimeSlices: MM_TIME_SLICES }) + '\\n');
+    fs.writeFileSync('GreatLogicJSONdump.json', JSON.stringify({ nodes, areas, prices: world.prices, priceRanges: PRICE_RANGES, priceCounts: PRICE_COUNTS, ootTimeAll: OOT_TIME_ALL, mmTimeSlices: MM_TIME_SLICES }) + '\\n');
     """.replace("__OFFERED_VALUES__", json.dumps(OfferedValues)))
     # Exits come from the logic (the entrance pass changes some), but regions and checks come from the
     # world dump, so the logic must have every one of them.
@@ -790,10 +823,11 @@ def ConvertRawOptions():
         body = [f"    display_name = {json.dumps(setting['name'])}"]
         if setting["type"] == "enum":
             # Archipelago reserves "random" on every Choice and rolls it itself.
-            values = [v for v in setting["values"] if v["value"] != "random"
+            price_option = key in ("priceOotShops", "priceMmShops")
+            values = [v for v in setting["values"] if (v["value"] != "random" or price_option)
                       and v["value"] in OfferedValues.get(key, [v["value"]])]
-            doc += [f"- **{v['value']}**: {v['description']}" if v.get("description") else f"- **{v['value']}**" for v in values]
-            body += [f"    option_{v['value']} = {i}" for i, v in enumerate(values)]
+            doc += [f"- **{'uniform' if price_option and v['value'] == 'random' else v['value']}**: {v['description']}" if v.get("description") else f"- **{v['value']}**" for v in values]
+            body += [f"    option_{'uniform' if price_option and v['value'] == 'random' else v['value']} = {i}" for i, v in enumerate(values)]
             # Archipelago lowercases option names; OoTMM's values keep their case.
             body.append(f"    ootmm_values = {[v['value'] for v in values]!r}")
             body.append('    default = "random"' if setting["default"] == "random" else f"    default = option_{setting['default']}")
@@ -855,21 +889,32 @@ def GenerateTimeSamples():
     import { logicPassEntrances } from './ootmm/packages/logic/src/solver/entrances.ts';
     import { Pathfinder } from './ootmm/packages/logic/src/pathfind/pathfind.ts';
     import { Items, makePlayerItem } from './ootmm/packages/logic/src/items/index.ts';
-    let state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: DEFAULT_SETTINGS } as any);
-    for (const pass of [logicPassWorld, logicPassPrice, logicPassSongEvents, logicPassEntrances] as any[]) {
-      state = { ...state, ...pass(state) };
-    }
-    const checks = JSON.parse(fs.readFileSync('GreatCheckItemJSONdump.json', 'utf8'));
-    const symbols = [...new Set([...Object.values(checks), 'OOT_MASK_SKULL', 'OOT_MASK_SPOOKY', 'OOT_MASK_GERUDO',
-      'OOT_MASK_KEATON', 'OOT_MASK_TRUTH', 'OOT_MASK_BUNNY', 'OOT_MASK_GORON', 'OOT_MASK_ZORA', 'MM_MASK_DEKU', 'MM_SWORD'])] as string[];
     const samples = [];
-    for (const removed of [[], ['MM_OCARINA'], ['MM_SONG_TIME'], ['OOT_OCARINA', 'MM_OCARINA']]) {
-      const counts = Object.fromEntries(symbols.filter(s => !removed.includes(s)).map(s => [s, 100]));
-      const items = new Map(Object.entries(counts).map(([s, n]) => [makePlayerItem(Items[s as keyof typeof Items], 0), n]));
-      const result = new Pathfinder(state.worlds, DEFAULT_SETTINGS, items).run(null, { recursive: true });
-      const ws = result.ws[0];
-      samples.push({ removed, counts, events: [...ws.events].sort(), areas: ws.ages.map(age =>
-        Object.fromEntries([...age.areas].map(([name, data]) => [name, [data.ootTime, data.mmTime + data.mmTime2 * 2 ** 32, data.flagsOn, data.flagsOff]]))) });
+    const configurations = [
+      ...['none', 'oot', 'always'].map(ageChange => ({ageChange})),
+      ...['vanilla', 'affordable', 'random', 'weighted'].map(mode =>
+        ({shopShuffleOot: 'full', shopShuffleMm: 'full', priceOotShops: mode, priceMmShops: mode})),
+    ];
+    for (const config of configurations) {
+      const settings = {...DEFAULT_SETTINGS, ...config};
+      let state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings } as any);
+      for (const pass of [logicPassWorld, logicPassPrice, logicPassSongEvents, logicPassEntrances] as any[]) {
+        state = { ...state, ...pass(state) };
+      }
+      const checks = JSON.parse(fs.readFileSync('GreatCheckItemJSONdump.json', 'utf8'));
+      const symbols = [...new Set([...Object.values(checks), 'OOT_MASK_SKULL', 'OOT_MASK_SPOOKY', 'OOT_MASK_GERUDO',
+        'OOT_MASK_KEATON', 'OOT_MASK_TRUTH', 'OOT_MASK_BUNNY', 'OOT_MASK_GORON', 'OOT_MASK_ZORA', 'MM_MASK_DEKU', 'MM_SWORD'])] as string[];
+      const inventories = 'priceOotShops' in config
+        ? [[], ['OOT_WALLET', 'MM_WALLET']]
+        : [[], ['MM_OCARINA'], ['MM_SONG_TIME'], ['OOT_OCARINA', 'MM_OCARINA'], ['OOT_SONG_TIME']];
+      for (const removed of inventories) {
+        const counts = Object.fromEntries(symbols.filter(s => !removed.includes(s)).map(s => [s, 100]));
+        const items = new Map(Object.entries(counts).map(([s, n]) => [makePlayerItem(Items[s as keyof typeof Items], 0), n]));
+        const result = new Pathfinder(state.worlds, settings as any, items).run(null, { recursive: true });
+        const ws = result.ws[0];
+        samples.push({ settings: {...config, _prices: state.worlds[0].prices}, removed, counts, locations: [...ws.locations].sort(), events: [...ws.events].sort(), areas: ws.ages.map(age =>
+          Object.fromEntries([...age.areas].map(([name, data]) => [name, [data.ootTime, data.mmTime + data.mmTime2 * 2 ** 32, data.flagsOn, data.flagsOff]]))) });
+      }
     }
     fs.writeFileSync('../test/time_samples.json', JSON.stringify(samples) + '\\n');
     """)

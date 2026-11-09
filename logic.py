@@ -13,6 +13,8 @@ from typing import Any, Union
 from . import ootxmm_staticdata
 
 AGES = ("child", "adult")
+TRAVERSAL_SETTINGS = {"ageChange"}
+AGE_CHANGE_EVENT = "OOT_TIME_TRAVEL_AT_WILL"
 ORIGIN = "OOT SPAWN"
 
 # Items OoTMM adds to the pool on top of the checks' vanilla items (EXTRA_ITEMS_OOT and EXTRA_ITEMS_MM in
@@ -29,6 +31,8 @@ SHARED_ITEM_SETTINGS = ootxmm_staticdata.OOTxMMFill["sharedItems"]
 SHARED_SOUL_SETTINGS = {key: defs for key, defs in SHARED_ITEM_SETTINGS.items() if key.startswith("sharedSouls")}
 
 POOL_TRANSFORMS = ootxmm_staticdata.OOTxMMFill["poolTransforms"]
+CROSS_GAME_SONGS = ootxmm_staticdata.OOTxMMFill["crossGameSongs"]
+LULLABY_SETTINGS = {"songGoronOot", "sharedSongGoron", "progressiveGoronLullabyOot", "progressiveGoronLullabyMm"}
 
 POOL_SETTINGS = {"skeletonKeyOot": "OOT_SKELETON_KEY", "skeletonKeyMm": "MM_SKELETON_KEY"}
 
@@ -46,6 +50,11 @@ def normalize_shared_items(settings: Settings) -> Settings:
     settings["sharedOcarinaButtons"] = bool(_value(settings, "sharedOcarinaButtons")
                                            and _value(settings, "ocarinaButtonsShuffleOot")
                                            and _value(settings, "ocarinaButtonsShuffleMm"))
+    for key, (enable, _) in CROSS_GAME_SONGS.items():
+        settings[key] = bool(_value(settings, key) and _value(settings, enable))
+    settings["sharedSongGoron"] = bool(_value(settings, "sharedSongGoron") and _value(settings, "songGoronOot")
+                                      and _value(settings, "progressiveGoronLullabyOot")
+                                      == _value(settings, "progressiveGoronLullabyMm"))
     return settings
 
 
@@ -53,9 +62,13 @@ def extra_items(settings: Settings) -> list[str]:
     """Base additions and optional items from OoTMM's world/transform.ts."""
     settings = normalize_shared_items(settings)
     additions = (EXTRA_ITEMS + [item for key, item in POOL_SETTINGS.items() if _value(settings, key)]
-            + [item for key, group in OPTIONAL_ITEM_SETTINGS.items() if _value(settings, key) for item in group])
+            + [item for key, group in OPTIONAL_ITEM_SETTINGS.items() if _value(settings, key)
+               and not any(enable == key and _value(settings, shared)
+                           for shared, (enable, _) in CROSS_GAME_SONGS.items()) for item in group])
     # OoTMM shareItems(..., 'max'): these optional items have at most one copy per game.
     present = set(additions)
+    if _value(settings, "songGoronOot") and not _value(settings, "sharedSongGoron"):
+        present.update(("OOT_SONG_GORON", "OOT_SONG_GORON_HALF"))
     for key, definitions in SHARED_ITEM_SETTINGS.items():
         if not _value(settings, key):
             continue
@@ -88,8 +101,9 @@ def key_rings(settings: Settings) -> dict[str, str]:
 
 
 def transform_pool(items, settings: Settings):
-    """Apply OoTMM's ordered sharing replacements and copy reductions."""
+    """Apply OoTMM's ordered sharing replacements, copy reductions and Lullaby modes."""
     from collections import Counter
+    settings = normalize_shared_items(settings)
     pool = Counter(items)
     for key, operations in POOL_TRANSFORMS.items():
         if not _value(settings, key):
@@ -103,6 +117,23 @@ def transform_pool(items, settings: Settings):
                 pool[source] = max(0, pool[source] - target)
             else:
                 raise ValueError(f"Unknown pool operation: {op}")
+    def replace(source, target):
+        count = pool.pop(source, 0)
+        if count:
+            pool[target] += count
+    if _value(settings, "sharedSongGoron"):
+        for suffix in ("GORON", "GORON_HALF"):
+            replace("MM_SONG_" + suffix, "SHARED_SONG_" + suffix)
+        games = ("SHARED",)
+    else:
+        games = ("OOT", "MM")
+    for game in games:
+        full, half = game + "_SONG_GORON", game + "_SONG_GORON_HALF"
+        mode_game = "Mm" if game in ("MM", "SHARED") else "Oot"
+        if _value(settings, "progressiveGoronLullaby" + mode_game) == "progressive":
+            replace(full, half)
+        else:
+            pool.pop(half, None)
     return +pool
 
 
@@ -113,12 +144,21 @@ def shared_item(item: str, settings: Settings) -> str:
             for op, source, target in operations:
                 if op == "replaceItem" and item == source:
                     item = target
+    if item in ("OOT_SONG_GORON", "MM_SONG_GORON", "OOT_SONG_GORON_HALF", "MM_SONG_GORON_HALF"):
+        settings = normalize_shared_items(settings)
+        game, suffix = item.split("_", 1)
+        if game == "MM" and _value(settings, "sharedSongGoron"):
+            game = "SHARED"
+        mode_game = "Mm" if game in ("MM", "SHARED") else "Oot"
+        if suffix == "SONG_GORON" and _value(settings, "progressiveGoronLullaby" + mode_game) == "progressive":
+            suffix += "_HALF"
+        item = game + "_" + suffix
     return item
 
 
 def pool_items(items, settings: Settings) -> set[str]:
     rings = key_rings(settings)
-    return {rings.get(item, item) for item in transform_pool(items, settings)} | set(extra_items(settings))
+    return {rings.get(item, item) for item in transform_pool([*items, *extra_items(settings)], settings)}
 
 
 # A condition is True, False, or a tuple: ("item", OoTMM item ID, count), ("event", event),
@@ -235,6 +275,8 @@ class _Specializer:
             return node
         if node[0] == "age":
             return node[1] == age
+        if node[0] == "price":
+            return self.settings.get("_prices", ootxmm_staticdata.OOTxMMLogic["prices"])[node[1]] <= node[2]
         if node[0] in ("time-oot", "time-mm", "flag-on", "flag-off"):
             return tuple(node)
         if node[0] == "setting":
@@ -279,6 +321,10 @@ def _met(cond: Condition, events: set[str]) -> bool:
 def region_name(area: str, age: str) -> str:
     return f"{area} ({age.capitalize()})"
 
+
+def can_change_age(area: str) -> bool:
+    return _areas[area]["game"] == "oot" and _areas[area].get("age_change", False)
+
 def _explore(specialize: _Specializer):
     """Regions and events reachable from the spawn with every pool item."""
     areas = ootxmm_staticdata.OOTxMMRegionData.keys()
@@ -289,6 +335,10 @@ def _explore(specialize: _Specializer):
     while changed:
         changed = False
         for area, age in list(regions):
+            other = (area, "adult" if age == "child" else "child")
+            if AGE_CHANGE_EVENT in events and can_change_age(area) and other not in regions:
+                regions.add(other)
+                changed = True
             for target, node in _areas[area]["exits"].items():
                 if target in areas and (target, age) not in regions and _met(specialize(node, age), events):
                     regions.add((target, age))
@@ -348,11 +398,16 @@ class Logic:
         # reachable at only one age. They cannot contribute checks, events or a return route.
         occupied = {(area, age) for parents in (*checks.values(), *event_parents.values())
                     for area, age, _ in parents}
+        age_changes = {key for key in exits if can_change_age(key[0])
+                       and (key[0], "adult" if key[1] == "child" else "child") in exits
+                       and AGE_CHANGE_EVENT in event_parents}
+        occupied.update(age_changes)
         while empty := {key for key, targets in exits.items() if not targets and key not in occupied
                        and key[0] != ORIGIN}:
             exits = {key: [(target, cond) for target, cond in targets if (target, key[1]) not in empty]
                      for key, targets in exits.items() if key not in empty}
         self.exits = exits
+        self.age_changes = age_changes
         self.regions = list(exits)
         self.checks = checks
         self.events = event_parents
@@ -372,7 +427,7 @@ class Logic:
                 _items(cond, self.items)
 
 # Conditions and optional pool items both change the specialized graph.
-LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"} | set(POOL_TRANSFORMS) | set(POOL_SETTINGS) | set(OPTIONAL_ITEM_SETTINGS) | set(SHARED_ITEM_SETTINGS) | set(KEY_RING_SETTINGS) | {"smallKeyShuffleHideout"})
+LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"} | set(POOL_TRANSFORMS) | set(POOL_SETTINGS) | set(OPTIONAL_ITEM_SETTINGS) | set(SHARED_ITEM_SETTINGS) | set(KEY_RING_SETTINGS) | LULLABY_SETTINGS | {"smallKeyShuffleHideout"})
 
 _cache: dict[tuple, Logic] = {}
 
@@ -380,7 +435,7 @@ def build(settings: Settings) -> Logic:
     """The graph for these settings. Players with the same logic settings, tricks and checks share one."""
     settings = normalize_shared_items(settings)
     removed = removed_checks(settings)
-    key = (tuple(tuple(name for name in KEY_RING_SETTINGS[k] if _set_has(_value(settings, k), name))
+    key = (tuple(settings.get("_prices", ootxmm_staticdata.OOTxMMLogic["prices"])), tuple(tuple(name for name in KEY_RING_SETTINGS[k] if _set_has(_value(settings, k), name))
                  if k in KEY_RING_SETTINGS else _value(settings, k) for k in LOGIC_SETTINGS), tuple(sorted(settings["tricks"])), frozenset(removed))
     if key not in _cache:
         _cache[key] = Logic(settings, removed)

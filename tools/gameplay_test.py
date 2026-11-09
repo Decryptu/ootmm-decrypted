@@ -96,6 +96,10 @@ def validate(scenario):
         elif action == "expect":
             probe(step)
             integer(step["value"], 0, 256 ** step["size"] - 1)
+            if "mask" in step:
+                integer(step["mask"], 1, 256 ** step["size"] - 1)
+                if step["value"] & ~step["mask"]:
+                    raise ValueError("Expected value contains bits outside the assertion mask")
             integer(step["timeout_frames"], 1, scenario["max_frames"])
         elif action == "capture":
             if not step["name"] or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_" for c in step["name"]):
@@ -107,6 +111,9 @@ def validate(scenario):
                 raise ValueError("Choose an acquired master or biggoron sword")
             if action.endswith("_support"):
                 integer(step["frames"], 1, scenario["max_frames"])
+        elif action in ("oot_gohma_prepare", "oot_gohma_approach"):
+            if "oot_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
+                raise ValueError("Gohma setup requires a sourced OoT layout and assisted gameplay")
         elif action in ("mm_boss_loadout", "oot_boss_loadout"):
             if f"{action.split('_')[0]}_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
                 raise ValueError("Boss loadout requires a sourced game layout and assisted-gameplay coverage")

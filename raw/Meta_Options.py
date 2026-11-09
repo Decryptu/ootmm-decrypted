@@ -59,12 +59,17 @@ PortedChecks = [
 # The completion condition, ported in rules.py.
 PortedGoal = ["goal"]
 
+# Per-area age switching and clock propagation in logic.py and time_logic.py.
+PortedTraversal = ["ageChange"]
+
+PortedShops = ["shopShuffleOot", "shopShuffleMm", "priceOotShops", "priceMmShops"]
+
 # Dungeon placement and removal, ported in prefill.py. Maps can also start in the ROM inventory.
 PortedDungeon = ["mapCompassShuffle", "bossKeyShuffleOot", "bossKeyShuffleMm", "smallKeyShuffleOot", "smallKeyShuffleMm", "ganonBossKey", "smallKeyShuffleHideout", "smallKeyShuffleChestGame"]
 
 PortedFairies = ["strayFairyChestShuffle", "strayFairyOtherShuffle"]
 
-PortedSongs = ["songs"]
+PortedSongs = ["songs", "songGoronOot", "sharedSongGoron", "progressiveGoronLullabyOot", "progressiveGoronLullabyMm"]
 
 PortedRewards = ["dungeonRewardShuffle"]
 
@@ -73,13 +78,24 @@ PortedMaps = ["tingleShuffle"]
 # Optional vanilla placements from OoTMM's misc/fixer.ts. The normal item pool is unchanged.
 PortedFixed = ["shuffleOcarinasOot", "shuffleMasterSword", "shuffleGerudoCard"]
 
-SharedPoolTransforms = ["sharedBows", "sharedBombBags", "sharedMagic",
+CrossGameSongs = {
+    "sharedSongAwakening": ("songAwakeningOot", "OOT_SONG_AWAKENING"),
+    "sharedSongZora": ("songZoraOot", "OOT_SONG_ZORA"),
+    "sharedSongOrder": ("songOrderOot", "OOT_SONG_ORDER"),
+    "sharedSongSun": ("songSunMm", "MM_SONG_SUN"),
+    "sharedSongElegy": ("elegyOot", "OOT_SONG_EMPTINESS"),
+    "sharedSongHealing": ("songHealingOot", "OOT_SONG_HEALING"),
+    "sharedSongSoaring": ("songSoaringOot", "OOT_SONG_SOARING"),
+}
+
+SharedPoolTransforms = list(CrossGameSongs) + ["sharedBows", "sharedBombBags", "sharedMagic",
                         "sharedMagicArrowFire", "sharedMagicArrowIce", "sharedMagicArrowLight",
-                        "sharedHookshot", "sharedLens", "sharedSongEpona", "sharedSongStorms", "sharedSongTime"]
+                        "sharedHookshot", "sharedLens", "sharedSongEpona", "sharedSongStorms", "sharedSongTime",
+                        "sharedMaskGoron", "sharedMaskZora", "sharedMaskTruth", "sharedMaskBunny", "sharedMaskKeaton"]
 
-PortedPool = SharedPoolTransforms + ["ocarinaButtonsShuffleOot", "ocarinaButtonsShuffleMm", "sharedOcarinaButtons", "sharedSkeletonKey", "sharedSoulsEnemy", "sharedSoulsNpc", "sharedSoulsAnimal", "sharedSoulsMisc", "soulsEnemyOot", "soulsEnemyMm", "soulsBossOot", "soulsBossMm", "soulsNpcOot", "soulsNpcMm", "soulsAnimalOot", "soulsAnimalMm", "soulsMiscOot", "soulsMiscMm", "skeletonKeyOot", "skeletonKeyMm", "smallKeyRingOot", "smallKeyRingMm"]
+PortedPool = SharedPoolTransforms + [enable for enable, _ in CrossGameSongs.values()] + ["ocarinaButtonsShuffleOot", "ocarinaButtonsShuffleMm", "sharedOcarinaButtons", "sharedSkeletonKey", "sharedSoulsEnemy", "sharedSoulsNpc", "sharedSoulsAnimal", "sharedSoulsMisc", "soulsEnemyOot", "soulsEnemyMm", "soulsBossOot", "soulsBossMm", "soulsNpcOot", "soulsNpcMm", "soulsAnimalOot", "soulsAnimalMm", "soulsMiscOot", "soulsMiscMm", "skeletonKeyOot", "skeletonKeyMm", "smallKeyRingOot", "smallKeyRingMm"]
 
-Ported = PortedPool + PortedMaps + PortedChecks + PortedGoal + PortedDungeon + PortedFairies + PortedSongs + PortedRewards + PortedFixed
+Ported = PortedPool + PortedMaps + PortedChecks + PortedGoal + PortedDungeon + PortedFairies + PortedSongs + PortedRewards + PortedFixed + PortedTraversal + PortedShops
 
 # Enum settings offered with only some of their values: the others need what the world doesn't port yet.
 # The Triforce goals add Triforce pieces to the pool (makePools in packages/logic/src/world/transform.ts).

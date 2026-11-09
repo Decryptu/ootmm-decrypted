@@ -50,6 +50,19 @@ def validate_restart(stage, stage_names, backlog):
         raise ValueError("Server restart requires a declared stage and no backlog outage")
 
 
+def expected_sources(players, locations, names):
+    wanted = {}
+    for player in players:
+        slot = player["slot"]
+        wanted[slot] = {loc for loc in locations[slot] if names[loc] in player["checks"]}
+        assert len(wanted[slot]) == len(set(player["checks"])), "Unknown expected source check"
+    for player in players:
+        slot = player["slot"]
+        if player["received_index"] > 0:
+            assert any(locations[3 - slot][loc][1] == slot for loc in wanted[3 - slot]), "Receipt target needs an expected remote source"
+    return wanted
+
+
 def completed_captures(path):
     if not path.exists():
         return []
@@ -99,8 +112,10 @@ async def run(args):
     restart_stage = plan.get("restart_stage")
     validate_restart(restart_stage, stage_names, backlog)
     for p in players:
-        if not p["checks"] or type(p["received_index"]) is not int or p["received_index"] < 1:
-            raise ValueError("Each slot needs actual source checks and a positive receipt target")
+        if not p["checks"] or type(p["received_index"]) is not int or p["received_index"] < 0:
+            raise ValueError("Each slot needs actual source checks and a nonnegative receipt target")
+    if not any(p["received_index"] > 0 for p in players):
+        raise ValueError("At least one slot needs a positive receipt target")
     # Resolve every input before launching either emulator, so a missing second-slot
     # checkpoint cannot interrupt an otherwise valid first-slot run.
     for key in ("seed", "emulator", "config", "connector"):
@@ -392,12 +407,7 @@ async def run(args):
                 print(f"Slot {slot}: attached to verified ROM on port {port}", flush=True)
 
             names = context.location_names["OOTxMM"]
-            wanted = {}
-            for peer in peers:
-                slot = peer.player["slot"]
-                wanted[slot] = {loc for loc in context.locations[slot] if names[loc] in peer.player["checks"]}
-                assert len(wanted[slot]) == len(set(peer.player["checks"])), "Unknown expected source check"
-                assert any(context.locations[slot][loc][1] == 3 - slot for loc in wanted[slot]), "Each source must award the other player"
+            wanted = expected_sources(players, context.locations, names)
             for stage in stages:
                 for condition in stage["players"]:
                     valid_checks = {names[loc] for loc in context.locations[condition["slot"]]}

@@ -11,6 +11,95 @@
    "OOT Gerudo Member Card"
   ]
  },
+ "shopFixed": {
+  "shopShuffleOot": [
+   "OOT Goron Shop Item 1",
+   "OOT Goron Shop Item 2",
+   "OOT Goron Shop Item 3",
+   "OOT Goron Shop Item 4",
+   "OOT Goron Shop Item 5",
+   "OOT Goron Shop Item 6",
+   "OOT Goron Shop Item 7",
+   "OOT Goron Shop Item 8",
+   "OOT Kakariko Bazaar Item 1",
+   "OOT Kakariko Bazaar Item 2",
+   "OOT Kakariko Bazaar Item 3",
+   "OOT Kakariko Bazaar Item 4",
+   "OOT Kakariko Bazaar Item 5",
+   "OOT Kakariko Bazaar Item 6",
+   "OOT Kakariko Bazaar Item 7",
+   "OOT Kakariko Bazaar Item 8",
+   "OOT Kakariko Potion Shop Item 1",
+   "OOT Kakariko Potion Shop Item 2",
+   "OOT Kakariko Potion Shop Item 3",
+   "OOT Kakariko Potion Shop Item 4",
+   "OOT Kakariko Potion Shop Item 5",
+   "OOT Kakariko Potion Shop Item 6",
+   "OOT Kakariko Potion Shop Item 7",
+   "OOT Kakariko Potion Shop Item 8",
+   "OOT Kokiri Shop Item 1",
+   "OOT Kokiri Shop Item 2",
+   "OOT Kokiri Shop Item 3",
+   "OOT Kokiri Shop Item 4",
+   "OOT Kokiri Shop Item 5",
+   "OOT Kokiri Shop Item 6",
+   "OOT Kokiri Shop Item 7",
+   "OOT Kokiri Shop Item 8",
+   "OOT Market Bazaar Item 1",
+   "OOT Market Bazaar Item 2",
+   "OOT Market Bazaar Item 3",
+   "OOT Market Bazaar Item 4",
+   "OOT Market Bazaar Item 5",
+   "OOT Market Bazaar Item 6",
+   "OOT Market Bazaar Item 7",
+   "OOT Market Bazaar Item 8",
+   "OOT Market Bombchu Shop Item 1",
+   "OOT Market Bombchu Shop Item 2",
+   "OOT Market Bombchu Shop Item 3",
+   "OOT Market Bombchu Shop Item 4",
+   "OOT Market Bombchu Shop Item 5",
+   "OOT Market Bombchu Shop Item 6",
+   "OOT Market Bombchu Shop Item 7",
+   "OOT Market Bombchu Shop Item 8",
+   "OOT Market Potion Shop Item 1",
+   "OOT Market Potion Shop Item 2",
+   "OOT Market Potion Shop Item 3",
+   "OOT Market Potion Shop Item 4",
+   "OOT Market Potion Shop Item 5",
+   "OOT Market Potion Shop Item 6",
+   "OOT Market Potion Shop Item 7",
+   "OOT Market Potion Shop Item 8",
+   "OOT Zora Shop Item 1",
+   "OOT Zora Shop Item 2",
+   "OOT Zora Shop Item 3",
+   "OOT Zora Shop Item 4",
+   "OOT Zora Shop Item 5",
+   "OOT Zora Shop Item 6",
+   "OOT Zora Shop Item 7",
+   "OOT Zora Shop Item 8"
+  ],
+  "shopShuffleMm": [
+   "MM Bomb Shop Item 1",
+   "MM Bomb Shop Item 2",
+   "MM Goron Shop Item 1",
+   "MM Goron Shop Item 2",
+   "MM Goron Shop Item 3",
+   "MM Swamp Potion Shop Item 1",
+   "MM Swamp Potion Shop Item 2",
+   "MM Swamp Potion Shop Item 3",
+   "MM Trading Post Item 1",
+   "MM Trading Post Item 2",
+   "MM Trading Post Item 3",
+   "MM Trading Post Item 4",
+   "MM Trading Post Item 5",
+   "MM Trading Post Item 6",
+   "MM Trading Post Item 7",
+   "MM Trading Post Item 8",
+   "MM Zora Shop Item 1",
+   "MM Zora Shop Item 2",
+   "MM Zora Shop Item 3"
+  ]
+ },
  "sharedItems": {
   "sharedSkeletonKey": [
    {
@@ -649,6 +738,27 @@
   "soulsMiscMm": [
    "MM_SOUL_MISC_BUSINESS_SCRUB",
    "MM_SOUL_MISC_GS"
+  ],
+  "songAwakeningOot": [
+   "OOT_SONG_AWAKENING"
+  ],
+  "songZoraOot": [
+   "OOT_SONG_ZORA"
+  ],
+  "songOrderOot": [
+   "OOT_SONG_ORDER"
+  ],
+  "songSunMm": [
+   "MM_SONG_SUN"
+  ],
+  "elegyOot": [
+   "OOT_SONG_EMPTINESS"
+  ],
+  "songHealingOot": [
+   "OOT_SONG_HEALING"
+  ],
+  "songSoaringOot": [
+   "OOT_SONG_SOARING"
   ]
  },
  "fixed": [
@@ -3247,7 +3357,86 @@
   "ACoI",
   "SS"
  ],
+ "crossGameSongs": {
+  "sharedSongAwakening": [
+   "songAwakeningOot",
+   "OOT_SONG_AWAKENING"
+  ],
+  "sharedSongZora": [
+   "songZoraOot",
+   "OOT_SONG_ZORA"
+  ],
+  "sharedSongOrder": [
+   "songOrderOot",
+   "OOT_SONG_ORDER"
+  ],
+  "sharedSongSun": [
+   "songSunMm",
+   "MM_SONG_SUN"
+  ],
+  "sharedSongElegy": [
+   "elegyOot",
+   "OOT_SONG_EMPTINESS"
+  ],
+  "sharedSongHealing": [
+   "songHealingOot",
+   "OOT_SONG_HEALING"
+  ],
+  "sharedSongSoaring": [
+   "songSoaringOot",
+   "OOT_SONG_SOARING"
+  ]
+ },
  "poolTransforms": {
+  "sharedSongAwakening": [
+   [
+    "replaceItem",
+    "MM_SONG_AWAKENING",
+    "SHARED_SONG_AWAKENING"
+   ]
+  ],
+  "sharedSongZora": [
+   [
+    "replaceItem",
+    "MM_SONG_ZORA",
+    "SHARED_SONG_ZORA"
+   ]
+  ],
+  "sharedSongOrder": [
+   [
+    "replaceItem",
+    "MM_SONG_ORDER",
+    "SHARED_SONG_ORDER"
+   ]
+  ],
+  "sharedSongSun": [
+   [
+    "replaceItem",
+    "OOT_SONG_SUN",
+    "SHARED_SONG_SUN"
+   ]
+  ],
+  "sharedSongElegy": [
+   [
+    "replaceItem",
+    "MM_SONG_EMPTINESS",
+    "SHARED_SONG_EMPTINESS"
+   ]
+  ],
+  "sharedSongHealing": [
+   [
+    "replaceItem",
+    "MM_SONG_HEALING",
+    "SHARED_SONG_HEALING"
+   ]
+  ],
+  "sharedSongSoaring": [
+   [
+    "replaceItem",
+    "MM_SONG_SOARING",
+    "SHARED_SONG_SOARING"
+   ]
+  ],
   "sharedBows": [
    [
     "replaceItem",
@@ -3532,6 +3721,91 @@
    [
     "removeItem",
     "SHARED_SONG_TIME",
+    1
+   ]
+  ],
+  "sharedMaskGoron": [
+   [
+    "replaceItem",
+    "OOT_MASK_GORON",
+    "SHARED_MASK_GORON"
+   ],
+   [
+    "replaceItem",
+    "MM_MASK_GORON",
+    "SHARED_MASK_GORON"
+   ],
+   [
+    "removeItem",
+    "SHARED_MASK_GORON",
+    1
+   ]
+  ],
+  "sharedMaskZora": [
+   [
+    "replaceItem",
+    "OOT_MASK_ZORA",
+    "SHARED_MASK_ZORA"
+   ],
+   [
+    "replaceItem",
+    "MM_MASK_ZORA",
+    "SHARED_MASK_ZORA"
+   ],
+   [
+    "removeItem",
+    "SHARED_MASK_ZORA",
+    1
+   ]
+  ],
+  "sharedMaskTruth": [
+   [
+    "replaceItem",
+    "OOT_MASK_TRUTH",
+    "SHARED_MASK_TRUTH"
+   ],
+   [
+    "replaceItem",
+    "MM_MASK_TRUTH",
+    "SHARED_MASK_TRUTH"
+   ],
+   [
+    "removeItem",
+    "SHARED_MASK_TRUTH",
+    1
+   ]
+  ],
+  "sharedMaskBunny": [
+   [
+    "replaceItem",
+    "OOT_MASK_BUNNY",
+    "SHARED_MASK_BUNNY"
+   ],
+   [
+    "replaceItem",
+    "MM_MASK_BUNNY",
+    "SHARED_MASK_BUNNY"
+   ],
+   [
+    "removeItem",
+    "SHARED_MASK_BUNNY",
+    1
+   ]
+  ],
+  "sharedMaskKeaton": [
+   [
+    "replaceItem",
+    "OOT_MASK_KEATON",
+    "SHARED_MASK_KEATON"
+   ],
+   [
+    "replaceItem",
+    "MM_MASK_KEATON",
+    "SHARED_MASK_KEATON"
+   ],
+   [
+    "removeItem",
+    "SHARED_MASK_KEATON",
     1
    ]
   ]
