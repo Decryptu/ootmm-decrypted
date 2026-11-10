@@ -91,7 +91,32 @@ The default N64 settings can add input lag and audio delay. In BizHawk:
 
 ## Host preparation
 
-The host needs this repository, the two ROMs, and the OoTMM toolchain described in the repository's `DEVELOPMENT.md`: WSL on Windows, or Docker on macOS and Linux.
+Windows hosts can use the host helper below. It needs WSL with Ubuntu 24.04, but no Git, Python or PowerShell 7 on Windows. Players joining your game do not need WSL. macOS/Linux hosts use the Docker commands below.
+
+### Windows host helper
+
+1. Download `ootxmm-host.zip` alongside the matching world package from the group's release, if offered. Extract the entire ZIP to a short local path, such as `C:\ootxmm-host`. Older releases without this ZIP use the manual build instructions below; do not mix their world package with a newer helper. From a repository checkout, the same helper is `Host Setup.cmd` in the root.
+2. Double-click **Host Setup.cmd**. It checks WSL before asking for files. If Ubuntu 24.04 is missing, open **Start**, type **PowerShell**, right-click **Windows PowerShell** and select **Run as administrator**. Paste:
+
+   ```powershell
+   wsl --install -d Ubuntu-24.04
+   ```
+
+   Restart if requested, then open **Ubuntu 24.04** from Start and finish its username/password setup. Run **Host Setup.cmd** again as your normal user. See [Microsoft's WSL installation guide](https://learn.microsoft.com/windows/wsl/install) if Windows reports an installation error.
+3. After generating your Archipelago game as described below, select its extracted seed folder in the helper, then your original OoT and MM ROMs. Use files on local Windows drives. The helper converts paths automatically and downloads/builds the toolchain on first use; keep its window open.
+4. On success it opens a new `patches-...` folder inside the seed folder. Send each player their `.ootmm` file. Keep the generated `.z64` ROMs and `.build.json` receipts private. If the build fails, the window stays open with the error; rerun the helper after fixing it. Each attempt uses a new output folder, so partial output is never mixed with a later run.
+
+If double-clicking is unavailable, open Windows PowerShell in the extracted helper folder and paste:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -STA -File .\tools\host-setup.ps1
+```
+
+This runs the local helper for that process only. The helper uses the dedicated `/root/ootmm` build checkout inside Ubuntu; do not keep your own edits there. It installs Podman and Git inside Ubuntu as needed. Internet access and space for the toolchain and build are required. The helper does not install WSL or restart Windows itself.
+
+### Generate and build
+
+Windows helper users follow steps 1-2, then use the helper instead of steps 3-4. The manual commands remain available for existing toolchain setups.
 
 1. Install the matching world in Archipelago 0.6.8.
 2. Put the group's YAMLs in Archipelago's `Players` folder and run **Generate**. The window closes on its own when done. Extract the output ZIP from Archipelago's `output` folder into a dedicated seed folder. It holds the seed's `.archipelago` file, one `.ootxmm.json` file per player and the spoiler.
