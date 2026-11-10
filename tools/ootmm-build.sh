@@ -6,6 +6,10 @@ set -eu
 
 REPO="$1"
 shift
+if [ "${1:-}" = "--patch-seed" ] && [ "$#" -ne 5 ]; then
+  echo "Expected seed, OoT ROM, MM ROM and output paths" >&2
+  exit 1
+fi
 OOTMM_TAG=v33.0
 TOOLCHAIN=ghcr.io/ootmm/toolchain:1.4
 SRC=/root/ootmm
@@ -36,7 +40,17 @@ cp "$REPO"/ootmm-ap/* packages/generator/lib/ap/
 
 # OoTMM's build reads the ROMs (custom assets).
 mkdir -p roms
-cp "$REPO/roms/oot.z64" "$REPO/roms/mm.z64" roms/
+if [ "${1:-}" = "--patch-seed" ]; then
+  cp "$3" roms/oot.z64
+  cp "$4" roms/mm.z64
+else
+  cp "$REPO/roms/oot.z64" "$REPO/roms/mm.z64" roms/
+fi
+
+if [ "${1:-}" = "--patch-seed" ]; then
+  podman run --rm -v "$SRC:$SRC" -v /mnt:/mnt -w "$SRC" -e CI=1 -e NX_DAEMON=false -e OOTMM_AP_SOURCE_ROOT="$REPO" "$TOOLCHAIN" sh -c 'pnpm install --frozen-lockfile && ./scripts/deps.sh && pnpm nx run @ootmm/generator:build --prod && cd packages/generator && NODE_ENV=production pnpm exec tsx lib/ap/ap-patch.ts "$1" ../../roms/oot.z64 ../../roms/mm.z64 "$2"' sh "$2" "$5"
+  exit $?
+fi
 
 if [ $# -gt 0 ]; then
   CMD="$*"

@@ -67,6 +67,8 @@ Three consecutive real OoT Mido chests at requested 400% speed start 2.66 second
 
 ## 5. Player installation and hub
 
+- [ ] Rehearse the extracted Windows host bundle on a fresh machine: missing WSL instructions, reboot/resume, cancelled pickers, paths with spaces, failed build and complete multi-player output. Publish `ootxmm-host.zip` and its checksum with the matching world.
+
 - [ ] Rehearse the graphical launcher and v33.0 browser patcher steps. A clean isolated installation loads the packaged world without legacy manifest fallback, generates its full template, reapplies both player patches through CLI Patch mode, then verifies own-item inventory and actual bidirectional exchange from fresh files.
 - [ ] Check that a second person needs only the package, their own ROMs and connection details; fix unclear instructions discovered during rehearsal.
 

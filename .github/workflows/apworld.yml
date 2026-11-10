@@ -69,3 +69,26 @@ jobs:
         with:
           name: ootxmm.apworld
           path: ootxmm.apworld
+
+  host-helper:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check Windows helper syntax
+        shell: powershell
+        run: |
+          $parseErrors = $null
+          $tokens = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("$pwd/tools/host-setup.ps1", [ref]$tokens, [ref]$parseErrors) | Out-Null
+          if ($parseErrors) { throw ($parseErrors | Out-String) }
+      - run: python -m unittest discover -s tools -p test_package_host.py
+      - run: python tools/package_host.py dist/ootxmm-host.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ootxmm-host
+          path: |
+            dist/ootxmm-host.zip
+            dist/ootxmm-host.zip.sha256

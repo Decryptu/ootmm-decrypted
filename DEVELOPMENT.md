@@ -197,6 +197,12 @@ The ROM patch and the in-game multiworld code come from OoTMM itself, built from
 - WSL itself is set up once with `wsl --install -d Ubuntu-24.04` (needs admin and a reboot); the script installs Podman and pulls the image on first use.
 - On macOS and Linux, `sh tools/ootmm-build-docker.sh` does the same with Docker. Its checkout lives in `$OOTMM_SRC` (default `~/.cache/ootmm-decrypted/ootmm`) and is mounted at the same path. `--seed <folder>` mounts a seed folder at `/seed` for `ap-patch.ts`. The image is x86-64 only, so Apple Silicon runs it under emulation; a fresh build and one patch took about five minutes on an Apple Silicon Mac.
 
+### Windows host helper
+
+`Host Setup.cmd` launches `tools/host-setup.ps1` using built-in Windows PowerShell 5.1 in STA mode. The helper checks Ubuntu-24.04, offers seed/ROM pickers, translates local drive paths with `wslpath`, and calls `ootmm-build.sh --patch-seed` with separate arguments. This mode builds the toolchain output and all player patches in one run. Each attempt uses a fresh output folder; failures must not be distributed. The helper leaves WSL installation/restarts to the host and shows the setup command when needed. `-SeedFolder`, `-OotRom` and `-MmRom` accept Windows paths for terminal use; `-CheckOnly` checks WSL and package prerequisites without building.
+
+For each release, run `python tools/package_host.py dist/ootxmm-host.zip` and publish the ZIP and its `.sha256` alongside the matching world. The packager includes only the launcher, helper, Linux build script, patch sources, license and setup guide; no ROMs, seeds or developer environment are included. Existing output ZIPs are refused. The World workflow uploads this bundle as a development artifact. Rehearse the extracted release bundle on a fresh Windows installation, including missing WSL, cancellation, paths with spaces and a complete multi-player build before calling the graphical setup validated.
+
 ### ROM patch
 A player's ROM is built from their Archipelago output with OoTMM's generator:
 1. `generate_output` in `world.py` writes `<seed>_P<n>_<name>.ootxmm.json` into the seed's output: OoTMM's seed string, the player's OoTMM settings (`ootmm_settings`), the exact price table and, for every check, the OoTMM item there and whether it is the player's own. Another player's item shows as itself if it is an OoTMM item, else as a stand-in for its classification (`FOREIGN_STAND_INS`: the Triforce for progression, a heart piece for useful, a green rupee otherwise).
