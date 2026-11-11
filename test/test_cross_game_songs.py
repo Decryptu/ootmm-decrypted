@@ -14,6 +14,49 @@ DUNGEON_SHARE = {key: True for key in ("sharedSongAwakening", "sharedSongZora", 
 class TestSeparateCrossGameSongs(OOTxMMTestBase):
     options = {**ENABLE, "songs": "anywhere"}
 
+    def test_warp_songs_require_song_and_native_ocarina(self):
+        from .. import time_logic
+        inventory = Counter({items.ITEM_BY_SYMBOLIC_ID[symbol].display_name: 99
+                             for symbol in self.world.logic.items})
+        data = (time_logic.OOT_ALL, time_logic.MM_ALL, 0, 0)
+        for suffix, shared in (("FOREST", "sharedSongMinuet"), ("FIRE", "sharedSongBolero"),
+                               ("WATER", "sharedSongSerenade"), ("SPIRIT", "sharedSongRequiem"),
+                               ("SHADOW", "sharedSongNocturne"), ("LIGHT", "sharedSongPrelude")):
+            for game, source in (("OOT", "OOT GLOBAL"), ("MM", "MM WARP_SONGS")):
+                with self.subTest(song=suffix, game=game):
+                    conditions = [cond for (area, _), exits in self.world.logic.exits.items()
+                                  if area == source for target, cond in exits
+                                  if target == "OOT SONG_TP_" + suffix]
+                    enabled = game == "OOT" or self.world.ootmm_settings[
+                        logic.CROSS_GAME_SONGS[shared][0]]
+                    if enabled:
+                        self.assertTrue(conditions)
+                    self.assertEqual(any(time_logic.evaluate(c, data, inventory) is not None
+                                         for c in conditions), enabled)
+                    if not enabled:
+                        continue
+                    prefix = "SHARED" if self.world.ootmm_settings[shared] else game
+                    for symbol in (prefix + "_SONG_TP_" + suffix, game + "_OCARINA"):
+                        missing = inventory.copy()
+                        missing.pop(items.ITEM_BY_SYMBOLIC_ID[symbol].display_name, None)
+                        self.assertTrue(all(time_logic.evaluate(c, data, missing) is None
+                                            for c in conditions), symbol)
+
+    def test_oot_lullaby_and_saria_checks(self):
+        from .. import time_logic
+        data = (time_logic.OOT_ALL, time_logic.MM_ALL, 0, 0)
+        for suffix, shared, location in (
+                ("ZELDA", "sharedSongZeldaLullaby", "OOT Zora River Frogs Zeldas Lullaby"),
+                ("SARIA", "sharedSongSarias", "OOT Zora River Frogs Sarias Song")):
+            with self.subTest(song=suffix):
+                symbol = ("SHARED" if self.world.ootmm_settings[shared] else "OOT") + "_SONG_" + suffix
+                conditions = [cond for _, _, cond in self.world.logic.checks[location]]
+                inventory = Counter({items.ITEM_BY_SYMBOLIC_ID["OOT_OCARINA"].display_name: 1,
+                                     items.ITEM_BY_SYMBOLIC_ID[symbol].display_name: 1})
+                self.assertTrue(any(time_logic.evaluate(c, data, inventory) is not None for c in conditions))
+                inventory.pop(items.ITEM_BY_SYMBOLIC_ID[symbol].display_name)
+                self.assertTrue(all(time_logic.evaluate(c, data, inventory) is None for c in conditions))
+
     def test_song_pool_and_placement(self):
         settings = self.world.ootmm_settings
         pool = Counter(items.ITEM_BY_NAME[item.name].symbolic_id

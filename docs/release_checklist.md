@@ -74,10 +74,12 @@ Three consecutive real OoT Mido chests at requested 400% speed start 2.66 second
 
 ## 6. Additional options
 
-- [ ] Port the remaining shared equipment and songs in small coherent groups. For each group compare source and shared pool counts with OoTMM, test logic gates and prefill, generate a two-player seed and build both ROM patches.
+- [ ] Port the remaining shared equipment in small coherent groups. For each group compare source and shared pool counts with OoTMM, test logic gates and prefill, generate a two-player seed and build both ROM patches.
+- [ ] Verify native shared-wallet delivery and persistence in both games, including purchases at each capacity and fixed rupee pickups. Source pool and logic checks do not establish native payment or inventory behavior.
 - [ ] Verify native Song of Time age changes with `ageChange: oot` and `always`, including the Temple of Time prerequisite and the Ocarina of Time requirement for `oot`. Source-pathfinder comparisons and generation tests cover logic; they do not establish native song input and age transitions.
 - [ ] Verify separate and shared Goron Lullaby receipts in both games: one progressive Intro must not grant the full song, the second must; single mode grants the full song once. Check Snowhead access and save/reload, and verify Goron Baby can award a non-song in single mode.
 - [ ] Verify native OoT use of Sonata of Awakening, New Wave Bossa Nova and Oath to Order, including shared remote delivery and save/reload. Verify shared copies still trigger Woodfall, the Great Bay turtle and Moon entry in MM. Logic and ROM builds do not establish native song handling.
+- [ ] Verify native MM use of Zelda's Lullaby, Saria's Song and all six OoT warp songs for separate and shared copies, including cross-game warp destinations, remote delivery and save/reload. Repeat their OoT effects with shared copies. Source pool, logic, placement and ROM-build checks do not establish native song effects.
 - [ ] Verify native MM Sun's Song time changes for separate and shared songs, including remote delivery and save/reload. Source pool and placement checks do not establish native song effects.
 - [ ] Verify native OoT use of Elegy of Emptiness, Song of Healing and child Song of Soaring, including shared remote delivery and save/reload. Pool and placement tests do not establish the native effects.
 - [ ] Prioritize options intended for the group's YAML; verify their gameplay effects before including them in the candidate settings.

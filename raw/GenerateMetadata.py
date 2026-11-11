@@ -370,10 +370,22 @@ def GenerateFillFile():
         if block is None:
             raise ValueError(f"Missing pool transform: {key}")
         operations = re.findall(r"this\.(replaceItem|removeItem)\(Items\.(\w+),\s*(?:Items\.(\w+)|(\d+))\);", block.group(1))
-        if not operations:
+        pool_operations = [[op, source, target if target else int(count)]
+                           for op, source, target, count in operations]
+        # Wallet copies are halved after both native wallets have been merged.
+        division = re.search(
+            r"const playerItem = makePlayerItem\(Items\.(\w+), i\);\s*"
+            r"this\.pool\.set\(playerItem, \(this\.pool\.get\(playerItem\) \|\| 0\) / (\d+)\);",
+            block.group(1),
+        )
+        if key == "sharedWallets":
+            if division is None:
+                raise ValueError("Missing shared wallet pool division")
+            source, divisor = division.groups()
+            pool_operations.append(["divideItem", source, int(divisor)])
+        if not pool_operations:
             raise ValueError(f"Empty pool transform: {key}")
-        fill["poolTransforms"][key] = [[op, source, target if target else int(count)]
-                                       for op, source, target, count in operations]
+        fill["poolTransforms"][key] = pool_operations
     with open("GreatFillJSONdump.json", 'w') as file:
         json.dump(fill, file, indent=1)
         file.write("\n")

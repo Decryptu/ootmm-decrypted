@@ -547,6 +547,7 @@ SHARED_EQUIPMENT = (
     ("sharedMaskTruth", "MASK_TRUTH", 1, 1, 1),
     ("sharedMaskBunny", "MASK_BUNNY", 1, 1, 1),
     ("sharedMaskKeaton", "MASK_KEATON", 1, 1, 1),
+    ("sharedWallets", "WALLET", 2, 2, 2),
 )
 
 
@@ -577,7 +578,7 @@ class SharedEquipmentTests(OOTxMMTestBase):
         inventory = Counter({items.ITEM_BY_SYMBOLIC_ID[symbol].display_name: 99
                              for symbol in self.world.logic.items})
         # Isolate mask requirements from the dog-race funding and guard-gate prerequisites.
-        inventory.update({"MM_RUPEES": 1, "OOT_KAKARIKO_GATE_OPEN": 1})
+        inventory.update({"OOT_RUPEES": 1, "MM_RUPEES": 1, "OOT_KAKARIKO_GATE_OPEN": 1})
         data = (time_logic.OOT_ALL, time_logic.MM_ALL, 0, 0)
         for key, suffix, *_ in SHARED_EQUIPMENT:
             if not self.options.get(key):
@@ -653,6 +654,11 @@ class TestSharedBombBags(SharedEquipmentTests):
 class TestSharedMagic(SharedEquipmentTests):
     __test__ = True
     options = {"sharedMagic": True}
+
+
+class TestSharedWallets(SharedEquipmentTests):
+    __test__ = True
+    options = {"sharedWallets": True}
 
 
 class TestSharedEquipment(SharedEquipmentTests):

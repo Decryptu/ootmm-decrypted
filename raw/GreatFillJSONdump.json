@@ -739,6 +739,30 @@
    "MM_SOUL_MISC_BUSINESS_SCRUB",
    "MM_SOUL_MISC_GS"
   ],
+  "songZeldaLullabyMm": [
+   "MM_SONG_ZELDA"
+  ],
+  "songSariasMm": [
+   "MM_SONG_SARIA"
+  ],
+  "songMinuetMm": [
+   "MM_SONG_TP_FOREST"
+  ],
+  "songBoleroMm": [
+   "MM_SONG_TP_FIRE"
+  ],
+  "songSerenadeMm": [
+   "MM_SONG_TP_WATER"
+  ],
+  "songRequiemMm": [
+   "MM_SONG_TP_SPIRIT"
+  ],
+  "songNocturneMm": [
+   "MM_SONG_TP_SHADOW"
+  ],
+  "songPreludeMm": [
+   "MM_SONG_TP_LIGHT"
+  ],
   "songAwakeningOot": [
    "OOT_SONG_AWAKENING"
   ],
@@ -3358,6 +3382,38 @@
   "SS"
  ],
  "crossGameSongs": {
+  "sharedSongZeldaLullaby": [
+   "songZeldaLullabyMm",
+   "MM_SONG_ZELDA"
+  ],
+  "sharedSongSarias": [
+   "songSariasMm",
+   "MM_SONG_SARIA"
+  ],
+  "sharedSongMinuet": [
+   "songMinuetMm",
+   "MM_SONG_TP_FOREST"
+  ],
+  "sharedSongBolero": [
+   "songBoleroMm",
+   "MM_SONG_TP_FIRE"
+  ],
+  "sharedSongSerenade": [
+   "songSerenadeMm",
+   "MM_SONG_TP_WATER"
+  ],
+  "sharedSongRequiem": [
+   "songRequiemMm",
+   "MM_SONG_TP_SPIRIT"
+  ],
+  "sharedSongNocturne": [
+   "songNocturneMm",
+   "MM_SONG_TP_SHADOW"
+  ],
+  "sharedSongPrelude": [
+   "songPreludeMm",
+   "MM_SONG_TP_LIGHT"
+  ],
   "sharedSongAwakening": [
    "songAwakeningOot",
    "OOT_SONG_AWAKENING"
@@ -3388,6 +3444,62 @@
   ]
  },
  "poolTransforms": {
+  "sharedSongZeldaLullaby": [
+   [
+    "replaceItem",
+    "OOT_SONG_ZELDA",
+    "SHARED_SONG_ZELDA"
+   ]
+  ],
+  "sharedSongSarias": [
+   [
+    "replaceItem",
+    "OOT_SONG_SARIA",
+    "SHARED_SONG_SARIA"
+   ]
+  ],
+  "sharedSongMinuet": [
+   [
+    "replaceItem",
+    "OOT_SONG_TP_FOREST",
+    "SHARED_SONG_TP_FOREST"
+   ]
+  ],
+  "sharedSongBolero": [
+   [
+    "replaceItem",
+    "OOT_SONG_TP_FIRE",
+    "SHARED_SONG_TP_FIRE"
+   ]
+  ],
+  "sharedSongSerenade": [
+   [
+    "replaceItem",
+    "OOT_SONG_TP_WATER",
+    "SHARED_SONG_TP_WATER"
+   ]
+  ],
+  "sharedSongRequiem": [
+   [
+    "replaceItem",
+    "OOT_SONG_TP_SPIRIT",
+    "SHARED_SONG_TP_SPIRIT"
+   ]
+  ],
+  "sharedSongNocturne": [
+   [
+    "replaceItem",
+    "OOT_SONG_TP_SHADOW",
+    "SHARED_SONG_TP_SHADOW"
+   ]
+  ],
+  "sharedSongPrelude": [
+   [
+    "replaceItem",
+    "OOT_SONG_TP_LIGHT",
+    "SHARED_SONG_TP_LIGHT"
+   ]
+  ],
   "sharedSongAwakening": [
    [
     "replaceItem",
@@ -3807,6 +3919,83 @@
     "removeItem",
     "SHARED_MASK_KEATON",
     1
+   ]
+  ],
+  "sharedWallets": [
+   [
+    "replaceItem",
+    "OOT_WALLET",
+    "SHARED_WALLET"
+   ],
+   [
+    "replaceItem",
+    "MM_WALLET",
+    "SHARED_WALLET"
+   ],
+   [
+    "replaceItem",
+    "OOT_RUPEE_GREEN",
+    "SHARED_RUPEE_GREEN"
+   ],
+   [
+    "replaceItem",
+    "OOT_RUPEE_BLUE",
+    "SHARED_RUPEE_BLUE"
+   ],
+   [
+    "replaceItem",
+    "OOT_RUPEE_RED",
+    "SHARED_RUPEE_RED"
+   ],
+   [
+    "replaceItem",
+    "OOT_RUPEE_PURPLE",
+    "SHARED_RUPEE_PURPLE"
+   ],
+   [
+    "replaceItem",
+    "OOT_RUPEE_HUGE",
+    "SHARED_RUPEE_GOLD"
+   ],
+   [
+    "replaceItem",
+    "OOT_RUPEE_RAINBOW",
+    "SHARED_RUPEE_RAINBOW"
+   ],
+   [
+    "replaceItem",
+    "MM_RUPEE_GREEN",
+    "SHARED_RUPEE_GREEN"
+   ],
+   [
+    "replaceItem",
+    "MM_RUPEE_BLUE",
+    "SHARED_RUPEE_BLUE"
+   ],
+   [
+    "replaceItem",
+    "MM_RUPEE_RED",
+    "SHARED_RUPEE_RED"
+   ],
+   [
+    "replaceItem",
+    "MM_RUPEE_PURPLE",
+    "SHARED_RUPEE_PURPLE"
+   ],
+   [
+    "replaceItem",
+    "MM_RUPEE_SILVER",
+    "SHARED_RUPEE_SILVER"
+   ],
+   [
+    "replaceItem",
+    "MM_RUPEE_GOLD",
+    "SHARED_RUPEE_GOLD"
+   ],
+   [
+    "divideItem",
+    "SHARED_WALLET",
+    2
    ]
   ]
  }
