@@ -5,6 +5,7 @@
 # CI entry points, everything packed into the .apworld and what runs in the OoTMM
 # toolchain under WSL must be the same bytes after a Windows checkout.
 *.sh text eol=lf
+.githooks/* text eol=lf
 *.py text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
