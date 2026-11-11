@@ -214,7 +214,6 @@ def run(args):
         config["ClockThrottle"] = True
         config["Unthrottled"] = False
     (out / "config.ini").write_text(json.dumps(config, indent=2), encoding="utf-8")
-    shutil.copy2(paths["rom"], out / paths["rom"].name)
     if args.save_ram:
         save_dir = out / "N64" / "SaveRAM"
         save_dir.mkdir(parents=True)
@@ -251,7 +250,7 @@ def run(args):
     command = [str(paths["emulator"]), "--gdi", f"--config={out / 'config.ini'}",
                *([f"--load-state={paths['state']}"] if args.state else []), f"--lua={out / 'lua' / 'scenario.lua'}",
                f"--userdata=out:{out};connector:{out / 'lua' / paths['connector'].name}",
-               str(out / paths["rom"].name)]
+               str(paths["rom"])]
     startup = subprocess.STARTUPINFO()
     startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     startup.wShowWindow = 0

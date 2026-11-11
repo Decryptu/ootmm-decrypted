@@ -29,12 +29,9 @@ def main():
     parser.add_argument("--seed", type=Path, required=True)
     parser.add_argument("--patches", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--validation-report", type=Path, help="copy the private validation report into host/VALIDATION.json")
     parser.add_argument("--require-build-receipts", action="store_true",
                         help="require each patch to match its placement and current patch sources")
     args = parser.parse_args()
-    if args.validation_report is not None:
-        json.loads(args.validation_report.read_text(encoding="utf-8"))
     if args.out.exists():
         parser.error("output directory already exists; choose a new directory to preserve frozen builds")
     with zipfile.ZipFile(args.seed) as seed:
@@ -75,8 +72,6 @@ def main():
         host = args.out / "host"
         (share / "patches").mkdir(parents=True)
         host.mkdir()
-        if args.validation_report is not None:
-            shutil.copyfile(args.validation_report, host / "VALIDATION.json")
         # Flatten names so ZIP paths never escape the output.
         for name in host_members:
             (host / Path(name).name).write_bytes(seed.read(name))
@@ -139,12 +134,8 @@ def main():
         "slots": [{"placement": Path(slot["file"]).name, "seed": slot["seed"],
                    "goal": slot["goal"], "patch": slot["patch"].name} for slot in slots],
         "validation": {
-            "gameplay_verified": False,
             "patch_build_receipts_verified": all(slot["receipt"] is not None for slot in slots),
-            "note": "Hashes identify supplied artifacts and the packaged world. "
-                    "Build receipts, when present, bind supplied patches to placements and current "
-                    "patch scripts. They do not certify toolchain reproducibility or gameplay. Validate the exact bundle "
-                    "before distribution."},
+        },
     }
     (host / "PROVENANCE.json").write_text(
         json.dumps(provenance, indent=2, sort_keys=True) + "\n", encoding="utf-8")

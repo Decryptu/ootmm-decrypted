@@ -45,15 +45,10 @@ WORLD_FILES = [
     "raw/GreatItemJSONdump.json",
     "raw/ItemIDs.json",
 ]
-WORLD_DIRS = ["test"]
-
-
-def world_files():
+def world_files(*, include_tests=False):
     files = [ROOT / name for name in WORLD_FILES]
-    for name in WORLD_DIRS:
-        folder = ROOT / name
-        if folder.is_dir():
-            files += [p for p in folder.rglob("*") if p.is_file() and "__pycache__" not in p.parts]
+    if include_tests:
+        files += [p for p in (ROOT / "test").rglob("*") if p.is_file() and "__pycache__" not in p.parts]
     missing = [str(p) for p in files if not p.is_file()]
     if missing:
         raise SystemExit("missing world files: " + ", ".join(missing))
@@ -72,7 +67,7 @@ def main():
         dest = Path(args.dir)
         if dest.exists():
             shutil.rmtree(dest)
-        for src in world_files():
+        for src in world_files(include_tests=True):
             target = dest / src.relative_to(ROOT)
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(src, target)
