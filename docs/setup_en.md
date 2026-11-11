@@ -27,7 +27,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 - Your own Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U ROMs.
 - Your slot's `.ootmm` patch from the host, plus the server address, port, slot name and password if set.
 
-Download the matching world or prepared `players.zip` from the [latest prerelease](https://github.com/Decryptu/ootmm-decrypted/releases/tag/v0.0.1-alpha.4), also linked from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing; everyone should use the same build.
+Download the matching world or prepared `players.zip` from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing so everyone uses the same build.
 
 For the prepared playtest, the host assigns **Tester1** or **Tester2** and provides the server connection details. Use that slot's patch; the goal is both bosses. Skip Choose settings below. The public ZIP contains no running server: the host must start the matching private server file. A new seed needs newly built matching patches.
 
