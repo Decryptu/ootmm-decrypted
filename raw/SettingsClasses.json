@@ -111,6 +111,8 @@
   "progressiveGoronLullabyOot",
   "skeletonKeyOot",
   "skeletonKeyMm",
+  "hammerMm",
+  "boomerangMm",
   "elegyOot",
   "songSoaringOot",
   "songHealingOot",
@@ -177,7 +179,9 @@
   "sharedSoulsAnimal",
   "sharedSoulsMisc",
   "sharedOcarinaButtons",
-  "sharedSkeletonKey"
+  "sharedSkeletonKey",
+  "sharedHammer",
+  "sharedBoomerang"
  ],
  "patch": [
   "crossGameFw",
@@ -308,8 +312,6 @@
   "tunicZoraMm",
   "scalesMm",
   "strengthMm",
-  "hammerMm",
-  "boomerangMm",
   "gfsOot",
   "slingshotMm",
   "spinUpgradeOot",
@@ -367,8 +369,6 @@
   "sharedTunicZora",
   "sharedScales",
   "sharedStrength",
-  "sharedHammer",
-  "sharedBoomerang",
   "sharedGFS",
   "sharedSlingshot",
   "sharedMaskGerudo",

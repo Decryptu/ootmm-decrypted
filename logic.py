@@ -32,6 +32,7 @@ SHARED_SOUL_SETTINGS = {key: defs for key, defs in SHARED_ITEM_SETTINGS.items() 
 
 POOL_TRANSFORMS = ootxmm_staticdata.OOTxMMFill["poolTransforms"]
 CROSS_GAME_SONGS = ootxmm_staticdata.OOTxMMFill["crossGameSongs"]
+CROSS_GAME_ITEMS = CROSS_GAME_SONGS | ootxmm_staticdata.OOTxMMFill["crossGameEquipment"]
 LULLABY_SETTINGS = {"songGoronOot", "sharedSongGoron", "progressiveGoronLullabyOot", "progressiveGoronLullabyMm"}
 
 POOL_SETTINGS = {"skeletonKeyOot": "OOT_SKELETON_KEY", "skeletonKeyMm": "MM_SKELETON_KEY"}
@@ -50,7 +51,7 @@ def normalize_shared_items(settings: Settings) -> Settings:
     settings["sharedOcarinaButtons"] = bool(_value(settings, "sharedOcarinaButtons")
                                            and _value(settings, "ocarinaButtonsShuffleOot")
                                            and _value(settings, "ocarinaButtonsShuffleMm"))
-    for key, (enable, _) in CROSS_GAME_SONGS.items():
+    for key, (enable, _) in CROSS_GAME_ITEMS.items():
         settings[key] = bool(_value(settings, key) and _value(settings, enable))
     settings["sharedSongGoron"] = bool(_value(settings, "sharedSongGoron") and _value(settings, "songGoronOot")
                                       and _value(settings, "progressiveGoronLullabyOot")
@@ -64,7 +65,7 @@ def extra_items(settings: Settings) -> list[str]:
     additions = (EXTRA_ITEMS + [item for key, item in POOL_SETTINGS.items() if _value(settings, key)]
             + [item for key, group in OPTIONAL_ITEM_SETTINGS.items() if _value(settings, key)
                and not any(enable == key and _value(settings, shared)
-                           for shared, (enable, _) in CROSS_GAME_SONGS.items()) for item in group])
+                           for shared, (enable, _) in CROSS_GAME_ITEMS.items()) for item in group])
     # OoTMM shareItems(..., 'max'): these optional items have at most one copy per game.
     present = set(additions)
     if _value(settings, "songGoronOot") and not _value(settings, "sharedSongGoron"):
