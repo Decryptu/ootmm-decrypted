@@ -96,13 +96,20 @@ CrossGameSongs = {
     "sharedSongSoaring": ("songSoaringOot", "OOT_SONG_SOARING"),
 }
 
-SharedPoolTransforms = list(CrossGameSongs) + ["sharedBows", "sharedBombBags", "sharedMagic",
+CrossGameEquipment = {
+    "sharedHammer": ("hammerMm", "MM_HAMMER"),
+    "sharedBoomerang": ("boomerangMm", "MM_BOOMERANG"),
+}
+
+CrossGameItems = CrossGameSongs | CrossGameEquipment
+
+SharedPoolTransforms = list(CrossGameItems) + ["sharedBows", "sharedBombBags", "sharedMagic",
                         "sharedMagicArrowFire", "sharedMagicArrowIce", "sharedMagicArrowLight",
                         "sharedHookshot", "sharedLens", "sharedSongEpona", "sharedSongStorms", "sharedSongTime",
                         "sharedMaskGoron", "sharedMaskZora", "sharedMaskTruth", "sharedMaskBunny", "sharedMaskKeaton",
                         "sharedWallets"]
 
-PortedPool = SharedPoolTransforms + [enable for enable, _ in CrossGameSongs.values()] + ["ocarinaButtonsShuffleOot", "ocarinaButtonsShuffleMm", "sharedOcarinaButtons", "sharedSkeletonKey", "sharedSoulsEnemy", "sharedSoulsNpc", "sharedSoulsAnimal", "sharedSoulsMisc", "soulsEnemyOot", "soulsEnemyMm", "soulsBossOot", "soulsBossMm", "soulsNpcOot", "soulsNpcMm", "soulsAnimalOot", "soulsAnimalMm", "soulsMiscOot", "soulsMiscMm", "skeletonKeyOot", "skeletonKeyMm", "smallKeyRingOot", "smallKeyRingMm"]
+PortedPool = SharedPoolTransforms + [enable for enable, _ in CrossGameItems.values()] + ["ocarinaButtonsShuffleOot", "ocarinaButtonsShuffleMm", "sharedOcarinaButtons", "sharedSkeletonKey", "sharedSoulsEnemy", "sharedSoulsNpc", "sharedSoulsAnimal", "sharedSoulsMisc", "soulsEnemyOot", "soulsEnemyMm", "soulsBossOot", "soulsBossMm", "soulsNpcOot", "soulsNpcMm", "soulsAnimalOot", "soulsAnimalMm", "soulsMiscOot", "soulsMiscMm", "skeletonKeyOot", "skeletonKeyMm", "smallKeyRingOot", "smallKeyRingMm"]
 
 Ported = PortedPool + PortedMaps + PortedChecks + PortedGoal + PortedDungeon + PortedFairies + PortedSongs + PortedRewards + PortedFixed + PortedTraversal + PortedShops
 

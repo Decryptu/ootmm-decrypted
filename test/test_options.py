@@ -691,6 +691,24 @@ class TestSharedSongsAnywhere(TestSharedSongs):
     options = {**TestSharedSongs.options, "songs": "anywhere"}
 
 
+class TestCrossGameEquipment(OOTxMMTestBase):
+    options = {"hammerMm": True, "sharedHammer": True, "boomerangMm": True}
+
+    def test_equipment_in_generated_pool(self) -> None:
+        from collections import Counter
+        from ..items import ITEM_BY_NAME
+
+        pool = Counter(ITEM_BY_NAME[item.name].symbolic_id
+                       for item in self.multiworld.get_items() if item.player == self.player and item.code)
+        for symbol in ("SHARED_HAMMER", "OOT_BOOMERANG", "MM_BOOMERANG"):
+            self.assertEqual(pool[symbol], 1)
+        for symbol in ("OOT_HAMMER", "MM_HAMMER", "SHARED_BOOMERANG"):
+            self.assertEqual(pool[symbol], 0)
+        settings = self.world.fill_slot_data()["settings"]
+        for key, value in self.options.items():
+            self.assertEqual(settings[key], value)
+
+
 class TestSharedEquipmentReference(unittest.TestCase):
     def test_same_pool_as_ootmm(self) -> None:
         import json
@@ -705,7 +723,7 @@ class TestSharedEquipmentReference(unittest.TestCase):
                 base.pop(game + "_SONG_" + suffix, None)
         base.update(item for item in logic.ootxmm_staticdata.OOTxMMCheckItems.values()
                     if item in ("MM_SONG_GORON", "MM_SONG_GORON_HALF"))
-        additions = {item for _, item in logic.CROSS_GAME_SONGS.values()}
+        additions = {item for _, item in logic.CROSS_GAME_ITEMS.values()}
         additions.update(("OOT_SONG_GORON", "OOT_SONG_GORON_HALF"))
         for sample in samples:
             with self.subTest(settings=sample["settings"]):

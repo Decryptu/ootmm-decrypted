@@ -11,7 +11,7 @@ import sys
 
 import re
 
-from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, PortedFixed, SharedPoolTransforms, CrossGameSongs
+from Meta_Options import NotOffered, NotOfferedCategories, OfferedValues, Ported, PortedChecks, PortedFixed, SharedPoolTransforms, CrossGameSongs, CrossGameEquipment, CrossGameItems
 
 # World files per game, as OoTMM's packages/data/build/world.ts loads them for default settings:
 # vanilla dungeons (dungeons_mq is the Master Quest variant) and the US Deku Palace (mm/jp is the jpLayouts variant).
@@ -362,7 +362,8 @@ def GenerateFillFile():
     with open(os.path.join("ootmm", "packages", "logic", "src", "world", "transform.ts"), encoding="utf-8") as file:
         transform = file.read()
     fill["crossGameSongs"] = CrossGameSongs
-    fill["optionalItems"].update({enable: [item] for enable, item in CrossGameSongs.values()})
+    fill["crossGameEquipment"] = CrossGameEquipment
+    fill["optionalItems"].update({enable: [item] for enable, item in CrossGameItems.values()})
     fill["poolTransforms"] = {}
     for key in SharedPoolTransforms:
         dependency = " && settings." + CrossGameSongs[key][0] if key == "sharedSongSun" else ""
@@ -398,11 +399,11 @@ def GenerateEquipmentSamples():
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
     const fill = JSON.parse(fs.readFileSync('GreatFillJSONdump.json', 'utf8'));
     const transforms = fill.poolTransforms;
-    const songKeys = Object.entries(fill.crossGameSongs);
-    const enabledSongs = Object.fromEntries(songKeys.map(([key, [enable]]: any) => [enable, true]));
+    const crossGameItems = Object.entries({...fill.crossGameSongs, ...fill.crossGameEquipment});
+    const enabledItems = Object.fromEntries(crossGameItems.map(([key, [enable]]: any) => [enable, true]));
     const symbols = new Set(Object.values(transforms).flatMap((ops: any) => ops.flatMap(([op, src, dst]: any) =>
       typeof dst === 'string' ? [src, dst] : [src])));
-    for (const [, item] of Object.values(fill.crossGameSongs) as any) symbols.add(item);
+    for (const [, [, item]] of crossGameItems as any) symbols.add(item);
     for (const game of ['OOT', 'MM', 'SHARED'])
       for (const suffix of ['GORON', 'GORON_HALF']) symbols.add(game + '_SONG_' + suffix);
     const lullabies = [];
@@ -415,9 +416,9 @@ def GenerateEquipmentSamples():
     const keys = Object.keys(transforms);
     for (const settings of [{}, ...lullabies, ...keys.map(key => ({[key]:true})),
                             Object.fromEntries(keys.map(key => [key,true])),
-                            ...songKeys.flatMap(([key, [enable]]: any) => [
+                            ...crossGameItems.flatMap(([key, [enable]]: any) => [
                               {[enable]:true}, {[enable]:true,[key]:true}]),
-                            {...enabledSongs, ...Object.fromEntries(keys.map(key => [key,true]))}]) {
+                            {...enabledItems, ...Object.fromEntries(keys.map(key => [key,true]))}]) {
       const state: any = await worldState(new Monitor({onLog:()=>{}}),
         {seed:'ootxmm', settings:makeSettings(settings)} as any);
       samples.push({settings, songLocations:[...state.worlds[0].songLocations].sort(), pool:Object.fromEntries([...state.pool].filter(([i]: any) => symbols.has(i.item.id))

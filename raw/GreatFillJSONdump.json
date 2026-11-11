@@ -783,6 +783,12 @@
   ],
   "songSoaringOot": [
    "OOT_SONG_SOARING"
+  ],
+  "hammerMm": [
+   "MM_HAMMER"
+  ],
+  "boomerangMm": [
+   "MM_BOOMERANG"
   ]
  },
  "fixed": [
@@ -3443,6 +3449,16 @@
    "OOT_SONG_SOARING"
   ]
  },
+ "crossGameEquipment": {
+  "sharedHammer": [
+   "hammerMm",
+   "MM_HAMMER"
+  ],
+  "sharedBoomerang": [
+   "boomerangMm",
+   "MM_BOOMERANG"
+  ]
+ },
  "poolTransforms": {
   "sharedSongZeldaLullaby": [
    [
@@ -3547,6 +3563,20 @@
     "replaceItem",
     "MM_SONG_SOARING",
     "SHARED_SONG_SOARING"
+   ]
+  ],
+  "sharedHammer": [
+   [
+    "replaceItem",
+    "OOT_HAMMER",
+    "SHARED_HAMMER"
+   ]
+  ],
+  "sharedBoomerang": [
+   [
+    "replaceItem",
+    "OOT_BOOMERANG",
+    "SHARED_BOOMERANG"
    ]
   ],
   "sharedBows": [
