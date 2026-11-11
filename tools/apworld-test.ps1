@@ -1,15 +1,17 @@
-# Runs the world's tests the way .github/workflows/apworld.yml does: inside an Archipelago 0.6.8
+# Runs the world's tests inside an Archipelago 0.6.8
 # source checkout, with the world copied to worlds/ootxmm (tools/build_apworld.py picks the files)
 # and every other game removed (tools/prune_worlds.py).
 #
-#   pwsh tools/apworld-test.ps1                  # Archipelago's generic world tests plus ours
-#   pwsh tools/apworld-test.ps1 -k TestBase      # extra arguments go to pytest
+#   pwsh tools/apworld-test.ps1                  # default seed and client smoke checks
+#   pwsh tools/apworld-test.ps1 -k TestBase      # select tests from the world suite
+#   pwsh tools/apworld-test.ps1 -Full            # include upstream tests and benchmarks
 #
 # The first run clones Archipelago and installs its Python packages into a virtualenv
 # (Python 3.12, from the py launcher) under %LOCALAPPDATA%\ootmm-decrypted\archipelago.
 # -Reinstall starts that over.
 param(
     [switch]$Reinstall,
+    [switch]$Full,
     [Parameter(ValueFromRemainingArguments = $true)][string[]]$PytestArgs
 )
 $ErrorActionPreference = "Stop"
@@ -52,6 +54,12 @@ Run $python @((Join-Path $repo "tools\prune_worlds.py"), $ap)
 Push-Location $ap
 try {
     $env:SKIP_REQUIREMENTS_UPDATE = "1"
-    & $python -m pytest test/general test/benchmark worlds/ootxmm -n auto -q @PytestArgs
+    if ($Full) {
+        & $python -m pytest test/general test/benchmark worlds/ootxmm -n auto -q @PytestArgs
+    } elseif ($PytestArgs) {
+        & $python -m pytest worlds/ootxmm -q @PytestArgs
+    } else {
+        & $python -m pytest worlds/ootxmm/test/test_options.py::TestDefaults worlds/ootxmm/test/test_client.py -q
+    }
     exit $LASTEXITCODE
 } finally { Pop-Location }

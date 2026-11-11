@@ -40,8 +40,6 @@ class PackageTest(unittest.TestCase):
             patches = root / "patches"
             patches.mkdir()
             placement = json.dumps({"version": 1, "seed": "123-1", "settings": {"goal": "both"}}).encode()
-            validation = root / "validation.json"
-            validation.write_text('{"pending": ["gameplay"]}', encoding="utf-8")
             seed = root / "AP_123.zip"
             with zipfile.ZipFile(seed, "w") as archive:
                 archive.writestr("AP_123_P1_Link.ootxmm.json", placement)
@@ -62,7 +60,7 @@ class PackageTest(unittest.TestCase):
                 out = root / name
                 result = subprocess.run([sys.executable, str(package_playtest.ROOT / "tools/package_playtest.py"),
                                          "--seed", str(seed), "--patches", str(patches), "--out", str(out),
-                                         "--require-build-receipts", "--validation-report", str(validation)], capture_output=True, text=True)
+                                         "--require-build-receipts"], capture_output=True, text=True)
                 return result, out
 
             result, out = package("missing")
@@ -82,9 +80,7 @@ class PackageTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             report = verify_playtest.verify(out)
             self.assertTrue(report["validation"]["patch_build_receipts_verified"])
-            self.assertEqual((out / "host/VALIDATION.json").read_bytes(), validation.read_bytes())
             with zipfile.ZipFile(out / "players.zip") as archive:
-                self.assertNotIn("VALIDATION.json", archive.namelist())
                 self.assertFalse(any(name.endswith((".build.json", ".archipelago", "_Spoiler.txt", ".z64"))
                                      for name in archive.namelist()))
             for relative in ("share/PLAYTEST.md", "host/AP_123.archipelago", "players.zip"):

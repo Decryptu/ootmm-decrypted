@@ -27,6 +27,7 @@ jobs:
           source: dist/pages-source
           destination: dist/pages
       - uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
         with:
           path: dist/pages
 

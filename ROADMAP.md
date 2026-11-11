@@ -7,13 +7,11 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 
 ## Planned, in order
 
-Remaining gameplay checks use [the playtest checklist](docs/playtest_en.md) and [disposable gameplay tests](docs/gameplay_testing.md). No group playtest is planned.
-The ordered developer tasks and validation gates are in [release readiness](docs/release_checklist.md), starting with isolated, repeatable gameplay setups and source-verified test shortcuts. The standalone gameplay observer records mailbox recovery and client-poll timings for game-switch validation ([measurement limits](docs/gameplay_testing.md)).
-The Windows host helper automates seed/ROM selection and patch building; fresh-machine release-bundle rehearsal remains a release gate.
-Release hardening still needs a full playthrough and the remaining gameplay checks below. Additional options can follow the current alpha releases.
+Before the group release, rehearse [installation and packaging](docs/release_checklist.md) and finish a full playthrough.
+
 | Item | Notes |
 |---|---|
-| Client | Implemented ([DEVELOPMENT.md](DEVELOPMENT.md#client)); remaining gameplay gates include full fairy collection routes, remaining upgrade interactions, shop purchases and shared equipment abilities, continuous native completion/credits and other goal settings. Current source, exchange, native inventory, OoT and MM remote small-key, dungeon boss-key and Ganon-key doors, boss blue-warp and recovery/load coverage is recorded in [release readiness](docs/release_checklist.md). [Disposable gameplay tests](docs/gameplay_testing.md) defines the isolated setup, assistance and assertion limits |
+| Client | Finish native completion through credits and exercise the remaining fairy collection, upgrade and shop interactions in the intended group settings. |
 | More options | The world offers condition/ROM settings and the check, placement and pool changes listed in [Options](DEVELOPMENT.md#options). Unported settings retain OoTMM defaults. Port each remaining setting with the relevant behavior in OoTMM's `world/transform.ts` and `misc/fixer.ts`, then add it to `Ported` in `raw/Meta_Options.py` and regenerate metadata. Remaining pool changes include other shared items, `itemPool`, `pondFishShuffle` and the Triforce values of `goal` |
 | Gossip stone hints | Gossip stones only show OoTMM's junk (joke) hints, because OoTMM's hint pass needs a playthrough of the whole seed ([ROM patch](DEVELOPMENT.md#rom-patch)); a tester read them as broken. Archipelago knows the whole multiworld at generation: compute way-of-the-hero, foolish and item hints there (from the spheres and required locations, across worlds) and pass them to `ap-patch.ts` as gossip texts |
 | Dolphin + Virtual Console (to evaluate, after the alpha) | Players asked for Dolphin with a `.wad`, which gives better picture, latency and audio sync than BizHawk's N64 core. Needs a client on `dolphin-memory-engine` (as Archipelago's existing Dolphin worlds use) instead of the BizHawk connector, finding the IPC mailbox in the VC emulator's RAM by its magic, checking OoTMM runs correctly under the VC emulator, and a player guide for building the WAD from the patched ROM. Project64 would need a new connector too and is not planned |
