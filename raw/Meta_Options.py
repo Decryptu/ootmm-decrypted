@@ -79,6 +79,14 @@ PortedMaps = ["tingleShuffle"]
 PortedFixed = ["shuffleOcarinasOot", "shuffleMasterSword", "shuffleGerudoCard"]
 
 CrossGameSongs = {
+    "sharedSongZeldaLullaby": ("songZeldaLullabyMm", "MM_SONG_ZELDA"),
+    "sharedSongSarias": ("songSariasMm", "MM_SONG_SARIA"),
+    "sharedSongMinuet": ("songMinuetMm", "MM_SONG_TP_FOREST"),
+    "sharedSongBolero": ("songBoleroMm", "MM_SONG_TP_FIRE"),
+    "sharedSongSerenade": ("songSerenadeMm", "MM_SONG_TP_WATER"),
+    "sharedSongRequiem": ("songRequiemMm", "MM_SONG_TP_SPIRIT"),
+    "sharedSongNocturne": ("songNocturneMm", "MM_SONG_TP_SHADOW"),
+    "sharedSongPrelude": ("songPreludeMm", "MM_SONG_TP_LIGHT"),
     "sharedSongAwakening": ("songAwakeningOot", "OOT_SONG_AWAKENING"),
     "sharedSongZora": ("songZoraOot", "OOT_SONG_ZORA"),
     "sharedSongOrder": ("songOrderOot", "OOT_SONG_ORDER"),
@@ -91,7 +99,8 @@ CrossGameSongs = {
 SharedPoolTransforms = list(CrossGameSongs) + ["sharedBows", "sharedBombBags", "sharedMagic",
                         "sharedMagicArrowFire", "sharedMagicArrowIce", "sharedMagicArrowLight",
                         "sharedHookshot", "sharedLens", "sharedSongEpona", "sharedSongStorms", "sharedSongTime",
-                        "sharedMaskGoron", "sharedMaskZora", "sharedMaskTruth", "sharedMaskBunny", "sharedMaskKeaton"]
+                        "sharedMaskGoron", "sharedMaskZora", "sharedMaskTruth", "sharedMaskBunny", "sharedMaskKeaton",
+                        "sharedWallets"]
 
 PortedPool = SharedPoolTransforms + [enable for enable, _ in CrossGameSongs.values()] + ["ocarinaButtonsShuffleOot", "ocarinaButtonsShuffleMm", "sharedOcarinaButtons", "sharedSkeletonKey", "sharedSoulsEnemy", "sharedSoulsNpc", "sharedSoulsAnimal", "sharedSoulsMisc", "soulsEnemyOot", "soulsEnemyMm", "soulsBossOot", "soulsBossMm", "soulsNpcOot", "soulsNpcMm", "soulsAnimalOot", "soulsAnimalMm", "soulsMiscOot", "soulsMiscMm", "skeletonKeyOot", "skeletonKeyMm", "smallKeyRingOot", "smallKeyRingMm"]
 

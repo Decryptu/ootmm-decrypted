@@ -115,6 +115,8 @@ def transform_pool(items, settings: Settings):
                     pool[target] += count
             elif op == "removeItem":
                 pool[source] = max(0, pool[source] - target)
+            elif op == "divideItem":
+                pool[source] //= target
             else:
                 raise ValueError(f"Unknown pool operation: {op}")
     def replace(source, target):
