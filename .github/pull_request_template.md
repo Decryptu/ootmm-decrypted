@@ -1,6 +1,7 @@
 ## What this changes
 
 ## Checklist
+- [ ] The branch name, title, description and commit metadata use human attribution only
 - [ ] `pwsh tools/apworld-test.ps1` passes (or the World workflow is green)
 - [ ] Generated a seed with the packed `ootxmm.apworld`, or explained why not
 - [ ] `ROADMAP.md` updated: row added for work started, row deleted for work finished

@@ -262,7 +262,7 @@ git merge clean/quasky-main
 The script needs `python -m pip install git-filter-repo`.
 
 ## Conventions
-- Commit messages are plain and descriptive. No co-author trailers for tools, and no mention of AI assistants anywhere in commits, code or docs. Local assistant files (`CLAUDE.md`, `AGENTS.md`, `.claude/`) are listed in `.git/info/exclude` and never committed.
+- Use human attribution only in public commits, branch names, pull requests and release text. Keep private workspace instructions in `.git/info/exclude`. Run `git config core.hooksPath .githooks` once per clone to check commit messages, identities and outgoing commits and refs. The Public metadata workflow also checks incoming pushes and pull request titles, descriptions, branches and commits. Review exact release text and other public content before publishing.
 - The game name `OOTxMM` is what seeds and clients match on. Changing it is a breaking change.
 - Update `ROADMAP.md` in the same commit that starts or finishes an item: add its row when work starts, delete it when the item is done. The roadmap and docs describe the current state, never history. At the end of a change, grep `ROADMAP.md` and the docs for its topic and remove anything it made stale.
 - Credit ported work (`cherry-pick -x` or a source note) and keep the README's Credits current.
