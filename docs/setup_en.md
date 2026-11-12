@@ -17,7 +17,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 
 > **Do not generate a seed on ootmm.com.** A ROM from the website's normal generator is an ordinary OoTMM randomizer. It cannot talk to Archipelago and has a different item layout. The BizHawk Client still says it is running the OOTxMM handler for such a ROM, but no item is ever sent or received. Only use the website's **Patch** mode with a `.ootmm` file built from your Archipelago seed.
 
-**Playing solo?** You are both host and player: follow every step yourself, including [Host preparation](#host-preparation). The [prepared playtest ZIP](#what-each-player-needs) is the only way to play without building a patch.
+**Playing solo?** You are both host and player: follow every step yourself, including [Host preparation](#host-preparation).
 
 ## What each player needs
 
@@ -27,9 +27,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 - Your own Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U ROMs.
 - Your slot's `.ootmm` patch from the host, plus the server address, port, slot name and password if set.
 
-Download the matching world or prepared `players.zip` from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed. Extract the ZIP before installing so everyone uses the same build.
-
-For the prepared playtest, the host assigns **Tester1** or **Tester2** and provides the server connection details. Use that slot's patch; the goal is both bosses. Skip Choose settings below. The public ZIP contains no running server: the host must start the matching private server file. A new seed needs newly built matching patches.
+Download the matching world package from the [player hub](https://decryptu.github.io/ootmm-decrypted/). No GitHub account is needed.
 
 ## Choose settings
 
@@ -61,7 +59,7 @@ The patch contains the seed's placements and communication code. Players need no
 
 Type `/bh` in the client to see whether it is connected to BizHawk. If the client was started before the Lua script, or BizHawk was restarted, load the script again.
 
-Boss completion is saved on the Archipelago server, so the client can restart between bosses for the `both` goal. The host must keep the server save. Use native in-game saves for restart tests; loading an older savestate can rewind received-item progress.
+Boss completion is saved on the Archipelago server, so the client can restart between bosses for the `both` goal. The host must keep the server save. Use native in-game saves when resuming; loading an older savestate can rewind received-item progress.
 
 Use Archipelago's BizHawk Client for item exchange. The standalone OoTMM multiplayer client is not used.
 

@@ -63,7 +63,6 @@ def main():
     for source, target, title in [
         ("setup_en.md", "setup.md", "Setup guide"),
         ("en_OOTxMM.md", "game.md", "About the game"),
-        ("playtest_en.md", "playtest.md", "Playtest checklist"),
     ]:
         content = (ROOT / "docs" / source).read_text(encoding="utf-8")
         content = content.replace("](setup_en.md)", "](setup.html)")
