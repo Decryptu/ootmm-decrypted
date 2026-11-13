@@ -11,12 +11,11 @@ Before the group release, rehearse [installation and packaging](docs/release_che
 
 | Item | Notes |
 |---|---|
-| Client | Finish native completion through credits and exercise the remaining fairy collection, upgrade and shop interactions in the intended group settings. |
-| More options | The world offers condition/ROM settings and the check, placement and pool changes listed in [Options](DEVELOPMENT.md#options). Unported settings retain OoTMM defaults. Port each remaining setting with the relevant behavior in OoTMM's `world/transform.ts` and `misc/fixer.ts`, then add it to `Ported` in `raw/Meta_Options.py` and regenerate metadata. Remaining pool changes include other shared items, `itemPool`, `pondFishShuffle` and the Triforce values of `goal` |
+| More options | Verify shared items, pool modes and pond catches in native gameplay. Verify shared Triforce delivery in game with an Archipelago Item Link group |
 | Gossip stone hints | Gossip stones only show OoTMM's junk (joke) hints, because OoTMM's hint pass needs a playthrough of the whole seed ([ROM patch](DEVELOPMENT.md#rom-patch)); a tester read them as broken. Archipelago knows the whole multiworld at generation: compute way-of-the-hero, foolish and item hints there (from the spheres and required locations, across worlds) and pass them to `ap-patch.ts` as gossip texts |
 | Dolphin + Virtual Console (to evaluate, after the alpha) | Players asked for Dolphin with a `.wad`, which gives better picture, latency and audio sync than BizHawk's N64 core. Needs a client on `dolphin-memory-engine` (as Archipelago's existing Dolphin worlds use) instead of the BizHawk connector, finding the IPC mailbox in the VC emulator's RAM by its magic, checking OoTMM runs correctly under the VC emulator, and a player guide for building the WAD from the patched ROM. Project64 would need a new connector too and is not planned |
 
-Next options: shared boots, tunics and spells together with their MM enabling settings. Shared ocarinas and health need their own pool rules. The hub lists every changed setting it cannot import, so a newly ported setting is imported once it is in `options.py`.
+The hub lists every changed setting it cannot import. Newly ported settings can be imported once they are in `options.py`.
 
 ## Decisions
 - Keep the game name `OOTxMM` and upstream's file layout, so Quasky's work can still be merged if AP-OOTMM resumes ([Syncing upstream](DEVELOPMENT.md#syncing-upstream)).

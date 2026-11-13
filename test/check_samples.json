@@ -6,6 +6,13 @@
  },
  {
   "settings": {
+   "pondFishShuffle": true
+  },
+  "count": 1017,
+  "sha256": "922be96f20e615a0cddc8871b5d7d59e33e19ab08222732d7622e0233603f9f4"
+ },
+ {
+  "settings": {
    "restoreBrokenActors": true,
    "shuffleMaskTrades": true,
    "divingGameRupeeShuffle": true,
@@ -162,5 +169,29 @@
   },
   "count": 2118,
   "sha256": "3078dab37ae2afed8379d7d042409428461936d54cd5085af52e4fdcf47e4e97"
+ },
+ {
+  "settings": {
+   "shuffleRocksMm": "all",
+   "bootsIronMm": true
+  },
+  "count": 1111,
+  "sha256": "0ab4d0d955da201de466b5955fefd3b8d88e6bb468b334fd93db9f4071e1c75d"
+ },
+ {
+  "settings": {
+   "shuffleRocksMm": "overworld",
+   "bootsIronMm": true
+  },
+  "count": 1108,
+  "sha256": "adf66718b1042c4b922305682a0da79fe24ff588aa5c4690413225e1d3ae0ec2"
+ },
+ {
+  "settings": {
+   "shuffleRocksMm": "dungeons",
+   "bootsIronMm": true
+  },
+  "count": 987,
+  "sha256": "59052c0114d588a6c72d61750b520d9e2b6b465e9b227a02da1f08a23d2d16b0"
  }
 ]
