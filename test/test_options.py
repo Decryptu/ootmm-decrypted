@@ -692,7 +692,13 @@ class TestSharedSongsAnywhere(TestSharedSongs):
 
 
 class TestCrossGameEquipment(OOTxMMTestBase):
-    options = {"hammerMm": True, "sharedHammer": True, "boomerangMm": True}
+    options = {
+        "hammerMm": True, "sharedHammer": True, "boomerangMm": True,
+        "bootsIronMm": True, "sharedBootsIron": True, "tunicGoronMm": True,
+        "tunicZoraMm": True, "sharedTunicZora": True,
+        "spellWindMm": True, "sharedSpellWind": True, "sharedSpellLove": True,
+        "shuffleRocksMm": "all",
+    }
 
     def test_equipment_in_generated_pool(self) -> None:
         from collections import Counter
@@ -700,12 +706,19 @@ class TestCrossGameEquipment(OOTxMMTestBase):
 
         pool = Counter(ITEM_BY_NAME[item.name].symbolic_id
                        for item in self.multiworld.get_items() if item.player == self.player and item.code)
-        for symbol in ("SHARED_HAMMER", "OOT_BOOMERANG", "MM_BOOMERANG"):
+        for symbol in ("SHARED_HAMMER", "OOT_BOOMERANG", "MM_BOOMERANG",
+                       "SHARED_BOOTS_IRON", "MM_TUNIC_GORON",
+                       "SHARED_SPELL_WIND", "OOT_SPELL_LOVE"):
             self.assertEqual(pool[symbol], 1)
-        for symbol in ("OOT_HAMMER", "MM_HAMMER", "SHARED_BOOMERANG"):
+        self.assertEqual(pool["OOT_TUNIC_GORON"], 2)
+        self.assertEqual(pool["SHARED_TUNIC_ZORA"], 2)
+        for symbol in ("OOT_HAMMER", "MM_HAMMER", "SHARED_BOOMERANG",
+                       "OOT_BOOTS_IRON", "MM_BOOTS_IRON", "SHARED_TUNIC_GORON",
+                       "OOT_TUNIC_ZORA", "MM_TUNIC_ZORA",
+                       "OOT_SPELL_WIND", "MM_SPELL_WIND", "SHARED_SPELL_LOVE", "MM_SPELL_LOVE"):
             self.assertEqual(pool[symbol], 0)
         settings = self.world.fill_slot_data()["settings"]
-        for key, value in self.options.items():
+        for key, value in {**self.options, "sharedSpellLove": False}.items():
             self.assertEqual(settings[key], value)
 
 
@@ -724,12 +737,117 @@ class TestSharedEquipmentReference(unittest.TestCase):
         base.update(item for item in logic.ootxmm_staticdata.OOTxMMCheckItems.values()
                     if item in ("MM_SONG_GORON", "MM_SONG_GORON_HALF"))
         additions = {item for _, item in logic.CROSS_GAME_ITEMS.values()}
-        additions.update(("OOT_SONG_GORON", "OOT_SONG_GORON_HALF"))
+        additions.update(item for key in ("sharedShovel", "sharedPlatinumToken")
+                         for definition in logic.SHARED_ITEM_SETTINGS[key] for item in definition.values())
+        additions.update(("OOT_SONG_GORON", "OOT_SONG_GORON_HALF", "MM_OCARINA"))
+        vanilla = logic.ootxmm_staticdata.OOTxMMCheckItems
+        equipment = logic.EQUIPMENT_ITEMS
+        consumables = {"OOT_RECOVERY_HEART", "MM_RECOVERY_HEART", "OOT_FAIRY_BIG", "MM_FAIRY_BIG"}
         for sample in samples:
             with self.subTest(settings=sample["settings"]):
                 settings = logic.normalize_shared_items(sample["settings"])
                 pool = base.copy()
+                if "healthChecks" in sample:
+                    for item in consumables:
+                        pool.pop(item, None)
+                    pool.update(vanilla[name] for name in sample["healthChecks"])
                 pool.update(item for item in logic.extra_items(settings) if item in additions)
-                self.assertEqual(logic.transform_pool(pool.elements(), settings), Counter(sample["pool"]))
+                if "equipmentChecks" in sample:
+                    for item in equipment:
+                        pool.pop(item, None)
+                    pool.update(vanilla[name] for name in sample["equipmentChecks"])
+                    pool.update(item for item in logic.extra_items(settings) if item in equipment)
+                    self.assertEqual({name: logic.shared_item(vanilla[name], settings)
+                                      for name in sample["fixedEquipment"]}, sample["fixedEquipment"])
+                transformed = logic.transform_pool(pool.elements(), settings)
+                transformed.subtract(logic.shared_item(vanilla[name], settings)
+                                     for name in sample.get("fixedOcarinas", ()))
+                expected = Counter(sample["pool"])
+                if "equipmentChecks" in sample and sample["settings"].get("shopShuffleOot") == "full":
+                    # Shuffled shops also add unrelated vanilla stock to the reference pool.
+                    transformed = Counter({item: transformed[item] for item in equipment if transformed[item]})
+                    expected = Counter({item: expected[item] for item in equipment if expected[item]})
+                self.assertEqual(+transformed, expected)
                 from .. import prefill
                 self.assertEqual(prefill.song_locations(settings), set(sample["songLocations"]))
+
+
+class TestSharedOcarinaAndHealth(OOTxMMTestBase):
+    options = {"sharedOcarina": True, "sharedHealth": True, "sharedMagic": True,
+               "fairyOcarinaMm": True, "shuffleFreeHeartsMm": True, "shuffleGossipBigFairiesMm": "all"}
+
+    def test_shared_items_in_pool_and_patch_settings(self) -> None:
+        from collections import Counter
+        from .. import items
+        pool = Counter(items.ITEM_BY_NAME[item.name].symbolic_id
+                       for item in self.multiworld.get_items() if item.player == self.player and item.code)
+        for suffix, count in (("OCARINA", 2), ("HEART_CONTAINER", 6), ("HEART_PIECE", 44), ("DEFENSE_UPGRADE", 1)):
+            self.assertEqual(pool["SHARED_" + suffix], count)
+            self.assertEqual(pool["OOT_" + suffix] + pool["MM_" + suffix], 0)
+        for suffix in ("RECOVERY_HEART", "FAIRY_BIG"):
+            self.assertGreater(pool["SHARED_" + suffix], 0)
+            self.assertEqual(pool["OOT_" + suffix] + pool["MM_" + suffix], 0)
+        settings = self.world.fill_slot_data()["settings"]
+        for key, value in self.options.items():
+            self.assertEqual(settings[key], value)
+        self.assertIn("SHARED_OCARINA", self.world.logic.items)
+        self.assertTrue({"OOT_OCARINA", "MM_OCARINA"}.isdisjoint(self.world.logic.items))
+
+
+class TestSharedFixedOcarinas(OOTxMMTestBase):
+    options = {"sharedOcarina": True, "shuffleOcarinasOot": False}
+
+    def test_only_fixed_shared_ocarinas(self) -> None:
+        from .. import items, prefill
+        name = items.ITEM_BY_SYMBOLIC_ID["SHARED_OCARINA"].display_name
+        sources = prefill.FIXED_SETTINGS["shuffleOcarinasOot"]
+        self.assertEqual(len(sources), 2)
+        for source in sources:
+            location = self.multiworld.get_location(source, self.player)
+            self.assertTrue(location.locked)
+            self.assertEqual(location.item.name, name)
+        self.assertFalse(any(item.name == name for item in self.multiworld.itempool))
+
+
+class TestSharedSwordsShieldsAndNutsSticks(OOTxMMTestBase):
+    options = {
+        "extraChildSwordsOot": True, "sharedSwords": True,
+        "progressiveShieldsOot": "progressive", "progressiveShieldsMm": "progressive", "sharedShields": True,
+        "sticksNutsUpgradesMm": True, "sticksNutsUpgradesInitial": True, "sharedNutsSticks": True,
+    }
+
+    def test_shared_progression_and_fixed_stock(self) -> None:
+        from collections import Counter
+        from .. import items
+        pool = Counter(items.ITEM_BY_NAME[item.name].symbolic_id for item in self.multiworld.itempool
+                       if item.player == self.player)
+        for suffix in ("SWORD", "SHIELD", "STICK_UPGRADE", "NUT_UPGRADE"):
+            self.assertEqual(pool["SHARED_" + suffix], 3)
+            self.assertEqual(pool["OOT_" + suffix] + pool["MM_" + suffix], 0)
+            self.assertIn("SHARED_" + suffix, self.world.logic.items)
+        for check, symbol in (
+            ("MM Trading Post Item 3", "SHARED_SHIELD_HYLIAN"),
+            ("MM Trading Post Item 5", "SHARED_STICK"),
+            ("OOT Kokiri Shop Item 5", "SHARED_NUTS_5"),
+        ):
+            location = self.multiworld.get_location(check, self.player)
+            self.assertTrue(location.locked)
+            self.assertEqual(items.ITEM_BY_NAME[location.item.name].symbolic_id, symbol)
+        settings = self.world.fill_slot_data()["settings"]
+        for key, value in self.options.items():
+            self.assertEqual(settings[key], value)
+
+
+class TestSharedSeparateShields(OOTxMMTestBase):
+    options = {"sharedShields": True, "dekuShieldMm": True,
+               "shopShuffleOot": "full", "shopShuffleMm": "full"}
+
+    def test_shield_additions_fit_pool(self) -> None:
+        from collections import Counter
+        from .. import items
+        pool = self.multiworld.itempool
+        self.assertEqual(sum(item.player == self.player for item in pool) + len(self.world.get_pre_fill_items()),
+                         len(self.multiworld.get_unfilled_locations(self.player)))
+        counts = Counter(items.ITEM_BY_NAME[item.name].symbolic_id for item in pool if item.player == self.player)
+        for suffix, count in (("SHIELD_DEKU", 8), ("SHIELD_HYLIAN", 6), ("SHIELD_MIRROR", 1)):
+            self.assertEqual(counts["SHARED_" + suffix], count)

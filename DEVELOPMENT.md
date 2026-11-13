@@ -68,7 +68,7 @@ The tricks are one option set, `tricks`, defaulting to OoTMM's default tricks. O
 
 Settings the world doesn't offer keep OoTMM's default (`defaults` in `raw/GreatSettingsJSONdump.json`).
 
-**Ported so far: the check filters, shops and shop prices, goal, Song of Time age changing, Tingle maps and map/compass, regular and Hideout/chest-game small-key, boss-key (including Ganon), stray-fairy, song and blue-warp, dungeon-only (with or without a one-reward limit) and anywhere reward placement, plus optional vanilla OoT ocarina, Master Sword and Gerudo Card placements, separate and shared skeleton keys, small-key rings, enemy, boss, NPC, animal and miscellaneous souls, including shared souls, separate or shared ocarina buttons, and shared bows, bomb bags, magic, elemental arrows, Hookshot, Lens of Truth, Epona, Storms, Time, Sun, Elegy, Healing, Soaring, Awakening, New Wave Bossa Nova, Oath to Order, Goron Lullaby, Zelda's Lullaby, Saria's Song and all six OoT warp songs, and Goron, Zora, Truth, Bunny and Keaton masks.** OoTMM leaves out the checks a setting doesn't shuffle (pots, grass, rocks, free rupees and the like, `filterChecks*` and the removals before `makePools` in `run()` of its `world/transform.ts`); the world's checks are its world files' checks minus `removed_checks` in `logic.py`. That reads each check's type, scene and whether the scene is a dungeon from `raw/GreatCheckInfoJSONdump.json`, which the generator exports from OoTMM's check data along with the name lists `transform.ts` removes by. A removed check's vanilla item leaves the pool with it, as in OoTMM. `pondFishShuffle` is not ported: it also puts fish of random weights in the pool.
+**Ported so far: the check filters, shops and shop prices, goal, Song of Time age changing, Tingle maps and map/compass, regular and Hideout/chest-game small-key, boss-key (including Ganon), stray-fairy, song and blue-warp, dungeon-only (with or without a one-reward limit) and anywhere reward placement, plus optional vanilla OoT ocarina, Master Sword and Gerudo Card placements, separate and shared skeleton keys, small-key rings, enemy, boss, NPC, animal and miscellaneous souls, including shared souls, separate or shared ocarina buttons, and shared bows, bomb bags, magic, elemental arrows, Hookshot, Lens of Truth, Epona, Storms, Time, Sun, Elegy, Healing, Soaring, Awakening, New Wave Bossa Nova, Oath to Order, Goron Lullaby, Zelda's Lullaby, Saria's Song and all six OoT warp songs, and Goron, Zora, Truth, Bunny and Keaton masks.** OoTMM leaves out the checks a setting doesn't shuffle (pots, grass, rocks, free rupees and the like, `filterChecks*` and the removals before `makePools` in `run()` of its `world/transform.ts`); the world's checks are its world files' checks minus `removed_checks` in `logic.py`. That reads each check's type, scene and whether the scene is a dungeon from `raw/GreatCheckInfoJSONdump.json`, which the generator exports from OoTMM's check data along with the name lists `transform.ts` removes by. A removed check's vanilla item leaves the pool with it, as in OoTMM.
 
 `shopShuffleOot` and `shopShuffleMm` offer `none` and `full`. Full removes the game's ordinary shops from fixed placement; MM's two bomb-bag purchases and All-Night Mask remain shuffled in either mode, as in OoTMM. The exporter derives `shopFixed` from upstream's fixer and samples all four shop-toggle combinations. Items and check counts stay unchanged with the default pool.
 
@@ -80,7 +80,45 @@ Base and optional extra items enter the pool before shared replacements, so OoT 
 
 Shared equipment and songs apply the item replacements and count adjustments exported from OoTMM's `world/transform.ts` into `poolTransforms`. The combined pool keeps three shared bows, three shared bomb bags, two shared magic upgrades and two shared Hookshots; each shared elemental arrow, Lens of Truth and Epona, Storms, Time or Sun song has one copy. Shared Goron, Zora, Truth, Bunny and Keaton masks each retain one copy in the combined pool. Goron and Zora masks provide their transformation abilities in MM; their OoT counterparts are cosmetic. Shared wallets halve the combined wallet-upgrade count and convert native rupee denominations to shared rupees, including fixed pickups and filler. Shared songs retain the `songs` placement restriction. Ammunition, magic jars and fixed vanilla pickups use the same replacements; removed upgrade copies become filler. Logic pruning uses the transformed pool and caches each setting independently. The exporter preserves v33.0's arrow replacement order: its first replacement maps OoT 30-arrow bundles to shared 5-arrow bundles. Follow the tracked release when changing it. `GenerateEquipmentSamples` records independent results from OoTMM's full world pipeline in `test/shared_equipment_samples.json`; the reference test compares every affected item count for the separate and combined settings.
 
-`hammerMm` and `boomerangMm` each add a separate copy to the MM pool. With the corresponding `sharedHammer` or `sharedBoomerang` toggle enabled, the OoT copy becomes a single shared item and the separate MM copy is omitted. A sharing toggle only applies when its MM option is enabled.
+The MM equipment toggles add separate copies of the Hammer, Boomerang, Iron Boots, Hover Boots, Goron Tunic, Zora Tunic, and the three spells to the MM pool. With the corresponding sharing toggle enabled, the OoT copies become shared items and the separate MM copy is omitted. A sharing toggle only applies when its MM option is enabled. MM water rock checks also require `bootsIronMm` and the corresponding rock shuffle.
+
+`sharedOcarina` combines the two OoT ocarinas and the MM ocarina into two progressive copies. If OoT ocarina shuffle is off, both shared copies stay at the fixed OoT checks. With `fairyOcarinaMm` enabled, the first shared copy also works in MM. With sharing off, `fairyOcarinaMm` adds a second MM ocarina to the pool.
+
+`sharedHealth` combines both games' health into 44 Pieces of Heart, six Heart Containers, one Double Defense, and shared Recovery Hearts. Big Fairies also become shared when `sharedMagic` is enabled.
+
+`extraChildSwordsOot` adds the Razor and Gilded Swords to OoT's child sword progression. With `sharedSwords` enabled, the two games use three shared child sword upgrades. The Master Sword and Great Fairy's Sword keep their own item IDs.
+
+`sharedShields` requires matching OoT and MM shield modes. Separate mode shares the Hylian, Hero's and Mirror Shields, and shares the Deku Shield when `dekuShieldMm` is enabled. Progressive mode uses three shared upgrades. Fixed shops retain the shield stock that OoTMM assigns to them.
+
+`sticksNutsUpgradesMm` enables MM capacity upgrades. With `sharedNutsSticks` enabled, both games use shared refills and two shared upgrades per capacity. `sticksNutsUpgradesInitial` adds a third upgrade and makes the first one unlock the corresponding capacity.
+Shared scales, strength, the Slingshot and its ammo, the Great Fairy's Sword, the Powder Keg, Stone of Agony,
+the Spin Attack upgrade, and the Blast, Stone, Kamaro, Gerudo, Skull, and Spooky masks require the option
+that enables the item in the other game. Separate MM scales and strength add two and three copies respectively.
+`bronzeScale` adds a third scale in each enabled game. Separate MM Slingshots add three upgrades and seven seed packs.
+`sharedShovel` and `sharedPlatinumToken` each merge two enabled copies into one. The shovel opens grottos in
+both games, and the Platinum Token counts toward both games' token rewards.
+`sharedBombchu` requires matching Bombchu behavior. With Bomb Bag behavior, it also requires shared Bomb Bags.
+Separate Bombchu Bag mode adds three bags per game, or three total with sharing. First Pack mode uses eligible
+ammo packs to unlock the bag.
+`extraBottlesOot` adds two bottles. With `sharedBottles`, the games share bottles and refills, and an open King
+Zora replaces the shared Ruto's Letter with an empty bottle.
+`itemPool` offers Normal, Scarce, Minimal, Plentiful, and Barren. Scarce and Minimal reduce selected equipment counts
+and remove Heart Pieces, and Minimal also removes shuffled Heart Containers. Plentiful adds copies of
+eligible items and converts shuffled Heart Pieces to Heart Containers.
+Barren starts from Minimal. After progression balancing, it replaces optional items from this world's shuffled
+checks with Nothing, including its items that would have gone to another slot. It preserves fixed and plando
+placements, traps, Triforce items, and other games' items. Each removal must preserve the multiworld's
+completion conditions and the accessibility setting of every slot.
+`pondFishShuffle` adds 33 pond checks. Catches enter the pool with randomized weights, with an extra catch of
+each kind in Plentiful. The child and adult fishing prizes require a qualifying fish or loach of the corresponding age.
+`goal: triforce` adds `triforcePieces` to each player's pool and completes when that player collects `triforceGoal`.
+The required count is capped at the number of pieces. `goal: triforce3` adds one each of Power, Courage, and Wisdom
+to the player's pool. Both modes allow cross-world placement. The client combines checked local pieces and
+remote pieces confirmed by the game's receipt index. The ROM handles the credits warp.
+For a shared hunt, participating players can use an Archipelago Item Link with the same name, matching
+Triforce goal and piece counts, `item_pool: [Triforce Piece]`, and `replacement_item: Nothing`.
+The generated pool then has one set of pieces assigned to the group. Each player receives the linked
+pieces through the server, including when a linked piece is found in their own world.
 
 Cross-game song settings add one separate song in the receiving game, or replace the native copy with one shared song when sharing is enabled:
 
@@ -112,7 +150,7 @@ Zelda's Lullaby, Saria's Song and all six OoT warp songs can also be enabled in 
 
 Goron Lullaby has separate rules. `songGoronOot` enables an OoT copy; `progressiveGoronLullabyOot` and `progressiveGoronLullabyMm` select `progressive` (two Intro items, the second granting the full song) or `single` (one full Lullaby). Both default to `progressive`. `sharedSongGoron` replaces the MM copies with shared ones and adds no OoT copies; sharing is disabled unless OoT is enabled and the modes match. Single MM mode keeps the Goron Baby check but excludes it from song placement and from song-location capacity; it becomes available for other items. Pool transforms run even with no sharing enabled, so the default MM pool also matches OoTMM. The source-reference samples cover every combination of enabling, sharing and both modes, including the eligible song checks. Native progressive receipt and song use remain gameplay gates.
 
-`goal` sets the completion condition in `rules.py` as OoTMM's `isGoalReached` does, from its `OOT_GANON` and `MM_MAJORA` events. An enum can be offered with only some of its values (`OfferedValues` in `raw/Meta_Options.py`): `goal` leaves out the Triforce values, which add pieces to the pool.
+`goal` sets the completion condition in `rules.py`. The boss goals use the `OOT_GANON` and `MM_MAJORA` events.
 
 To port a setting: do in the world what OoTMM's code does with it, add it to `PortedChecks`, `PortedGoal`, `PortedDungeon`, `PortedFairies`, `PortedSongs`, `PortedRewards`, `PortedMaps`, `PortedPool`, `PortedFixed`, `PortedTraversal` or `PortedShops` in `raw/Meta_Options.py` (or a new list for a new kind), and rerun the generator. `test/test_checks.py` checks that every ported setting is one the check filters, completion condition, pool additions, key-ring conversion, age traversal, price generation or item placement handles (`PORTED_SETTINGS` in `options.py`) and checks that `removed_checks` leaves exactly OoTMM's own checks for the settings in `test/check_samples.json`. The generator writes that file by running OoTMM's pipeline with defaults, then every ported check setting at `all` (or on), `overworld` and `dungeons` (or off), as hashes of the check names; on a mismatch, compare `removed_checks` with OoTMM's `state.worlds[0].locations` for that sample. `test/test_options.py` generates with non-default settings and all tricks, and `test/test_checks.py` also generates with every ported setting on.
 
@@ -219,6 +257,8 @@ To run it: `pwsh tools/ootmm-build.ps1 "cd packages/generator && NODE_ENV=produc
 
 The host builds patches and distributes each player's `.ootmm`, not the ROM. Players apply it with OoTMM v33.0's Patch mode and their own ROMs; the patch carries our custom communication code. Both the standard v33.0 CLI and browser Patch modes rebuild these patches: the browser download matches the host-built ROM except for the 32 random player-ID bytes described above. See `docs/setup_en.md` for the player and host instructions.
 
+To correct the OoT ending card in BizHawk 2.11.1 with GLideN64, run `python tools/gliden64_rom.py <combined.z64> <output-directory>` after applying the player's patch. Open the resulting copy in BizHawk. The tool keeps the ROM filename for SaveRAM lookup and refuses to overwrite an existing file. It changes only the ROM title, appending `MASK` to select GLideN64's Majora's Mask and Zelda monochrome behavior while keeping the title prefix the Archipelago client expects.
+
 ### Player hub
 
 `site/` contains a static hub and a browser-local starter YAML download (name and goal; other settings keep defaults). Full option templates come from Archipelago's **Generate Template Options**, so unsupported settings are not advertised. No ROMs, seed generation or multiplayer server run on GitHub Pages.
@@ -235,6 +275,8 @@ Each file in `ootmm-patches/` is one change, as a diff against the tracked tag. 
 - `0001-ipc-ram-mailbox.patch`: OoTMM's multiworld code talks to the outside only through its IPC layer (`packages/generator/src/common/ipc/`), whose one backend drives the cartridge registers of OoTMM's own Project64 build. With multiplayer on and no connection, the second item sent waits forever for an ack (`Multi_EnsureSendBufferEmpty` in `src/common/multi/multi.c`), so the game locks. The patch adds a backend that is used when that Project64 isn't there (`src/common/ipc/ram.c`): a mailbox in RDRAM that a BizHawk client reads and writes. Its layout, all big-endian: magic `OoTMM-IPC-RAM-1` (16 bytes, 16-aligned, written last at init), `connected` (u32, the client sets it to 1 while attached), `alive` (u32, the game counts it up every frame: after a game switch the other game's mailbox may still be in RAM, and the live one is the one that moves), `outHead`, `outTail`, `inHead`, `inTail` (u32), then two 0x800-byte rings, game to client and client to game. Each ring holds packets as a big-endian u16 length then the packet; the writer moves the head, the reader the tail, and head equal to tail means empty. The packets are OoTMM's own (`src/common/multi/multi.h`). Every check the player gets is sent as a reliable WAL item packet with its check key, also when the item is the player's own, so the client learns every checked location from that one stream.
 
 - `0002-remote-item-identity.patch`: remote pickups retain dungeon-specific item IDs in check overrides, even when the host uses own-dungeon placement. The host's dungeon context cannot identify another player's key or fairy; generic conversion can also produce an invalid OoT fairy ID. Generic conversion is disabled for remote items and their cloaks.
+
+- `0003-mm-bombchu-license.patch`: MM Bombchu purchases use MM's Bomb Bag for the Bomb Bag requirement. Owning MM Bombchu still satisfies the license independently.
 
 ## Branches
 - `main`: stable. Only moves to a commit `dev` already tested.

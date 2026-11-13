@@ -245,6 +245,10 @@ def GenerateFillFile():
     import { Monitor, DEFAULT_SETTINGS } from './ootmm/packages/core/src/index.ts';
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
     import { Items, ItemHelpers, ItemGroups, SharedItemGroups } from './ootmm/packages/logic/src/items/index.ts';
+    const transform = fs.readFileSync('ootmm/packages/logic/src/world/transform.ts', 'utf8');
+    const poolItems = (source: string): string[] =>
+      [...source.matchAll(/(Items|ItemGroups)\\.(\\w+)/g)].flatMap(([, kind, key]) =>
+        kind === 'Items' ? [(Items as any)[key].id] : [...(ItemGroups as any)[key]].map(i => i.id));
     const checkSettings = JSON.parse(fs.readFileSync('_fill.json', 'utf8'));
     const { isLocationChestFairy, isLocationOtherFairy, makeLocation } = await import('./ootmm/packages/logic/src/locations.ts');
     const state: any = await worldState(new Monitor({ onLog: () => {} }), { seed: 'ootxmm', settings: { ...DEFAULT_SETTINGS, ...checkSettings } } as any);
@@ -284,8 +288,13 @@ def GenerateFillFile():
     fs.writeFileSync('_fill.json', JSON.stringify({
       conditionalFixed,
       shopFixed,
+      shieldPairs: SharedItemGroups.SHIELDS.map(d => [d.shared.id, [d.oot.id, d.mm.id]]),
+      itemPoolModes: Object.fromEntries(['SCARCE', 'SCARCE_NOLIMIT', 'PLENTIFUL'].map(key =>
+        [key.toLowerCase(), poolItems(transform.match(new RegExp('const ITEM_POOL_' + key + ' = new Set\\\\(\\\\[([\\\\s\\\\S]*?)\\\\]\\\\);'))![1])])),
       sharedItems: Object.fromEntries([
         ['sharedSkeletonKey', SharedItemGroups.SKELETON_KEY],
+        ['sharedShovel', SharedItemGroups.SHOVEL],
+        ['sharedPlatinumToken', SharedItemGroups.PLATINUM_TOKEN],
         ['sharedOcarinaButtons', SharedItemGroups.OCARINA_BUTTONS],
         ['sharedSoulsEnemy', SharedItemGroups.SOULS_ENEMY],
         ['sharedSoulsNpc', SharedItemGroups.SOULS_NPC],
@@ -364,15 +373,77 @@ def GenerateFillFile():
     fill["crossGameSongs"] = CrossGameSongs
     fill["crossGameEquipment"] = CrossGameEquipment
     fill["optionalItems"].update({enable: [item] for enable, item in CrossGameItems.values()})
+    for key in ("shovelOot", "shovelMm", "platinumTokenOot", "platinumTokenMm"):
+        match = re.search(r"if\s*\(settings\." + key + r"\) \{\s*this\.addItem\(Items\.(\w+)\);", transform)
+        if match is None:
+            raise ValueError(f"Missing optional item: {key}")
+        fill["optionalItems"][key] = [match[1]]
+    fairy_ocarina = re.search(r"else if \(this\.state\.settings\.fairyOcarinaMm\) \{\s*this\.addItem\(Items\.(\w+)\);", transform)
+    if fairy_ocarina is None:
+        raise ValueError("Missing Fairy Ocarina in MM pool addition")
+    fill["optionalItems"]["fairyOcarinaMm"] = [fairy_ocarina[1]]
+    # These transforms run before sharing. Keep the shield shop stock fixed even when
+    # the corresponding non-progressive shields are removed from the shuffled pool.
+    fill["equipmentTransforms"] = {}
+    equipment_blocks = {
+        "progressiveShieldsOot": r"this\.state\.settings\.progressiveShieldsOot === 'progressive'",
+        "progressiveShieldsMm": r"settings\.progressiveShieldsMm === 'progressive'",
+        "dekuShieldMm": r"settings\.dekuShieldMm",
+        "extraChildSwordsOot": r"settings\.extraChildSwordsOot",
+        "sticksNutsUpgradesInitial": r"settings\.sticksNutsUpgradesInitial && settings\.games !== 'mm'",
+        "sticksNutsUpgradesMm": r"settings\.sticksNutsUpgradesMm",
+        "bronzeScale": r"settings\.bronzeScale && settings\.games !== 'mm'",
+        "scalesMm": r"settings\.scalesMm",
+        "strengthMm": r"settings\.strengthMm",
+        "slingshotMm": r"settings\.slingshotMm",
+        "zoraKing": r"settings\.zoraKing === 'open'",
+    }
+    for key, condition in equipment_blocks.items():
+        prefix = "else " if key in ("dekuShieldMm", "sticksNutsUpgradesMm", "scalesMm", "strengthMm", "slingshotMm") else ""
+        block = re.search(r"\n    (?:\} )?" + prefix + r"if \(" + condition + r"\) \{(.*?)\n    \}", transform, re.S)
+        if block is None:
+            raise ValueError(f"Missing equipment transform: {key}")
+        operations = []
+        for line in block[1].splitlines():
+            call = re.fullmatch(r"( +)this\.(replaceItem|removeItem|addItem)\(Items\.(\w+)(?:,\s*(?:Items\.(\w+)|(\d+)))?\);", line)
+            if call:
+                indent, op, source, target, count = call.groups()
+                operation = [op, source, target if target else int(count) if count else None]
+                if len(indent) == 8:
+                    operation.append({"scalesMm": "bronzeScale", "progressiveShieldsMm": "dekuShieldMm",
+                                      "sticksNutsUpgradesMm": "sticksNutsUpgradesInitial"}[key])
+                operations.append(operation)
+        if not operations:
+            raise ValueError(f"Empty equipment transform: {key}")
+        fill["equipmentTransforms"][key] = operations
+    for key in ("scalesMm", "strengthMm", "slingshotMm"):
+        del fill["optionalItems"][key]
+    for key, source, count in (
+        ("extraBottlesOot", "OOT_BOTTLE_EMPTY", 2),
+        ("bombchuBehaviorOot", "OOT_BOMBCHU_BAG", 3),
+        ("bombchuBehaviorMm", "MM_BOMBCHU_BAG", 3),
+    ):
+        if f"this.addItem(Items.{source}, {count});" not in transform:
+            raise ValueError(f"Missing pool addition: {source}")
+        fill["equipmentTransforms"][key] = [["addItem", source, count]]
     fill["poolTransforms"] = {}
     for key in SharedPoolTransforms:
         dependency = " && settings." + CrossGameSongs[key][0] if key == "sharedSongSun" else ""
         block = re.search(r"if \(settings\." + key + re.escape(dependency) + r"\) \{(.*?)\n    \}", transform, re.S)
         if block is None:
             raise ValueError(f"Missing pool transform: {key}")
-        operations = re.findall(r"this\.(replaceItem|removeItem)\(Items\.(\w+),\s*(?:Items\.(\w+)|(\d+))\);", block.group(1))
-        pool_operations = [[op, source, target if target else int(count)]
+        body = block[1]
+        if key == "sharedBottles":
+            # Export the normal removal; Plentiful removes one additional copy.
+            body = re.sub(r"if \(settings\.itemPool === 'plentiful'\) \{.*?\} else \{", "", body, flags=re.S)
+        operations = re.findall(r"this\.(replaceItem|removeItem)\(Items\.(\w+)(?:,\s*(?:Items\.(\w+)|(\d+)))?\);?", body)
+        pool_operations = [[op, source, target if target else int(count) if count else None]
                            for op, source, target, count in operations]
+        if key == "sharedBombchu":
+            bag = re.search(r"if \(settings\.bombchuBehaviorOot === 'bagSeparate'\) \{\s*this\.addItem\(Items\.(\w+), (\d+)\);", body)
+            if bag is None:
+                raise ValueError("Missing shared Bombchu Bag addition")
+            pool_operations.append(["addItem", bag[1], int(bag[2]), ["bombchuBehaviorOot", "bagSeparate"]])
         # Wallet copies are halved after both native wallets have been merged.
         division = re.search(
             r"const playerItem = makePlayerItem\(Items\.(\w+), i\);\s*"
@@ -384,10 +455,24 @@ def GenerateFillFile():
                 raise ValueError("Missing shared wallet pool division")
             source, divisor = division.groups()
             pool_operations.append(["divideItem", source, int(divisor)])
+        if key == "sharedHealth":
+            counts = re.findall(r"this\.pool\.set\(makePlayerItem\(Items\.(\w+), i\), (\d+)\);", block.group(1))
+            big_fairies = re.search(r"if \(settings\.sharedHealth && settings\.sharedMagic\) \{(.*?)\n    \}", transform, re.S)
+            if len(counts) != 2 or big_fairies is None:
+                raise ValueError("Missing shared health pool counts or big fairy transform")
+            pool_operations.extend(["setItem", source, int(count)] for source, count in counts)
+            replacements = re.findall(r"this\.replaceItem\(Items\.(\w+),\s*Items\.(\w+)\);", big_fairies[1])
+            if len(replacements) != 2:
+                raise ValueError("Missing big fairy replacements")
+            pool_operations.extend(["replaceItem", source, target, "sharedMagic"] for source, target in replacements)
+        if key == "sharedShields":
+            pool_operations = [["mergeMax", shared, pair] for shared, pair in fill.pop("shieldPairs")] + pool_operations
+            pool_operations = [operation + ["dekuShieldMm"] if operation[2] == "SHARED_SHIELD_DEKU"
+                               else operation for operation in pool_operations]
         if not pool_operations:
             raise ValueError(f"Empty pool transform: {key}")
         fill["poolTransforms"][key] = pool_operations
-    with open("GreatFillJSONdump.json", 'w') as file:
+    with open("GreatFillJSONdump.json", 'w', newline="\n") as file:
         json.dump(fill, file, indent=1)
         file.write("\n")
 
@@ -398,11 +483,22 @@ def GenerateEquipmentSamples():
     import { Monitor, DEFAULT_SETTINGS, makeSettings } from './ootmm/packages/core/src/index.ts';
     import { worldState } from './ootmm/packages/logic/src/pipeline.ts';
     const fill = JSON.parse(fs.readFileSync('GreatFillJSONdump.json', 'utf8'));
+    const vanilla = JSON.parse(fs.readFileSync('GreatCheckItemJSONdump.json', 'utf8'));
     const transforms = fill.poolTransforms;
     const crossGameItems = Object.entries({...fill.crossGameSongs, ...fill.crossGameEquipment});
     const enabledItems = Object.fromEntries(crossGameItems.map(([key, [enable]]: any) => [enable, true]));
-    const symbols = new Set(Object.values(transforms).flatMap((ops: any) => ops.flatMap(([op, src, dst]: any) =>
-      typeof dst === 'string' ? [src, dst] : [src])));
+    const operationItems = (ops: any) => ops.flatMap(([op, src, dst]: any) =>
+      typeof dst === 'string' ? [src, dst] : [src, ...(Array.isArray(dst) ? dst : [])]);
+    const equipmentSymbols = new Set([
+      ...Object.values(fill.equipmentTransforms).flatMap(operationItems),
+      ...['sharedSwords', 'sharedShields', 'sharedNutsSticks', 'sharedBottles', 'sharedBombchu',
+        'sharedSlingshot', 'sharedScales', 'sharedStrength'].flatMap(key => operationItems(transforms[key])),
+    ]);
+    const symbols = new Set(Object.values(transforms).flatMap(operationItems));
+    for (const key of ['sharedShovel', 'sharedPlatinumToken'])
+      for (const definition of fill.sharedItems[key])
+        for (const item of Object.values(definition)) symbols.add(item);
+    for (const item of equipmentSymbols) symbols.add(item);
     for (const [, [, item]] of crossGameItems as any) symbols.add(item);
     for (const game of ['OOT', 'MM', 'SHARED'])
       for (const suffix of ['GORON', 'GORON_HALF']) symbols.add(game + '_SONG_' + suffix);
@@ -414,15 +510,69 @@ def GenerateEquipmentSamples():
             lullabies.push({songGoronOot, sharedSongGoron, progressiveGoronLullabyOot, progressiveGoronLullabyMm});
     const samples = [];
     const keys = Object.keys(transforms);
+    const ocarinas = [];
+    for (const sharedOcarina of [false, true])
+      for (const fairyOcarinaMm of [false, true])
+        for (const shuffleOcarinasOot of [false, true])
+          ocarinas.push({sharedOcarina, fairyOcarinaMm, shuffleOcarinasOot});
+    const health = [false, true].map(sharedMagic => ({
+      sharedHealth: true, sharedMagic, shuffleFreeHeartsOot: true, shuffleFreeHeartsMm: true,
+      shuffleGossipBigFairiesOot: 'all', shuffleGossipBigFairiesMm: 'all',
+    }));
+    const equipment = [{sharedSwords: true, extraChildSwordsOot: true}, {extraChildSwordsOot: true}];
+    for (const dekuShieldMm of [false, true])
+      for (const mode of ['separate', 'progressive'])
+        for (const shops of ['none', 'full'])
+          equipment.push({sharedShields: true, dekuShieldMm, progressiveShieldsOot: mode,
+            progressiveShieldsMm: mode, shopShuffleOot: shops, shopShuffleMm: shops});
+    equipment.push({sharedShields: true, progressiveShieldsOot: 'progressive'});
+    for (const sharedNutsSticks of [false, true])
+      for (const sticksNutsUpgradesInitial of [false, true])
+        equipment.push({sharedNutsSticks, sticksNutsUpgradesMm: true, sticksNutsUpgradesInitial});
+    equipment.push({sticksNutsUpgradesInitial: true});
+    const moreSharing = [
+      {scalesMm: true, bronzeScale: true}, {scalesMm: true, bronzeScale: true, sharedScales: true},
+      {extraBottlesOot: true}, {extraBottlesOot: true, sharedBottles: true},
+      {extraBottlesOot: true, sharedBottles: true, zoraKing: 'open'},
+      {shovelOot: true, shovelMm: true, sharedShovel: true},
+      {platinumTokenOot: true, platinumTokenMm: true, sharedPlatinumToken: true},
+      {bombchuBehaviorOot: 'bagSeparate', bombchuBehaviorMm: 'bagSeparate'},
+      {bombchuBehaviorOot: 'bombBag', bombchuBehaviorMm: 'bombBag', sharedBombchu: true},
+      {bombchuBehaviorOot: 'bombBag', bombchuBehaviorMm: 'bombBag', sharedBombchu: true, sharedBombBags: true},
+    ];
+    for (const mode of ['free', 'bagFirst', 'bagSeparate'])
+      moreSharing.push({bombchuBehaviorOot: mode, bombchuBehaviorMm: mode, sharedBombchu: true});
+    equipment.push({...Object.fromEntries(keys.map(key => [key,true])), extraChildSwordsOot: true,
+      progressiveShieldsOot: 'progressive', progressiveShieldsMm: 'progressive',
+      dekuShieldMm: true, sticksNutsUpgradesMm: true, sticksNutsUpgradesInitial: true});
     for (const settings of [{}, ...lullabies, ...keys.map(key => ({[key]:true})),
                             Object.fromEntries(keys.map(key => [key,true])),
                             ...crossGameItems.flatMap(([key, [enable]]: any) => [
                               {[enable]:true}, {[enable]:true,[key]:true}]),
-                            {...enabledItems, ...Object.fromEntries(keys.map(key => [key,true]))}]) {
+                            {...enabledItems, ...Object.fromEntries(keys.map(key => [key,true]))},
+                            ...ocarinas, ...health, ...equipment, ...moreSharing]) {
       const state: any = await worldState(new Monitor({onLog:()=>{}}),
         {seed:'ootxmm', settings:makeSettings(settings)} as any);
-      samples.push({settings, songLocations:[...state.worlds[0].songLocations].sort(), pool:Object.fromEntries([...state.pool].filter(([i]: any) => symbols.has(i.item.id))
-        .map(([i,n]: any) => [i.item.id,n]))});
+      const world = state.worlds[0];
+      const sample: any = {settings, songLocations:[...world.songLocations].sort(),
+        pool:Object.fromEntries([...state.pool].filter(([i]: any) => symbols.has(i.item.id))
+          .map(([i,n]: any) => [i.item.id,n]))};
+      if (equipment.includes(settings)) {
+        const fixed = new Set([...state.fixedLocations].map((loc: any) => loc.split('@')[0]));
+        sample.equipmentChecks = [...world.locations].filter((name: string) =>
+          equipmentSymbols.has(vanilla[name]) && !fixed.has(name)).sort();
+        sample.fixedEquipment = Object.fromEntries([...fixed].filter((name: string) => equipmentSymbols.has(vanilla[name]))
+          .sort().map((name: string) => [name, world.checkItems.get(name).id]));
+      }
+      if (settings.shuffleOcarinasOot === false)
+        sample.fixedOcarinas = [...state.fixedLocations].map((loc: string) => loc.split('@')[0])
+          .filter((name: string) => vanilla[name] === 'OOT_OCARINA').sort();
+      if (settings.shuffleFreeHeartsOot) {
+        const consumables = new Set(['OOT_RECOVERY_HEART', 'MM_RECOVERY_HEART', 'OOT_FAIRY_BIG', 'MM_FAIRY_BIG']);
+        const fixed = new Set([...state.fixedLocations].map((loc: any) => loc.split('@')[0]));
+        sample.healthChecks = [...world.locations].filter((name: string) => consumables.has(vanilla[name]) && !fixed.has(name)).sort();
+      }
+      samples.push(sample);
     }
     fs.writeFileSync('../test/shared_equipment_samples.json', JSON.stringify(samples, null, 1) + '\\n');
     """)
@@ -436,6 +586,8 @@ def GenerateCheckSamples():
         types = {s["key"]: s["type"] for s in json.load(file)["settings"]}
     samples = [{}] + [{key: (value if types[key] == "enum" else toggle) for key in PortedChecks}
                       for value, toggle in (("all", True), ("overworld", True), ("dungeons", False))]
+    samples += [{"shuffleRocksMm": mode, "bootsIronMm": True}
+                for mode in ("all", "overworld", "dungeons")]
     with open("_samples.json", 'w') as file:
         json.dump(samples, file)
     RunTypeScript("""
@@ -839,6 +991,9 @@ def ConvertRawOptions():
             price_option = key in ("priceOotShops", "priceMmShops")
             values = [v for v in setting["values"] if (v["value"] != "random" or price_option)
                       and v["value"] in OfferedValues.get(key, [v["value"]])]
+            if key == "goal":
+                values = [{**v, "description": "Collect the Triforce of Power, Courage and Wisdom to win."}
+                          if v["value"] == "triforce3" else v for v in values]
             doc += [f"- **{'uniform' if price_option and v['value'] == 'random' else v['value']}**: {v['description']}" if v.get("description") else f"- **{v['value']}**" for v in values]
             body += [f"    option_{'uniform' if price_option and v['value'] == 'random' else v['value']} = {i}" for i, v in enumerate(values)]
             # Archipelago lowercases option names; OoTMM's values keep their case.

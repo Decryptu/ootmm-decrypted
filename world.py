@@ -30,8 +30,13 @@ class OOTxMM(World):
 
     def generate_early(self) -> None:
         self.ootmm_settings = ootmm_settings(self.options)
+        if self.ootmm_settings["goal"] == "triforce":
+            self.ootmm_settings["triforceGoal"] = min(self.ootmm_settings["triforceGoal"],
+                                                     self.ootmm_settings["triforcePieces"])
         self.prices = prices.generate(self.ootmm_settings, self.random)
         self.logic = logic.build({**self.ootmm_settings, "_prices": self.prices})
+        self.goal_items = rules.triforce_items(self.ootmm_settings)
+        self.progression_items = self.logic.items | self.goal_items.keys()
 
     def create_regions(self) -> None:
         self.time_logic = time_logic.TimeLogic(self.logic, self.player, {
@@ -49,6 +54,13 @@ class OOTxMM(World):
     @classmethod
     def stage_pre_fill(cls, multiworld) -> None:
         prefill.pre_fill_all(multiworld)
+
+    @classmethod
+    def stage_pre_output(cls, multiworld) -> None:
+        barren = [world for world in multiworld.get_game_worlds(cls.game)
+                  if world.ootmm_settings["itemPool"] == "barren"]
+        if barren:
+            items.minimize_barren(multiworld, barren)
 
     def get_pre_fill_items(self) -> list:
         # Restricted items kept out of the main pool until coordinated pre-fill places them.
@@ -79,7 +91,15 @@ class OOTxMM(World):
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         # The player's OoTMM settings, for the patch.
-        return {"settings": self.ootmm_settings}
+        data = {"settings": self.ootmm_settings}
+        if self.goal_items:
+            data["local_triforce"] = {
+                str(location.address): location.item.code
+                for location in self.multiworld.get_filled_locations(self.player)
+                if location.address is not None and location.item.player == self.player
+                and items.ITEM_BY_NAME[location.item.name].symbolic_id in self.goal_items
+            }
+        return data
 
 def ootmm_settings(opts: options.OOTxMMOptions) -> logic.Settings:
     """The OoTMM settings the options set, keyed and valued as OoTMM's settings."""
