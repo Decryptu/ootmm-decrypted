@@ -39,6 +39,9 @@ def option_specs() -> dict:
             specs[key] = {"type": "toggle", "default": kind == "DefaultOnToggle"}
         elif kind == "OptionSet":
             specs[key] = {"type": "set", "values": ast.literal_eval(fields["valid_keys"]), "default": []}
+        elif kind == "Range":
+            specs[key] = {"type": "range", "min": ast.literal_eval(fields["range_start"]),
+                          "max": ast.literal_eval(fields["range_end"]), "default": ast.literal_eval(fields["default"])}
         else:
             raise ValueError(f"{node.name}: unsupported option type {kind}")
     missing = set(names) - set(specs)

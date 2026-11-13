@@ -24,6 +24,7 @@ function sameValue(a, b) {
 function convert(spec, value) {
   if (spec.type === "choice") return spec.values.includes(value) ? (spec.aliases?.[value] ?? value) : undefined;
   if (spec.type === "toggle") return typeof value === "boolean" ? value : undefined;
+  if (spec.type === "range") return Number.isInteger(value) && value >= spec.min && value <= spec.max ? value : undefined;
   // Sets: OoTMM's {type: none | all | specific, values} for key rings, a plain list for tricks.
   let list;
   if (Array.isArray(value)) list = value;
