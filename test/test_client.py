@@ -263,6 +263,29 @@ class TestClientProtocol(unittest.TestCase):
         self.assertTrue(self.ctx.finished_game)
         self.assertEqual(self.sent[-1]["cmd"], "StatusUpdate")
 
+    def test_triforce_hunt_counts_local_checks_and_confirmed_deliveries(self) -> None:
+        piece = ootxmm_staticdata.OOTxMMItemIDs["SHARED_TRIFORCE"]
+        self.ctx.slot_data = {"settings": {"goal": "triforce", "triforceGoal": 2},
+                              "local_triforce": {"100001": piece}}
+        self.ctx.checked_locations.add(100001)
+        self.ctx.items_received = [NetworkItem(piece, 1, 2, 0)]
+        for index in (0, 1):
+            self.game.send(struct.pack(">IBI", 3, client.OP_WAL_QUERY, index))
+            self.exchange()
+            self.assertEqual(self.ctx.finished_game, index == 1)
+
+    def test_triforce_quest_requires_each_distinct_aspect(self) -> None:
+        power, courage, wisdom = (ootxmm_staticdata.OOTxMMItemIDs["SHARED_TRIFORCE_" + aspect]
+                                  for aspect in ("POWER", "COURAGE", "WISDOM"))
+        self.ctx.slot_data = {"settings": {"goal": "triforce3"},
+                              "local_triforce": {"100001": power}}
+        self.ctx.checked_locations.add(100001)
+        self.ctx.items_received = [NetworkItem(item, 1, 2, 0) for item in (courage, courage, wisdom)]
+        for index in (2, 3):
+            self.game.send(struct.pack(">IBI", 3, client.OP_WAL_QUERY, index))
+            self.exchange()
+            self.assertEqual(self.ctx.finished_game, index == 3)
+
     def defeat(self, event: str) -> None:
         gi = ootxmm_staticdata.OOTxMMCheckInfo["goalGi"][event]
         self.game.send(struct.pack(">IBIBBBhhI", 7, client.OP_WAL, 1, client.WAL_ITEM,
