@@ -12,7 +12,7 @@ from ..options import PORTED_SETTINGS
 class TestPortedSettings(unittest.TestCase):
     def test_ported_settings_are_handled(self) -> None:
         from .. import prices
-        self.assertLessEqual(set(PORTED_SETTINGS), prices.SETTINGS | set(prefill.SHOP_SETTINGS) | logic.TRAVERSAL_SETTINGS | set(logic.POOL_TRANSFORMS) | set(logic.POOL_SETTINGS) | set(logic.OPTIONAL_ITEM_SETTINGS) | set(logic.SHARED_ITEM_SETTINGS) | set(logic.KEY_RING_SETTINGS) | set(logic.CHECK_SETTINGS) | set(rules.GOAL_SETTINGS) | set(prefill.DUNGEON_SETTINGS) | set(prefill.FAIRY_SETTINGS) | set(prefill.FIXED_SETTINGS) | prefill.MAP_SETTINGS | prefill.SONG_SETTINGS | prefill.REWARD_SETTINGS)
+        self.assertLessEqual(set(PORTED_SETTINGS), prices.SETTINGS | set(prefill.SHOP_SETTINGS) | logic.TRAVERSAL_SETTINGS | set(logic.POOL_TRANSFORMS) | set(logic.EQUIPMENT_TRANSFORMS) | logic.ITEM_POOL_SETTINGS | set(logic.POOL_SETTINGS) | set(logic.OPTIONAL_ITEM_SETTINGS) | set(logic.SHARED_ITEM_SETTINGS) | set(logic.KEY_RING_SETTINGS) | set(logic.CHECK_SETTINGS) | set(rules.GOAL_SETTINGS) | set(prefill.DUNGEON_SETTINGS) | set(prefill.FAIRY_SETTINGS) | set(prefill.FIXED_SETTINGS) | prefill.MAP_SETTINGS | prefill.SONG_SETTINGS | prefill.REWARD_SETTINGS)
 
 
 class TestOoTMMCheckSets(unittest.TestCase):
