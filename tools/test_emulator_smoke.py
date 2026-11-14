@@ -11,10 +11,26 @@ spec.loader.exec_module(smoke)
 
 
 class TestObserverAttachment(unittest.TestCase):
-    def test_observer_selects_player_and_opposite_source_slot(self):
+    def test_linked_pickup_requires_one_award_in_each_members_queue(self):
+        context = SimpleNamespace(locations={1: {12: (34, 3, 0)}}, slot_set=lambda slot: {1, 2})
+        award = SimpleNamespace(location=12, player=1, item=34)
+        queues = {1: [award], 2: [award]}
+
+        def received_items(ctx, team, target, remote_items):
+            self.assertTrue(remote_items)
+            return queues[target]
+
+        self.assertEqual(smoke.verify_pickup_award(context, received_items, 1, 12), (34, 3))
+        for invalid_queue in ([], [award, award]):
+            queues[2] = invalid_queue
+            with self.assertRaisesRegex(AssertionError, "slot 2"):
+                smoke.verify_pickup_award(context, received_items, 1, 12)
+
+    def test_observer_selects_player_and_another_source_slot(self):
         names = {(0, 1): "FairyReceiver", (0, 2): "FairySource"}
         self.assertEqual(smoke.observer_slots(names, 1), (1, 2))
         self.assertEqual(smoke.observer_slots(names, 2), (2, 1))
+        self.assertEqual(smoke.observer_slots({**names, (0, 3): "Third"}, 3), (3, 1))
         for players, slot in ((names, 0), (names, 3), ({(0, 1): "Solo"}, 2),
                               ({(0, 1): "Solo"}, 1)):
             with self.subTest(players=players, slot=slot), self.assertRaises(ValueError):

@@ -22,17 +22,25 @@ class TestGameplayStages(unittest.TestCase):
                    {"slot": 2, "checks": ["Key chest"], "received_index": 0}]
         names = {10: "Local chest", 20: "Key chest", 21: "Other chest"}
         locations = {1: {10: (100, 1, 0)}, 2: {20: (200, 1, 0), 21: (201, 1, 0)}}
-        self.assertEqual(expected_sources(players, locations, names), {1: {10}, 2: {20}})
+        slot_set = lambda slot: {slot}
+        self.assertEqual(expected_sources(players, locations, names, slot_set), {1: {10}, 2: {20}})
         # An unrelated remote placement cannot satisfy a local-only expected source.
         locations[2][20] = (200, 2, 0)
         with self.assertRaisesRegex(AssertionError, "expected remote source"):
-            expected_sources(players, locations, names)
+            expected_sources(players, locations, names, slot_set)
         locations[2][20] = (200, 1, 0)
         players[1]["received_index"] = 1
         with self.assertRaisesRegex(AssertionError, "expected remote source"):
-            expected_sources(players, locations, names)
+            expected_sources(players, locations, names, slot_set)
         locations[1][10] = (100, 2, 0)
-        self.assertEqual(expected_sources(players, locations, names), {1: {10}, 2: {20}})
+        self.assertEqual(expected_sources(players, locations, names, slot_set), {1: {10}, 2: {20}})
+
+    def test_group_source_can_deliver_to_both_players_from_one_world(self):
+        players = [{"slot": 1, "checks": ["Triforce chest"], "received_index": 1},
+                   {"slot": 2, "checks": [], "received_index": 1}]
+        locations = {1: {10: (100, 3, 0)}, 2: {}}
+        self.assertEqual(expected_sources(players, locations, {10: "Triforce chest"}, lambda slot: {1, 2}),
+                         {1: {10}, 2: set()})
 
     def test_restart_requires_a_stage_and_excludes_overlapping_outages(self):
         validate_restart(None, {"ready"}, None)
