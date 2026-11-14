@@ -8,6 +8,8 @@ with every pool item, and exits, checks and events whose condition is then false
 """
 from __future__ import annotations
 
+from collections import Counter
+from random import Random
 from typing import Any, Union
 
 from . import ootxmm_staticdata
@@ -31,6 +33,62 @@ SHARED_ITEM_SETTINGS = ootxmm_staticdata.OOTxMMFill["sharedItems"]
 SHARED_SOUL_SETTINGS = {key: defs for key, defs in SHARED_ITEM_SETTINGS.items() if key.startswith("sharedSouls")}
 
 POOL_TRANSFORMS = ootxmm_staticdata.OOTxMMFill["poolTransforms"]
+EQUIPMENT_TRANSFORMS = ootxmm_staticdata.OOTxMMFill["equipmentTransforms"]
+ITEM_POOL_MODES = ootxmm_staticdata.OOTxMMFill["itemPoolModes"]
+ITEM_POOL_SETTINGS = {"itemPool"}
+POND_FISH = {
+    "CHILD_FISH": (38, 36, 41, 35, 39, 44, 40, 34, 54, 47, 42, 33, 57, 63, 71),
+    "ADULT_FISH": (38, 36, 41, 35, 39, 44, 40, 34, 54, 47, 42, 33, 57, 63, 71),
+    "CHILD_LOACH": (45, 43),
+    "ADULT_LOACH": (45,),
+}
+
+
+def pond_fish_pool(pool: Counter, random: Random | None) -> None:
+    """Replace unweighted pond placeholders using OoTMM's weight distribution."""
+    for kind, weights in POND_FISH.items():
+        item = "OOT_FISHING_POND_" + kind
+        count = pool.pop(item, 0)
+        if not count:
+            continue
+        is_child = kind.startswith("CHILD")
+        is_loach = kind.endswith("LOACH")
+        threshold = 0 if is_loach else 59 if is_child else 46
+        qualifying = tuple(weight for weight in weights if weight >= threshold)
+        weights = weights[max(0, len(weights) - count):]
+        if random is not None:
+            weights += tuple(random.choice(qualifying) for _ in range(count - len(weights)))
+        for weight in weights:
+            # Graph specialization keeps all possible weights. Generation rolls one per copy.
+            if random is None:
+                rolls = range(weight, weight + (12 if weight + 4 >= 65 else 5))
+            else:
+                weight += random.randrange(5)
+                if weight >= 65 and random.randrange(20) == 0:
+                    weight += random.randrange(8)
+                rolls = (weight,)
+            for roll in rolls:
+                scaled = roll * (0.73 if is_child else 1) * (2 if is_loach else 1)
+                pounds = int(scaled * scaled * 0.0036 + 0.5)
+                pool[f"{item}_{pounds}LBS"] += 1
+EQUIPMENT_SHARING = ("sharedSwords", "sharedShields", "sharedNutsSticks", "sharedBombchu",
+                     "sharedBottles", "sharedSlingshot", "sharedScales", "sharedStrength")
+
+
+def equipment_pool_items() -> set[str]:
+    operations = [*EQUIPMENT_TRANSFORMS.values(), *(POOL_TRANSFORMS[key] for key in EQUIPMENT_SHARING)]
+    symbols = set()
+    for group in operations:
+        for op, source, target, *_ in group:
+            symbols.add(source)
+            if op == "replaceItem":
+                symbols.add(target)
+            elif op == "mergeMax":
+                symbols.update(target)
+    return symbols
+
+
+EQUIPMENT_ITEMS = equipment_pool_items()
 CROSS_GAME_SONGS = ootxmm_staticdata.OOTxMMFill["crossGameSongs"]
 CROSS_GAME_ITEMS = CROSS_GAME_SONGS | ootxmm_staticdata.OOTxMMFill["crossGameEquipment"]
 LULLABY_SETTINGS = {"songGoronOot", "sharedSongGoron", "progressiveGoronLullabyOot", "progressiveGoronLullabyMm"}
@@ -56,6 +114,21 @@ def normalize_shared_items(settings: Settings) -> Settings:
     settings["sharedSongGoron"] = bool(_value(settings, "sharedSongGoron") and _value(settings, "songGoronOot")
                                       and _value(settings, "progressiveGoronLullabyOot")
                                       == _value(settings, "progressiveGoronLullabyMm"))
+    settings["sharedSwords"] = bool(_value(settings, "sharedSwords") and _value(settings, "extraChildSwordsOot"))
+    settings["sharedShields"] = bool(_value(settings, "sharedShields")
+                                    and _value(settings, "progressiveShieldsOot")
+                                    == _value(settings, "progressiveShieldsMm"))
+    settings["sharedNutsSticks"] = bool(_value(settings, "sharedNutsSticks") and _value(settings, "sticksNutsUpgradesMm"))
+    for family in ("Shovel", "PlatinumToken"):
+        key = "shared" + family
+        native = family[0].lower() + family[1:]
+        settings[key] = bool(_value(settings, key) and _value(settings, native + "Oot")
+                             and _value(settings, native + "Mm"))
+    bombchu = _value(settings, "bombchuBehaviorOot")
+    settings["sharedBombchu"] = bool(_value(settings, "sharedBombchu")
+                                    and bombchu == _value(settings, "bombchuBehaviorMm")
+                                    and (bombchu != "bombBag" or _value(settings, "sharedBombBags")))
+    settings["sharedBottles"] = bool(_value(settings, "sharedBottles") and _value(settings, "extraBottlesOot"))
     return settings
 
 
@@ -64,6 +137,7 @@ def extra_items(settings: Settings) -> list[str]:
     settings = normalize_shared_items(settings)
     additions = (EXTRA_ITEMS + [item for key, item in POOL_SETTINGS.items() if _value(settings, key)]
             + [item for key, group in OPTIONAL_ITEM_SETTINGS.items() if _value(settings, key)
+               and not (key == "fairyOcarinaMm" and _value(settings, "sharedOcarina"))
                and not any(enable == key and _value(settings, shared)
                            for shared, (enable, _) in CROSS_GAME_ITEMS.items()) for item in group])
     # OoTMM shareItems(..., 'max'): these optional items have at most one copy per game.
@@ -101,29 +175,114 @@ def key_rings(settings: Settings) -> dict[str, str]:
     return selected
 
 
+def _pool_operations(settings: Settings):
+    progressive_mm = _value(settings, "progressiveShieldsMm") == "progressive"
+    enabled = {
+        "progressiveShieldsOot": _value(settings, "progressiveShieldsOot") == "progressive",
+        "progressiveShieldsMm": progressive_mm,
+        "dekuShieldMm": _value(settings, "dekuShieldMm") and not progressive_mm,
+        "extraChildSwordsOot": _value(settings, "extraChildSwordsOot"),
+        "sticksNutsUpgradesInitial": _value(settings, "sticksNutsUpgradesInitial"),
+        "sticksNutsUpgradesMm": _value(settings, "sticksNutsUpgradesMm") and not _value(settings, "sharedNutsSticks"),
+        "scalesMm": _value(settings, "scalesMm") and not _value(settings, "sharedScales"),
+        "strengthMm": _value(settings, "strengthMm") and not _value(settings, "sharedStrength"),
+        "slingshotMm": _value(settings, "slingshotMm") and not _value(settings, "sharedSlingshot"),
+        "extraBottlesOot": _value(settings, "extraBottlesOot") and not _value(settings, "sharedBottles"),
+        "bombchuBehaviorOot": _value(settings, "bombchuBehaviorOot") == "bagSeparate" and not _value(settings, "sharedBombchu"),
+        "bombchuBehaviorMm": _value(settings, "bombchuBehaviorMm") == "bagSeparate" and not _value(settings, "sharedBombchu"),
+        "zoraKing": _value(settings, "zoraKing") == "open",
+    }
+    before_sharing = ((key, ops) for key, ops in EQUIPMENT_TRANSFORMS.items() if key != "zoraKing")
+    for key, operations in (*before_sharing, *POOL_TRANSFORMS.items(), ("zoraKing", EQUIPMENT_TRANSFORMS["zoraKing"])):
+        if enabled.get(key, _value(settings, key)):
+            for op, source, target, *requires in operations:
+                if all(_value(settings, required) == value for required, value in
+                       (condition if isinstance(condition, list) else (condition, True) for condition in requires)):
+                    if key == "sharedBottles" and op == "removeItem" and source == "MM_BOTTLE_EMPTY":
+                        target += _value(settings, "itemPool") == "plentiful"
+                    yield op, source, target
+
+
+def apply_item_pool_mode(pool, settings: Settings) -> None:
+    mode = _value(settings, "itemPool")
+    games = ("OOT", "MM", "SHARED")
+    if mode in ("scarce", "minimal", "barren"):
+        delta = 1 if mode == "scarce" else 2
+        limited = set(ITEM_POOL_MODES["scarce"])
+        if _value(settings, "ageChange") != "oot":
+            limited.add("OOT_OCARINA")
+        if _value(settings, "shopShuffleOot") == "full":
+            limited.update(("OOT_TUNIC_GORON", "OOT_TUNIC_ZORA"))
+        if _value(settings, "sharedOcarina") and _value(settings, "fairyOcarinaMm"):
+            limited.add("SHARED_OCARINA")
+        for item in limited & pool.keys():
+            pool[item] = max(1, pool[item] - delta)
+        for item in ITEM_POOL_MODES["scarce_nolimit"]:
+            pool[item] = max(0, pool[item] - delta)
+        for game in games:
+            pool.pop(f"{game}_HEART_PIECE", None)
+            if delta == 2:
+                pool.pop(f"{game}_HEART_CONTAINER", None)
+    elif mode == "plentiful":
+        fill = ootxmm_staticdata.OOTxMMFill
+        extra = list(ITEM_POOL_MODES["plentiful"])
+        if _value(settings, "songs") == "anywhere":
+            extra.extend(fill["songItems"])
+        if _value(settings, "dungeonRewardShuffle") in ("anywhere", "dungeonsLimited"):
+            extra.extend(fill["rewardItems"])
+        for key, ids in fill["dungeonShuffleItems"].items():
+            if _value(settings, key) == "anywhere":
+                extra.extend(ids)
+        for key, item in (("shuffleGerudoCard", "OOT_GERUDO_CARD"), ("shuffleMasterSword", "OOT_SWORD_MASTER")):
+            if _value(settings, key):
+                extra.append(item)
+        if _value(settings, "ganonBossKey") == "anywhere":
+            extra.append("OOT_BOSS_KEY_GANON")
+        if _value(settings, "tingleShuffle") == "anywhere":
+            from .prefill import TINGLE_ITEMS
+            extra.extend(TINGLE_ITEMS)
+        if _value(settings, "zoraKing") == "open":
+            extra.append("SHARED_BOTTLE_EMPTY" if _value(settings, "sharedBottles") else "OOT_BOTTLE_EMPTY")
+        elif _value(settings, "sharedBottles"):
+            extra.append("SHARED_BOTTLE_RUTO_LETTER")
+        if _value(settings, "sharedBottles"):
+            extra.append("SHARED_BOTTLED_GOLD_DUST")
+        if _value(settings, "pondFishShuffle"):
+            extra.extend("OOT_FISHING_POND_" + kind for kind in POND_FISH)
+        for item in extra:
+            if pool[item]:
+                pool[item] += 1
+        for game in games:
+            pieces = pool.pop(f"{game}_HEART_PIECE", 0)
+            pool[f"{game}_HEART_CONTAINER"] += (pieces + 3) // 4
+
+
 def transform_pool(items, settings: Settings):
     """Apply OoTMM's ordered sharing replacements, copy reductions and Lullaby modes."""
-    from collections import Counter
     settings = normalize_shared_items(settings)
     pool = Counter(items)
-    for key, operations in POOL_TRANSFORMS.items():
-        if not _value(settings, key):
-            continue
-        for op, source, target in operations:
-            if op == "replaceItem":
-                count = pool.pop(source, 0)
-                if count:
-                    pool[target] += count
-            elif op == "removeItem":
-                pool[source] = max(0, pool[source] - target)
-            elif op == "divideItem":
-                pool[source] //= target
-            else:
-                raise ValueError(f"Unknown pool operation: {op}")
     def replace(source, target):
         count = pool.pop(source, 0)
         if count:
             pool[target] += count
+    for op, source, target in _pool_operations(settings):
+        if op == "replaceItem":
+            replace(source, target)
+        elif op == "removeItem":
+            if target is None:
+                pool.pop(source, None)
+            else:
+                pool[source] = max(0, pool[source] - target)
+        elif op == "addItem":
+            pool[source] += 1 if target is None else target
+        elif op == "mergeMax":
+            pool[source] += max(pool.pop(item, 0) for item in target)
+        elif op == "divideItem":
+            pool[source] //= target
+        elif op == "setItem":
+            pool[source] = target
+        else:
+            raise ValueError(f"Unknown pool operation: {op}")
     if _value(settings, "sharedSongGoron"):
         for suffix in ("GORON", "GORON_HALF"):
             replace("MM_SONG_" + suffix, "SHARED_SONG_" + suffix)
@@ -142,13 +301,11 @@ def transform_pool(items, settings: Settings):
 
 def shared_item(item: str, settings: Settings) -> str:
     # Fixed pickups also use the transformed vanilla item, without pool copy reductions.
-    for key, operations in POOL_TRANSFORMS.items():
-        if _value(settings, key):
-            for op, source, target in operations:
-                if op == "replaceItem" and item == source:
-                    item = target
+    settings = normalize_shared_items(settings)
+    for op, source, target in _pool_operations(settings):
+        if op == "replaceItem" and item == source:
+            item = target
     if item in ("OOT_SONG_GORON", "MM_SONG_GORON", "OOT_SONG_GORON_HALF", "MM_SONG_GORON_HALF"):
-        settings = normalize_shared_items(settings)
         game, suffix = item.split("_", 1)
         if game == "MM" and _value(settings, "sharedSongGoron"):
             game = "SHARED"
@@ -161,7 +318,10 @@ def shared_item(item: str, settings: Settings) -> str:
 
 def pool_items(items, settings: Settings) -> set[str]:
     rings = key_rings(settings)
-    return {rings.get(item, item) for item in transform_pool([*items, *extra_items(settings)], settings)}
+    pool = transform_pool([*items, *extra_items(settings)], settings)
+    if _value(settings, "pondFishShuffle"):
+        pond_fish_pool(pool, None)
+    return {rings.get(item, item) for item in pool}
 
 
 # A condition is True, False, or a tuple: ("item", OoTMM item ID, count), ("event", event),
@@ -430,7 +590,7 @@ class Logic:
                 _items(cond, self.items)
 
 # Conditions and optional pool items both change the specialized graph.
-LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"} | set(POOL_TRANSFORMS) | set(POOL_SETTINGS) | set(OPTIONAL_ITEM_SETTINGS) | set(SHARED_ITEM_SETTINGS) | set(KEY_RING_SETTINGS) | LULLABY_SETTINGS | {"smallKeyShuffleHideout"})
+LOGIC_SETTINGS = sorted({node[1] for node in _nodes if isinstance(node, list) and node[0] == "setting"} | set(POOL_TRANSFORMS) | set(EQUIPMENT_TRANSFORMS) | ITEM_POOL_SETTINGS | set(POOL_SETTINGS) | set(OPTIONAL_ITEM_SETTINGS) | set(SHARED_ITEM_SETTINGS) | set(KEY_RING_SETTINGS) | LULLABY_SETTINGS | {"smallKeyShuffleHideout"})
 
 _cache: dict[tuple, Logic] = {}
 

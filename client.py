@@ -406,7 +406,18 @@ class OOTxMMClient(BizHawkClient):
         return self.packet(OP_WAL, body)
 
     def goal_reached(self, ctx: "BizHawkClientContext") -> bool:
-        goal = ctx.slot_data.get("settings", {}).get("goal") if ctx.slot_data else None
+        slot = ctx.slot_data or {}
+        settings = slot.get("settings", {})
+        goal = settings.get("goal")
+        if goal in ("triforce", "triforce3"):
+            ids = ootxmm_staticdata.OOTxMMItemIDs
+            local = [item for location, item in slot.get("local_triforce", {}).items()
+                     if int(location) in ctx.checked_locations]
+            delivered = [item.item for item in ctx.items_received[:self.last_query or 0]]
+            if goal == "triforce":
+                piece = ids["SHARED_TRIFORCE"]
+                return local.count(piece) + delivered.count(piece) >= settings["triforceGoal"]
+            return {ids["SHARED_TRIFORCE_" + aspect] for aspect in ("POWER", "COURAGE", "WISDOM")} <= set(local + delivered)
         if goal == "ganon":
             return "OOT_GANON" in self.goals
         if goal == "majora":
