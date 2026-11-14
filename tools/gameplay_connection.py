@@ -1,4 +1,4 @@
-"""Bounded ROM identity checks shared by isolated gameplay observers."""
+"""ROM identity and pickup checks shared by isolated gameplay observers."""
 import asyncio
 
 
@@ -22,3 +22,11 @@ async def wait_for_rom(peer, bizhawk, expected_sha1=None, timeout=30, connect=No
                 pass
             await asyncio.sleep(0.25)
 
+
+def verify_pickup_award(context, get_received_items, source, location):
+    item, recipient, _flags = context.locations[source][location]
+    for target in context.slot_set(recipient):
+        queued = get_received_items(context, 0, target, True)
+        assert sum(entry.location == location and entry.player == source and entry.item == item
+                   for entry in queued) == 1, f"Pickup must queue exactly one award for slot {target}"
+    return item, recipient

@@ -1,6 +1,6 @@
 """Deliver remote items through the real BizHawk connector into a disposable gameplay state.
 
-Run with AP's Python, --archipelago <checkout> --seed <two-player .archipelago>.
+Run with AP's Python, --archipelago <checkout> --seed <multi-player .archipelago>.
 Open the selected slot's matching ROM and connector first. Use a fresh test save, never a player's live save.
 The other player's pickups are simulated on a temporary loopback server. Server persistence is opt-in and uses disposable files.
 """
@@ -16,15 +16,16 @@ import zlib
 
 from mailbox_timing import MailboxTiming
 from mailbox_load import MailboxLoad
-from gameplay_connection import wait_for_rom
+from gameplay_connection import verify_pickup_award, wait_for_rom
 
 
 def observer_slots(player_names, slot):
-    if slot not in (1, 2) or (0, slot) not in player_names:
-        raise ValueError("Observer requires an active player slot 1 or 2")
-    remote_slot = 3 - slot
-    if (0, remote_slot) not in player_names:
-        raise ValueError("Observer requires a two-player seed")
+    if slot < 1 or (0, slot) not in player_names:
+        raise ValueError("Observer requires an active player slot")
+    remote_slot = min((player for team, player in player_names
+                       if team == 0 and player != slot), default=None)
+    if remote_slot is None:
+        raise ValueError("Observer requires at least two player slots")
     return slot, remote_slot
 
 
@@ -133,7 +134,10 @@ async def run(args):
 
     context = MultiServer.Context("127.0.0.1", 0, "", "", 1, 10, False)
     context.load(str(args.seed))
-    slot, remote_slot = observer_slots(context.player_names, args.slot)
+    slot, remote_slot = observer_slots(
+        {key: name for key, name in context.player_names.items() if key[1] in context.locations},
+        args.slot,
+    )
     if args.server_save_input:
         context.set_save(Utils.restricted_loads(zlib.decompress(args.server_save_input.read_bytes())))
     if args.server_save_output:
@@ -337,10 +341,7 @@ async def run(args):
                 assert context._save(), "Disposable server save failed"
             observed = sorted(context.location_checks[0, slot])
             for loc in wanted:
-                item, recipient, _flags = context.locations[slot][loc]
-                queued = MultiServer.get_received_items(context, 0, recipient, True)
-                assert sum(entry.location == loc and entry.player == slot and entry.item == item
-                           for entry in queued) == 1, "Pickup must queue exactly one award"
+                verify_pickup_award(context, MultiServer.get_received_items, slot, loc)
             report = {"coverage": "assisted-gameplay", "seed": str(args.seed), "slot": slot,
                       "server_reloaded": bool(args.server_save_input),
                       "interruption": interruption,
@@ -436,7 +437,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archipelago", type=Path, required=True)
     parser.add_argument("--seed", type=Path, required=True)
-    parser.add_argument("--slot", type=int, choices=(1, 2), default=1)
+    parser.add_argument("--slot", type=int, default=1)
     parser.add_argument("--expect-check", action="append", default=[], help="Observe actual pickups; do not inject remote checks")
     parser.add_argument("--expect-boss", action="append", default=[], choices=("OOT_GANON", "MM_MAJORA"), help="Observe real boss packets and confirmed server storage")
     parser.add_argument("--min-game-switches", type=int, default=0)
