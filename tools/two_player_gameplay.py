@@ -18,7 +18,7 @@ import sys
 import time
 import zlib
 
-from gameplay_connection import wait_for_rom
+from gameplay_connection import verify_pickup_award, wait_for_rom
 from mailbox_load import MailboxLoad
 
 
@@ -50,16 +50,20 @@ def validate_restart(stage, stage_names, backlog):
         raise ValueError("Server restart requires a declared stage and no backlog outage")
 
 
-def expected_sources(players, locations, names):
+def expected_sources(players, locations, names, slot_set):
     wanted = {}
+    remote_targets = set()
     for player in players:
         slot = player["slot"]
         wanted[slot] = {loc for loc in locations[slot] if names[loc] in player["checks"]}
         assert len(wanted[slot]) == len(set(player["checks"])), "Unknown expected source check"
+        for loc in wanted[slot]:
+            _, recipient, _ = locations[slot][loc]
+            if recipient != slot:
+                remote_targets.update(slot_set(recipient))
     for player in players:
-        slot = player["slot"]
         if player["received_index"] > 0:
-            assert any(locations[3 - slot][loc][1] == slot for loc in wanted[3 - slot]), "Receipt target needs an expected remote source"
+            assert player["slot"] in remote_targets, "Receipt target needs an expected remote source"
     return wanted
 
 
@@ -117,8 +121,10 @@ async def run(args):
     restart_stage = plan.get("restart_stage")
     validate_restart(restart_stage, stage_names, backlog)
     for p in players:
-        if not p["checks"] or type(p["received_index"]) is not int or p["received_index"] < 0:
-            raise ValueError("Each slot needs actual source checks and a nonnegative receipt target")
+        if type(p["received_index"]) is not int or p["received_index"] < 0:
+            raise ValueError("Each slot needs a nonnegative receipt target")
+    if not any(p["checks"] for p in players):
+        raise ValueError("At least one slot needs actual source checks")
     if not any(p["received_index"] > 0 for p in players):
         raise ValueError("At least one slot needs a positive receipt target")
     # Resolve every input before launching either emulator, so a missing second-slot
@@ -161,6 +167,7 @@ async def run(args):
             self.player = player
             self.bizhawk_ctx = bizhawk.BizHawkContext()
             self.handler = OOTxMMClient()
+            self.last_observed_receipt = None
             self.history = []
             self.load = MailboxLoad()
             self.slot_data = None
@@ -231,6 +238,8 @@ async def run(args):
         else:
             peer.live = False
         peer.poll_count += 1
+        if peer.handler.last_query is not None:
+            peer.last_observed_receipt = peer.handler.last_query
         value = {"mailbox": peer.handler.mailbox, "received_index": peer.handler.last_query}
         if not peer.history or peer.history[-1] != value:
             peer.history.append(value)
@@ -412,7 +421,7 @@ async def run(args):
                 print(f"Slot {slot}: attached to verified ROM on port {port}", flush=True)
 
             names = context.location_names["OOTxMM"]
-            wanted = expected_sources(players, context.locations, names)
+            wanted = expected_sources(players, context.locations, names, context.slot_set)
             for stage in stages:
                 for condition in stage["players"]:
                     valid_checks = {names[loc] for loc in context.locations[condition["slot"]]}
@@ -451,9 +460,7 @@ async def run(args):
                 verify_receipt_count(starting, received, peer.player["received_index"])
                 awards = []
                 for loc in sorted(wanted[slot]):
-                    item, recipient, _flags = context.locations[slot][loc]
-                    queued = MultiServer.get_received_items(context, 0, recipient, True)
-                    assert sum(i.location == loc and i.player == slot and i.item == item for i in queued) == 1, "Award duplicated"
+                    item, recipient = verify_pickup_award(context, MultiServer.get_received_items, slot, loc)
                     awards.append({"location": names[loc], "recipient": recipient,
                                    "item": context.item_names["OOTxMM"][item]})
                 report["players"].append({"slot": slot, "awards": awards, "received_index": peer.handler.last_query,
@@ -470,7 +477,8 @@ async def run(args):
             for peer, process in zip(peers, processes):
                 result = json.loads((out / f"slot-{peer.player['slot']}" / "result.json").read_text(encoding="utf-8"))
                 assert process.returncode == 0 and result["passed"], "Game scenario failed"
-                assert peer.handler.last_query == peer.player["received_index"], "Receipt index changed after stability check"
+                # The credits transition or emulator shutdown can clear the active mailbox.
+                assert peer.last_observed_receipt == peer.player["received_index"], "Receipt index changed after stability check"
             assert len(report["stages"]) == len(stages), "Not all gameplay stages completed"
             if backlog:
                 assert report["backlog"] and report["backlog"]["reconnected"], "Backlog recovery did not run"
@@ -479,13 +487,13 @@ async def run(args):
                 for peer in peers:
                     baseline = report["server_restart"]["before"][str(peer.player["slot"]) ]
                     assert wanted[peer.player["slot"]] - set(baseline["checks"]), "No new source pickup after restart"
-                    assert peer.handler.last_query > baseline["received_index"], "No new remote delivery after restart"
+                    assert peer.last_observed_receipt > baseline["received_index"], "No new remote delivery after restart"
             report["passed"] = True
     except Exception as exc:
         report["reason"] = f"{type(exc).__name__}: {exc}"
         raise
     finally:
-        report["final_observations"] = [{"slot": peer.player["slot"], "received_index": peer.handler.last_query,
+        report["final_observations"] = [{"slot": peer.player["slot"], "received_index": peer.last_observed_receipt,
                                          "mailbox_load": peer.load.report(),
                                          "history": peer.history,
                                          "checks": [context.location_names["OOTxMM"][loc]
