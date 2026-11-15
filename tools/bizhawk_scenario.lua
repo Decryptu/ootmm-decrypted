@@ -156,6 +156,7 @@ local function support_boss()
     end
 end
 local ganon_support = nil
+local fishing = nil
 local function ganon_actor(play, f)
     local actor = memory.read_u32_be(play + f.lists + 9 * f.stride + 4, "RDRAM") - 0x80000000
     local visited = {}
@@ -449,6 +450,98 @@ local function tick()
         record({event = "setup_loadout", game = "oot", scene = step.scene,
             equipment = "Adult on next scene load, acquired Master Sword equipped, twenty hearts"})
         done = true
+    elseif step.action == "oot_adult_funds" then
+        local play, f = game_play("oot", step.scene)
+        assert(memory.read_u8(play + f.trigger, "RDRAM") == 0, "Transition already active")
+        -- Age_SetRawOot defers the change through PlayState.linkAgeOnLoad; follow with a transition.
+        memory.write_u8(play + 0x11de8, 0, "RDRAM")
+        memory.write_u16_be(0x11a5d0 + 0x34, step.rupees, "RDRAM")
+        record({event = "setup_adult_funds", scene = step.scene, rupees = step.rupees,
+            assistance = "Adult on next scene load; rupee balance set"})
+        done = true
+    elseif step.action == "oot_fishing" then
+        -- Retail Fishing layout (zeldaret/oot z_fishing.h minus the debug Actor's 0x10):
+        -- fishState 0x148, fishLength 0x19c, fishTargetPos 0x1a4. ACTOR_EN_FISHING is 0xfe.
+        local play, f = game_play("oot", 0x49)
+        local fish, visited = nil, {}
+        for category = 0, 11 do
+            local actor = memory.read_u32_be(play + f.lists + category * f.stride + 4, "RDRAM") - 0x80000000
+            while actor >= 0 and not fish do
+                assert(actor + 0x1d0 <= memory.getmemorydomainsize("RDRAM") and not visited[actor], "Invalid actor list")
+                visited[actor] = true
+                if memory.read_u16_be(actor, "RDRAM") == 0xfe and memory.read_u16_be(actor + 0x1c, "RDRAM") == step.fish then fish = actor end
+                actor = memory.read_u32_be(actor + f.next, "RDRAM") - 0x80000000
+            end
+        end
+        fishing = fishing or {t = 0}
+        fishing.t = fishing.t + 1
+        local state = fish and memory.read_s16_be(fish + 0x148, "RDRAM") or nil
+        if state ~= fishing.last then
+            record({event = "fish_state", fish = step.fish, state = state})
+            fishing.last = state
+        end
+        local player = memory.read_u32_be(play + f.lists + 2 * f.stride + 4, "RDRAM") - 0x80000000
+        assert(memory.read_u16_be(player, "RDRAM") == 0 and memory.read_u8(player + 2, "RDRAM") == 2, "Player actor guard failed")
+        if not fish then
+            -- The kept fish is killed by Fishing_FishGiveItem; the server check is asserted separately.
+            done = fishing.saw_catch == true
+            if not done and fishing.t > 30 then finish(false, "Requested pond fish is not present"); return end
+        elseif state == 6 then
+            fishing.saw_catch = true
+            if fishing.t % 20 < 4 then joypad.set({["P1 A"] = true}) end
+        elseif state == 5 then
+            fishing.hooked = (fishing.hooked or 0) + 1
+            -- Keep the rod pulled back with the stick and reel with A. Native fish start a new pull
+            -- when A is held as timerArray[1] (retail 0x16c) reaches a multiple of 16; ease off there.
+            local dx = memory.readfloat(fish + 0x24, true, "RDRAM") - memory.readfloat(player + 0x24, true, "RDRAM")
+            local dz = memory.readfloat(fish + 0x2c, true, "RDRAM") - memory.readfloat(player + 0x2c, true, "RDRAM")
+            local phase = memory.read_s16_be(fish + 0x16c, "RDRAM") % 16
+            if fishing.hooked == 2 or fishing.hooked > 4 and phase >= 3 and phase <= 13 then
+                joypad.set({["P1 A"] = true})
+            end
+            if fishing.hooked > 30 then joypad.setanalog({["P1 Y Axis"] = -100}) end
+            -- The reeled fish hangs at the surface under the raised rod tip (40 units out, 66 up)
+            -- and settles 57-90 units away. Once it is hooked and close, move it inside the native
+            -- 50-unit landing radius; the landing, catch text, Keep choice and item grant stay native.
+            local d = math.sqrt(dx * dx + dz * dz)
+            if fishing.hooked > 300 and d < 100 and d > 40 then
+                local scale = 40 / d
+                local px, pz = memory.readfloat(player + 0x24, true, "RDRAM"), memory.readfloat(player + 0x2c, true, "RDRAM")
+                for _, offset in ipairs({0x24, f.prev_pos}) do
+                    memory.writefloat(fish + offset, px + dx * scale, true, "RDRAM")
+                    memory.writefloat(fish + offset + 8, pz + dz * scale, true, "RDRAM")
+                end
+                if not fishing.landing then record({event = "fish_landing_assist", distance = d}); fishing.landing = true end
+            end
+        elseif state >= 2 and state <= 4 then
+            fishing.hooked = 0
+            if fishing.t % 12 < 2 then joypad.set({["P1 A"] = true}) end
+        else
+            fishing.hooked = 0
+            local cycle = fishing.t % 900
+            if cycle < 6 then
+                joypad.set({["P1 B"] = true})
+            elseif cycle >= 90 and cycle < 600 then
+                -- Assistance: move the fish in front of the lure line; biting and hooking stay native.
+                local yaw = memory.read_u16_be(player + 0xb6, "RDRAM")
+                local r = yaw * math.pi / 32768
+                local d = 150 + (math.floor((cycle - 90) / 20) % 12) * 50
+                local x = memory.readfloat(player + 0x24, true, "RDRAM") + math.sin(r) * d
+                local z = memory.readfloat(player + 0x2c, true, "RDRAM") + math.cos(r) * d
+                for _, offset in ipairs({0x24, f.prev_pos}) do
+                    memory.writefloat(fish + offset, x, true, "RDRAM")
+                    memory.writefloat(fish + offset + 8, z, true, "RDRAM")
+                end
+                memory.write_u16_be(fish + 0x32, yaw, "RDRAM")
+                memory.write_u16_be(fish + 0xb6, yaw, "RDRAM")
+                if fishing.t % 12 < 2 then joypad.set({["P1 A"] = true}) end
+                if cycle == 90 then record({event = "fish_approach", fish = step.fish}) end
+            elseif cycle >= 600 then
+                joypad.set({["P1 A"] = true})
+            end
+        end
+        if not done and elapsed >= step.timeout_frames then finish(false, "Fishing timed out"); return end
+        if done then fishing = nil end
     elseif step.action == "mm_boss_loadout" then
         local play, f = game_play("mm", step.scene)
         assert(memory.read_u8(play + f.trigger, "RDRAM") == 0, "Transition already active")
