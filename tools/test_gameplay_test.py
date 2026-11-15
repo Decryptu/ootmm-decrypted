@@ -37,6 +37,20 @@ class TestGameplayValidation(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate(scenario)
 
+    def test_pond_helpers_require_assisted_coverage_and_pond_fish(self):
+        scenario = self.scenario()
+        funds = dict(action="oot_adult_funds", scene=52, rupees=99)
+        fishing = dict(action="oot_fishing", fish=100, timeout_frames=100)
+        scenario["steps"] = [funds, fishing]
+        validate(scenario)
+        for step, changes in ((funds, {"rupees": 1000}), (funds, {"rupees": True}), (fishing, {"fish": 99}),
+                              (fishing, {"fish": 117}), (fishing, {"timeout_frames": 0})):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                validate({**scenario, "steps": [{**step, **changes}]})
+        scenario["coverage"] = "unmodified-gameplay"
+        with self.assertRaises(ValueError):
+            validate(scenario)
+
     def test_flag_assertion_mask_fits_probe_and_expected_bits(self):
         scenario = self.scenario()
         step = dict(action="expect", name="lock", address=0x100, size=4,

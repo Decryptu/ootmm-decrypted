@@ -128,6 +128,15 @@ def validate(scenario):
         elif action in ("oot_gohma_prepare", "oot_gohma_approach"):
             if "oot_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
                 raise ValueError("Gohma setup requires a sourced OoT layout and assisted gameplay")
+        elif action in ("oot_adult_funds", "oot_fishing"):
+            if "oot_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
+                raise ValueError("Pond setup requires a sourced OoT layout and assisted gameplay")
+            if action == "oot_adult_funds":
+                integer(step["scene"], 0, 0xffff)
+                integer(step["rupees"], 0, 999)
+            else:
+                integer(step["fish"], 100, 116)
+                integer(step["timeout_frames"], 1, scenario["max_frames"])
         elif action in ("mm_boss_loadout", "oot_boss_loadout"):
             if f"{action.split('_')[0]}_layout" not in scenario or scenario["coverage"] != "assisted-gameplay":
                 raise ValueError("Boss loadout requires a sourced game layout and assisted-gameplay coverage")
