@@ -5,11 +5,11 @@ What is in progress and planned. Finished work is not listed: git history has it
 ## Goal
 A world a group can play a full multiworld with: generation in Archipelago, a patched OoTMM ROM per player, and a client that sends and receives items in game.
 
-## Planned, in order
+## In progress
 
 | Item | Notes |
 |---|---|
-| Dolphin + Virtual Console (to evaluate, after the alpha) | Players asked for Dolphin with a `.wad`, which gives better picture, latency and audio sync than BizHawk's N64 core. Needs a client on `dolphin-memory-engine` (as Archipelago's existing Dolphin worlds use) instead of the BizHawk connector, finding the IPC mailbox in the VC emulator's RAM by its magic, checking OoTMM runs correctly under the VC emulator, and a player guide for building the WAD from the patched ROM. Project64 would need a new connector too and is not planned |
+| Dolphin + Virtual Console evaluation (paused) | The Majora's Mask donor booted in Dolphin, and the WAD containing the exact combined OOTxMM ROM reached the spinning-mask intro. The [evaluation guide](docs/dolphin_evaluation.md) records the controls and how to run the read-only probe, which can read both Wii RAM banks. Resume by entering gameplay in the injected WAD and checking for a live OOTxMM mailbox. Verify both games, switching and mailbox access before implementing a Dolphin client or publishing player setup instructions. Project64 remains outside the roadmap. |
 
 The hub lists every changed setting it cannot import. Newly ported settings can be imported once they are in `options.py`.
 
