@@ -17,7 +17,7 @@ import path from 'path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { Monitor, makeRegion, options, randomInt, resolveMmAgeRequirements, SETTINGS } from '@ootmm/core';
+import { Monitor, makeRegion, options, randomInt, resolveMmAgeRequirements, SETTINGS, shuffle } from '@ootmm/core';
 import { solvedWorldState, logicPassCloak, itemByID, ItemGroups, ItemHelpers, makeLocation, makePlayerItem } from '@ootmm/logic';
 /* Not exported by the package */
 import { logicPassHash } from '../../../logic/src/misc';
@@ -35,6 +35,7 @@ type PlayerFile = {
   /* OoTMM settings, keyed and valued as OoTMM's, sets as lists */
   settings: { [k: string]: unknown };
   prices?: number[];
+  gossip?: string[];
   /* Location to [OoTMM item, true if the item is the player's own] */
   locations: { [k: string]: [string, boolean] };
 };
@@ -72,12 +73,8 @@ function settingsInput(data: PlayerFile['settings']) {
   return result;
 }
 
-/*
- * OoTMM's hints come from its playthrough analysis, which can't run on half a multiworld. Gossip stones get
- * junk hints; the fixed hints (where the dungeon rewards, Light Arrows, Oath to Order and Ganon's key are, how
- * important the item at a few checks is) are worked out from the placements, as OoTMM does.
- */
-function hints(state: any): Hints {
+/* Archipelago supplies the gossip text. OoTMM's fixed hints are worked out from the placements. */
+function hints(state: any, texts: string[]): Hints {
   const world = state.worlds[OUR_WORLD];
   const regionsOf = (ids: string[], count: number) => {
     const wanted = ids.map((id) => makePlayerItem(itemByID(id), OUR_WORLD));
@@ -98,8 +95,12 @@ function hints(state: any): Hints {
     return ItemHelpers.isItemMajor(item.item) ? 2 : -1;
   };
   const gossip: Hints[number]['gossip'] = {};
-  for (const [id, g] of Object.entries(world.gossip as { [k: string]: { game: 'oot' | 'mm' } })) {
-    gossip[id] = { game: g.game, type: 'junk', id: randomInt(state.random, 65536) };
+  const stones = Object.entries(world.gossip as Record<string, { game: 'oot' | 'mm' }>);
+  const indices = { oot: 0, mm: 0 };
+  for (const [id, { game }] of texts.length ? shuffle(state.random, stones) : stones) {
+    gossip[id] = texts.length
+      ? { game, type: 'text', text: texts[indices[game]++ % texts.length] }
+      : { game, type: 'junk', id: randomInt(state.random, 65536) };
   }
   const ganonBossKey = state.settings.ganonBossKey === 'anywhere' ? regionsOf(['OOT_BOSS_KEY_GANON'], 1)[0] : makeRegion('NONE', OUR_WORLD);
   const oathToOrder = state.settings.songs === 'notes'
@@ -120,6 +121,9 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   const playerBytes = await fs.readFile(playerPath);
   const player: PlayerFile = JSON.parse(playerBytes.toString('utf-8'));
   if (player.version !== 1) throw new Error(`Unsupported player file version ${player.version}`);
+  if (player.gossip !== undefined &&
+      (!Array.isArray(player.gossip) || player.gossip.some(text => typeof text !== 'string' || !text.trim())))
+    throw new Error('Invalid Archipelago gossip text');
 
   const monitor = new Monitor({}, false);
   const opts = options({
@@ -161,7 +165,7 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
     items: state.items,
     itemCloaks,
     analysis: { spheres: [], required: new Set(), useless: new Set(), unreachable: new Set(), paths: [] },
-    hints: hints(state),
+    hints: hints(state, player.gossip ?? []),
     hash: logicPassHash(state as any).hash,
   };
 

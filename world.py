@@ -1,6 +1,8 @@
 import json
 import os
+from collections import Counter, defaultdict
 from collections.abc import Mapping
+from itertools import takewhile
 from typing import Any
 
 from BaseClasses import ItemClassification
@@ -57,10 +59,11 @@ class OOTxMM(World):
 
     @classmethod
     def stage_pre_output(cls, multiworld) -> None:
-        barren = [world for world in multiworld.get_game_worlds(cls.game)
-                  if world.ootmm_settings["itemPool"] == "barren"]
+        worlds = multiworld.get_game_worlds(cls.game)
+        barren = [world for world in worlds if world.ootmm_settings["itemPool"] == "barren"]
         if barren:
             items.minimize_barren(multiworld, barren)
+        assign_gossip_hints(multiworld, worlds)
 
     def get_pre_fill_items(self) -> list:
         # Restricted items kept out of the main pool until coordinated pre-fill places them.
@@ -79,6 +82,7 @@ class OOTxMM(World):
             "seed": f"{self.multiworld.seed_name}-{self.player}",
             "settings": self.ootmm_settings,
             "prices": self.prices,
+            "gossip": getattr(self, "gossip_hints", []),
             "locations": {
                 location.name: display_item(self, location.item)
                 for location in self.multiworld.get_locations(self.player)
@@ -100,6 +104,76 @@ class OOTxMM(World):
                 and items.ITEM_BY_NAME[location.item.name].symbolic_id in self.goal_items
             }
         return data
+
+
+def assign_gossip_hints(multiworld, worlds) -> None:
+    """Analyze the final placements once, before player output runs in parallel."""
+    reachable = [
+        location
+        for sphere in takewhile(bool, multiworld.get_spheres())
+        for location in sorted(sphere)
+    ]
+    progression = [location for location in multiworld.get_filled_locations() if location.advancement]
+    progression_regions = {location.parent_region for location in progression}
+    copies = Counter((location.item.player, location.item.name) for location in progression)
+    checks_by_region = defaultdict(list)
+    for location in reachable:
+        if location.address is not None:
+            checks_by_region[location.parent_region].append(location)
+    required = {}
+    beatable = multiworld.can_beat_game(locations=progression)
+
+    for world in worlds:
+        player = world.player
+        recipients = {player} | multiworld.get_player_groups(player)
+        candidates = [
+            location for location in reachable
+            if location.address is not None and location.advancement
+            and (location.player == player or location.item.player in recipients)
+        ]
+        world.random.shuffle(candidates)
+        # Prefer scarcer progression over repeated ammo and currency placements.
+        candidates.sort(key=lambda location: copies[location.item.player, location.item.name])
+
+        def where(location):
+            if location.player == player:
+                return location.name
+            return f"{location.name} (P{location.player})"
+
+        paths = []
+        path_checks = set()
+        if beatable:
+            # Bound the number of full multiworld replays per slot.
+            for location in candidates[:16]:
+                if location not in required:
+                    required[location] = not multiworld.can_beat_game(
+                        locations=[check for check in progression if check != location]
+                    )
+                if required[location]:
+                    paths.append(f"{where(location)} is on the Way of the Hero")
+                    path_checks.add(location)
+                    if len(paths) == 4:
+                        break
+
+        foolish = [
+            region.name for region, checks in checks_by_region.items()
+            if region.player == player and region not in progression_regions and len(checks) >= 2
+        ]
+        world.random.shuffle(foolish)
+        item_hints = []
+        hinted_items = set()
+        for location in candidates:
+            item = location.item
+            item_key = (item.player, item.name)
+            if location in path_checks or item_key in hinted_items:
+                continue
+            hinted_items.add(item_key)
+            recipient = "" if item.player == player else f" for {multiworld.get_player_name(item.player)}"
+            item_hints.append(f"{where(location)} holds {item.name}{recipient}")
+            if len(item_hints) == 6:
+                break
+        world.gossip_hints = paths + [f"plundering {name} is a foolish choice" for name in foolish[:4]] + item_hints
+
 
 def ootmm_settings(opts: options.OOTxMMOptions) -> logic.Settings:
     """The OoTMM settings the options set, keyed and valued as OoTMM's settings."""

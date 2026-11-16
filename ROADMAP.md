@@ -7,11 +7,8 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 
 ## Planned, in order
 
-Before the group release, rehearse [installation and packaging](docs/release_checklist.md) and finish a full playthrough.
-
 | Item | Notes |
 |---|---|
-| Gossip stone hints | Gossip stones only show OoTMM's junk (joke) hints, because OoTMM's hint pass needs a playthrough of the whole seed ([ROM patch](DEVELOPMENT.md#rom-patch)); a tester read them as broken. Archipelago knows the whole multiworld at generation: compute way-of-the-hero, foolish and item hints there (from the spheres and required locations, across worlds) and pass them to `ap-patch.ts` as gossip texts |
 | Dolphin + Virtual Console (to evaluate, after the alpha) | Players asked for Dolphin with a `.wad`, which gives better picture, latency and audio sync than BizHawk's N64 core. Needs a client on `dolphin-memory-engine` (as Archipelago's existing Dolphin worlds use) instead of the BizHawk connector, finding the IPC mailbox in the VC emulator's RAM by its magic, checking OoTMM runs correctly under the VC emulator, and a player guide for building the WAD from the patched ROM. Project64 would need a new connector too and is not planned |
 
 The hub lists every changed setting it cannot import. Newly ported settings can be imported once they are in `options.py`.

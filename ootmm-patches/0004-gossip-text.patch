@@ -1,0 +1,89 @@
+--- a/packages/generator/include/combo/hint.h
++++ b/packages/generator/include/combo/hint.h
+@@ -11,6 +11,7 @@
+ #define HINT_TYPE_ITEM_EXACT    0x02
+ #define HINT_TYPE_ITEM_REGION   0x03
+ #define HINT_TYPE_JUNK          0x04
++#define HINT_TYPE_TEXT          0x05
+ 
+ typedef struct PlayState PlayState;
+ 
+--- a/packages/generator/src/common/hint.c
++++ b/packages/generator/src/common/hint.c
+@@ -206,6 +206,9 @@
+         comboTextAppendStr(&b, " can be found ");
+         comboTextAppendRegionName(&b, hint->region, hint->world, TF_PREPOS);
+         break;
++    case HINT_TYPE_TEXT:
++        comboTextAppendStr(&b, (const char*)gHints + (u16)hint->items[0]);
++        break;
+     case HINT_TYPE_JUNK:
+         comboTextAppendStr(&b, kJunkHints[((u16)hint->items[0]) % ARRAY_COUNT(kJunkHints)]);
+         break;
+--- a/packages/generator/lib/combo/randomizer/hints.ts
++++ b/packages/generator/lib/combo/randomizer/hints.ts
+@@ -48,18 +48,35 @@
+ 
+   private execute(): Uint8Array {
+     const buffers: Uint8Array[] = [];
+-    const hints = this.ctx.logic.hints[this.ctx.worldId];
+-    for (const gossip in hints.gossip) {
+-      const h = hints.gossip[gossip];
+-      if (h.game !== this.ctx.game) {
+-        continue;
++    const strings: Uint8Array[] = [];
++    const offsets = new Map<string, number>();
++    const encoder = new TextEncoder();
++    const gossip = Object.entries(this.ctx.logic.hints[this.ctx.worldId].gossip)
++      .filter(([, hint]) => hint.game === this.ctx.game);
++    let offset = (gossip.length + 1) * 0x10;
++    for (const [id, hint] of gossip) {
++      const record = this.hintBuffer(id, hint);
++      if (hint.type === 'text') {
++        /* Only printable ASCII can go into both games' message buffers. */
++        const text = hint.text.normalize('NFKD').replace(/\p{Mark}/gu, '').replace(/[^ -~]/g, '?').slice(0, 240);
++        let textOffset = offsets.get(text);
++        if (textOffset === undefined) {
++          const encoded = encoder.encode(text + '\0');
++          if (offset + encoded.length > 0x10000)
++            throw new Error('Gossip text exceeds the hint table limit');
++          textOffset = offset;
++          offsets.set(text, offset);
++          strings.push(encoded);
++          offset += encoded.length;
++        }
++        bufWriteU16BE(record, HINT_OFFSETS.ITEM, textOffset);
+       }
+-      buffers.push(this.hintBuffer(gossip, h));
++      buffers.push(record);
+     }
+     const b = new Uint8Array(0x10);
+     b.fill(0xff);
+     buffers.push(b);
+-    return padBuffer16(concatUint8Arrays(buffers));
++    return padBuffer16(concatUint8Arrays([...buffers, ...strings]));
+   }
+ 
+   private hintBuffer(gossip: string, hint: HintGossip): Uint8Array {
+@@ -82,6 +99,10 @@
+         break;
+     }
+     switch (hint.type) {
++      case 'text':
++        bufWriteU8(data, HINT_OFFSETS.KEY, id);
++        bufWriteU8(data, HINT_OFFSETS.TYPE, 0x05);
++        break;
+       case 'path':
+         {
+           const { path } = hint;
+--- a/packages/logic/src/hints.ts
++++ b/packages/logic/src/hints.ts
+@@ -124,7 +124,7 @@
+   id: number;
+ };
+ 
+-export type HintGossip = { game: Game } & (HintGossipPath | HintGossipFoolish | HintGossipItemExact | HintGossipItemRegion | HintGossipJunk);
++export type HintGossip = { game: Game } & (HintGossipPath | HintGossipFoolish | HintGossipItemExact | HintGossipItemRegion | HintGossipJunk | { type: 'text'; text: string });
+ 
+ type WorldItemHints = {
+   dungeonRewards: Region[];

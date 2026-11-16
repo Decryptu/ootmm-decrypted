@@ -10,7 +10,7 @@ The world offers settings it reproduces in both logic and the ROM: logic and cos
 
 Only vanilla dungeons and the US Deku Palace layout are supported. Master Quest and Japanese layouts are not offered. Logic tracks reachable times per area, including MM's three-day clock and conditional waiting, along with regional flag constraints. Renewable resources and item licenses are approximated by owning the item.
 
-Gossip stones do not give useful hints yet: they show OoTMM's joke messages. OoTMM builds its hints from a playthrough of the whole seed, which a single world in a multiworld cannot run. Fixed hints still work, such as where dungeon rewards, the Light Arrows, the Oath to Order and Ganon's boss key are. Use Archipelago's `!hint` command instead.
+Gossip stones share hints from the Archipelago multiworld. Way of the Hero hints point to checks required for the group to finish. A foolish region has no progression placements. Item hints tell you where a progression item is and who receives it if it belongs to another player. A location marked `P2` is in slot 2's world. Stones can repeat hints. Archipelago's `!hint` command is also available.
 
 ## Current status
 
