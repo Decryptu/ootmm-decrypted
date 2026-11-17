@@ -1,0 +1,77 @@
+--- a/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
++++ b/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
+@@ -203,6 +203,7 @@
+     return true;
+ }
+ 
++__attribute__((optimize("no-optimize-sibling-calls", "no-delayed-branch")))
+ void EnRiverSound_Update(Actor* thisx, PlayState* play) {
+     Path* path;
+     Vec3f* pos;
+--- a/packages/generator/src/common/souls.c
++++ b/packages/generator/src/common/souls.c
+@@ -12,15 +12,18 @@
+     *index = param & 0xfff;
+     type = param >> 12;
+ 
+-    switch (type)
++    static u8* const bitmaps[] =
+     {
+-    case 0: *bm = gSharedCustomSave.soulsEnemyOot; break;
+-    case 1: *bm = gSharedCustomSave.soulsBossOot; break;
+-    case 2: *bm = gSharedCustomSave.soulsNpcOot; break;
+-    case 3: *bm = gSharedCustomSave.soulsAnimalsOot; break;
+-    case 4: *bm = gSharedCustomSave.soulsMiscOot; break;
+-    default: UNREACHABLE(); break;
+-    }
++        gSharedCustomSave.soulsEnemyOot,
++        gSharedCustomSave.soulsBossOot,
++        gSharedCustomSave.soulsNpcOot,
++        gSharedCustomSave.soulsAnimalsOot,
++        gSharedCustomSave.soulsMiscOot,
++    };
++
++    if (type >= sizeof(bitmaps) / sizeof(*bitmaps))
++        UNREACHABLE();
++    *bm = bitmaps[type];
+ }
+ 
+ static void soulInfosMm(u8** bm, int* index, s16 gi)
+@@ -32,15 +35,18 @@
+     *index = param & 0xfff;
+     type = param >> 12;
+ 
+-    switch (type)
++    static u8* const bitmaps[] =
+     {
+-    case 0: *bm = gSharedCustomSave.soulsEnemyMm; break;
+-    case 1: *bm = gSharedCustomSave.soulsBossMm; break;
+-    case 2: *bm = gSharedCustomSave.soulsNpcMm; break;
+-    case 3: *bm = gSharedCustomSave.soulsAnimalsMm; break;
+-    case 4: *bm = gSharedCustomSave.soulsMiscMm; break;
+-    default: UNREACHABLE(); break;
+-    }
++        gSharedCustomSave.soulsEnemyMm,
++        gSharedCustomSave.soulsBossMm,
++        gSharedCustomSave.soulsNpcMm,
++        gSharedCustomSave.soulsAnimalsMm,
++        gSharedCustomSave.soulsMiscMm,
++    };
++
++    if (type >= sizeof(bitmaps) / sizeof(*bitmaps))
++        UNREACHABLE();
++    *bm = bitmaps[type];
+ }
+ 
+ void comboAddSoulOot(s16 gi)
+--- a/packages/generator/src/common/ipc/ram.c
++++ b/packages/generator/src/common/ipc/ram.c
+@@ -44,7 +44,7 @@
+ {
+     volatile IPCRamMailbox* m;
+ 
+-    m = Mailbox();
++    m = &sMailbox;
+     m->alive++;
+     gIPC.isConnected = !!m->connected;
+ }

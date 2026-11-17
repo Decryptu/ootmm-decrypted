@@ -9,7 +9,7 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 
 | Item | Notes |
 |---|---|
-| Dolphin + Virtual Console evaluation (paused) | The Majora's Mask donor booted in Dolphin, and the WAD containing the exact combined OOTxMM ROM reached the spinning-mask intro. The [evaluation guide](docs/dolphin_evaluation.md) records the controls and how to run the read-only probe, which can read both Wii RAM banks. Resume by entering gameplay in the injected WAD and checking for a live OOTxMM mailbox. Verify both games, switching and mailbox access before implementing a Dolphin client or publishing player setup instructions. Project64 remains outside the roadmap. |
+| Dolphin + Virtual Console evaluation (paused) | The experimental NARE build passed OoT mailbox item delivery and chest reporting. The Market door selected South Clock Town and stalled at the RSP status poll. A diagnostic build reached the final MM handoff and faulted before gameplay. The [evaluation guide](docs/dolphin_evaluation.md) records both results. Resolve the handoff, then verify MM mailbox reattachment, the return trip and save persistence before implementing the connector or publishing player setup. Project64 remains outside the roadmap. |
 
 The hub lists every changed setting it cannot import. Newly ported settings can be imported once they are in `options.py`.
 
