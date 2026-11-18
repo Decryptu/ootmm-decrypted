@@ -1,16 +1,34 @@
---- a/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
-+++ b/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
-@@ -203,6 +203,7 @@
-     return true;
- }
+diff --git a/packages/generator/CMakeLists.txt b/packages/generator/CMakeLists.txt
+index 8912285..95b3d5e 100644
+--- a/packages/generator/CMakeLists.txt
++++ b/packages/generator/CMakeLists.txt
+@@ -15,7 +15,7 @@ endforeach()
+ project(OoTMM C ASM)
  
-+__attribute__((optimize("no-optimize-sibling-calls", "no-delayed-branch")))
- void EnRiverSound_Update(Actor* thisx, PlayState* play) {
-     Path* path;
-     Vec3f* pos;
+ set(FLAGS "-EB -static -fomit-frame-pointer -ffreestanding -nostdlib -nostdinc -fno-PIC -mabi=32 -mno-shared -mno-abicalls -march=vr4300 -mtune=vr4300 -mfix4300 -mfix-r4000 -G 0 -Os -Wall -Werror=implicit-function-declaration -Werror=implicit-int -Wimplicit-fallthrough -Wl,--build-id=none")
+-set(CMAKE_C_FLAGS "${FLAGS} -D_LANGUAGE_C=1")
++set(CMAKE_C_FLAGS "${FLAGS} -fno-optimize-sibling-calls -D_LANGUAGE_C=1")
+ set(CMAKE_ASM_FLAGS "${FLAGS}")
+ 
+ # Override default envs
+diff --git a/packages/generator/src/common/ipc/ram.c b/packages/generator/src/common/ipc/ram.c
+index 1e9097e..4f4cf74 100755
+--- a/packages/generator/src/common/ipc/ram.c
++++ b/packages/generator/src/common/ipc/ram.c
+@@ -44,7 +44,7 @@ static void IPC_Ram_Refresh(void)
+ {
+     volatile IPCRamMailbox* m;
+ 
+-    m = Mailbox();
++    m = &sMailbox;
+     m->alive++;
+     gIPC.isConnected = !!m->connected;
+ }
+diff --git a/packages/generator/src/common/souls.c b/packages/generator/src/common/souls.c
+index e2c298f..498d1a3 100644
 --- a/packages/generator/src/common/souls.c
 +++ b/packages/generator/src/common/souls.c
-@@ -12,15 +12,18 @@
+@@ -12,15 +12,18 @@ static void soulInfosOot(u8** bm, int* index, s16 gi)
      *index = param & 0xfff;
      type = param >> 12;
  
@@ -37,7 +55,7 @@
  }
  
  static void soulInfosMm(u8** bm, int* index, s16 gi)
-@@ -32,15 +35,18 @@
+@@ -32,15 +35,18 @@ static void soulInfosMm(u8** bm, int* index, s16 gi)
      *index = param & 0xfff;
      type = param >> 12;
  
@@ -64,14 +82,862 @@
  }
  
  void comboAddSoulOot(s16 gi)
---- a/packages/generator/src/common/ipc/ram.c
-+++ b/packages/generator/src/common/ipc/ram.c
-@@ -44,7 +44,7 @@
- {
-     volatile IPCRamMailbox* m;
+diff --git a/packages/generator/src/common/switch.S b/packages/generator/src/common/switch.S
+index f222ccc..5c2437f 100644
+--- a/packages/generator/src/common/switch.S
++++ b/packages/generator/src/common/switch.S
+@@ -2,7 +2,7 @@
  
--    m = Mailbox();
-+    m = &sMailbox;
-     m->alive++;
-     gIPC.isConnected = !!m->connected;
+ .globl comboGameSwitch2
+ comboGameSwitch2:
+-  la sp,0xa0800000
++  la sp,0x80800000
+   la t0,(comboGameSwitch3 + 0x20000000)
+   jr t0
+    nop
+diff --git a/packages/generator/src/common/switch.c b/packages/generator/src/common/switch.c
+index 1374d8e..fdb2c88 100644
+--- a/packages/generator/src/common/switch.c
++++ b/packages/generator/src/common/switch.c
+@@ -7,10 +7,12 @@ typedef void (*EntryPoint)(void)  __attribute__ ((noreturn));
+ 
+ #if defined(GAME_OOT)
+ # define FOREIGN_OFF    0x80000
++# define FOREIGN_THREAD_TAIL 0x80097e10
+ # define FOREIGN_CART   (0x10001000 + MM_BASE)
+ # define FOREIGN_SIZE   0x19500
+ #else
+ # define FOREIGN_OFF    0x400
++# define FOREIGN_THREAD_TAIL 0x80006330
+ # define FOREIGN_CART   0x10001000
+ # define FOREIGN_SIZE   0x6430
+ #endif
+@@ -23,7 +25,7 @@ static void waitSubsystems(void)
+     for (;;)
+     {
+         tmp = IO_READ(SP_STATUS_REG);
+-        if ((tmp & 2) && (tmp & 1) && !(tmp & (SP_STATUS_DMA_BUSY | SP_STATUS_DMA_FULL)))
++        if ((tmp & 1) && !(tmp & (SP_STATUS_DMA_BUSY | SP_STATUS_DMA_FULL)))
+             break;
+     }
+     IO_WRITE(SP_STATUS_REG, SP_SET_HALT | SP_CLR_BROKE | SP_CLR_INTR | SP_CLR_SSTEP | SP_CLR_INTR_BREAK | SP_CLR_SIG0 | SP_CLR_SIG1 | SP_CLR_SIG2 | SP_CLR_SIG3 | SP_CLR_SIG4 | SP_CLR_SIG5 | SP_CLR_SIG6 | SP_CLR_SIG7);
+@@ -68,6 +70,71 @@ static void waitSubsystems(void)
+     IO_WRITE(VI_CURRENT_REG, 0);
  }
+ 
++/*
++ * Wii Virtual Console reads the addresses of libultra's scheduler variables from OoT's exception
++ * handler once, then uses them for every exception. Both games keep these variables in one block
++ * (vc_libultra.S), which is reset here for the next game, with its own thread queue tail.
++ */
++static void resetSchedulerBlock(void)
++{
++    volatile u32* block = (volatile u32*)0x80000200;
++
++    block[0] = FOREIGN_THREAD_TAIL; /* __osRunQueue */
++    block[1] = FOREIGN_THREAD_TAIL; /* __osActiveQueue */
++    block[2] = 0;                   /* __osRunningThread */
++    block[3] = 0;                   /* __osFaultedThread */
++    block[4] = 0x003fff01;          /* __OSGlobalIntMask */
++#pragma GCC unroll 32
++    for (int i = 0; i < 32; ++i)
++        block[8 + i] = 0;           /* __osEventStateTab */
++}
++
++/*
++ * Virtual Console also replaces five libultra thread functions with calls into the emulator, but only in
++ * OoT's RAM, the first time. The next game's copies are loaded unchanged from the ROM, so copy the
++ * replacement words to them. Other emulators and the console leave send_mesg as MIPS code.
++ */
++typedef struct
++{
++    u32 oot;
++    u32 mm;
++    u32 count;
++}
++VcPatch;
++
++static const VcPatch kVcPatches[] = {
++    { 0x80002964, 0x8008905c, 3 }, /* send_mesg */
++    { 0x80002a58, 0x80089150, 1 }, /* __osEnqueueAndYield */
++    { 0x80002b4c, 0x80089244, 3 }, /* __osEnqueueThread */
++    { 0x80002b94, 0x8008928c, 3 }, /* __osPopThread */
++    { 0x80002ba4, 0x800892a4, 1 }, /* __osDispatchThread */
++};
++
++static void copyVcPatches(void)
++{
++    const VcPatch* p;
++    const volatile u32* src;
++    volatile u32* dst;
++
++    for (u32 i = 0; i < ARRAY_COUNT(kVcPatches); ++i)
++    {
++        p = &kVcPatches[i];
++#if defined(GAME_OOT)
++        src = (const volatile u32*)(p->oot | 0xa0000000);
++        dst = (volatile u32*)(p->mm | 0xa0000000);
++#else
++        src = (const volatile u32*)(p->mm | 0xa0000000);
++        dst = (volatile u32*)(p->oot | 0xa0000000);
++#endif
++        /* VC library call opcode (0x7c000000 | function index) */
++        if ((src[0] & 0xffffff00) != 0x7c000000)
++            return;
++        for (u32 j = 0; j < p->count; ++j)
++            dst[j] = src[j];
++    }
++}
++
++void osInvalICache(void* addr, s32 size);
+ NORETURN void comboGameSwitch2(void);
+ NORETURN void comboGameSwitch4(u32);
+ 
+@@ -92,6 +159,17 @@ NORETURN void comboGameSwitch3(void)
+     System_InvalICache((void*)FOREIGN_DRAM, FOREIGN_SIZE);
+     IO_WRITE(PI_STATUS_REG, PI_STATUS_RESET | PI_STATUS_CLR_INTR);
+ 
++    /*
++     * The next game decompresses its code over code this game ran. Virtual Console replaces
++     * osInvalICache with a call that drops its translated code for the range, but only on one
++     * side of its function tree's root, so invalidate in small pieces. This code runs from KSEG1,
++     * which that call leaves alone.
++     */
++    for (u32 addr = 0x80000000; addr < 0x80800000; addr += 0x2000)
++        osInvalICache((void*)addr, 0x2000);
++
+     Context_Export();
++    copyVcPatches();
++    resetSchedulerBlock();
+     comboGameSwitch4(FOREIGN_DRAM);
+ }
+diff --git a/packages/generator/src/mm/vc_libultra.S b/packages/generator/src/mm/vc_libultra.S
+new file mode 100755
+index 0000000..91e3d15
+--- /dev/null
++++ b/packages/generator/src/mm/vc_libultra.S
+@@ -0,0 +1,452 @@
++#include <combo.h>
++
++/* Move libultra scheduler variables to a block shared by both games (see switch.c),
++   generated from the vanilla ROM. */
++
++PATCH_START 0x80087b60
++  .word 0x3c098000
++PATCH_END
++
++PATCH_START 0x80087b64
++  .word 0x8d290208
++PATCH_END
++
++PATCH_START 0x80087e74
++  .word 0x3c198000
++PATCH_END
++
++PATCH_START 0x80087e78
++  .word 0x8f390208
++PATCH_END
++
++PATCH_START 0x80087f20
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x80087f24
++  .word 0x8d080208
++PATCH_END
++
++PATCH_START 0x80088018
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x8008801c
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x800880b8
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x800880bc
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x800880e0
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x800880e4
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80088b48
++  .word 0x3c1a8000
++PATCH_END
++
++PATCH_START 0x80088b4c
++  .word 0x8f5a0208
++PATCH_END
++
++PATCH_START 0x80088bf8
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x80088bfc
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80088c48
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x80088c4c
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80088dc4
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x80088dc8
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80088f68
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80088f6c
++  .word 0x8d4a0200
++PATCH_END
++
++PATCH_START 0x80088fe0
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80088fe4
++  .word 0x8d4a0200
++PATCH_END
++
++PATCH_START 0x80088ffc
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x80089008
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80089014
++  .word 0x3c098000
++PATCH_END
++
++PATCH_START 0x80089018
++  .word 0x25290200
++PATCH_END
++
++PATCH_START 0x8008902c
++  .word 0x3c018000
++PATCH_END
++
++PATCH_START 0x80089030
++  .word 0xac3a020c
++PATCH_END
++
++PATCH_START 0x8008905c
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80089060
++  .word 0x254a0220
++PATCH_END
++
++PATCH_START 0x800890f8
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x80089104
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80089144
++  .word 0x3c058000
++PATCH_END
++
++PATCH_START 0x80089148
++  .word 0x8ca50208
++PATCH_END
++
++PATCH_START 0x800891c4
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x800891c8
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80089204
++  .word 0x3c1a8000
++PATCH_END
++
++PATCH_START 0x80089208
++  .word 0x275a0210
++PATCH_END
++
++PATCH_START 0x800892a4
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x800892ac
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x800892b0
++  .word 0x3c018000
++PATCH_END
++
++PATCH_START 0x800892b4
++  .word 0xac220208
++PATCH_END
++
++PATCH_START 0x800892c4
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x800892cc
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x800893d8
++  .word 0x3c1a8000
++PATCH_END
++
++PATCH_START 0x800893dc
++  .word 0x275a0210
++PATCH_END
++
++PATCH_START 0x8008949c
++  .word 0x3c0f8000
++PATCH_END
++
++PATCH_START 0x800894a0
++  .word 0x8def0208
++PATCH_END
++
++PATCH_START 0x800894cc
++  .word 0x3c088000
++PATCH_END
++
++PATCH_START 0x800894d0
++  .word 0x8d080204
++PATCH_END
++
++PATCH_START 0x800894e4
++  .word 0x3c018000
++PATCH_END
++
++PATCH_START 0x800894ec
++  .word 0xac2a0204
++PATCH_END
++
++PATCH_START 0x800894f0
++  .word 0x3c118000
++PATCH_END
++
++PATCH_START 0x800894f4
++  .word 0x8e310204
++PATCH_END
++
++PATCH_START 0x80089538
++  .word 0x3c198000
++PATCH_END
++
++PATCH_START 0x8008953c
++  .word 0x8f390208
++PATCH_END
++
++PATCH_START 0x80089f48
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80089f4c
++  .word 0x8d4a0204
++PATCH_END
++
++PATCH_START 0x80089f58
++  .word 0x3c018000
++PATCH_END
++
++PATCH_START 0x80089f6c
++  .word 0xac390204
++PATCH_END
++
++PATCH_START 0x8008af38
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x8008af3c
++  .word 0x8c840208
++PATCH_END
++
++PATCH_START 0x8008d660
++  .word 0x3c188000
++PATCH_END
++
++PATCH_START 0x8008d668
++  .word 0x27180220
++PATCH_END
++
++PATCH_START 0x8008fafc
++  .word 0x3c098000
++PATCH_END
++
++PATCH_START 0x8008fb00
++  .word 0x8d290208
++PATCH_END
++
++PATCH_START 0x8008fc28
++  .word 0x3c0f8000
++PATCH_END
++
++PATCH_START 0x8008fc2c
++  .word 0x8def0208
++PATCH_END
++
++PATCH_START 0x8008fc4c
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x8008fc50
++  .word 0x8d4a0208
++PATCH_END
++
++PATCH_START 0x8008fc8c
++  .word 0x3c0d8000
++PATCH_END
++
++PATCH_START 0x8008fc90
++  .word 0x3c0f8000
++PATCH_END
++
++PATCH_START 0x8008fc94
++  .word 0x8def0200
++PATCH_END
++
++PATCH_START 0x8008fc98
++  .word 0x8dad0208
++PATCH_END
++
++PATCH_START 0x8008fcb4
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x8008fcc0
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x8008fce8
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x8008fcec
++  .word 0x8c840208
++PATCH_END
++
++PATCH_START 0x80090694
++  .word 0x3c0e8000
++PATCH_END
++
++PATCH_START 0x80090698
++  .word 0x8dce0210
++PATCH_END
++
++PATCH_START 0x800906a4
++  .word 0x3c018000
++PATCH_END
++
++PATCH_START 0x800906ac
++  .word 0xac380210
++PATCH_END
++
++PATCH_START 0x800915e8
++  .word 0x3c0e8000
++PATCH_END
++
++PATCH_START 0x800915ec
++  .word 0x8dce0210
++PATCH_END
++
++PATCH_START 0x80091600
++  .word 0x3c018000
++PATCH_END
++
++PATCH_START 0x80091608
++  .word 0xac280210
++PATCH_END
++
++PATCH_START 0x80091a60
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80091a64
++  .word 0x254a0210
++PATCH_END
++
++PATCH_START 0x80091a90
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80091a94
++  .word 0x254a0208
++PATCH_END
++
++PATCH_START 0x80093c70
++  .word 0x3c0f8000
++PATCH_END
++
++PATCH_START 0x80093c74
++  .word 0x8def0208
++PATCH_END
++
++PATCH_START 0x80093c7c
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x80093c84
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x800957f0
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x80095800
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x8009581c
++  .word 0x3c098000
++PATCH_END
++
++PATCH_START 0x80095820
++  .word 0x25290200
++PATCH_END
++
++PATCH_START 0x80095834
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x80095844
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x8009587c
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x80095880
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x8009588c
++  .word 0x3c188000
++PATCH_END
++
++PATCH_START 0x80095890
++  .word 0x8f180208
++PATCH_END
++
++PATCH_START 0x800958ac
++  .word 0x3c198000
++PATCH_END
++
++PATCH_START 0x800958b0
++  .word 0x3c098000
++PATCH_END
++
++PATCH_START 0x800958b4
++  .word 0x8d290200
++PATCH_END
++
++PATCH_START 0x800958b8
++  .word 0x8f390208
++PATCH_END
++
++PATCH_START 0x800958d4
++  .word 0x3c048000
++PATCH_END
++
++PATCH_START 0x800958e0
++  .word 0x24840200
++PATCH_END
+diff --git a/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c b/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
+index e009243..ad7349a 100644
+--- a/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
++++ b/packages/generator/src/oot/ovl/actors/En_River_Sound/En_River_Sound.c
+@@ -203,6 +203,7 @@ s32 EnRiverSound_GetSfxPos(Vec3s* points, s32 numPoints, Vec3f* hearPos, Vec3f*
+     return true;
+ }
+ 
++__attribute__((optimize("no-optimize-sibling-calls", "no-delayed-branch")))
+ void EnRiverSound_Update(Actor* thisx, PlayState* play) {
+     Path* path;
+     Vec3f* pos;
+diff --git a/packages/generator/src/oot/vc_libultra.S b/packages/generator/src/oot/vc_libultra.S
+new file mode 100644
+index 0000000..2aa08fc
+--- /dev/null
++++ b/packages/generator/src/oot/vc_libultra.S
+@@ -0,0 +1,254 @@
++#include <combo.h>
++
++/* Move libultra scheduler variables to a block shared by both games (see switch.c),
++   generated from the vanilla ROM. */
++
++PATCH_START 0x80001e74
++  .word 0x8d290208
++PATCH_END
++
++PATCH_START 0x80001fd8
++  .word 0x8f390208
++PATCH_END
++
++PATCH_START 0x80002084
++  .word 0x8d080208
++PATCH_END
++
++PATCH_START 0x8000247c
++  .word 0x8f5a0208
++PATCH_END
++
++PATCH_START 0x8000252c
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x8000257c
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x800026f8
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80002874
++  .word 0x8d4a0200
++PATCH_END
++
++PATCH_START 0x800028ec
++  .word 0x8d4a0200
++PATCH_END
++
++PATCH_START 0x80002910
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80002920
++  .word 0x25290200
++PATCH_END
++
++PATCH_START 0x80002938
++  .word 0xac3a020c
++PATCH_END
++
++PATCH_START 0x80002964
++  .word 0x3c0a8000
++PATCH_END
++
++PATCH_START 0x80002968
++  .word 0x254a0220
++PATCH_END
++
++PATCH_START 0x80002a0c
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80002a50
++  .word 0x8ca50208
++PATCH_END
++
++PATCH_START 0x80002ad0
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80002b10
++  .word 0x275a0210
++PATCH_END
++
++PATCH_START 0x80002bac
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80002bb4
++  .word 0xac220208
++PATCH_END
++
++PATCH_START 0x80002bcc
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80002cdc
++  .word 0x275a0210
++PATCH_END
++
++PATCH_START 0x80002da0
++  .word 0x8def0208
++PATCH_END
++
++PATCH_START 0x80002dd0
++  .word 0x8d080204
++PATCH_END
++
++PATCH_START 0x80002dec
++  .word 0xac2a0204
++PATCH_END
++
++PATCH_START 0x80002df4
++  .word 0x8e310204
++PATCH_END
++
++PATCH_START 0x80002e3c
++  .word 0x8f390208
++PATCH_END
++
++PATCH_START 0x8000302c
++  .word 0x8d4a0204
++PATCH_END
++
++PATCH_START 0x8000304c
++  .word 0xac390204
++PATCH_END
++
++PATCH_START 0x80003cac
++  .word 0x8c840208
++PATCH_END
++
++PATCH_START 0x80003ccc
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x80003fd0
++  .word 0x3c188000
++PATCH_END
++
++PATCH_START 0x80003fd8
++  .word 0x27180220
++PATCH_END
++
++PATCH_START 0x80004380
++  .word 0x8d290208
++PATCH_END
++
++PATCH_START 0x800044ac
++  .word 0x8def0208
++PATCH_END
++
++PATCH_START 0x800044d0
++  .word 0x8d4a0208
++PATCH_END
++
++PATCH_START 0x80004514
++  .word 0x8def0200
++PATCH_END
++
++PATCH_START 0x80004518
++  .word 0x8dad0208
++PATCH_END
++
++PATCH_START 0x80004540
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x8000456c
++  .word 0x8c840208
++PATCH_END
++
++PATCH_START 0x80004d78
++  .word 0x8dce0210
++PATCH_END
++
++PATCH_START 0x80004d8c
++  .word 0xac380210
++PATCH_END
++
++PATCH_START 0x800050ec
++  .word 0x8dce0210
++PATCH_END
++
++PATCH_START 0x80005108
++  .word 0xac280210
++PATCH_END
++
++PATCH_START 0x80005134
++  .word 0x254a0210
++PATCH_END
++
++PATCH_START 0x80005164
++  .word 0x254a0208
++PATCH_END
++
++PATCH_START 0x800058c4
++  .word 0x8def0208
++PATCH_END
++
++PATCH_START 0x800058d4
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80005f10
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80005f30
++  .word 0x25290200
++PATCH_END
++
++PATCH_START 0x80005f54
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80005f90
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x80005fa0
++  .word 0x8f180208
++PATCH_END
++
++PATCH_START 0x80005fc4
++  .word 0x8d290200
++PATCH_END
++
++PATCH_START 0x80005fc8
++  .word 0x8f390208
++PATCH_END
++
++PATCH_START 0x80005ff0
++  .word 0x24840200
++PATCH_END
++
++PATCH_START 0x800cf37c
++  .word 0x25080210
++PATCH_END
++
++PATCH_START 0x800cf3a4
++  .word 0x25080210
++PATCH_END
++
++/* Main_ClearMemory: also set up the shared scheduler block before the first thread is created */
++PATCH_START 0x80000460
++  lui t6,0x8000
++  addiu t7,t6,0x6330
++  sw t7,0x200(t6)
++  sw t7,0x204(t6)
++  lui t7,0x3f
++  ori t7,t7,0xff01
++  sw t7,0x210(t6)
++  lw t6,0x318(t6)
++  lui t7,1
++  addiu t7,t7,-0x4ec0
++  subu a1,t6,t7
++  lui a0,0x8001
++  j 0x80002e80
++   addiu a0,a0,-0x4ec0
++PATCH_END

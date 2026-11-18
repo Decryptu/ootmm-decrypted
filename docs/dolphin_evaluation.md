@@ -71,7 +71,18 @@ A separate source build with stage markers reached the RSP status polling loop i
 
 A diagnostic variant recorded RSP status `0x241`, which has HALT set, BROKE clear and both DMA flags clear. Requiring HALT and idle DMA let the switch pass the RSP poll, load the MM bootstrap prefix and export the handoff context. Dolphin then logged invalid PowerPC writes in the range `0xa171d0d4–0xa171d0dc` and an instruction-storage exception at zero. Those writes are immediately below the Wii address corresponding to the temporary N64 stack at `0xa0800000`. South Clock Town still did not start.
 
-With the relaxed RSP poll and the temporary stack at the cached N64 alias `0x80800000`, the invalid-write warnings disappeared. The bootstrap prefix and exported context appeared again, but the instruction-storage exception at zero still occurred. The next diagnostic is to capture the N64 execution address around the final jump in `comboGameSwitch4()` and check where bootstrap execution stops. These diagnostic changes are outside the experimental patch.
+With the relaxed RSP poll and the temporary stack at the cached N64 alias `0x80800000`, the invalid-write warnings disappeared. The bootstrap prefix and exported context appeared again, but the instruction-storage exception at zero still occurred. ### OoT to MM handoff causes
+
+The NARE emulator matches the public [oot-vc decompilation](https://github.com/zeldaret/oot-vc) closely enough to explain the remaining failures:
+
+1. On the first N64 exception it reads the addresses of libultra's scheduler variables from OoT's exception handler and never looks again (`libraryFindVariables`). Its exception and thread code then uses OoT's `__osRunQueue` block (`0x80006338–0x80006344`), `__OSGlobalIntMask` (`0x80006360`) and `__osEventStateTab` (`0x80009de0`) for MM too. MM keeps its own copies at `0x80097e18`, `0x80097e60` and `0x8009e510`, and its framebuffer covers OoT's addresses.
+2. At the same time it overwrites five OoT thread functions in RAM with emulator call opcodes (`0x7c000000 | index`): `send_mesg`, `__osEnqueueAndYield`, `__osEnqueueThread`, `__osPopThread` and `__osDispatchThread`. MM's copies run as MIPS and fault.
+3. MM decompresses its code over addresses where OoT code was translated. The emulator only drops translations on PI DMA or through its `osInvalICache` replacement, and that call only prunes one side of its function tree per call.
+4. The emulator ends a function at the first `jr` after all forward branches. GCC sibling calls end functions with `j`, which merges them with the next function. OoTMM's `j Object_AfterInitContext` hook in MM and the River Sound update hit this.
+
+The experimental patch now handles each one. Both games keep the scheduler variables in a shared block at N64 `0x80000200–0x8000029f` (generated `vc_libultra.S` patches, plus OoT's `Main_ClearMemory` at `0x80000460` initialising the block on cold boot). The switch copies the emulator's five replacement words to the other game's functions when OoT's `send_mesg` holds one, resets the block for the next game, and calls `osInvalICache` over RAM in 8 KiB pieces. The payload is built with `-fno-optimize-sibling-calls`. The RSP poll no longer requires BROKE and the temporary stack uses `0x80800000`.
+
+With a diagnostic build that switches from the OoT title demo after 400 frames (no save loaded), MM reached gameplay and its mailbox counter advanced for more than two minutes. The diagnostic switch back to OoT after 300 MM frames reached the switch code and then faulted with the same PowerPC exception at zero before OoT showed play frames. The [test scripts](../tools/dolphin_vc/README.md) reproduce these runs. Next: capture the N64 PC of the return fault (`ctx.py`), then test with a real save through the Market door.
 
 ## Rebuild the experimental ROM
 
