@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 def package(output):
     files = [ROOT / name for name in (
         "Host Setup.cmd", "tools/host-setup.ps1", "tools/ootmm-build.sh",
-        "docs/setup_en.md", "LICENSE",
+        "docs/setup_en.md", "LICENSE", "ootmm-patches/experimental/dolphin-vc.patch",
     )]
     for folder in ("ootmm-ap", "ootmm-patches"):
         files.extend(p for p in sorted((ROOT / folder).iterdir()) if p.is_file())

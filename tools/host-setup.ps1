@@ -1,6 +1,6 @@
 # Windows PowerShell 5.1; no PowerShell 7 installation required.
 [CmdletBinding()]
-param([string]$SeedFolder, [string]$OotRom, [string]$MmRom, [switch]$CheckOnly)
+param([string]$SeedFolder, [string]$OotRom, [string]$MmRom, [switch]$Dolphin, [switch]$CheckOnly)
 $ErrorActionPreference = 'Stop'
 $env:WSL_UTF8 = '1'
 $repo = Split-Path $PSScriptRoot -Parent
@@ -27,7 +27,7 @@ try {
     if ($LASTEXITCODE -ne 0) {
         throw 'Ubuntu-24.04 is not ready. In an administrator PowerShell run: wsl --install -d Ubuntu-24.04. Restart if requested, open Ubuntu 24.04 to finish setup, then run this helper again. See https://learn.microsoft.com/windows/wsl/install'
     }
-    foreach ($relative in @('tools/ootmm-build.sh', 'ootmm-ap/ap-patch.ts', 'ootmm-patches')) {
+    foreach ($relative in @('tools/ootmm-build.sh', 'ootmm-ap/ap-patch.ts', 'ootmm-patches', 'ootmm-patches/experimental/dolphin-vc.patch')) {
         if (-not (Test-Path -LiteralPath (Join-Path $repo $relative))) { throw "Missing $relative. Extract the entire host ZIP first." }
     }
     if ($CheckOnly) { Write-Host 'WSL and host package are ready.'; exit 0 }
@@ -46,6 +46,10 @@ try {
     }
     if (-not $OotRom) { $OotRom = PickFile 'Choose your Ocarina of Time 1.0 NTSC-U ROM' }
     if (-not $MmRom) { $MmRom = PickFile "Choose your Majora's Mask NTSC-U ROM" }
+    if (-not $Dolphin) {
+        $answer = [System.Windows.Forms.MessageBox]::Show('Does anyone play on Dolphin (Wii)? Yes also builds Dolphin patches, which takes longer.', 'OOTxMM host setup', 'YesNo')
+        $Dolphin = $answer -eq 'Yes'
+    }
     $OotRom = (Resolve-Path -LiteralPath $OotRom).Path
     $MmRom = (Resolve-Path -LiteralPath $MmRom).Path
     foreach ($path in @($repo, $SeedFolder, $OotRom, $MmRom)) {
@@ -61,8 +65,15 @@ try {
     Write-Host 'Building patches. First use downloads the toolchain and can take several minutes. Keep this window open.'
     & wsl.exe -d Ubuntu-24.04 -u root --exec sh "$linuxRepo/tools/ootmm-build.sh" $linuxRepo --patch-seed $linuxSeed $linuxOot $linuxMm $linuxOutput
     if ($LASTEXITCODE -ne 0) { throw "Build failed. Do not distribute partial output. See the error above. Output: $output" }
+    if ($Dolphin) {
+        Write-Host 'Building Dolphin patches.'
+        $dolphinOutput = Join-Path $output 'Dolphin'
+        New-Item -ItemType Directory -Path $dolphinOutput | Out-Null
+        & wsl.exe -d Ubuntu-24.04 -u root --exec sh "$linuxRepo/tools/ootmm-build.sh" $linuxRepo --patch-seed $linuxSeed $linuxOot $linuxMm "$linuxOutput/Dolphin" dolphin
+        if ($LASTEXITCODE -ne 0) { throw "Dolphin build failed. Do not distribute partial output. See the error above. Output: $output" }
+    }
     Write-Host "Build complete: $output"
-    Write-Host 'Send each player their .ootmm patch. Keep ROMs and .build.json receipts private.'
+    Write-Host 'Send each player their .ootmm patch (Dolphin players: the one in the Dolphin folder). Keep ROMs and .build.json receipts private.'
     Start-Process explorer.exe -ArgumentList ('"' + $output + '"')
 } catch {
     Write-Host ("ERROR: " + $_.Exception.Message) -ForegroundColor Red

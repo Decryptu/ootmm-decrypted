@@ -22,6 +22,21 @@ assert c1[off(c1, 0x800528dc):][:4] == bytes.fromhex('40800028')
 put(c1, 0x80089640, [0x3c000360])
 put(c1, 0x80089650, [0x3f990360])
 put(c1, 0x800528dc, [0x3c009380, 0x901f0004, 0x38000000, 0x900d8f40, 0x4800004c])
+# S2DEX G_BG_COPY/G_BG_1CYC: for an MM ROM ID the emulator replaces every background with MM's
+# framebuffer-copy effect, which draws a mirrored previous frame. OoT pre-rendered rooms (shops,
+# houses) use images in room segment 0x03, so send those to the normal background draw.
+# 0x80070128 duplicated the call at 0x800700c8; it becomes a branch there and frees room for the checks.
+assert c1[off(c1, 0x80070124):][:8] == bytes.fromhex('4082004438e00000')
+assert c1[off(c1, 0x80070248):][:4] == bytes.fromhex('4182001c')
+put(c1, 0x80070124, [0x40820034, 0x4bffffa0,
+    0x7cba2b78, 0x7f23cb78, 0x7f44d378, 0x38a10058, 0x4bffa12d,   # fill bg; imagePtr at 0x68(r1)
+    0x88010068, 0x28000003, 0x4082011c, 0x7f23cb78, 0x7f45d378, 0x480000f8,   # BG_COPY
+    0x88010068, 0x28000003, 0x4182ff68, 0x48000004])   # BG_1CYC
+put(c1, 0x80070248, [0x4182fee4])
+# Save store: the emulator writes the flash image to NAND at most once every 6 minutes and
+# otherwise only on a clean exit. Stopping Dolphin loses newer saves, so flush whenever dirty.
+assert c1[off(c1, 0x8007e580):][:4] == bytes.fromhex('41820034')
+put(c1, 0x8007e580, [0x48000034])
 (outdir / 'content1.app').write_bytes(lz10_enc(bytes(c1)))
 
 r = bytearray(rom.read_bytes())

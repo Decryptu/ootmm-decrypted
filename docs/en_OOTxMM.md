@@ -16,4 +16,4 @@ Gossip stones share hints from the Archipelago multiworld. Way of the Hero hints
 
 This is a development build pending a full multiworld play session. Assisted candidate tests verify actual OoT/MM checks, bidirectional item exchange, a cross-game entrance, native key/fairy counters and real Majora/Ganon victory reporting. Server progress survives a restart between the two boss victories and the both-boss slot completes. Earlier-seed tests cover native-save recovery and return travel. A complete unmodified route, wider item/ability coverage, the opposite boss order and other goal settings still need gameplay verification.
 
-Follow the setup guide to install the world, choose settings, obtain your player's patch and connect through Archipelago's BizHawk Client.
+Follow the setup guide to install the world, choose settings, obtain your player's patch and connect through Archipelago's BizHawk Client, or the OOTxMM Dolphin Client on Dolphin.

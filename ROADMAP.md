@@ -9,7 +9,7 @@ A world a group can play a full multiworld with: generation in Archipelago, a pa
 
 | Item | Notes |
 |---|---|
-| Dolphin + Virtual Console evaluation (paused) | The experimental NARE build passed OoT mailbox item delivery and chest reporting. The experimental patch now gets an OoT to MM switch into MM gameplay (diagnostic switch from the title demo, no save). The switch back to OoT still faults. The [evaluation guide](docs/dolphin_evaluation.md) records the causes and fixes. Fix the return trip, test with a real save through the Market door, then verify MM mailbox reattachment, the return trip and save persistence before implementing the connector or publishing player setup. Project64 remains outside the roadmap. |
+| Dolphin + Virtual Console | Supported as an alternative to BizHawk: the host helper builds Dolphin patches, and OOTxMM Dolphin Setup and Client in the launcher install the ROM and connect. Item delivery in both games and game switching work. The pause screen background is wrong on the Virtual Console. Next: a full multiworld session on Dolphin. |
 
 The hub lists every changed setting it cannot import. Newly ported settings can be imported once they are in `options.py`.
 
