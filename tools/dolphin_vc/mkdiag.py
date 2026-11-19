@@ -30,7 +30,7 @@ edit('oot/play/play.c', [
 
     Diag_Mark(0x100 + (sDiagFrames & 0xff));
     if (++sDiagFrames == 400)
-        comboGameSwitch(NULL, ENTR_MM_CLOCK_TOWN_FROM_CLOCK_TOWER);
+        { gSaveContext.fileNum = 0; comboGameSwitch(NULL, ENTR_MM_CLOCK_TOWN_FROM_CLOCK_TOWER); }
 
 '''),
 ])
@@ -43,13 +43,13 @@ edit('mm/play/play.c', [
 
     Diag_Mark(0x200 + (sDiagFrames & 0xff));
     if (++sDiagFrames == 300)
-        comboGameSwitch(NULL, ENTR_OOT_WARP_SONG_TEMPLE);
+        { gSaveContext.fileNum = 0; comboGameSwitch(NULL, ENTR_OOT_WARP_SONG_TEMPLE); }
 '''),
 ])
 #edit('mm/scene.c', [('void Object_AfterInitContext(void)\n', '__attribute__((optimize("no-optimize-sibling-calls", "no-delayed-branch")))\nvoid Object_AfterInitContext(void)\n')])
 
 import os
-if os.environ.get('DIAG_FLAGS', '1') == '1':
+if os.environ.get('DIAG_FLAGS', '0') == '1':
     p = '/root/ootmm/packages/generator/CMakeLists.txt'
     s = open(p).read()
     s = s.replace('set(CMAKE_C_FLAGS "${FLAGS} -D_LANGUAGE_C=1")', 'set(CMAKE_C_FLAGS "${FLAGS} -fno-optimize-sibling-calls -D_LANGUAGE_C=1")', 1)

@@ -1,5 +1,5 @@
 diff --git a/packages/generator/CMakeLists.txt b/packages/generator/CMakeLists.txt
-index 8912285..95b3d5e 100644
+index 8912285..362db5f 100644
 --- a/packages/generator/CMakeLists.txt
 +++ b/packages/generator/CMakeLists.txt
 @@ -15,7 +15,7 @@ endforeach()
@@ -7,10 +7,28 @@ index 8912285..95b3d5e 100644
  
  set(FLAGS "-EB -static -fomit-frame-pointer -ffreestanding -nostdlib -nostdinc -fno-PIC -mabi=32 -mno-shared -mno-abicalls -march=vr4300 -mtune=vr4300 -mfix4300 -mfix-r4000 -G 0 -Os -Wall -Werror=implicit-function-declaration -Werror=implicit-int -Wimplicit-fallthrough -Wl,--build-id=none")
 -set(CMAKE_C_FLAGS "${FLAGS} -D_LANGUAGE_C=1")
-+set(CMAKE_C_FLAGS "${FLAGS} -fno-optimize-sibling-calls -D_LANGUAGE_C=1")
++set(CMAKE_C_FLAGS "${FLAGS} -fno-optimize-sibling-calls -fno-jump-tables -fno-reorder-blocks -fno-shrink-wrap -D_LANGUAGE_C=1")
  set(CMAKE_ASM_FLAGS "${FLAGS}")
  
  # Override default envs
+diff --git a/packages/generator/src/common/dma.c b/packages/generator/src/common/dma.c
+index 95444ef..1249ef2 100644
+--- a/packages/generator/src/common/dma.c
++++ b/packages/generator/src/common/dma.c
+@@ -115,6 +115,13 @@ void DmaManagerRunRequest(const DmaRequest* dma)
+ 
+     if (e.pend == 0)
+     {
++        /*
++         * A zero-length PI transfer programs a length of 0xffffffff. Wii Virtual Console then
++         * copies the ROM over the rest of RDRAM, including the payload.
++         */
++        if (dma->size == 0)
++            return;
++
+         /* File is not compressed - load and allow partial loading */
+         offset = dma->vromAddr - e.vstart;
+         DMARomToRam((e.pstart + offset) | PI_DOM1_ADDR2, dma->dramAddr, dma->size);
 diff --git a/packages/generator/src/common/ipc/ram.c b/packages/generator/src/common/ipc/ram.c
 index 1e9097e..4f4cf74 100755
 --- a/packages/generator/src/common/ipc/ram.c
