@@ -75,7 +75,7 @@ Dolphin runs the game through Majora's Mask on the Wii Virtual Console. You need
 2. Make your `.z64` from it as in [Build your ROM](#build-your-rom).
 3. In Dolphin, select **Tools → Install WAD to Wii Menu** and choose your Majora's Mask WAD.
 4. In the Archipelago launcher, type **Dolphin** in the search box and open **OOTxMM Dolphin Setup**. It comes with `ootxmm.apworld` v0.0.2 or newer; if it is missing, install the latest world package and restart the launcher. Then choose your `.z64`. It puts the ROM into the installed Majora's Mask and sets Dolphin's memory size for it. If it cannot find Dolphin, choose Dolphin's user folder (**File → Open User Folder** in Dolphin).
-5. Start **The Legend of Zelda: Majora's Mask** from Dolphin's game list.
+5. Start the patched game from Dolphin's Wii Menu. Do not open the `.wad` file: that reinstalls the unpatched game and you would need to run step 4 again. The installed game does not appear in Dolphin's game list, and **Tools → Load Wii System Menu** stays greyed out until the Wii Menu is installed. Once only, select **Tools → Perform Online System Update → United States**. Then select **Tools → Load Wii System Menu** and open the Majora's Mask channel.
 6. In the Archipelago launcher, open **OOTxMM Dolphin Client** instead of the BizHawk Client and connect as in [Connect and play](#connect-and-play), steps 4 to 6. No Lua script is needed.
 
 Save in game as usual: saves reach Dolphin's NAND within seconds. To return to normal Majora's Mask, install the WAD again.
