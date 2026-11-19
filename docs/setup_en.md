@@ -69,6 +69,8 @@ To resume later, start in the same order: the server with the same seed (it keep
 
 ## Play on Dolphin
 
+**Experimental:** on Dolphin the game currently freezes on some item pickups (chests and shops). Use BizHawk for a run you want to finish.
+
 Dolphin runs the game through Majora's Mask on the Wii Virtual Console. You need your own NTSC-U Virtual Console WAD (title `NARE`) and a patch the host built for Dolphin.
 
 1. Ask the host for your patch from the helper's `Dolphin` folder. The files next to that folder are for BizHawk and do not run on Dolphin. Dolphin never opens the `.z64` directly: step 4 puts it into the installed Majora's Mask.

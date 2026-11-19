@@ -27,7 +27,7 @@
   const steps = {
     install: ['Install Archipelago', 'Install <a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/0.6.8">Archipelago 0.6.8</a>. Have your own Ocarina of Time 1.0 NTSC-U and Majora’s Mask NTSC-U ROMs.'],
     bizhawk: ['Install BizHawk', 'Install <a href="https://github.com/TASEmulators/BizHawk/releases/tag/2.11.1">BizHawk 2.11.1</a>.'],
-    dolphin: ['Install Dolphin', 'Install <a href="https://dolphin-emu.org/download/">Dolphin</a>. Select <strong>Tools → Install WAD to Wii Menu</strong> and choose your own Majora’s Mask NTSC-U Virtual Console WAD.'],
+    dolphin: ['Install Dolphin', '<strong>Experimental:</strong> the game currently freezes on some item pickups on Dolphin. Use BizHawk for a run you want to finish. Install <a href="https://dolphin-emu.org/download/">Dolphin</a>. Select <strong>Tools → Install WAD to Wii Menu</strong> and choose your own Majora’s Mask NTSC-U Virtual Console WAD.'],
     world: ['Install the world', 'Download <a href="./#world-package">ootxmm.apworld</a> into Archipelago’s <code>custom_worlds</code> folder, then restart the launcher.'],
     yaml: ['Make your player file', 'Make a <a href="./#settings">YAML on the hub</a> and send it to your organizer. You connect with the name you choose.'],
     ownyaml: ['Collect player files', 'Make your <a href="./#settings">YAML on the hub</a> and collect one from each player. Names must be unique.'],
