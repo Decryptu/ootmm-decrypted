@@ -28,5 +28,16 @@
       {% else %}{{ content }}{% endif %}</main>
     <footer><a href="https://github.com/Decryptu/ootmm-decrypted">GitHub ↗</a><span>Development build</span><a href="{{ '/' | relative_url }}">Return to player hub</a></footer>
   </div>
+  <script>
+    // Links in the guide open in a new tab, so players keep their place; links to a section of this page stay here.
+    document.querySelector('main').addEventListener('click', event => {
+      const link = event.target.closest('a[href]');
+      if (!link || link.hasAttribute('data-reference') || link.getAttribute('href').startsWith('#')) return;
+      const url = new URL(link.href, location.href);
+      if (url.pathname === location.pathname && url.hash) return;
+      link.target = '_blank';
+      link.rel = 'noopener';
+    });
+  </script>
 </body>
 </html>
