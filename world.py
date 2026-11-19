@@ -79,6 +79,8 @@ class OOTxMM(World):
         # The player's file for the ROM patch (ootmm-ap/ap-patch.ts): settings and what is at each check.
         data = {
             "version": 1,
+            # ap-patch.ts refuses files from another release: an older world drops settings it does not know.
+            "world_version": self.world_version.as_simple_string(),
             "seed": f"{self.multiworld.seed_name}-{self.player}",
             "settings": self.ootmm_settings,
             "prices": self.prices,

@@ -102,6 +102,7 @@ class TestShuffledShops(OOTxMMTestBase):
             with open(os.path.join(directory, os.listdir(directory)[0])) as file:
                 output = json.load(file)
         self.assertEqual(output["prices"], self.world.prices)
+        self.assertEqual(output["world_version"], self.world.world_version.as_simple_string())
         self.assertIs(self.world.logic, logic.build({**self.world.ootmm_settings, "_prices": self.world.prices}))
 
 

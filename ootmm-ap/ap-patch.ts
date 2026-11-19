@@ -28,9 +28,13 @@ import { buildPatchfiles } from '../combo/patch-build';
 import { Patchfile } from '../combo/patch-build/patchfile';
 import { makeAddresses } from '../combo/addresses';
 
+/* The world release this builder matches: archipelago.json's world_version (checked by test/test_patch_version.py) */
+const WORLD_VERSION = '0.0.3';
+
 /* Written by the world's generate_output (world.py) */
 type PlayerFile = {
   version: 1;
+  world_version?: string;
   seed: string;
   /* OoTMM settings, keyed and valued as OoTMM's, sets as lists */
   settings: { [k: string]: unknown };
@@ -121,6 +125,10 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   const playerBytes = await fs.readFile(playerPath);
   const player: PlayerFile = JSON.parse(playerBytes.toString('utf-8'));
   if (player.version !== 1) throw new Error(`Unsupported player file version ${player.version}`);
+  if (player.world_version !== WORLD_VERSION)
+    throw new Error(`This seed was generated with OOTxMM world ${player.world_version ?? 'older than 0.0.3'}, but these `
+      + `host tools are for ${WORLD_VERSION}. Install ootxmm.apworld ${WORLD_VERSION} (remove older copies from `
+      + `custom_worlds), restart the launcher and generate again.`);
   if (player.gossip !== undefined &&
       (!Array.isArray(player.gossip) || player.gossip.some(text => typeof text !== 'string' || !text.trim())))
     throw new Error('Invalid Archipelago gossip text');
