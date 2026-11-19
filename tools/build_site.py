@@ -50,6 +50,15 @@ def option_specs() -> dict:
     return specs
 
 
+def cosmetic_specs() -> dict:
+    """The cosmetics the hub offers, read from cosmetics.py without importing Archipelago."""
+    tree = ast.parse((ROOT / "cosmetics.py").read_text(encoding="utf-8"))
+    values = {node.targets[0].id: ast.literal_eval(node.value) for node in tree.body
+              if isinstance(node, ast.Assign) and isinstance(node.targets[0], ast.Name)
+              and node.targets[0].id in ("BOOLEANS", "COLOR_TARGETS", "COLORS")}
+    return {"booleans": values["BOOLEANS"], "colors": values["COLOR_TARGETS"], "colorNames": values["COLORS"]}
+
+
 def item_names() -> dict:
     """OoTMM item IDs to the world's item names (items.py names items from the same dump)."""
     items = json.loads((ROOT / "raw" / "GreatItemJSONdump.json").read_text(encoding="utf-8"))
@@ -74,7 +83,8 @@ def main():
     # The settings import needs the world's options, and OoTMM's defaults to tell which other settings a player changed.
     defaults = json.loads((ROOT / "raw" / "GreatSettingsJSONdump.json").read_text(encoding="utf-8"))["defaults"]
     (DEST / "options.json").write_text(json.dumps(
-        {"options": option_specs(), "ootmmDefaults": defaults, "itemNames": item_names()},
+        {"options": option_specs(), "ootmmDefaults": defaults, "itemNames": item_names(),
+         "cosmetics": cosmetic_specs()},
         separators=(",", ":")), encoding="utf-8")
     print(DEST)
 

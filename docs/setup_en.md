@@ -44,7 +44,7 @@ Already have settings on ootmm.com? Export them from the website, then choose th
 3. Under **Generator Mode**, select **Patch**, then your slot's `.ootmm` file. Do not use the normal generator mode.
 4. Select **Generate**, then **Download**. Extract the `.z64` if the download is a ZIP.
 
-Cosmetics, such as tunic colors and music, are not part of the patch: the website applies its own cosmetic settings when it builds your ROM. Change them there and patch again whenever you like. Gameplay settings come only from the YAML.
+Cosmetics, such as Z-targeting on Hold or tunic colors, come from the **Cosmetics** section of the hub's YAML form; the host's ROM build applies them. When you patch on the website instead, its own cosmetic settings replace them, so set them there too. Custom player models and music files are only available on the website. Gameplay settings come only from the YAML.
 
 The patch contains the seed's placements and communication code. Players need no WSL or compiler. Keep the patch to rebuild your ROM. The `.ootxmm.json` file is the host's input, not a Patch-mode file. A patch only works with the seed it was built from: if the host generates again, every player needs a new patch.
 
@@ -63,7 +63,7 @@ Boss completion is saved on the Archipelago server, so the client can restart be
 
 Use Archipelago's BizHawk Client for item exchange. The standalone OoTMM multiplayer client is not used.
 
-Keep the client connected during play. If the server connection drops during a pickup, a following pickup may wait for acknowledgement; reconnect before restarting the emulator. Unrestricted offline play has not been verified.
+Keep the client connected during play. Starting items and every item from the multiworld, your own included, arrive only through the connected client. Checks opened while the client is offline are kept in the save (up to 32) and sent once it reconnects; past 32 the game waits for the client.
 
 To resume later, start in the same order: the server with the same seed (it keeps its save), BizHawk with the same ROM and the Lua script, then the client.
 
@@ -98,6 +98,8 @@ The default N64 settings can add input lag and audio delay. In BizHawk:
 | `connector_bizhawk_generic.lua` is not in BizHawk's `Lua` folder | It ships with Archipelago. Open it from Archipelago's `data/lua` folder ([Connect and play](#connect-and-play), step 2). |
 | `Invalid Slot; please verify that you have connected to the correct world` | The server has no slot with that name. Check the name against the YAML (case-sensitive) and check the address and port. If the log lists data packages for games nobody in your group plays, you are connected to someone else's room: get the current address from the host. |
 | Connected to the server, but no item is sent or received | The ROM was not built from this seed's `.ootmm` patch, for example a seed generated directly on ootmm.com, or a patch from an older seed. Rebuild the ROM in Patch mode with the current patch. The client log warns when no mailbox exists in the game's memory. |
+| Starting items or found items are missing | The client was not connected to the server. Connect it: the items arrive within a few seconds. |
+| The game freezes after an item (patches from v0.0.3 or older) | The game waited for the client. Connect the client, or update the host tools and rebuild the patches. |
 | The client waits for the mailbox | Enter gameplay: the mailbox is inactive on the title screen and file select. |
 | `Waiting to connect to BizHawk` | Load the Lua script again in BizHawk's Lua Console. On Dolphin, start the game in Dolphin; the Dolphin Client connects once it runs. |
 | Dolphin shows a black screen | The ROM was built from a BizHawk patch. Use the patch from the host's `Dolphin` folder. |

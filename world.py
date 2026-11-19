@@ -2,6 +2,7 @@ import json
 import os
 from collections import Counter, defaultdict
 from collections.abc import Mapping
+from dataclasses import dataclass
 from itertools import takewhile
 from typing import Any
 
@@ -10,7 +11,12 @@ from BaseClasses import ItemClassification
 from Options import Choice, OptionSet, Toggle
 from worlds.AutoWorld import World
 
-from . import web_world, options, prefill, items, locations, logic, regions, rules, time_logic, prices
+from . import web_world, options, cosmetics, prefill, items, locations, logic, regions, rules, time_logic, prices
+
+@dataclass
+class OOTxMMOptions(options.OOTxMMOptions):
+    cosmetics: cosmetics.Cosmetics
+
 
 class OOTxMM(World):
     """
@@ -21,8 +27,8 @@ class OOTxMM(World):
     
     game = "OOTxMM"
     web = web_world.OOTxMMWebWorld()
-    options_dataclass = options.OOTxMMOptions
-    options: options.OOTxMMOptions
+    options_dataclass = OOTxMMOptions
+    options: OOTxMMOptions
     
     
     location_name_to_id = locations.LOCATION_NAME_TO_ID
@@ -85,6 +91,7 @@ class OOTxMM(World):
             "settings": self.ootmm_settings,
             "prices": self.prices,
             "gossip": getattr(self, "gossip_hints", []),
+            "cosmetics": dict(self.options.cosmetics.value),
             "locations": {
                 location.name: display_item(self, location.item)
                 for location in self.multiworld.get_locations(self.player)

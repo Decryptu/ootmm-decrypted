@@ -19,6 +19,7 @@ WORLD_FILES = [
     "__init__.py",
     "archipelago.json",
     "client.py",
+    "cosmetics.py",
     "dolphin.py",
     "items.py",
     "locations.py",

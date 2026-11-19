@@ -17,7 +17,7 @@ import path from 'path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { Monitor, makeRegion, options, randomInt, resolveMmAgeRequirements, SETTINGS, shuffle } from '@ootmm/core';
+import { COLORS, COSMETICS, Monitor, makeRegion, options, randomInt, resolveMmAgeRequirements, SETTINGS, shuffle } from '@ootmm/core';
 import { solvedWorldState, logicPassCloak, itemByID, ItemGroups, ItemHelpers, makeLocation, makePlayerItem } from '@ootmm/logic';
 /* Not exported by the package */
 import { logicPassHash } from '../../../logic/src/misc';
@@ -29,7 +29,7 @@ import { Patchfile } from '../combo/patch-build/patchfile';
 import { makeAddresses } from '../combo/addresses';
 
 /* The world release this builder matches: archipelago.json's world_version (checked by test/test_patch_version.py) */
-const WORLD_VERSION = '0.0.3';
+const WORLD_VERSION = '0.0.4';
 
 /* Written by the world's generate_output (world.py) */
 type PlayerFile = {
@@ -40,6 +40,8 @@ type PlayerFile = {
   settings: { [k: string]: unknown };
   prices?: number[];
   gossip?: string[];
+  /* OoTMM cosmetics chosen by the player (cosmetics.py); files such as custom models are not supported */
+  cosmetics?: { [k: string]: unknown };
   /* Location to [OoTMM item, true if the item is the player's own] */
   locations: { [k: string]: [string, boolean] };
 };
@@ -63,6 +65,20 @@ function readFileUint8(p: string): Promise<Uint8Array> {
 }
 
 /* Same conversion as OoTMM's CLI (lib/cli.ts): a set setting given as a list is that specific set */
+/* The player's cosmetics as OoTMM takes them, refusing unknown keys and values */
+function cosmeticsInput(data: PlayerFile['cosmetics']) {
+  const result: { [k: string]: unknown } = {};
+  for (const [key, value] of Object.entries(data ?? {})) {
+    const cosmetic = COSMETICS.find((x) => x.key === key);
+    const valid = cosmetic?.type === 'boolean' ? typeof value === 'boolean'
+      : cosmetic?.type === 'color' && typeof value === 'string'
+        && (['default', 'random', 'auto'].includes(value) || Object.hasOwn(COLORS, value));
+    if (!valid) throw new Error(`Unsupported cosmetic ${key}: ${JSON.stringify(value)}`);
+    result[key] = value;
+  }
+  return result;
+}
+
 function settingsInput(data: PlayerFile['settings']) {
   const result: { [k: string]: unknown } = {};
   for (const [key, value] of Object.entries(data)) {
@@ -137,6 +153,7 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   const opts = options({
     seed: player.seed,
     settings: { ...settingsInput(player.settings), mode: 'single', players: 1, teams: 1, generateSpoilerLog: false } as any,
+    cosmetics: cosmeticsInput(player.cosmetics) as any,
   });
   const roms = await decompressGames(monitor, { oot: await readFileUint8(ootPath), mm: await readFileUint8(mmPath) });
   const addresses = makeAddresses(roms);

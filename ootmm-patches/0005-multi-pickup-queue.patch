@@ -1,0 +1,121 @@
+diff --git a/packages/generator/include/combo/save.h b/packages/generator/include/combo/save.h
+index cc4bc22..3ae9581 100644
+--- a/packages/generator/include/combo/save.h
++++ b/packages/generator/include/combo/save.h
+@@ -34,6 +34,18 @@ typedef struct
+ }
+ MultiSave;
+ 
++#define MULTI_QUEUE_SIZE 32
++
++/* Reliable packets waiting behind the one in MultiSave.sendBuffer, oldest first */
++typedef struct
++{
++    char    buffer[MULTI_QUEUE_SIZE][32];
++    u32     token[MULTI_QUEUE_SIZE];
++    u8      size[MULTI_QUEUE_SIZE];
++    u8      count;
++}
++MultiQueue;
++
+ typedef struct ALIGNED(16)
+ {
+     OotCustomSave   oot;
+@@ -77,6 +89,7 @@ typedef struct ALIGNED(16)
+ #if defined(DEBUG)
+     u8              cheats[4];
+ #endif
++    MultiQueue      multiQueue; /* Last: older saves read it as empty */
+ }
+ SharedCustomSave;
+ 
+diff --git a/packages/generator/src/common/multi/multi.c b/packages/generator/src/common/multi/multi.c
+index ef9a71e..56357de 100644
+--- a/packages/generator/src/common/multi/multi.c
++++ b/packages/generator/src/common/multi/multi.c
+@@ -24,6 +24,8 @@ EXPORT_SYMBOL(MULTI_WORLD_ID, sWorldId);
+ 
+ ALIGNED(4) static u8 sBuffer[128];
+ 
++int Multi_SendPacket(MultiPacketHeader* pkt, u32 size);
++
+ static void Multi_ExportFilename(char* dst)
+ {
+     int len;
+@@ -289,6 +291,31 @@ static int MultiProcessMessageWAL(MultiPacketWalInHeader* pkt, int size)
+     return 1;
+ }
+ 
++static void Multi_SendNextQueued(void)
++{
++    MultiQueue* q;
++    MultiPacketHeader* pkt;
++
++    q = &gSharedCustomSave.multiQueue;
++    if (!q->count || gSharedCustomSave.multi.sendBufferSize)
++        return;
++
++    memcpy(&gSharedCustomSave.multi.sendBuffer, q->buffer[0], sizeof(q->buffer[0]));
++    gSharedCustomSave.multi.sendBufferSize = q->size[0];
++    gSharedCustomSave.multi.sendBufferToken = q->token[0];
++    q->count--;
++    for (int i = 0; i < q->count; ++i)
++    {
++        memcpy(q->buffer[i], q->buffer[i + 1], sizeof(q->buffer[0]));
++        q->size[i] = q->size[i + 1];
++        q->token[i] = q->token[i + 1];
++    }
++
++    pkt = (MultiPacketHeader*)&gSharedCustomSave.multi.sendBuffer;
++    Multi_SendPacket(pkt, gSharedCustomSave.multi.sendBufferSize);
++    gMulti.ttlResend = TTL_RESEND;
++}
++
+ static void MultiProcessAck(MultiPacketWalAckIn* pkt)
+ {
+     if (pkt->token != gSharedCustomSave.multi.sendBufferToken)
+@@ -296,6 +323,7 @@ static void MultiProcessAck(MultiPacketWalAckIn* pkt)
+ 
+     gSharedCustomSave.multi.sendBufferSize = 0;
+     gMulti.ttlResend = 0;
++    Multi_SendNextQueued();
+ }
+ 
+ static int MultiProcessMessage(MultiPacketHeader* pkt, int size)
+@@ -453,7 +481,7 @@ static void Multi_EnsureSendBufferEmpty(void)
+ {
+     for (;;)
+     {
+-        if (!gSharedCustomSave.multi.sendBufferSize)
++        if (gSharedCustomSave.multiQueue.count < MULTI_QUEUE_SIZE)
+             return;
+ 
+         if (gMulti.ttl)
+@@ -486,7 +514,9 @@ static int Multi_BeforeSend(void)
+     if (!Config_Flag(CFG_MULTIPLAYER))
+         return 0;
+ 
+-    Multi_EnsureSendBufferEmpty();
++    /* Without a client, pickups wait in the queue instead of locking the game; only a full queue waits */
++    if (gSharedCustomSave.multiQueue.count >= MULTI_QUEUE_SIZE)
++        Multi_EnsureSendBufferEmpty();
+     return 1;
+ }
+ 
+@@ -529,6 +559,16 @@ static void Multi_ReliableSendWAL(MultiPacketWalOutHeader* pkt, u32 size)
+     token = gSharedCustomSave.multi.ackToken++;
+     pkt->token = token;
+ 
++    if (gSharedCustomSave.multi.sendBufferSize)
++    {
++        MultiQueue* q = &gSharedCustomSave.multiQueue;
++        memcpy(q->buffer[q->count], pkt, size);
++        q->size[q->count] = size;
++        q->token[q->count] = token;
++        q->count++;
++        return;
++    }
++
+     Multi_SendPacket(&pkt->header, size);
+ 
+     /* Store persistently */

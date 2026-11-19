@@ -74,6 +74,25 @@ function importSettings(exported, { options: specs, ootmmDefaults, itemNames }) 
   return { options, skipped };
 }
 
+const COSMETIC_LABELS = {
+  defaultHold: "Z-targeting on Hold", applyFreestandings: "Cosmetics on freestanding items",
+  musicNames: "Show music names", musicCategories: "Music categories", nightBgm: "Night music (experimental)",
+  noLowHealthBeep: "No low health beep", gerudoTunic: "Gerudo Mask tunic",
+  ootTunicKokiri: "OoT Kokiri Tunic", ootTunicGoron: "OoT Goron Tunic", ootTunicZora: "OoT Zora Tunic",
+  ootShieldMirror: "OoT Mirror Shield", mmTunicHuman: "MM Human Tunic", mmTunicDeku: "MM Deku Tunic",
+  mmTunicGoron: "MM Goron Tunic", mmTunicZora: "MM Zora Tunic", mmTunicFierceDeity: "MM Fierce Deity Tunic",
+  dpad: "D-Pad", fileSelect: "File select",
+};
+
+// The cosmetics a player changed from OoTMM's defaults. values: {key: boolean or color name}.
+function chosenCosmetics(values, { booleans }) {
+  const chosen = {};
+  for (const [key, value] of Object.entries(values)) {
+    if (key in booleans ? value !== booleans[key] : value !== "default") chosen[key] = value;
+  }
+  return chosen;
+}
+
 function playerYaml(name, goal, options = {}) {
   name = name.trim();
   checkName(name);
@@ -95,6 +114,34 @@ if (typeof document !== "undefined") {
     }
     return specs;
   };
+
+  const cosmeticInputs = {};
+  loadSpecs().then(({ cosmetics }) => {
+    const fields = document.getElementById("cosmetics-fields");
+    const nodes = [];
+    for (const [key, initial] of Object.entries(cosmetics.booleans)) {
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = initial;
+      label.append(input, ` ${COSMETIC_LABELS[key] ?? key}`);
+      cosmeticInputs[key] = () => input.checked;
+      nodes.push(label);
+    }
+    for (const key of cosmetics.colors) {
+      const label = document.createElement("label");
+      const select = document.createElement("select");
+      for (const [value, text] of [["default", "Default"], ["random", "Random"], ...Object.entries(cosmetics.colorNames)]) {
+        select.append(new Option(text, value));
+      }
+      label.append(`${COSMETIC_LABELS[key] ?? key} `, select);
+      cosmeticInputs[key] = () => select.value;
+      nodes.push(label);
+    }
+    fields.replaceChildren(...nodes);
+  }).catch((error) => {
+    document.getElementById("cosmetics-fields").textContent = error.message;
+  });
 
   document.getElementById("yaml-form").addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -118,7 +165,10 @@ if (typeof document !== "undefined") {
         const fileGoal = (exported?.data?.settings ?? exported?.settings)?.goal;
         if (specs.options.goal.values.includes(fileGoal)) goal = fileGoal;
       }
-      const text = playerYaml(name, goal, imported.options);
+      const values = Object.fromEntries(Object.entries(cosmeticInputs).map(([key, read]) => [key, read()]));
+      const cosmetics = Object.keys(values).length ? chosenCosmetics(values, (await loadSpecs()).cosmetics) : {};
+      const options = Object.keys(cosmetics).length ? { ...imported.options, cosmetics } : imported.options;
+      const text = playerYaml(name, goal, options);
       const url = URL.createObjectURL(new Blob([text], { type: "application/yaml;charset=utf-8" }));
       const link = document.createElement("a");
       link.href = url;
@@ -146,4 +196,4 @@ if (typeof document !== "undefined") {
   });
 }
 
-if (typeof module !== "undefined") module.exports = { importSettings, playerYaml };
+if (typeof module !== "undefined") module.exports = { chosenCosmetics, importSettings, playerYaml };
