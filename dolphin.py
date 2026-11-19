@@ -337,7 +337,15 @@ def start_bridge() -> None:
 
 def run_client(*args: str) -> None:
     start_bridge()
-    from worlds._bizhawk.context import launch
+    from worlds._bizhawk.context import BizHawkClientContext, launch
+    make_gui = BizHawkClientContext.make_gui
+
+    def make_dolphin_gui(self):
+        ui = make_gui(self)
+        ui.base_title = "OOTxMM Dolphin Client"  # the BizHawk title made players think they had the wrong client
+        return ui
+
+    BizHawkClientContext.make_gui = make_dolphin_gui
     launch(*args)
 
 
