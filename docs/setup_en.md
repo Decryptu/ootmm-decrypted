@@ -107,7 +107,7 @@ Windows hosts can use the host helper below. It needs WSL with Ubuntu 24.04, but
 
 ### Windows host helper
 
-1. Download `ootxmm-host.zip` alongside the matching world package from the group's release, if offered. Extract the entire ZIP to a short local path, such as `C:\ootxmm-host`. Older releases without this ZIP use the manual build instructions below; do not mix their world package with a newer helper. From a repository checkout, the same helper is `Host Setup.cmd` in the root.
+1. Download [`ootxmm-host.zip`](https://github.com/Decryptu/ootmm-decrypted/releases/latest/download/ootxmm-host.zip) from the latest release (not "Source code"). Extract the entire ZIP to a short local path, such as `C:\ootxmm-host`. Older releases without this ZIP use the manual build instructions below; do not mix their world package with a newer helper. From a repository checkout, the same helper is `Host Setup.cmd` in the root.
 2. Double-click **Host Setup.cmd**. It checks WSL before asking for files. If Ubuntu 24.04 is missing, open **Start**, type **PowerShell**, right-click **Windows PowerShell** and select **Run as administrator**. Paste:
 
    ```powershell
