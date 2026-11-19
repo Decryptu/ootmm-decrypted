@@ -226,7 +226,11 @@ class Bridge:
             if not self.dolphin.is_hooked():
                 return False
         if self.header is None:
-            self.header = self.find_header()
+            try:
+                self.header = self.find_header()
+            except RuntimeError:  # hooked to Dolphin with no game running
+                self.dolphin.un_hook()
+                return False
         return self.header is not None
 
     def find_header(self) -> bytes | None:
@@ -319,8 +323,14 @@ class Bridge:
                             conn.sendall(self.process(raw.decode("utf-8").strip()).encode("utf-8") + b"\n")
                 except (OSError, RuntimeError, ValueError) as exc:
                     # Dolphin closed or the game stopped: drop the client and look for the game again.
+                    # Unhook too, or a stopped emulator keeps the hook and every retry fails the same way.
                     logger.info(f"Dolphin: connection lost ({exc})")
                     self.header = None
+                    try:
+                        self.dolphin.un_hook()
+                    except Exception:
+                        pass
+                    time.sleep(1)
 
 
 def start_bridge() -> None:
