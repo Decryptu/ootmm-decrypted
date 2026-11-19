@@ -136,11 +136,16 @@ def u8_replace(archive: bytes, name: str, data: bytes) -> bytes:
     return bytes(head + out)
 
 
-def install(rom_path: Path, user_dir: Path) -> None:
+def read_rom(rom_path: Path) -> bytes:
     rom = bytearray(rom_path.read_bytes())
     if rom[:4] != b"\x80\x37\x12\x40" or not rom[0x20:0x34].startswith(b"OOT+MM COMBO"):
         raise ValueError("Choose the patched OoTMM .z64 ROM built from your Dolphin patch.")
     rom[0x3B:0x3F] = b"NZSE"  # the Virtual Console only runs this ROM with Majora's Mask's cartridge ID
+    return bytes(rom)
+
+
+def install(rom_path: Path, user_dir: Path) -> None:
+    rom = read_rom(rom_path)
 
     content = user_dir.joinpath(*TITLE_PATH)
     tmd_path = content / "title.tmd"
@@ -208,6 +213,107 @@ def set_core_options(path: Path, options: dict[str, str]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+
+# --- Patched WAD, for players who have the Wii common key -----------------------------------------------------
+# Started directly in Dolphin, a WAD boots Majora's Mask itself, so its 128 MiB setting applies without the
+# Wii Menu. Building one re-encrypts the contents, which needs the Wii common key: the player's own key
+# (keys.bin from their Wii, or the 16-byte key alone); none ships with this world.
+
+def load_common_key(path: Path) -> bytes:
+    data = path.read_bytes()
+    if len(data) == 16:
+        return data
+    if len(data) >= 0x124:  # BootMii keys.bin: the common key is at 0x114
+        return data[0x114:0x124]
+    raise ValueError("The key file must be the 16-byte Wii common key or a BootMii keys.bin.")
+
+
+def _libcrypto():
+    import ctypes
+    import ctypes.util
+    import sys
+    names = [str(Path(sys.executable).parent / "lib" / "libcrypto-3.dll"), "libcrypto-3-x64.dll", "libcrypto-3.dll",
+             ctypes.util.find_library("crypto") or "libcrypto.so.3"]
+    for name in names:
+        try:
+            lib = ctypes.CDLL(name)
+            lib.EVP_CIPHER_CTX_new.restype = ctypes.c_void_p
+            lib.EVP_aes_128_cbc.restype = ctypes.c_void_p
+            return lib
+        except OSError:
+            continue
+    raise OSError("OpenSSL's libcrypto was not found, so the WAD cannot be encrypted.")
+
+
+def aes_cbc(key: bytes, iv: bytes, data: bytes, encrypt: bool) -> bytes:
+    import ctypes
+    lib = _libcrypto()
+    ctx = ctypes.c_void_p(lib.EVP_CIPHER_CTX_new())
+    try:
+        if not lib.EVP_CipherInit_ex(ctx, ctypes.c_void_p(lib.EVP_aes_128_cbc()), None, key, iv, int(encrypt)):
+            raise OSError("AES init failed")
+        lib.EVP_CIPHER_CTX_set_padding(ctx, 0)
+        out = ctypes.create_string_buffer(len(data) + 16)
+        size = ctypes.c_int(0)
+        if not lib.EVP_CipherUpdate(ctx, out, ctypes.byref(size), data, len(data)):
+            raise OSError("AES failed")
+        return out.raw[:size.value]
+    finally:
+        lib.EVP_CIPHER_CTX_free(ctx)
+
+
+def _align(n: int, a: int = 0x40) -> int:
+    return (n + a - 1) // a * a
+
+
+def build_wad(rom_path: Path, wad_path: Path, key_path: Path, out_path: Path) -> None:
+    rom = read_rom(rom_path)
+    wad = wad_path.read_bytes()
+    header_size, _, cert_size, crl_size, tik_size, tmd_size = struct.unpack_from(">I4sIIII", wad, 0)
+    offset = _align(header_size)
+    cert = wad[offset:offset + cert_size]
+    offset = _align(offset + cert_size) + _align(crl_size) if crl_size else _align(offset + cert_size)
+    tik = wad[offset:offset + tik_size]
+    offset = _align(offset + tik_size)
+    tmd = bytearray(wad[offset:offset + tmd_size])
+    offset = _align(offset + tmd_size)
+    if tmd[0x18C:0x194] != bytes.fromhex("000100014e415245"):
+        raise ValueError("Choose your own Majora's Mask (USA) Virtual Console WAD.")
+    title_key = aes_cbc(load_common_key(key_path), tik[0x1DC:0x1E4] + bytes(8), tik[0x1BF:0x1CF], False)
+
+    contents = []
+    for i in range(struct.unpack_from(">H", tmd, 0x1DE)[0]):
+        record = 0x1E4 + 36 * i
+        index, _, size = struct.unpack_from(">HHQ", tmd, record + 4)
+        iv = struct.pack(">H", index) + bytes(14)
+        data = aes_cbc(title_key, iv, wad[offset:offset + _align(size, 16)], False)[:size]
+        offset = _align(offset + _align(size, 16))
+        contents.append([record, index, data])
+    if hashlib.sha1(contents[0][2]).digest() != bytes(tmd[contents[0][0] + 16:contents[0][0] + 36]):
+        raise ValueError("The key does not decrypt this WAD: use the Wii common key.")
+
+    by_index = {c[1]: c for c in contents}
+    c7 = bytearray(by_index[7][2])
+    patch_content7(c7)
+    by_index[7][2] = bytes(c7)
+    c1 = lz10_decode(by_index[1][2])
+    patch_content1(c1)
+    by_index[1][2] = lz10_encode(c1)
+    by_index[5][2] = u8_replace(by_index[5][2], "romc", struct.pack(">I", len(rom) << 2) + rom)
+
+    body = bytearray()
+    for record, index, data in contents:
+        struct.pack_into(">Q20s", tmd, record + 8, len(data), hashlib.sha1(data).digest())
+        padded = data + bytes(-len(data) % 16)
+        body += aes_cbc(title_key, struct.pack(">H", index) + bytes(14), padded, True)
+        body += bytes(-len(body) % 0x40)
+
+    out = bytearray(struct.pack(">I4sIIIIII", 0x20, b"Is\0\0", len(cert), 0, len(tik), len(tmd), len(body), 0))
+    for part in (cert, tik, bytes(tmd)):
+        out += bytes(-len(out) % 0x40) + part
+    out += bytes(-len(out) % 0x40) + body
+    out_path.write_bytes(out)
+
 def dolphin_user_dirs() -> list[Path]:
     candidates = []
     if os.name == "nt":
@@ -232,6 +338,21 @@ def run_setup(*args: str) -> None:
         rom = args[0] if args else Utils.open_filename("Choose your patched OoTMM ROM (Dolphin patch)",
                                                          [("N64 ROM", [".z64"])])
         if not rom:
+            return
+        key = args[2] if len(args) > 2 else Utils.open_filename(
+            "Optional: your Wii common key (keys.bin or the 16-byte key). Cancel to use the Wii Menu instead.",
+            [("Key", [".bin"])])
+        if key:
+            wad = args[3] if len(args) > 3 else Utils.open_filename(
+                "Choose your own Majora's Mask (USA) Virtual Console WAD", [("WAD", [".wad"])])
+            if not wad:
+                return
+            out = Path(rom).with_suffix(".wad")
+            build_wad(Path(rom), Path(wad), Path(key), out)
+            for user_dir in dolphin_user_dirs():
+                set_core_options(user_dir / "Config" / "Dolphin.ini", CORE_OPTIONS)
+            Utils.messagebox("OOTxMM Dolphin Setup", f"Done. In Dolphin, select File > Open and open\n{out}\n"
+                             "to play (not the Wii Menu), then open OOTxMM Dolphin Client.")
             return
         found = dolphin_user_dirs()
         user_dir = args[1] if len(args) > 1 else (found[0] if found else Utils.open_directory(

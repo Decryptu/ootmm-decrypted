@@ -29,7 +29,7 @@ import { Patchfile } from '../combo/patch-build/patchfile';
 import { makeAddresses } from '../combo/addresses';
 
 /* The world release this builder matches: archipelago.json's world_version (checked by test/test_patch_version.py) */
-const WORLD_VERSION = '0.0.5';
+const WORLD_VERSION = '0.0.6';
 
 /* Written by the world's generate_output (world.py) */
 type PlayerFile = {

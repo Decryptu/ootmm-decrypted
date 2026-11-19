@@ -69,16 +69,18 @@ To resume later, start in the same order: the server with the same seed (it keep
 
 ## Play on Dolphin
 
-**Experimental:** on Dolphin the game currently freezes on some item pickups (chests and shops). Use BizHawk for a run you want to finish.
+**Experimental:** Dolphin is less tested than BizHawk. Use BizHawk for a run you want to finish.
 
 Dolphin runs the game through Majora's Mask on the Wii Virtual Console. You need your own NTSC-U Virtual Console WAD (title `NARE`) and a patch the host built for Dolphin.
 
-1. Ask the host for your patch from the helper's `Dolphin` folder. The files next to that folder are for BizHawk and do not run on Dolphin. Dolphin never opens the `.z64` directly: step 4 puts it into the installed Majora's Mask.
+1. Ask the host for your patch from the helper's `Dolphin` folder. The files next to that folder are for BizHawk and do not run on Dolphin.
 2. Make your `.z64` from it as in [Build your ROM](#build-your-rom).
-3. In Dolphin, select **Tools → Install WAD to Wii Menu** and choose your Majora's Mask WAD.
-4. In the Archipelago launcher, type **Dolphin** in the search box and open **OOTxMM Dolphin Setup**. It comes with `ootxmm.apworld` v0.0.2 or newer; if it is missing, install the latest world package and restart the launcher. Then choose your `.z64`. It puts the ROM into the installed Majora's Mask and sets Dolphin's memory size for it. If it cannot find Dolphin, choose Dolphin's user folder (**File → Open User Folder** in Dolphin).
-5. Start the patched game from Dolphin's Wii Menu. Do not open the `.wad` file: that reinstalls the unpatched game and you would need to run step 4 again. The installed game does not appear in Dolphin's game list, and **Tools → Load Wii System Menu** stays greyed out until the Wii Menu is installed. Once only, select **Tools → Perform Online System Update → United States**. Then select **Tools → Load Wii System Menu** and open the Majora's Mask channel.
-6. In the Archipelago launcher, open **OOTxMM Dolphin Client** instead of the BizHawk Client and connect as in [Connect and play](#connect-and-play), steps 4 to 6. No Lua script is needed.
+3. In the Archipelago launcher, type **Dolphin** in the search box and open **OOTxMM Dolphin Setup** (comes with `ootxmm.apworld`). Choose your `.z64`.
+4. **With your Wii common key (recommended):** when Setup asks for the key, choose your own `keys.bin` (dumped from your Wii with BootMii) or the 16-byte common key, then your Majora's Mask WAD. Setup writes a patched `.wad` next to your `.z64`. In Dolphin, select **File → Open** and open that `.wad` each time you play. No Wii Menu or system update is needed.
+5. **Without the key:** select **Cancel** when Setup asks for it. First install your Majora's Mask WAD with **Tools → Install WAD to Wii Menu**; Setup then patches the installed game. Once only, select **Tools → Perform Online System Update → United States**. Start the game with **Tools → Load Wii System Menu** and the Majora's Mask channel. Never open the original `.wad` afterwards: it reinstalls the unpatched game.
+6. In the Archipelago launcher, open **OOTxMM Dolphin Client** (its log file is still named `BizHawkClient_….txt`) and connect as in [Connect and play](#connect-and-play), steps 4 to 6. No Lua script is needed.
+
+Setup also sets Dolphin's memory to 128 MiB in its global settings, which the patched game needs.
 
 Save in game as usual: saves reach Dolphin's NAND within seconds. To return to normal Majora's Mask, install the WAD again.
 
