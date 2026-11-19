@@ -171,6 +171,41 @@ def install(rom_path: Path, user_dir: Path) -> None:
     settings = user_dir / "GameSettings"
     settings.mkdir(exist_ok=True)
     (settings / GAME_SETTINGS).write_text(GAME_SETTINGS_TEXT, encoding="utf-8")
+    # Dolphin sizes memory once, for the title it boots. Players start the game from the Wii Menu, so the
+    # game's own settings above come too late: without the global override MEM2 stays at 64 MiB and the end
+    # of the ROM (Majora's Mask's data) reads as invalid memory.
+    set_core_options(user_dir / "Config" / "Dolphin.ini", CORE_OPTIONS)
+
+
+CORE_OPTIONS = {"RAMOverrideEnable": "True", "MEM1Size": "25165824", "MEM2Size": "134217728"}
+
+
+def set_core_options(path: Path, options: dict[str, str]) -> None:
+    """Set keys in the [Core] section of a Dolphin INI file, keeping every other line as it is."""
+    lines = path.read_text(encoding="utf-8").splitlines() if path.is_file() else []
+    section = None
+    core_end = None
+    pending = dict(options)
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        if stripped.startswith("[") and stripped.endswith("]"):
+            if section == "Core":
+                core_end = i
+            section = stripped[1:-1]
+            continue
+        if section == "Core" and "=" in stripped:
+            key = stripped.split("=", 1)[0].strip()
+            if key in pending:
+                lines[i] = f"{key} = {pending.pop(key)}"
+    if section == "Core" and core_end is None:
+        core_end = len(lines)
+    added = [f"{key} = {value}" for key, value in pending.items()]
+    if core_end is None:
+        lines += ["[Core]"] + added
+    else:
+        lines[core_end:core_end] = added
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def dolphin_user_dirs() -> list[Path]:
