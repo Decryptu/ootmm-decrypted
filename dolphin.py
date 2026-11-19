@@ -105,6 +105,11 @@ def patch_content1(dol: bytearray) -> None:
         0x88010068, 0x28000003, 0x4082011C, 0x7F23CB78, 0x7F45D378, 0x480000F8,
         0x88010068, 0x28000003, 0x4182FF68, 0x48000004])
     patch_words(dol, 0x80070248, [0x4182001C], [0x4182FEE4])
+    # GameCube controller: the D-pad was mapped to N64 L (Majora's Mask's map). Map it to the N64 D-pad, as the
+    # Classic Controller table does, for the randomizer's D-pad item shortcuts.
+    dpad = [0x08000000, 0x04000000, 0x02000000, 0x01000000]
+    patch_words(dol, 0x8014C414, [0x00200000] * 4, dpad)
+    patch_words(dol, 0x8014C46C, [0x00200000] * 4, dpad)
     # Saves: write the flash image to NAND whenever it changed, not at most once every 6 minutes.
     patch_words(dol, 0x8007E580, [0x41820034], [0x48000034])
 
