@@ -3,8 +3,8 @@
   const root = document.querySelector('#setup-wizard');
   if (!root) return;
   const key = 'ootxmm-setup-v1';
-  const state = {role: 'join', emulator: 'bizhawk', hosting: 'web', checked: {}};
-  const choices = {role: ['join', 'host', 'solo'], emulator: ['bizhawk', 'dolphin'], hosting: ['web', 'local']};
+  const state = {role: 'join', emulator: 'bizhawk', hosting: 'web', wiikey: 'key', checked: {}};
+  const choices = {role: ['join', 'host', 'solo'], emulator: ['bizhawk', 'dolphin'], hosting: ['web', 'local'], wiikey: ['key', 'nokey']};
   let storage = true;
   try {
     const saved = JSON.parse(localStorage.getItem(key));
@@ -37,17 +37,21 @@
     local: ['Start the server', 'In the Archipelago launcher, select <strong>Host</strong> and choose the <code>AP_….zip</code> from Archipelago’s <code>output</code> folder. Keep the window open. '+detail('start-the-server')+'.'],
     patch: ['Get your patch', 'Get your <code>.ootmm</code> file, the server address and any password from your organizer.'],
     rom: ['Make your ROM', 'On <a href="https://ootmm.com/gen/v33.0">OoTMM v33.0</a>, select your two ROMs, set <strong>Generator Mode → Patch</strong>, choose your <code>.ootmm</code> and select <strong>Generate</strong>. Never generate a normal seed there: it cannot connect.'],
-    wad: ['Put the ROM in Dolphin', 'In the Archipelago launcher, type <strong>Dolphin</strong> in the search box and open <strong>OOTxMM Dolphin Setup</strong>. Choose your <code>.z64</code> from the host’s <code>Dolphin</code> folder. <strong>Recommended:</strong> when it asks for the Wii common key, choose your own <code>keys.bin</code> or 16-byte key, then your Majora’s Mask WAD: it writes a patched <code>.wad</code> next to the ROM. Without a key, select Cancel and use the Wii Menu (next step). '+detail('play-on-dolphin')+'.'],
+    keywad: ['Make your Dolphin game', 'In the Archipelago launcher, type <strong>Dolphin</strong> in the search box and open <strong>OOTxMM Dolphin Setup</strong>. Choose your <code>.z64</code> from the host’s <code>Dolphin</code> folder (not the BizHawk one). When it asks for the key, choose your <code>keys.bin</code> or 16-byte key, then your own Majora’s Mask WAD. It writes a patched <code>.wad</code> next to your <code>.z64</code>.'],
+    keyplay: ['Start the game', 'In Dolphin, select <strong>File → Open</strong> and open the patched <code>.wad</code> next to your <code>.z64</code> (not your original WAD). Do this each time you play. Load a save file.'],
+    menuwad: ['Install Majora’s Mask', 'In Dolphin, select <strong>Tools → Install WAD to Wii Menu</strong> and choose your own Majora’s Mask WAD.'],
+    wad: ['Patch the installed game', 'In the Archipelago launcher, type <strong>Dolphin</strong> in the search box and open <strong>OOTxMM Dolphin Setup</strong>. Choose your <code>.z64</code> from the host’s <code>Dolphin</code> folder (not the BizHawk one). When it asks for the key, select <strong>Cancel</strong>.'],
+    menuplay: ['Start the game', 'Once only: <strong>Tools → Perform Online System Update → United States</strong>. Then <strong>Tools → Load Wii System Menu</strong> and open the Majora’s Mask channel. Never open your original <code>.wad</code> afterwards: that reinstalls the unpatched game. Load a save file.'],
     lua: ['Start BizHawk', 'Open your <code>.z64</code> in BizHawk. In <strong>Tools → Lua Console</strong>, open <code>data/lua/connector_bizhawk_generic.lua</code> from your Archipelago folder.'],
     client: ['Connect', 'In the Archipelago launcher, open <strong>BizHawk Client</strong>. Enter the server address and port, select <strong>Connect</strong>, then enter your name.'],
-    dclient: ['Connect', 'With the key: in Dolphin, <strong>File → Open</strong> the patched <code>.wad</code>. Without it: install your Majora’s Mask WAD (<strong>Tools → Install WAD to Wii Menu</strong>) before Setup; once, <strong>Tools → Perform Online System Update → United States</strong>; then <strong>Tools → Load Wii System Menu</strong> and the Majora’s Mask channel. Load a save, then in the Archipelago launcher open <strong>OOTxMM Dolphin Client</strong>, enter the server address and port, select <strong>Connect</strong> and enter your name.'],
+    dclient: ['Connect', 'In the Archipelago launcher, open <strong>OOTxMM Dolphin Client</strong>. Enter the server address and port, select <strong>Connect</strong>, then enter your name. Its log should show <code>Connected to the game</code>.'],
     play: ['Play', 'Load a save file. Items arrive once you are in game. Save in game to keep your progress. '+detail('troubleshooting', 'Problems?')]
   };
   function ids() {
     const dolphin = state.emulator === 'dolphin';
     return ['install', dolphin ? 'dolphin' : 'bizhawk', 'world', ...(state.role === 'join'
       ? ['yaml', 'patch']
-      : ['ownyaml', 'generate', 'build', state.hosting]), ...(state.role === 'join' ? ['rom'] : []), ...(dolphin ? ['wad', 'dclient'] : ['lua', 'client']), 'play'];
+      : ['ownyaml', 'generate', 'build', state.hosting]), ...(state.role === 'join' ? ['rom'] : []), ...(dolphin ? (state.wiikey === 'key' ? ['keywad', 'keyplay', 'dclient'] : ['menuwad', 'wad', 'menuplay', 'dclient']) : ['lua', 'client']), 'play'];
   }
   function progress() {
     const active = ids();
@@ -60,6 +64,7 @@
   }
   function render() {
     document.querySelector('#setup-hosting').hidden = state.role === 'join';
+    document.querySelector('#setup-wiikey').hidden = state.emulator !== 'dolphin';
     document.querySelector('#setup-steps').innerHTML = ids().map((id, i) => `<li><label class="setup-step-title"><input type="checkbox" data-step="${id}" ${state.checked[id] ? 'checked' : ''}><span><small>STEP ${i + 1}</small><strong>${steps[id][0]}</strong></span></label><div class="setup-step-body"><p>${steps[id][1]}</p></div></li>`).join('');
     progress();
   }

@@ -12,7 +12,13 @@
   <fieldset><legend>2. Which emulator?</legend>
     <div class="setup-choices">
       <label><input type="radio" name="emulator" value="bizhawk" checked><span><strong>BizHawk</strong><small>Plays the N64 ROM.</small></span></label>
-      <label><input type="radio" name="emulator" value="dolphin"><span><strong>Dolphin (experimental)</strong><small>Freezes on some item pickups for now. Use BizHawk for a real run. Needs your own Majora’s Mask Wii Virtual Console WAD.</small></span></label>
+      <label><input type="radio" name="emulator" value="dolphin"><span><strong>Dolphin (experimental)</strong><small>Less tested than BizHawk. Needs your own Majora’s Mask Wii Virtual Console WAD.</small></span></label>
+    </div>
+  </fieldset>
+  <fieldset id="setup-wiikey" hidden><legend>Do you have the Wii common key?</legend>
+    <div class="setup-choices">
+      <label><input type="radio" name="wiikey" value="key" checked><span><strong>Yes, I have it</strong><small>A <code>keys.bin</code> dumped from a Wii, or the 16-byte common key. Simplest: no Wii Menu.</small></span></label>
+      <label><input type="radio" name="wiikey" value="nokey"><span><strong>No</strong><small>The game is started from Dolphin’s Wii Menu instead.</small></span></label>
     </div>
   </fieldset>
   <fieldset id="setup-hosting" hidden><legend>3. Where does the server run?</legend>
