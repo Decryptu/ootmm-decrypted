@@ -37,7 +37,7 @@
     local: ['Start the server', 'In the Archipelago launcher, select <strong>Host</strong> and choose the generated ZIP. Keep the window open. '+detail('start-the-server')+'.'],
     patch: ['Get your patch', 'Get your <code>.ootmm</code> file, the server address and any password from your organizer.'],
     rom: ['Make your ROM', 'On <a href="https://ootmm.com/gen/v33.0">OoTMM v33.0</a>, select your two ROMs, set <strong>Generator Mode → Patch</strong>, choose your <code>.ootmm</code> and select <strong>Generate</strong>. Never generate a normal seed there: it cannot connect.'],
-    wad: ['Put the ROM in Dolphin', 'In the Archipelago launcher, open <strong>OOTxMM Dolphin Setup</strong> and choose your <code>.z64</code>.'],
+    wad: ['Put the ROM in Dolphin', 'In the Archipelago launcher, open <strong>OOTxMM Dolphin Setup</strong> and choose your <code>.z64</code>. Use the one inside the host’s <code>Dolphin</code> folder: the one next to that folder is for BizHawk. Dolphin never opens the <code>.z64</code> directly; start Majora’s Mask from its game list.'],
     lua: ['Start BizHawk', 'Open your <code>.z64</code> in BizHawk. In <strong>Tools → Lua Console</strong>, open <code>data/lua/connector_bizhawk_generic.lua</code> from your Archipelago folder.'],
     client: ['Connect', 'In the Archipelago launcher, open <strong>BizHawk Client</strong>. Enter the server address and port, select <strong>Connect</strong>, then enter your name.'],
     dclient: ['Connect', 'Start Majora’s Mask in Dolphin. In the Archipelago launcher, open <strong>OOTxMM Dolphin Client</strong>. Enter the server address and port, select <strong>Connect</strong>, then enter your name.'],

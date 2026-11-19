@@ -71,7 +71,7 @@ To resume later, start in the same order: the server with the same seed (it keep
 
 Dolphin runs the game through Majora's Mask on the Wii Virtual Console. You need your own NTSC-U Virtual Console WAD (title `NARE`) and a patch the host built for Dolphin.
 
-1. Ask the host for your patch from the helper's `Dolphin` folder. A BizHawk patch does not run on Dolphin.
+1. Ask the host for your patch from the helper's `Dolphin` folder. The files next to that folder are for BizHawk and do not run on Dolphin. Dolphin never opens the `.z64` directly: step 4 puts it into the installed Majora's Mask.
 2. Make your `.z64` from it as in [Build your ROM](#build-your-rom).
 3. In Dolphin, select **Tools → Install WAD to Wii Menu** and choose your Majora's Mask WAD.
 4. In the Archipelago launcher, open **OOTxMM Dolphin Setup** and choose your `.z64`. It puts the ROM into the installed Majora's Mask and sets Dolphin's memory size for it. If it cannot find Dolphin, choose Dolphin's user folder (**File → Open User Folder** in Dolphin).
