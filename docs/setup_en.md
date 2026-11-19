@@ -11,7 +11,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 1. Each player sends a YAML to the host.
 2. The host runs **Generate** in Archipelago. This makes the seed, but no ROM.
 3. The host builds one `.ootmm` patch per player from that seed ([Host preparation](#host-preparation)).
-4. Each player applies their patch on the OoTMM website in **Patch** mode and gets a `.z64` ROM.
+4. Each player applies their patch on the OoTMM website in **Patch** mode and gets a `.z64` ROM. The host can skip this for their own slot: the host build already made their `.z64`. ROMs are not shared, so other players get only their `.ootmm`.
 5. The host starts the server with the same seed.
 6. Each player opens their ROM in BizHawk (or Dolphin), starts the client, then connects.
 
