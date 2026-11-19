@@ -374,6 +374,41 @@ class Bridge:
         import dolphin_memory_engine
         self.dolphin = dolphin_memory_engine
         self.header: bytes | None = None
+        self.rdram_base = RDRAM_BASE
+        self.base_found = False
+        self.next_locate = 0.0
+
+    def locate_rdram(self) -> None:
+        """Find where the emulated N64 RAM sits in MEM1: at the live mailbox, minus its RDRAM address.
+
+        The Virtual Console allocates N64 RAM at runtime; RDRAM_BASE is where it was in testing, but the place can
+        differ between setups. The ROM header lists both games' mailbox addresses, and the live mailbox's alive
+        counter moves in gameplay, which rules out copies of the magic string.
+        """
+        if self.base_found or time.monotonic() < self.next_locate or self.header[0x18:0x20] != b"APIPC001":
+            return
+        self.next_locate = time.monotonic() + 2
+        addresses = [int.from_bytes(self.header[o:o + 3], "big") for o in (0x34, 0x37)]
+        mem_base, mem_size = MEM1
+        data = self.dolphin.read_bytes(mem_base, mem_size)
+        candidates = []
+        index = data.find(b"OoTMM-IPC-RAM-1\0")
+        while index != -1:
+            for address in addresses:
+                base = mem_base + index - address
+                if index % 16 == 0 and base >= mem_base and base + RDRAM_SIZE <= mem_base + mem_size:
+                    candidates.append((base, mem_base + index))
+            index = data.find(b"OoTMM-IPC-RAM-1\0", index + 1)
+        if not candidates:
+            return
+        before = [self.dolphin.read_bytes(mailbox + 20, 4) for _, mailbox in candidates]
+        time.sleep(0.2)
+        for (base, mailbox), alive in zip(candidates, before):
+            if self.dolphin.read_bytes(mailbox + 20, 4) != alive:
+                logger.info(f"Dolphin: N64 memory found at {base:#x}")
+                self.rdram_base = base
+                self.base_found = True
+                return
 
     def ready(self) -> bool:
         if not self.dolphin.is_hooked():
@@ -382,6 +417,7 @@ class Bridge:
             if not self.dolphin.is_hooked():
                 return False
         if self.header is None:
+            self.base_found = False
             try:
                 self.header = self.find_header()
             except RuntimeError:  # hooked to Dolphin with no game running
@@ -407,7 +443,8 @@ class Bridge:
             return self.header[address:address + size]
         if domain != "RDRAM" or address < 0 or address + size > RDRAM_SIZE:
             raise ValueError(f"Cannot read {domain} {address:#x}+{size:#x} on Dolphin")
-        return self.dolphin.read_bytes(RDRAM_BASE + address, size)
+        self.locate_rdram()
+        return self.dolphin.read_bytes(self.rdram_base + address, size)
 
     def handle(self, req: dict) -> dict:
         kind = req["type"]
@@ -436,7 +473,7 @@ class Bridge:
             data = base64.b64decode(req["value"])
             if req["domain"] != "RDRAM" or req["address"] < 0 or req["address"] + len(data) > RDRAM_SIZE:
                 raise ValueError(f"Cannot write {req['domain']} {req['address']:#x} on Dolphin")
-            self.dolphin.write_bytes(RDRAM_BASE + req["address"], data)
+            self.dolphin.write_bytes(self.rdram_base + req["address"], data)
             return {"type": "WRITE_RESPONSE"}
         if kind == "DISPLAY_MESSAGE":
             return {"type": "DISPLAY_MESSAGE_RESPONSE"}
