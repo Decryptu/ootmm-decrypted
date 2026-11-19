@@ -5,11 +5,11 @@ What is in progress and planned. Finished work is not listed: git history has it
 ## Goal
 A world a group can play a full multiworld with: generation in Archipelago, a patched OoTMM ROM per player, and a client that sends and receives items in game.
 
-## Planned, in order
+## In progress
 
 | Item | Notes |
 |---|---|
-| Dolphin + Virtual Console (to evaluate, after the alpha) | Players asked for Dolphin with a `.wad`, which gives better picture, latency and audio sync than BizHawk's N64 core. Needs a client on `dolphin-memory-engine` (as Archipelago's existing Dolphin worlds use) instead of the BizHawk connector, finding the IPC mailbox in the VC emulator's RAM by its magic, checking OoTMM runs correctly under the VC emulator, and a player guide for building the WAD from the patched ROM. Project64 would need a new connector too and is not planned |
+| Dolphin + Virtual Console | Supported as an alternative to BizHawk: the host helper builds Dolphin patches, and OOTxMM Dolphin Setup and Client in the launcher install the ROM and connect. Item delivery in both games and game switching work. The pause screen background is wrong on the Virtual Console. Next: a full multiworld session on Dolphin. |
 
 The hub lists every changed setting it cannot import. Newly ported settings can be imported once they are in `options.py`.
 

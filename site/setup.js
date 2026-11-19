@@ -3,14 +3,14 @@
   const root = document.querySelector('#setup-wizard');
   if (!root) return;
   const key = 'ootxmm-setup-v1';
-  const state = {role: 'join', hosting: 'web', checked: {}};
+  const state = {role: 'join', emulator: 'bizhawk', hosting: 'web', checked: {}};
+  const choices = {role: ['join', 'host', 'solo'], emulator: ['bizhawk', 'dolphin'], hosting: ['web', 'local']};
   let storage = true;
   try {
     const saved = JSON.parse(localStorage.getItem(key));
     if (saved && typeof saved === 'object') {
-      for (const name of ['role', 'hosting']) {
-        const allowed = {role: ['join', 'host', 'solo'], hosting: ['web', 'local']};
-        if (allowed[name].includes(saved[name])) state[name] = saved[name];
+      for (const name of Object.keys(choices)) {
+        if (choices[name].includes(saved[name])) state[name] = saved[name];
       }
       if (saved.checked && typeof saved.checked === 'object') {
         for (const [id, value] of Object.entries(saved.checked)) if (value === true) state.checked[id] = true;
@@ -19,30 +19,35 @@
   } catch { storage = false; }
   function save() {
     try { localStorage.setItem(key, JSON.stringify(state)); } catch { storage = false; }
-    document.querySelector('#setup-storage').textContent = storage
-      ? 'Checkmarks are saved only in this browser. You can leave and come back.'
-      : 'Browser storage is unavailable. Your checklist still works while this page stays open.';
+    const note = document.querySelector('#setup-storage');
+    note.textContent = 'Checkmarks cannot be saved in this browser.';
+    note.hidden = storage;
   }
-  const detail = (anchor, label = 'Detailed instructions') => `<a href="#${anchor}" data-reference>${label}</a>`;
+  const detail = (anchor, label = 'Details') => `<a href="#${anchor}" data-reference>${label}</a>`;
   const steps = {
-    install: ['Get the essentials', 'Install <a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/0.6.8">Archipelago 0.6.8</a> and <a href="https://github.com/TASEmulators/BizHawk/releases/tag/2.11.1">BizHawk 2.11.1</a>. Have your own Ocarina of Time 1.0 NTSC-U and Majora’s Mask NTSC-U ROMs ready. ROMs are not included.'],
-    world: ['Install the matching world package', 'Get <a href="./#world-package">ootxmm.apworld from the player hub</a>. Put it in Archipelago’s <code>custom_worlds</code> folder, then restart the launcher. Everyone must use the same build.'],
-    yaml: ['Choose your settings', 'Make a <a href="./#settings">player file on the hub</a>. This downloads a YAML: a small file with your name and game settings. Pick a unique name and keep it; you’ll use it to connect. Send the file to your organizer.'],
-    ownyaml: ['Choose everyone’s settings', 'Make your own <a href="./#settings">player YAML on the hub</a> and collect one from each player. A YAML is a small settings file, not a game. Each player name must be unique. Playing solo? You only need your own.'],
-    generate: ['Create the game in Archipelago', 'Put the YAML files in Archipelago’s <code>Players</code> folder, then select <strong>Generate</strong> in its launcher. Extract the ZIP in <code>output</code> into a dedicated seed folder. A “seed” is this particular game’s item layout. This does not make playable ROMs yet.'],
-    build: ['Build a patch for each player', 'On Windows, the host helper checks WSL and lets you select your seed folder and original ROMs; no Linux paths to type. Use the helper bundled with your matching release, when available. macOS/Linux use Docker. Follow '+detail('host-preparation', 'the host build instructions and commands')+'. Check the build succeeds, then give each player their <code>.ootmm</code> file. Keep the generated server file for the next step. Never send ROMs.'],
-    web: ['Start a room on archipelago.gg', 'Open <a href="https://archipelago.gg/uploads">Host Game</a> and upload the generated seed ZIP (not your ROMs or repository). On the seed page, select <strong>Create Room</strong>. Share the room link, address and port with the players. Save the room link: reopen it to wake an idle room, and check its current port. Patches still come from your local build.'],
-    local: ['Start the server on your computer', 'Select <strong>Host</strong> in the Archipelago launcher and choose the seed ZIP or its <code>.archipelago</code> file. Keep the server window open. On this computer, connect to <code>localhost:38281</code>. Remote friends need your public address and port forwarding: '+detail('start-the-server', 'see server setup')+'. Keep the server save and reuse the same seed to resume.'],
-    patch: ['Get your patch and connection details', 'Ask your organizer for your <code>.ootmm</code> patch, your exact slot name, the server address and port, and any password. A slot is your place in the group’s game. Wait for these before continuing.'],
-    rom: ['Turn your patch into a playable ROM', 'Open <a href="https://ootmm.com/gen/v33.0">OoTMM v33.0</a>, select your two original ROMs, and set <strong>Generator Mode → Patch</strong>. Choose your <code>.ootmm</code> file, then <strong>Generate → Download</strong>. Extract the <code>.z64</code> if needed. Do not generate a new random game on the website: it would not connect to Archipelago. '+detail('build-your-rom')+'.'],
-    lua: ['Open BizHawk and load the connector', 'Open the patched <code>.z64</code> in BizHawk. Go to <strong>Tools → Lua Console → Script → Open Script</strong>. In your <em>Archipelago installation</em>, choose <code>data/lua/connector_bizhawk_generic.lua</code>. Leave the script running. '+detail('connect-and-play', 'Where to find the script')+'.'],
-    client: ['Connect your game', 'In the Archipelago launcher, open <strong>BizHawk Client</strong>. Look for <code>Connected to BizHawk</code> and <code>Running handler for OOTxMM</code>. Enter just the server address and port in <strong>Server</strong> (for example <code>archipelago.gg:12345</code>). Select <strong>Connect</strong>, then enter your exact slot name and any password when asked.'],
-    play: ['Start playing and check your first item', 'Start a new save and enter gameplay; the connection only becomes active after file select. Open your first chest or collect an item and check that the client logs it. Keep the client, Lua script and server connected. Use in-game saves to keep your progress. '+detail('troubleshooting', 'Something not working?')+'.']
+    install: ['Install Archipelago', 'Install <a href="https://github.com/ArchipelagoMW/Archipelago/releases/tag/0.6.8">Archipelago 0.6.8</a>. Have your own Ocarina of Time 1.0 NTSC-U and Majora’s Mask NTSC-U ROMs.'],
+    bizhawk: ['Install BizHawk', 'Install <a href="https://github.com/TASEmulators/BizHawk/releases/tag/2.11.1">BizHawk 2.11.1</a>.'],
+    dolphin: ['Install Dolphin', 'Install <a href="https://dolphin-emu.org/download/">Dolphin</a>. Select <strong>Tools → Install WAD to Wii Menu</strong> and choose your own Majora’s Mask NTSC-U Virtual Console WAD.'],
+    world: ['Install the world', 'Download <a href="./#world-package">ootxmm.apworld</a> into Archipelago’s <code>custom_worlds</code> folder, then restart the launcher.'],
+    yaml: ['Make your player file', 'Make a <a href="./#settings">YAML on the hub</a> and send it to your organizer. You connect with the name you choose.'],
+    ownyaml: ['Collect player files', 'Make your <a href="./#settings">YAML on the hub</a> and collect one from each player. Names must be unique.'],
+    generate: ['Generate the game', 'Put the YAMLs in Archipelago’s <code>Players</code> folder and select <strong>Generate</strong>. Extract the ZIP from <code>output</code> into a new folder.'],
+    build: ['Build the patches', 'Run <strong>Host Setup.cmd</strong> from the release’s host ZIP. Select that folder and your ROMs. Answer <strong>Yes</strong> if anyone plays on Dolphin. Send each player their <code>.ootmm</code> file; Dolphin players get theirs from the <code>Dolphin</code> folder. Never send ROMs. '+detail('host-preparation')+'.'],
+    web: ['Start the server', 'Upload the generated ZIP on <a href="https://archipelago.gg/uploads">archipelago.gg</a> and select <strong>Create Room</strong>. Share the address and port.'],
+    local: ['Start the server', 'In the Archipelago launcher, select <strong>Host</strong> and choose the generated ZIP. Keep the window open. '+detail('start-the-server')+'.'],
+    patch: ['Get your patch', 'Get your <code>.ootmm</code> file, the server address and any password from your organizer.'],
+    rom: ['Make your ROM', 'On <a href="https://ootmm.com/gen/v33.0">OoTMM v33.0</a>, select your two ROMs, set <strong>Generator Mode → Patch</strong>, choose your <code>.ootmm</code> and select <strong>Generate</strong>. Never generate a normal seed there: it cannot connect.'],
+    wad: ['Put the ROM in Dolphin', 'In the Archipelago launcher, open <strong>OOTxMM Dolphin Setup</strong> and choose your <code>.z64</code>.'],
+    lua: ['Start BizHawk', 'Open your <code>.z64</code> in BizHawk. In <strong>Tools → Lua Console</strong>, open <code>data/lua/connector_bizhawk_generic.lua</code> from your Archipelago folder.'],
+    client: ['Connect', 'In the Archipelago launcher, open <strong>BizHawk Client</strong>. Enter the server address and port, select <strong>Connect</strong>, then enter your name.'],
+    dclient: ['Connect', 'Start Majora’s Mask in Dolphin. In the Archipelago launcher, open <strong>OOTxMM Dolphin Client</strong>. Enter the server address and port, select <strong>Connect</strong>, then enter your name.'],
+    play: ['Play', 'Load a save file. Items arrive once you are in game. Save in game to keep your progress. '+detail('troubleshooting', 'Problems?')]
   };
   function ids() {
-    return ['install', 'world', ...(state.role === 'join'
+    const dolphin = state.emulator === 'dolphin';
+    return ['install', dolphin ? 'dolphin' : 'bizhawk', 'world', ...(state.role === 'join'
       ? ['yaml', 'patch']
-      : ['ownyaml', 'generate', 'build', state.hosting]), 'rom', 'lua', 'client', 'play'];
+      : ['ownyaml', 'generate', 'build', state.hosting]), 'rom', ...(dolphin ? ['wad', 'dclient'] : ['lua', 'client']), 'play'];
   }
   function progress() {
     const active = ids();
@@ -55,9 +60,6 @@
   }
   function render() {
     document.querySelector('#setup-hosting').hidden = state.role === 'join';
-    document.querySelector('#setup-path').textContent = state.role === 'join'
-      ? 'Your organizer handles game preparation and the server.'
-      : `${state.role === 'solo' ? 'Playing solo: you are both organizer and player.' : 'Organizing a group: prepare the game, then follow the player steps too.'} Server: ${state.hosting === 'web' ? 'archipelago.gg' : 'your computer'}.`;
     document.querySelector('#setup-steps').innerHTML = ids().map((id, i) => `<li><label class="setup-step-title"><input type="checkbox" data-step="${id}" ${state.checked[id] ? 'checked' : ''}><span><small>STEP ${i + 1}</small><strong>${steps[id][0]}</strong></span></label><div class="setup-step-body"><p>${steps[id][1]}</p></div></li>`).join('');
     progress();
   }
@@ -76,7 +78,7 @@
     if (event.target.closest('[data-reference]')) reference.open = true;
   });
   window.addEventListener('hashchange', openReference);
-  for (const name of ['role', 'hosting']) root.querySelector(`input[name="${name}"][value="${state[name]}"]`).checked = true;
+  for (const name of Object.keys(choices)) root.querySelector(`input[name="${name}"][value="${state[name]}"]`).checked = true;
   render();
   save();
   root.hidden = false;

@@ -6,8 +6,8 @@ set -eu
 
 REPO="$1"
 shift
-if [ "${1:-}" = "--patch-seed" ] && [ "$#" -ne 5 ]; then
-  echo "Expected seed, OoT ROM, MM ROM and output paths" >&2
+if [ "${1:-}" = "--patch-seed" ] && [ "$#" -ne 5 ] && { [ "$#" -ne 6 ] || [ "$6" != dolphin ]; }; then
+  echo "Expected seed, OoT ROM, MM ROM and output paths, then optionally: dolphin" >&2
   exit 1
 fi
 OOTMM_TAG=v33.0
@@ -34,6 +34,10 @@ for patch in "$REPO"/ootmm-patches/*.patch; do
   [ -e "$patch" ] || continue
   git apply "$patch"
 done
+# Dolphin (Wii Virtual Console) players need their own build: see docs/dolphin_evaluation.md.
+if [ "${1:-}" = "--patch-seed" ] && [ "${6:-}" = dolphin ]; then
+  git apply "$REPO"/ootmm-patches/experimental/dolphin-vc.patch
+fi
 # Our scripts that run on OoTMM's generator (ootmm-ap/), such as the ROM patch.
 mkdir -p packages/generator/lib/ap
 cp "$REPO"/ootmm-ap/* packages/generator/lib/ap/

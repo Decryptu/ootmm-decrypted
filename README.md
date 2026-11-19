@@ -18,6 +18,7 @@ Start at the [player hub](https://decryptu.github.io/ootmm-decrypted/) for the l
 
 - Archipelago 0.6.8, the tested version.
 - Your own ROMs: Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U (`.z64`, the versions OoTMM accepts). They are never part of this repository.
+- BizHawk 2.11.1, or Dolphin with your own Majora's Mask NTSC-U Wii Virtual Console WAD.
 
 ## Working on it
 

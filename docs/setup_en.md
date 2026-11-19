@@ -13,7 +13,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 3. The host builds one `.ootmm` patch per player from that seed ([Host preparation](#host-preparation)).
 4. Each player applies their patch on the OoTMM website in **Patch** mode and gets a `.z64` ROM.
 5. The host starts the server with the same seed.
-6. Each player opens their ROM in BizHawk, starts the Lua connector and the BizHawk Client, then connects.
+6. Each player opens their ROM in BizHawk (or Dolphin), starts the client, then connects.
 
 > **Do not generate a seed on ootmm.com.** A ROM from the website's normal generator is an ordinary OoTMM randomizer. It cannot talk to Archipelago and has a different item layout. The BizHawk Client still says it is running the OOTxMM handler for such a ROM, but no item is ever sent or received. Only use the website's **Patch** mode with a `.ootmm` file built from your Archipelago seed.
 
@@ -23,7 +23,7 @@ Each step depends on the one before it. Doing them out of order is the most comm
 
 - Archipelago 0.6.8, the version this world is tested against.
 - The group's matching `ootxmm.apworld`, installed in Archipelago's `custom_worlds` folder. Restart the launcher afterward.
-- BizHawk 2.11.1.
+- BizHawk 2.11.1, or Dolphin with your own Majora's Mask NTSC-U Wii Virtual Console WAD ([Play on Dolphin](#play-on-dolphin)).
 - Your own Ocarina of Time 1.0 NTSC-U and Majora's Mask NTSC-U ROMs.
 - Your slot's `.ootmm` patch from the host, plus the server address, port, slot name and password if set.
 
@@ -67,6 +67,19 @@ Keep the client connected during play. If the server connection drops during a p
 
 To resume later, start in the same order: the server with the same seed (it keeps its save), BizHawk with the same ROM and the Lua script, then the client.
 
+## Play on Dolphin
+
+Dolphin runs the game through Majora's Mask on the Wii Virtual Console. You need your own NTSC-U Virtual Console WAD (title `NARE`) and a patch the host built for Dolphin.
+
+1. Ask the host for your patch from the helper's `Dolphin` folder. A BizHawk patch does not run on Dolphin.
+2. Make your `.z64` from it as in [Build your ROM](#build-your-rom).
+3. In Dolphin, select **Tools → Install WAD to Wii Menu** and choose your Majora's Mask WAD.
+4. In the Archipelago launcher, open **OOTxMM Dolphin Setup** and choose your `.z64`. It puts the ROM into the installed Majora's Mask and sets Dolphin's memory size for it. If it cannot find Dolphin, choose Dolphin's user folder (**File → Open User Folder** in Dolphin).
+5. Start **The Legend of Zelda: Majora's Mask** from Dolphin's game list.
+6. In the Archipelago launcher, open **OOTxMM Dolphin Client** instead of the BizHawk Client and connect as in [Connect and play](#connect-and-play), steps 4 to 6. No Lua script is needed.
+
+Save in game as usual: saves reach Dolphin's NAND within seconds. To return to normal Majora's Mask, install the WAD again.
+
 ### BizHawk settings
 
 The default N64 settings can add input lag and audio delay. In BizHawk:
@@ -84,7 +97,8 @@ The default N64 settings can add input lag and audio delay. In BizHawk:
 | `Invalid Slot; please verify that you have connected to the correct world` | The server has no slot with that name. Check the name against the YAML (case-sensitive) and check the address and port. If the log lists data packages for games nobody in your group plays, you are connected to someone else's room: get the current address from the host. |
 | Connected to the server, but no item is sent or received | The ROM was not built from this seed's `.ootmm` patch, for example a seed generated directly on ootmm.com, or a patch from an older seed. Rebuild the ROM in Patch mode with the current patch. The client log warns when no mailbox exists in the game's memory. |
 | The client waits for the mailbox | Enter gameplay: the mailbox is inactive on the title screen and file select. |
-| `Waiting to connect to BizHawk` | Load the Lua script again in BizHawk's Lua Console. |
+| `Waiting to connect to BizHawk` | Load the Lua script again in BizHawk's Lua Console. On Dolphin, start the game in Dolphin; the Dolphin Client connects once it runs. |
+| Dolphin shows a black screen | The ROM was built from a BizHawk patch. Use the patch from the host's `Dolphin` folder. |
 | A room on archipelago.gg stops answering | Rooms sleep when idle and may get a new port when they wake. Open the room's page to wake it, then use the port it shows. |
 
 ## Host preparation
@@ -101,7 +115,7 @@ Windows hosts can use the host helper below. It needs WSL with Ubuntu 24.04, but
    ```
 
    Restart if requested, then open **Ubuntu 24.04** from Start and finish its username/password setup. Run **Host Setup.cmd** again as your normal user. See [Microsoft's WSL installation guide](https://learn.microsoft.com/windows/wsl/install) if Windows reports an installation error.
-3. After generating your Archipelago game as described below, select its extracted seed folder in the helper, then your original OoT and MM ROMs. Use files on local Windows drives. The helper converts paths automatically and downloads/builds the toolchain on first use; keep its window open.
+3. After generating your Archipelago game as described below, select its extracted seed folder in the helper, then your original OoT and MM ROMs. Answer **Yes** when it asks whether anyone plays on Dolphin: it then also builds Dolphin patches into a `Dolphin` folder. Use files on local Windows drives. The helper converts paths automatically and downloads/builds the toolchain on first use; keep its window open.
 4. On success it opens a new `patches-...` folder inside the seed folder. Send each player their `.ootmm` file. Keep the generated `.z64` ROMs and `.build.json` receipts private. If the build fails, the window stays open with the error; rerun the helper after fixing it. Each attempt uses a new output folder, so partial output is never mixed with a later run.
 
 If double-clicking is unavailable, open Windows PowerShell in the extracted helper folder and paste:
