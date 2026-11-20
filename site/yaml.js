@@ -124,6 +124,7 @@ if (typeof document !== "undefined") {
       const input = document.createElement("input");
       input.type = "checkbox";
       input.checked = initial;
+      input.dataset.key = key;
       label.append(input, ` ${COSMETIC_LABELS[key] ?? key}`);
       cosmeticInputs[key] = () => input.checked;
       nodes.push(label);
@@ -134,14 +135,42 @@ if (typeof document !== "undefined") {
       for (const [value, text] of [["default", "Default"], ["random", "Random"], ...Object.entries(cosmetics.colorNames)]) {
         select.append(new Option(text, value));
       }
+      select.dataset.key = key;
       label.append(`${COSMETIC_LABELS[key] ?? key} `, select);
       cosmeticInputs[key] = () => select.value;
       nodes.push(label);
     }
     fields.replaceChildren(...nodes);
+    restoreForm();
   }).catch((error) => {
     document.getElementById("cosmetics-fields").textContent = error.message;
   });
+
+  const FORM_KEY = "ootxmm-yaml-form";
+  const form = document.getElementById("yaml-form");
+  function formFields() {
+    return [document.getElementById("player"), document.getElementById("goal"),
+      ...document.querySelectorAll("#cosmetics-fields [data-key]")];
+  }
+  function fieldKey(field) { return field.dataset.key ?? field.id; }
+  function saveForm() {
+    const data = {};
+    for (const field of formFields()) data[fieldKey(field)] = field.type === "checkbox" ? field.checked : field.value;
+    try { localStorage.setItem(FORM_KEY, JSON.stringify(data)); } catch { /* storage unavailable */ }
+  }
+  function restoreForm() {
+    let data;
+    try { data = JSON.parse(localStorage.getItem(FORM_KEY)); } catch { return; }
+    if (!data || typeof data !== "object") return;
+    for (const field of formFields()) {
+      const value = data[fieldKey(field)];
+      if (field.type === "checkbox") { if (typeof value === "boolean") field.checked = value; }
+      else if (typeof value === "string" && (field.tagName !== "SELECT" || [...field.options].some((o) => o.value === value))) field.value = value;
+    }
+  }
+  restoreForm();
+  form.addEventListener("input", saveForm);
+  form.addEventListener("change", saveForm);
 
   document.getElementById("yaml-form").addEventListener("submit", async (event) => {
     event.preventDefault();
