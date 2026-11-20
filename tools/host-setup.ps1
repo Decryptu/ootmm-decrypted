@@ -1,8 +1,13 @@
 # Windows PowerShell 5.1; no PowerShell 7 installation required.
 [CmdletBinding()]
-param([string]$SeedFolder, [string]$OotRom, [string]$MmRom, [switch]$Dolphin, [switch]$CheckOnly)
+param([string]$SeedFolder, [string]$OotRom, [string]$MmRom, [switch]$Dolphin, [switch]$CheckOnly, [switch]$AnyWorldVersion)
 $ErrorActionPreference = 'Stop'
 $env:WSL_UTF8 = '1'
+if ($AnyWorldVersion) {
+    # Emergency rebuild of a running game's seed with newer host tools: the builder skips its world version check.
+    $env:OOTXMM_ANY_WORLD_VERSION = '1'
+    $env:WSLENV = (@($env:WSLENV, 'OOTXMM_ANY_WORLD_VERSION') | Where-Object { $_ }) -join ':'
+}
 $repo = Split-Path $PSScriptRoot -Parent
 
 function WslPath([string]$Path) {

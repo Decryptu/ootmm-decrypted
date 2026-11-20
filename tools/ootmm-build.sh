@@ -52,7 +52,7 @@ else
 fi
 
 if [ "${1:-}" = "--patch-seed" ]; then
-  podman run --rm -v "$SRC:$SRC" -v /mnt:/mnt -w "$SRC" -e CI=1 -e NX_DAEMON=false -e OOTMM_AP_SOURCE_ROOT="$REPO" "$TOOLCHAIN" sh -c 'pnpm install --frozen-lockfile && ./scripts/deps.sh && pnpm nx run @ootmm/generator:build --prod && cd packages/generator && NODE_ENV=production pnpm exec tsx lib/ap/ap-patch.ts "$1" ../../roms/oot.z64 ../../roms/mm.z64 "$2"' sh "$2" "$5"
+  podman run --rm -v "$SRC:$SRC" -v /mnt:/mnt -w "$SRC" -e CI=1 -e NX_DAEMON=false -e OOTMM_AP_SOURCE_ROOT="$REPO" -e OOTXMM_ANY_WORLD_VERSION="${OOTXMM_ANY_WORLD_VERSION:-}" "$TOOLCHAIN" sh -c 'pnpm install --frozen-lockfile && ./scripts/deps.sh && pnpm nx run @ootmm/generator:build --prod && cd packages/generator && NODE_ENV=production pnpm exec tsx lib/ap/ap-patch.ts "$1" ../../roms/oot.z64 ../../roms/mm.z64 "$2"' sh "$2" "$5"
   exit $?
 fi
 

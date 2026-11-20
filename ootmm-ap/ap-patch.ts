@@ -29,7 +29,42 @@ import { Patchfile } from '../combo/patch-build/patchfile';
 import { makeAddresses } from '../combo/addresses';
 
 /* The world release this builder matches: archipelago.json's world_version (checked by test/test_patch_version.py) */
-const WORLD_VERSION = '0.0.10';
+const WORLD_VERSION = '0.0.11';
+/* Oldest world whose seeds this builder still rebuilds the same way. Keep it when a release only fixes the ROM or
+ * the emulators, so players in a running game rebuild their ROM on the same seed. Raise it to WORLD_VERSION when
+ * generation, settings or the player file change. OOTXMM_ANY_WORLD_VERSION=1 skips the check (at your own risk). */
+const MIN_SEED_WORLD_VERSION = '0.0.10';
+
+function versionKey(version: string): number[] {
+  return version.split('.').map(Number);
+}
+
+function compareVersions(a: string, b: string): number {
+  const [x, y] = [versionKey(a), versionKey(b)];
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    const d = (x[i] ?? 0) - (y[i] ?? 0);
+    if (d) return d;
+  }
+  return 0;
+}
+
+function checkWorldVersion(version: string | undefined) {
+  if (version === WORLD_VERSION) return;
+  const shown = version ?? 'older than 0.0.3';
+  if (process.env.OOTXMM_ANY_WORLD_VERSION === '1') {
+    console.warn(`Warning: seed from OOTxMM world ${shown}, builder ${WORLD_VERSION}; version check skipped.`);
+    return;
+  }
+  if (version !== undefined && /^\d+(\.\d+)*$/.test(version)
+      && compareVersions(version, MIN_SEED_WORLD_VERSION) >= 0 && compareVersions(version, WORLD_VERSION) < 0) {
+    console.log(`Seed from OOTxMM world ${version}: rebuilt with the fixes of ${WORLD_VERSION}.`);
+    return;
+  }
+  throw new Error(`This seed was generated with OOTxMM world ${shown}, but these host tools are for ${WORLD_VERSION}`
+    + ` (seeds from ${MIN_SEED_WORLD_VERSION} on). Use the host tools of the world that generated the seed, or install`
+    + ` ootxmm.apworld ${WORLD_VERSION} (remove older copies from custom_worlds), restart the launcher and generate`
+    + ` again.`);
+}
 
 /* Written by the world's generate_output (world.py) */
 type PlayerFile = {
@@ -141,10 +176,7 @@ async function buildPlayer(playerPath: string, ootPath: string, mmPath: string, 
   const playerBytes = await fs.readFile(playerPath);
   const player: PlayerFile = JSON.parse(playerBytes.toString('utf-8'));
   if (player.version !== 1) throw new Error(`Unsupported player file version ${player.version}`);
-  if (player.world_version !== WORLD_VERSION)
-    throw new Error(`This seed was generated with OOTxMM world ${player.world_version ?? 'older than 0.0.3'}, but these `
-      + `host tools are for ${WORLD_VERSION}. Install ootxmm.apworld ${WORLD_VERSION} (remove older copies from `
-      + `custom_worlds), restart the launcher and generate again.`);
+  checkWorldVersion(player.world_version);
   if (player.gossip !== undefined &&
       (!Array.isArray(player.gossip) || player.gossip.some(text => typeof text !== 'string' || !text.trim())))
     throw new Error('Invalid Archipelago gossip text');

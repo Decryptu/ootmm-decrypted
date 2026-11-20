@@ -155,6 +155,16 @@ sh tools/ootmm-build-docker.sh --seed ~/seeds/my-seed "cd packages/generator && 
 
 The input can also be one player JSON. The command stops on the first failure; check it succeeds before distributing patches. It writes a `.ootmm`, `.z64` and private `.build.json` receipt per player. Send each player their patch, the matching world package and connection details. ROMs stay on the machine that built them.
 
+### Fix a game in progress
+
+A release that only fixes the ROM or Dolphin can be applied to a running game. The seed, the server room and the saves stay the same.
+
+1. Everyone installs the new `ootxmm.apworld` and restarts the launcher. The server keeps running.
+2. For a Dolphin-only fix, Dolphin players run **OOTxMM Dolphin Setup** again on their `.z64`. Nothing else is needed.
+3. For a ROM fix, the host extracts the new `ootxmm-host.zip` and runs the helper again on the same seed folder. Since 0.0.10, the helper rebuilds seeds from 0.0.10 onward until a release says the seed format changed. The release notes say when to rebuild. Players apply their new `.ootmm` in Patch mode. BizHawk players keep the same `.z64` file name and replace the old file, so BizHawk finds the save. Dolphin players then run **OOTxMM Dolphin Setup** on the new `.z64`.
+
+The helper refuses a seed from before its oldest supported version. In an emergency, run it from the helper folder with `& ".Host Setup.cmd" -AnyWorldVersion` in PowerShell to skip that check. This works only if the release did not change generation or settings, so check its notes first.
+
 ### Start the server
 
 The server passes items between players and saves the group's progress. Both hosting methods use the same locally generated seed and patches: archipelago.gg cannot generate this custom world for you.

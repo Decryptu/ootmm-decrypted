@@ -15,3 +15,11 @@ class TestPatchVersion(unittest.TestCase):
         match = re.search(r"^const WORLD_VERSION = '([^']+)';", source, re.M)
         self.assertIsNotNone(match)
         self.assertEqual(match.group(1), manifest["world_version"])
+
+    def test_oldest_seed_version_is_not_newer(self) -> None:
+        """Seeds from the oldest accepted world through this one rebuild; the range must not be empty."""
+        source = (ROOT / "ootmm-ap" / "ap-patch.ts").read_text(encoding="utf-8")
+        world = re.search(r"^const WORLD_VERSION = '([^']+)';", source, re.M).group(1)
+        oldest = re.search(r"^const MIN_SEED_WORLD_VERSION = '([^']+)';", source, re.M).group(1)
+        key = lambda v: tuple(int(p) for p in v.split("."))
+        self.assertLessEqual(key(oldest), key(world))
