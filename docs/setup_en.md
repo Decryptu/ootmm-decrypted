@@ -163,7 +163,7 @@ A release that only fixes the ROM or Dolphin can be applied to a running game. T
 2. For a Dolphin-only fix, Dolphin players run **OOTxMM Dolphin Setup** again on their `.z64`. Nothing else is needed.
 3. For a ROM fix, the host extracts the new `ootxmm-host.zip` and runs the helper again on the same seed folder. Since 0.0.10, the helper rebuilds seeds from 0.0.10 onward until a release says the seed format changed. The release notes say when to rebuild. Players apply their new `.ootmm` in Patch mode. BizHawk players keep the same `.z64` file name and replace the old file, so BizHawk finds the save. Dolphin players then run **OOTxMM Dolphin Setup** on the new `.z64`.
 
-The helper refuses a seed from before its oldest supported version. In an emergency, run it from the helper folder with `& ".Host Setup.cmd" -AnyWorldVersion` in PowerShell to skip that check. This works only if the release did not change generation or settings, so check its notes first.
+The helper refuses a seed from before its oldest supported version. In an emergency, run it from the helper folder with `& ".\Host Setup.cmd" -AnyWorldVersion` in PowerShell to skip that check. This works only if the release did not change generation or settings, so check its notes first.
 
 ### Start the server
 
