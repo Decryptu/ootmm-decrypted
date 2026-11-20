@@ -112,6 +112,10 @@ def patch_content1(dol: bytearray) -> None:
     patch_words(dol, 0x8014C46C, [0x00200000] * 4, dpad)
     # Saves: write the flash image to NAND whenever it changed, not at most once every 6 minutes.
     patch_words(dol, 0x8007E580, [0x41820034], [0x48000034])
+    # Recompiled code cache: when its two fixed heaps are full, take the block from the general heap instead of
+    # failing. Failing forces an eviction that can free functions still on the call stack, so the game returns into
+    # freed code (invalid writes, then "Unknown instruction" at an empty address). OoTMM's larger code fills them.
+    patch_words(dol, 0x8004C71C, [0x3800FFFF], [0x4BFFFF40])
 
 
 def u8_replace(archive: bytes, name: str, data: bytes) -> bytes:
@@ -185,13 +189,17 @@ def install(rom_path: Path, user_dir: Path) -> None:
     # game's own settings above come too late: without the global override MEM2 stays at 64 MiB and the end
     # of the ROM (Majora's Mask's data) reads as invalid memory.
     set_core_options(user_dir / "Config" / "Dolphin.ini", CORE_OPTIONS)
+    set_core_options(user_dir / "Config" / "Dolphin.ini", INTERFACE_OPTIONS, "Interface")
 
 
 CORE_OPTIONS = {"RAMOverrideEnable": "True", "MEM1Size": "25165824", "MEM2Size": "134217728"}
+# Dolphin pauses the game with a popup on every access outside Wii memory. The N64 ignores those accesses,
+# so let the game carry on as it would on the console the ROM was made for.
+INTERFACE_OPTIONS = {"UsePanicHandlers": "False"}
 
 
-def set_core_options(path: Path, options: dict[str, str]) -> None:
-    """Set keys in the [Core] section of a Dolphin INI file, keeping every other line as it is."""
+def set_core_options(path: Path, options: dict[str, str], name: str = "Core") -> None:
+    """Set keys in one section of a Dolphin INI file, keeping every other line as it is."""
     lines = path.read_text(encoding="utf-8").splitlines() if path.is_file() else []
     section = None
     core_end = None
@@ -199,19 +207,19 @@ def set_core_options(path: Path, options: dict[str, str]) -> None:
     for i, line in enumerate(lines):
         stripped = line.strip()
         if stripped.startswith("[") and stripped.endswith("]"):
-            if section == "Core":
+            if section == name:
                 core_end = i
             section = stripped[1:-1]
             continue
-        if section == "Core" and "=" in stripped:
+        if section == name and "=" in stripped:
             key = stripped.split("=", 1)[0].strip()
             if key in pending:
                 lines[i] = f"{key} = {pending.pop(key)}"
-    if section == "Core" and core_end is None:
+    if section == name and core_end is None:
         core_end = len(lines)
     added = [f"{key} = {value}" for key, value in pending.items()]
     if core_end is None:
-        lines += ["[Core]"] + added
+        lines += [f"[{name}]"] + added
     else:
         lines[core_end:core_end] = added
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -356,6 +364,7 @@ def run_setup(*args: str) -> None:
             build_wad(Path(rom), Path(wad), Path(key), out)
             for user_dir in dolphin_user_dirs():
                 set_core_options(user_dir / "Config" / "Dolphin.ini", CORE_OPTIONS)
+                set_core_options(user_dir / "Config" / "Dolphin.ini", INTERFACE_OPTIONS, "Interface")
             Utils.messagebox("OOTxMM Dolphin Setup", f"Done. In Dolphin, select File > Open and open\n{out}\n"
                              "to play (not the Wii Menu), then open OOTxMM Dolphin Client.")
             return
