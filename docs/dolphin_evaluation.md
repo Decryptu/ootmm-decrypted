@@ -90,7 +90,7 @@ With a real save (file 1 of the age-change seed), opening the Market's Mask Shop
 
 ### Live Archipelago connection
 
-The world's `dolphin.py` provides two launcher components. **OOTxMM Dolphin Setup** applies the `mkwad.py` changes to the NARE title installed in Dolphin's NAND, where contents are stored decrypted, so no Wii keys are needed. It updates the TMD sizes and hashes and writes `GameSettings/NAR.ini` for the 128 MiB MEM2 override. **OOTxMM Dolphin Client** serves the BizHawk connector protocol from Dolphin's memory and starts the normal BizHawk Client. It maps `RDRAM` to Wii `0x80f1d0e0` and serves the `ROM` header from a copy in MEM1 (`0x80f11128`, only 8-aligned), because Dolphin Memory Engine cannot read MEM2.
+The world's `dolphin.py` provides two launcher components. **OOTxMM Dolphin Setup** applies the `mkwad.py` changes to the NARE title installed in Dolphin's NAND, where contents are stored decrypted, so no Wii keys are needed. It updates the TMD sizes and hashes and writes `GameSettings/NAR.ini` for the 128 MiB MEM2 override. **OOTxMM Dolphin Client** serves the BizHawk connector protocol from Dolphin's memory and starts the normal BizHawk Client. It finds `RDRAM` in Wii MEM1 from the live mailbox (`0x8081d0c0` in testing) and serves the `ROM` header from a copy in MEM1 (found by scanning), because Dolphin Memory Engine cannot read MEM2.
 
 With a ROM from the host helper's Dolphin build installed this way, `tools/emulator-smoke.py --grant-item` delivered an OoT rupee in OoT (0 to 20 on screen), the Mask Shop door switched to MM, and an MM rupee was delivered in MM, each with 16 stable polls.
 

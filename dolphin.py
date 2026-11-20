@@ -25,7 +25,7 @@ TITLE_PATH = ("Wii", "title", "00010001", "4e415245", "content")  # Majora's Mas
 GAME_SETTINGS = "NAR.ini"
 # The patches below give the N64 ROM 64 MiB in MEM2, so Dolphin must emulate 128 MiB of MEM2.
 GAME_SETTINGS_TEXT = "[Core]\nRAMOverrideEnable = True\nMEM1Size = 25165824\nMEM2Size = 134217728\n"
-RDRAM_BASE = 0x80F1D0E0  # the emulated N64 RAM inside Wii MEM1
+RDRAM_BASE = 0x8081D0C0  # the emulated N64 RAM inside Wii MEM1
 RDRAM_SIZE = 8 << 20
 MEM1 = (0x80000000, 24 << 20)
 PORTS = range(43055, 43060)
@@ -116,6 +116,14 @@ def patch_content1(dol: bytearray) -> None:
     # failing. Failing forces an eviction that can free functions still on the call stack, so the game returns into
     # freed code (invalid writes, then "Unknown instruction" at an empty address). OoTMM's larger code fills them.
     patch_words(dol, 0x8004C71C, [0x3800FFFF], [0x4BFFFF40])
+    # A function left in the general heap keeps heap ID 3 after it is freed or after a failed take. The next take
+    # then reads an unset block count and can retry the full general heap forever (freeze on item get, songs).
+    # Treat any ID other than 1 or 2 as a new function.
+    patch_words(dol, 0x8004C5D4, [0x4082000C], [0x4082FFD0])
+    # MEM1 is nearly full, so large recompiled functions (general heap, MEM1 only: they call helpers with relative
+    # branches) cannot be placed and the code cache cleanup never frees MEM1. Move the 7 MiB MEM1 texture/frame
+    # buffer pool to MEM2, as the emulator already does for its other pool, and leave MEM1 to code.
+    patch_words(dol, 0x80085228, [0x67E43000], [0x67E47000])
 
 
 def u8_replace(archive: bytes, name: str, data: bytes) -> bytes:
@@ -410,7 +418,7 @@ class Bridge:
         while index != -1:
             for address in addresses:
                 base = mem_base + index - address
-                if index % 16 == 0 and base >= mem_base and base + RDRAM_SIZE <= mem_base + mem_size:
+                if base % 4 == 0 and base >= mem_base and base + RDRAM_SIZE <= mem_base + mem_size:
                     candidates.append((base, mem_base + index))
             index = data.find(b"OoTMM-IPC-RAM-1\0", index + 1)
         if not candidates:
