@@ -29,7 +29,7 @@ import { Patchfile } from '../combo/patch-build/patchfile';
 import { makeAddresses } from '../combo/addresses';
 
 /* The world release this builder matches: archipelago.json's world_version (checked by test/test_patch_version.py) */
-const WORLD_VERSION = '0.0.13';
+const WORLD_VERSION = '0.0.14';
 /* Oldest world whose seeds this builder still rebuilds the same way. Keep it when a release only fixes the ROM or
  * the emulators, so players in a running game rebuild their ROM on the same seed. Raise it to WORLD_VERSION when
  * generation, settings or the player file change. OOTXMM_ANY_WORLD_VERSION=1 skips the check (at your own risk). */

@@ -136,6 +136,14 @@ def patch_content1(dol: bytearray) -> None:
         0x8061000C, 0x38810020, 0x48046B29, 0x48000018, 0x80A10010, 0x80010050, 0x90050030, 0x80010054,
         0x90050034, 0x80610018, 0x80010084, 0x7C0803A6, 0x38210080, 0x4E800020])
     patch_words(dol, 0x8003BB6C, [0x480109E1], [0x4BFCA095])
+    # Translating a function lists its call sites in an 8 KiB stack buffer of 1024 entries. Larger functions (the MM
+    # blacksmith's update) overflow it or fail the take, and the emulator jumps to a null code pointer. Double the
+    # buffer and the limit; the 64 KiB main stack has room.
+    for address, original, patched in ((0x8003BA28, 0x9421DFB0, 0x9421BFB0), (0x8003BA30, 0x90012054, 0x90014054),
+                                       (0x8003BA34, 0x39612050, 0x39614050), (0x8003BE0C, 0x2C000400, 0x2C000800),
+                                       (0x8003BEB4, 0x39612050, 0x39614050), (0x8003BEBC, 0x80012054, 0x80014054),
+                                       (0x8003BEC4, 0x38212050, 0x38214050)):
+        patch_words(dol, address, [original], [patched])
 
 
 def u8_replace(archive: bytes, name: str, data: bytes) -> bytes:
