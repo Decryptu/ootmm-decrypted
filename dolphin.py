@@ -124,6 +124,18 @@ def patch_content1(dol: bytearray) -> None:
     # branches) cannot be placed and the code cache cleanup never frees MEM1. Move the 7 MiB MEM1 texture/frame
     # buffer pool to MEM2, as the emulator already does for its other pool, and leave MEM1 to code.
     patch_words(dol, 0x80085228, [0x67E43000], [0x67E47000])
+    # Recompiling a function (OoTMM loads and unloads overlays all the time) takes a new code block from the other
+    # code heap or the general heap and never frees the old one, so after about half an hour of play every heap is
+    # full and the emulator jumps to a null code pointer (freeze). The function take is wrapped, in padding of the
+    # init section: it keeps a copy of the function's old block, frees that copy once the new block is taken, and
+    # restores the old block when the take fails, so the cache cleanup between retries can still free it.
+    patch_words(dol, 0x80005C00, [0] * 38, [
+        0x9421FF80, 0x7C0802A6, 0x90010084, 0x90610008, 0x9081000C, 0x90A10010, 0x90C10014, 0x80050030,
+        0x90010050, 0x80050034, 0x90010054, 0x80050000, 0x90010020, 0x80050004, 0x90010024, 0x48046911,
+        0x90610018, 0x2C030000, 0x41820028, 0x80010050, 0x2C000001, 0x41800030, 0x2C000003, 0x41810028,
+        0x8061000C, 0x38810020, 0x48046B29, 0x48000018, 0x80A10010, 0x80010050, 0x90050030, 0x80010054,
+        0x90050034, 0x80610018, 0x80010084, 0x7C0803A6, 0x38210080, 0x4E800020])
+    patch_words(dol, 0x8003BB6C, [0x480109E1], [0x4BFCA095])
 
 
 def u8_replace(archive: bytes, name: str, data: bytes) -> bytes:
