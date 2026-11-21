@@ -1,5 +1,5 @@
 diff --git a/packages/generator/CMakeLists.txt b/packages/generator/CMakeLists.txt
-index 8912285..362db5f 100644
+index 8912285..c3d8ae4 100644
 --- a/packages/generator/CMakeLists.txt
 +++ b/packages/generator/CMakeLists.txt
 @@ -15,7 +15,7 @@ endforeach()
@@ -114,7 +114,7 @@ index f222ccc..5c2437f 100644
    jr t0
     nop
 diff --git a/packages/generator/src/common/switch.c b/packages/generator/src/common/switch.c
-index 1374d8e..fdb2c88 100644
+index 1374d8e..3fb1be4 100644
 --- a/packages/generator/src/common/switch.c
 +++ b/packages/generator/src/common/switch.c
 @@ -7,10 +7,12 @@ typedef void (*EntryPoint)(void)  __attribute__ ((noreturn));
@@ -130,8 +130,13 @@ index 1374d8e..fdb2c88 100644
  # define FOREIGN_CART   0x10001000
  # define FOREIGN_SIZE   0x6430
  #endif
-@@ -23,7 +25,7 @@ static void waitSubsystems(void)
-     for (;;)
+@@ -20,17 +22,18 @@ static void waitSubsystems(void)
+ {
+     u32 tmp;
+ 
+-    for (;;)
++    /* Virtual Console may never finish a task once interrupts are off: stop the RSP instead of waiting forever */
++    for (u32 i = 0; i < 0x100000; ++i)
      {
          tmp = IO_READ(SP_STATUS_REG);
 -        if ((tmp & 2) && (tmp & 1) && !(tmp & (SP_STATUS_DMA_BUSY | SP_STATUS_DMA_FULL)))
@@ -139,7 +144,21 @@ index 1374d8e..fdb2c88 100644
              break;
      }
      IO_WRITE(SP_STATUS_REG, SP_SET_HALT | SP_CLR_BROKE | SP_CLR_INTR | SP_CLR_SSTEP | SP_CLR_INTR_BREAK | SP_CLR_SIG0 | SP_CLR_SIG1 | SP_CLR_SIG2 | SP_CLR_SIG3 | SP_CLR_SIG4 | SP_CLR_SIG5 | SP_CLR_SIG6 | SP_CLR_SIG7);
-@@ -68,6 +70,71 @@ static void waitSubsystems(void)
+     IO_WRITE(SP_SEMAPHORE_REG, 0);
+     IO_WRITE(SP_PC_REG, 0);
+ 
+-    for (;;)
++    for (u32 i = 0; i < 0x100000; ++i)
+     {
+         tmp = IO_READ(DPC_STATUS_REG);
+         if (!(tmp & 0x170))
+@@ -63,11 +66,95 @@ static void waitSubsystems(void)
+     }
+     IO_WRITE(SI_STATUS_REG, 0);
+ 
+-    /* Disable VI */
+-    IO_WRITE(VI_CONTROL_REG, 0);
++    /* Keep VI running: Virtual Console stops sending retrace interrupts when it is turned off, and the next game waits for them forever */
      IO_WRITE(VI_CURRENT_REG, 0);
  }
  
@@ -208,10 +227,38 @@ index 1374d8e..fdb2c88 100644
 +}
 +
 +void osInvalICache(void* addr, s32 size);
++
++/*
++ * Virtual Console runs RSP tasks and reports their end through interrupts. A task still running when the
++ * switch turns interrupts off never ends, and the next game then waits forever for the RSP. Let the running
++ * graphics and audio tasks finish first, with interrupts still on.
++ */
++static void drainRsp(void)
++{
++    u32 idle = 0;
++
++    for (u32 i = 0; i < 0x400000 && idle < 0x400; ++i)
++    {
++        u32 sp = IO_READ(SP_STATUS_REG);
++        u32 dp = IO_READ(DPC_STATUS_REG);
++        if ((sp & 1) && !(sp & (SP_STATUS_DMA_BUSY | SP_STATUS_DMA_FULL)) && !(dp & 0x170))
++            ++idle;
++        else
++            idle = 0;
++    }
++}
  NORETURN void comboGameSwitch2(void);
  NORETURN void comboGameSwitch4(u32);
  
-@@ -92,6 +159,17 @@ NORETURN void comboGameSwitch3(void)
+@@ -78,6 +165,7 @@ NORETURN void comboGameSwitch(PlayState* play, u32 entrance)
+ 
+     if (play)
+         Save_DoSave(play, SF_OWL);
++    drainRsp();
+     System_DisableInterrupts();
+     waitSubsystems();
+     comboGameSwitch2();
+@@ -92,6 +180,17 @@ NORETURN void comboGameSwitch3(void)
      System_InvalICache((void*)FOREIGN_DRAM, FOREIGN_SIZE);
      IO_WRITE(PI_STATUS_REG, PI_STATUS_RESET | PI_STATUS_CLR_INTR);
  
