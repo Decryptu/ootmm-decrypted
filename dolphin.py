@@ -144,6 +144,11 @@ def patch_content1(dol: bytearray) -> None:
                                        (0x8003BEB4, 0x39612050, 0x39614050), (0x8003BEBC, 0x80012054, 0x80014054),
                                        (0x8003BEC4, 0x38212050, 0x38214050)):
         patch_words(dol, address, [original], [patched])
+    # When a take fails, the cache cleanup frees one function older than a threshold and the take is retried. Each
+    # retry raised the threshold by 95 ticks (about frames) up to "older than 10", so a few retries freed code still
+    # running on the N64 call stack and the game returned into it (crashes in Deku Palace and elsewhere after long
+    # play). Keep the threshold at 300 ticks: the cleanup keeps freeing old functions, of which there are plenty.
+    patch_words(dol, 0x8003BB98, [0x3803FFF6], [0x3803FED4])
 
 
 def u8_replace(archive: bytes, name: str, data: bytes) -> bytes:
