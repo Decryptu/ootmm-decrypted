@@ -9,13 +9,14 @@ from __future__ import annotations
 import logging
 import struct
 import time
+from time import time as _wall_time
 from typing import TYPE_CHECKING
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
-from . import items, locations, ootxmm_staticdata
+from . import end_stats, items, locations, ootxmm_staticdata
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
@@ -68,9 +69,15 @@ class OOTxMMClient(BizHawkClient):
         super().__init__()
         self.known_mailboxes: list[int] = []  # where mailboxes were found, kept across resets
         self.rom_mailboxes: list[int] = []  # exact payload addresses from this ROM's versioned header
+        self.last_mailbox: int | None = None  # detects OoT <-> MM switches across mailbox resets
         self.reset()
         self.goals: set[str] = set()
         self.goal_key: str | None = None
+        self.stats_key: str | None = None
+        self.run_stats: dict = {}
+        self.end_stats_shown = False
+        self.end_stats_tab = None
+        self.last_end_stats: end_stats.EndStats | None = None
 
     def reset(self) -> None:
         self.mailbox: int | None = None
@@ -83,29 +90,68 @@ class OOTxMMClient(BizHawkClient):
         self.last_query: int | None = None
         self.last_alive: int | None = None
         self.alive_changed_at = 0.0
+        self.last_active_at: float | None = None
         self.attach_alive: int | None = None
         self.attach_started = 0.0
+
+    def _merge_run_stats(self, value: dict) -> None:
+        started = value.get("started_at")
+        if isinstance(started, (int, float)):
+            current = self.run_stats.get("started_at")
+            if current is None or started < current:
+                self.run_stats["started_at"] = started
+        finished = value.get("finished_at")
+        if isinstance(finished, (int, float)):
+            self.run_stats["finished_at"] = finished
+        active = value.get("active_seconds")
+        if isinstance(active, (int, float)) and active > float(self.run_stats.get("active_seconds") or 0):
+            self.run_stats["active_seconds"] = float(active)
+        switches = value.get("game_switches")
+        if isinstance(switches, int) and switches > int(self.run_stats.get("game_switches") or 0):
+            self.run_stats["game_switches"] = switches
+        order = value.get("boss_order")
+        if isinstance(order, list):
+            merged = list(order)
+            for boss in self.run_stats.get("boss_order", []):
+                if boss not in merged:
+                    merged.append(boss)
+            self.run_stats["boss_order"] = merged
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Connected":
             # Re-read on every login, including reconnects to the same slot.
             self.goal_key = None
             self.goals.clear()
+            self.stats_key = None
+            self.run_stats = {}
+            self.end_stats_shown = False
         elif self.goal_key is not None:
             value = None
+            stats_value = None
             if cmd == "Retrieved":
                 value = args["keys"].get(self.goal_key)
-            elif cmd == "SetReply" and args["key"] == self.goal_key:
-                value = args["value"]
+                if self.stats_key is not None:
+                    stats_value = args["keys"].get(self.stats_key)
+            elif cmd == "SetReply":
+                if args["key"] == self.goal_key:
+                    value = args["value"]
+                elif self.stats_key is not None and args["key"] == self.stats_key:
+                    stats_value = args["value"]
             if isinstance(value, dict):
                 self.goals.update(event for event in GOAL_GI.values() if value.get(event) is True)
+            if isinstance(stats_value, dict):
+                self._merge_run_stats(stats_value)
 
     async def sync_goals(self, ctx: "BizHawkClientContext") -> None:
         key = f"ootxmm_goals_{ctx.server_seed_name}_{ctx.team}_{ctx.slot}"
+        stats_key = f"ootxmm_stats_{ctx.server_seed_name}_{ctx.team}_{ctx.slot}"
         if key != self.goal_key:
             self.goals.clear()
             self.goal_key = key
-            await ctx.send_msgs([{"cmd": "Get", "keys": [key]}])
+            self.stats_key = stats_key
+            self.run_stats = {}
+            self.end_stats_shown = False
+            await ctx.send_msgs([{"cmd": "Get", "keys": [key, stats_key]}])
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         try:
@@ -188,6 +234,9 @@ class OOTxMMClient(BizHawkClient):
             alive = struct.unpack_from(">I", raw, 20)[0]
             previous = self.candidates.get(address)
             if previous is not None and alive != previous:
+                if self.last_mailbox is not None and self.last_mailbox != address:
+                    self.run_stats["game_switches"] = int(self.run_stats.get("game_switches") or 0) + 1
+                self.last_mailbox = address
                 self.mailbox = address
                 self.seq_net = 0
                 if address not in self.known_mailboxes:
@@ -279,6 +328,11 @@ class OOTxMMClient(BizHawkClient):
 
         now = time.monotonic()
         if alive != self.last_alive:
+            if self.last_active_at is not None and now > self.last_active_at:
+                delta = min(now - self.last_active_at, MAILBOX_STALL_SECONDS)
+                self.run_stats["active_seconds"] = float(self.run_stats.get("active_seconds") or 0.0) + delta
+            self.last_active_at = now
+            self.run_stats.setdefault("started_at", _wall_time())
             self.last_alive = alive
             self.alive_changed_at = now
         elif now - self.alive_changed_at >= MAILBOX_STALL_SECONDS:
@@ -366,6 +420,10 @@ class OOTxMMClient(BizHawkClient):
 
         unsaved_goals = goals - self.goals
         if unsaved_goals:
+            order = self.run_stats.setdefault("boss_order", [])
+            for event in sorted(unsaved_goals):
+                if event not in order:
+                    order.append(event)
             # Persist before acknowledging the pickup. Updating individual keys preserves the other boss,
             # even if its stored result has not arrived yet or another client is connected to this slot.
             await ctx.send_msgs([{"cmd": "Set", "key": self.goal_key, "default": {}, "want_reply": True,
@@ -388,8 +446,26 @@ class OOTxMMClient(BizHawkClient):
         self.seq_net = seq_after
 
         if not ctx.finished_game and self.goal_reached(ctx):
+            now_wall = _wall_time()
+            self.run_stats.setdefault("started_at", now_wall)
+            self.run_stats.setdefault("finished_at", now_wall)
+            if self.stats_key is not None:
+                await ctx.send_msgs([{"cmd": "Set", "key": self.stats_key, "default": {}, "want_reply": False,
+                                      "operations": [{"operation": "update", "value": dict(self.run_stats)}]}])
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
+            self.show_end_stats(ctx)
+
+    def show_end_stats(self, ctx: "BizHawkClientContext") -> end_stats.EndStats | None:
+        if self.end_stats_shown:
+            return self.last_end_stats
+        self.end_stats_shown = True
+        stats = end_stats.collect_stats(ctx, self.goals, last_query=self.last_query, run_stats=self.run_stats)
+        self.last_end_stats = stats
+        logger.info("\n" + end_stats.format_text_report(stats))
+        existing = self.end_stats_tab["tab"] if isinstance(self.end_stats_tab, dict) else self.end_stats_tab
+        self.end_stats_tab = end_stats.show_end_stats_tab(ctx, stats, existing_tab=existing)
+        return stats
 
     def packet(self, op: int, body: bytes) -> bytes:
         packet = struct.pack(">IB", self.seq_net, op) + body

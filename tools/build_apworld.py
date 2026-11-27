@@ -21,6 +21,7 @@ WORLD_FILES = [
     "client.py",
     "cosmetics.py",
     "dolphin.py",
+    "end_stats.py",
     "items.py",
     "locations.py",
     "logic.py",
